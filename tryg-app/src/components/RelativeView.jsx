@@ -142,7 +142,14 @@ export const RelativeView = ({ tasks, profile, lastCheckIn, symptomLogs, onAddTa
                         <div className="space-y-2">
                             {symptomLogs.map((log, i) => (
                                 <div key={i} className="flex items-center justify-between text-sm text-orange-900 bg-white/50 p-2 rounded-lg">
-                                    <span className="font-medium">{log.label}</span>
+                                    <div className="flex items-center gap-2">
+                                        <span className="font-medium">{log.label}</span>
+                                        {log.bodyLocation && (
+                                            <span className="text-orange-600 text-xs bg-orange-100 px-2 py-0.5 rounded-full">
+                                                {log.bodyLocation.emoji} {log.bodyLocation.label}
+                                            </span>
+                                        )}
+                                    </div>
                                     <span className="text-orange-500 text-xs">{log.time}</span>
                                 </div>
                             ))}
@@ -234,10 +241,17 @@ export const RelativeView = ({ tasks, profile, lastCheckIn, symptomLogs, onAddTa
                         ) : (
                             <ul className="space-y-2">
                                 {symptomLogs.map((log, i) => (
-                                    <li key={i} className="flex items-center gap-3 text-sm p-3 bg-white border rounded-lg">
-                                        <log.icon className="w-5 h-5 text-slate-400" />
-                                        <span className="font-medium text-slate-700">{log.label}</span>
-                                        <span className="text-slate-400 ml-auto">{log.time}</span>
+                                    <li key={i} className="flex flex-col gap-1 text-sm p-3 bg-white border rounded-lg">
+                                        <div className="flex items-center gap-3">
+                                            <log.icon className="w-5 h-5 text-slate-400" />
+                                            <span className="font-medium text-slate-700">{log.label}</span>
+                                            <span className="text-slate-400 ml-auto">{log.time}</span>
+                                        </div>
+                                        {log.bodyLocation && (
+                                            <div className="ml-8 text-xs text-slate-500">
+                                                📍 Lokation: <span className="font-medium">{log.bodyLocation.emoji} {log.bodyLocation.label}</span>
+                                            </div>
+                                        )}
                                     </li>
                                 ))}
                             </ul>

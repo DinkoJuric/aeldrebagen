@@ -82,4 +82,7 @@ description: Learnings from past projects to apply in future work
 - **LocalStorage for MVP**: Enables quick iteration without backend complexity
 - **Browser testing**: Use element indices for reliable click testing, pixel coordinates unreliable in scrollable areas
 - **Reflect periodically**: Pause after each feature to update learnings.md - prevents knowledge loss
+- **Animation for feedback**: Animated states (heart fill, sparkles) provide better emotional feedback than static changes
+- **Toast notifications**: Auto-dismiss with tap-to-dismiss option respects user agency
+- **Bidirectional features**: When adding communication features, always implement in both directions (senior→relative AND relative→senior)
 

@@ -8,12 +8,12 @@ A prioritized plan to make Tryg robust, accessible, and emotionally resonant.
 
 ### Error Handling & Crash Prevention
 
-| Task | Priority | Effort |
-|------|----------|--------|
-| Add React Error Boundary at app root | 🔴 High | 1h |
-| Install `@sentry/react` + `@sentry/capacitor` | 🔴 High | 2h |
-| Wrap all Capacitor plugin calls in try/catch | 🟡 Medium | 2h |
-| Add global `window.onerror` handler | 🔴 High | 30m |
+| Task | Priority | Effort | Status |
+|------|----------|--------|--------|
+| Add React Error Boundary at app root | 🔴 High | 1h | ✅ Done |
+| Install `@sentry/react` + `@sentry/capacitor` | 🔴 High | 2h | ⏳ TODO |
+| Wrap all Capacitor plugin calls in try/catch | 🟡 Medium | 2h | ⏳ TODO |
+| Add global `window.onerror` handler | 🔴 High | 30m | ✅ Done |
 
 **Why**: Seniors can't debug white screens. Every crash = lost trust.
 
@@ -73,12 +73,12 @@ A prioritized plan to make Tryg robust, accessible, and emotionally resonant.
 
 ### Emotional Design
 
-| Feature | Trust/Safety Principle | Effort |
-|---------|----------------------|--------|
-| **Success sounds**: Gentle chime on task completion | Positive reinforcement | 1h |
-| **Calm color palette audit**: Remove any anxiety-inducing reds | Emotional safety | 2h |
-| **Reassuring micro-copy**: "Alt er godt" instead of clinical language | Dignity preservation | 2h |
-| **Family photo personalization**: Let relatives upload real photos | Emotional connection | 4h |
+| Feature | Trust/Safety Principle | Effort | Status |
+|---------|----------------------|--------|--------|
+| **Success sounds**: Gentle chime on task completion | Positive reinforcement | 1h | ✅ Done |
+| **Calm color palette audit**: Remove any anxiety-inducing reds | Emotional safety | 2h | ⏳ TODO |
+| **Reassuring micro-copy**: "Alt er godt" instead of clinical language | Dignity preservation | 2h | ⏳ TODO |
+| **Family photo personalization**: Let relatives upload real photos | Emotional connection | 4h | ⏳ TODO |
 
 ---
 

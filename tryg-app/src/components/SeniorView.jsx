@@ -15,12 +15,17 @@ import { Button } from './ui/Button';
 import { Modal } from './ui/Modal';
 import { FamilyStatusCard } from './FamilyStatusCard';
 import { ThinkingOfYouButton } from './ThinkingOfYou';
+import { BodyPainSelector } from './BodyPainSelector';
 import { SYMPTOMS_LIST } from '../data/constants';
 
 export const SeniorView = ({ tasks, toggleTask, updateStatus, addSymptom, familyStatus, onSendPing }) => {
     const [showCallModal, setShowCallModal] = useState(false);
     const [showSymptomModal, setShowSymptomModal] = useState(false);
     const [activePeriod, setActivePeriod] = useState('morgen');
+
+    // Two-step symptom flow: symptom type → body location (for pain)
+    const [selectedSymptom, setSelectedSymptom] = useState(null);
+    const [showBodySelector, setShowBodySelector] = useState(false);
 
     // Reward Logic - unlock photo when morning tasks complete
     const morningTasksTotal = tasks.filter(t => t.period === 'morgen').length;
@@ -203,31 +208,63 @@ export const SeniorView = ({ tasks, toggleTask, updateStatus, addSymptom, family
                 </Button>
             </footer>
 
-            {/* Symptom Modal */}
+            {/* Symptom Modal - Two-step flow for pain */}
             <Modal
                 isOpen={showSymptomModal}
-                onClose={() => setShowSymptomModal(false)}
-                title="Hvor har du ondt?"
+                onClose={() => {
+                    setShowSymptomModal(false);
+                    setSelectedSymptom(null);
+                    setShowBodySelector(false);
+                }}
+                title={showBodySelector ? "Hvor gør det ondt?" : "Hvordan har du det?"}
             >
-                <div className="grid grid-cols-2 gap-4">
-                    {SYMPTOMS_LIST.map(sym => (
-                        <button
-                            key={sym.id}
-                            onClick={() => {
-                                addSymptom(sym);
-                                setShowSymptomModal(false);
-                            }}
-                            className={`
-                                flex flex-col items-center justify-center gap-2 p-6 rounded-2xl
-                                transition-transform active:scale-95 border-2 border-transparent hover:border-stone-300
-                                ${sym.color}
-                            `}
-                        >
-                            <sym.icon className="w-10 h-10" />
-                            <span className="font-bold">{sym.label}</span>
-                        </button>
-                    ))}
-                </div>
+                {showBodySelector ? (
+                    // Step 2: Body location selector (for Smerter)
+                    <BodyPainSelector
+                        onSelectLocation={(bodyLocation) => {
+                            // Add symptom with body location
+                            addSymptom({
+                                ...selectedSymptom,
+                                bodyLocation: bodyLocation
+                            });
+                            setShowSymptomModal(false);
+                            setSelectedSymptom(null);
+                            setShowBodySelector(false);
+                        }}
+                        onBack={() => {
+                            setShowBodySelector(false);
+                            setSelectedSymptom(null);
+                        }}
+                    />
+                ) : (
+                    // Step 1: Symptom type selector
+                    <div className="grid grid-cols-2 gap-4">
+                        {SYMPTOMS_LIST.map(sym => (
+                            <button
+                                key={sym.id}
+                                onClick={() => {
+                                    // If it's pain (smerter), show body location picker
+                                    if (sym.id === 'pain') {
+                                        setSelectedSymptom(sym);
+                                        setShowBodySelector(true);
+                                    } else {
+                                        // For other symptoms, add directly
+                                        addSymptom(sym);
+                                        setShowSymptomModal(false);
+                                    }
+                                }}
+                                className={`
+                                    flex flex-col items-center justify-center gap-2 p-6 rounded-2xl
+                                    transition-transform active:scale-95 border-2 border-transparent hover:border-stone-300
+                                    ${sym.color}
+                                `}
+                            >
+                                <sym.icon className="w-10 h-10" />
+                                <span className="font-bold">{sym.label}</span>
+                            </button>
+                        ))}
+                    </div>
+                )}
             </Modal>
 
             {/* Call Modal */}

@@ -8,7 +8,7 @@ A living document for brainstorming features that could make Tryg more valuable.
 
 ## 🌟 Connection-First Features (Priority)
 
-### Bidirectional Visibility ("Mirror Features")
+### Bidirectional Visibility ("Mirror Features") ✅ IMPLEMENTED
 The key to avoiding surveillance: **reciprocity by default**.
 
 | Senior Sees | Family Sees |
@@ -17,7 +17,7 @@ The key to avoiding surveillance: **reciprocity by default**.
 | "Børnene er kommet hjem fra skole" | "Farmor tog sin morgen medicin" |
 | "Emma løb 5km i morges" | "Farmor har gået en tur i haven" |
 
-**Implementation**: Add a `FamilyStatus` component that shows what the relative is doing - work, traveling, home, etc. Makes the senior feel part of daily life, not isolated.
+**Implementation**: ✅ `FamilyStatusCard.jsx` shows relative's status (work, home, traveling, available, busy). Picker in RelativeView, display in SeniorView.
 
 ---
 
@@ -34,10 +34,11 @@ Replace "health dashboard" with **shared experiences**.
 - Grandchildren recording "Godmorgen Farmor!" as morning greeting
 - Senior can respond with voice, not typing
 
-**"Jeg tænker på dig" Button**
-- One-tap "thinking of you" ping
-- Visual: Heart animation on recipient's screen
-- No response required - just warmth
+**"Jeg tænker på dig" Button** ✅ IMPLEMENTED
+- ✅ One-tap "thinking of you" ping (`ThinkingOfYou.jsx`)
+- ✅ Visual: Heart animation on recipient's screen
+- ✅ Pink toast notification with auto-dismiss
+- ✅ Web Audio ping sound for emotional feedback
 
 ---
 
@@ -103,15 +104,36 @@ Features that connect health goals to **meaningful life moments**:
 
 ---
 
+## 🏥 Health Tracking Enhancements
+
+### Body Pain Mapping ✅ IMPLEMENTED
+When senior clicks "Jeg har ondt" → "Smerter", they can tap WHERE on their body:
+- ✅ `BodyPainSelector.jsx` with large touch-friendly grid
+- ✅ Regions: Head, Neck, Chest, Arms (L/R), Stomach, Back, Legs (L/R)
+- ✅ Stored with timestamp and shown in doctor report
+- ⏳ TODO: Visual history ("You've had head pain 3 times this week")
+
+### Pain Severity Scale
+- After location, ask "Hvor ondt?" (How much?)
+- 3-level pictogram: 🙂 Lidt → 😐 Noget → 😣 Meget
+- Avoid clinical 1-10 scales - too complex for seniors
+
+### Symptom Patterns
+- Weekly summary: "Du har ofte hovedpine om morgenen"
+- Helpful for doctor consultations
+- Non-alarming presentation
+
+---
+
 ## 🎯 High-Value / Low-Effort (MVP+1)
 
-| Feature | Connection Value | Effort |
-|---------|-----------------|--------|
-| Two-way status ("Louise er...") | ★★★★★ | 2h |
-| "Tænker på dig" one-tap ping | ★★★★★ | 1h |
-| Voice note sharing | ★★★★☆ | 4h |
-| Simple photo sharing from senior | ★★★★☆ | 3h |
-| Emoji reactions on photos | ★★★★☆ | 2h |
+| Feature | Connection Value | Effort | Status |
+|---------|-----------------|--------|--------|
+| Two-way status ("Louise er...") | ★★★★★ | 2h | ✅ Done |
+| "Tænker på dig" one-tap ping | ★★★★★ | 1h | ✅ Done |
+| Voice note sharing | ★★★★☆ | 4h | ⏳ TODO |
+| Simple photo sharing from senior | ★★★★☆ | 3h | ⏳ TODO |
+| Emoji reactions on photos | ★★★★☆ | 2h | ⏳ TODO |
 
 ---
 

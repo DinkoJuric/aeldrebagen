@@ -21,6 +21,12 @@ All notable changes to this project will be documented in this file.
 - Auto-dismisses after 5 seconds or tap to dismiss
 - Uses Web Audio ping sound for emotional feedback
 
+**Body Pain Location Selector (Phase 3 Health Tracking)**
+- Two-step symptom flow: symptom type → body location
+- `BodyPainSelector.jsx` with 9 body regions (head, neck, chest, arms, stomach, back, legs)
+- Body location stored with symptom log and displayed in doctor report
+- Large touch-friendly grid layout for senior accessibility
+
 ---
 
 ## [1.1.0] - 2025-12-11
