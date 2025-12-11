@@ -24,7 +24,8 @@ import { FEATURES } from '../config/features';
 
 export const SeniorView = ({
     tasks, toggleTask, updateStatus, addSymptom, familyStatus, onSendPing,
-    weeklyAnswers, onWeeklyAnswer, helpOffers, helpRequests, onHelpOffer, onHelpRequest
+    weeklyAnswers, onWeeklyAnswer, helpOffers, helpRequests, onHelpOffer, onHelpRequest,
+    userName = 'Senior', relativeName = 'Familie'
 }) => {
     const [showCallModal, setShowCallModal] = useState(false);
     const [showSymptomModal, setShowSymptomModal] = useState(false);
@@ -203,12 +204,12 @@ export const SeniorView = ({
                     <>
                         {/* Family Status - toggle with FEATURES.familyStatusCard */}
                         {FEATURES.familyStatusCard && (
-                            <FamilyStatusCard familyStatus={familyStatus} familyName="Louise" />
+                            <FamilyStatusCard familyStatus={familyStatus} familyName={relativeName} />
                         )}
 
                         {/* Thinking of You - toggle with FEATURES.thinkingOfYou */}
                         {FEATURES.thinkingOfYou && (
-                            <ThinkingOfYouButton onSendPing={onSendPing} fromName="Birthe" />
+                            <ThinkingOfYouButton onSendPing={onSendPing} fromName={userName} />
                         )}
 
                         {/* Weekly Question Ritual - toggle with FEATURES.weeklyQuestion */}
@@ -242,7 +243,7 @@ export const SeniorView = ({
                 <Button variant="danger" size="large" className="w-full" onClick={() => setShowCallModal(true)}>
                     <div className="flex items-center gap-3">
                         <Phone className="w-8 h-8" />
-                        <span>Ring til Louise</span>
+                        <span>Ring til {relativeName}</span>
                     </div>
                 </Button>
             </footer>
@@ -314,7 +315,7 @@ export const SeniorView = ({
                             <Phone className="w-10 h-10 text-rose-600" />
                         </div>
                         <h3 className="text-2xl font-bold text-stone-800 mb-2">Ringer op...</h3>
-                        <p className="text-stone-500 mb-8">Ringer til Louise</p>
+                        <p className="text-stone-500 mb-8">Ringer til {relativeName}</p>
                         <Button variant="danger" onClick={() => setShowCallModal(false)}>Afslut opkald</Button>
                     </div>
                 </div>

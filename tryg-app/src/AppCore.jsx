@@ -10,6 +10,7 @@ import { PrivacySettings } from './components/PrivacySettings';
 import { useTasks } from './hooks/useTasks';
 import { useSymptoms } from './hooks/useSymptoms';
 import { useSettings } from './hooks/useSettings';
+import { useWeeklyQuestions } from './hooks/useWeeklyQuestions';
 import { SENIOR_PROFILE } from './data/constants';
 import { playCompletionSound, playSuccessSound, playPingSound } from './utils/sounds';
 import { FEATURES } from './config/features';
@@ -23,9 +24,9 @@ export default function TrygAppCore({
     inviteCode,
     onGetInviteCode
 }) {
-    // Determine view based on user role
+    // View is determined by user role - no toggle allowed
     const isRelative = userProfile?.role === 'relative';
-    const [view, setView] = useState(isRelative ? 'relative' : 'senior');
+    const isSenior = userProfile?.role === 'senior';
     const [activePing, setActivePing] = useState(null);
     const [notification, setNotification] = useState(null);
     const [showSettings, setShowSettings] = useState(false);
@@ -35,9 +36,9 @@ export default function TrygAppCore({
     const { tasks, toggleTask, addTask } = useTasks(careCircle?.id);
     const { symptoms, addSymptom } = useSymptoms(careCircle?.id);
     const { familyStatus, setFamilyStatus } = useSettings(careCircle?.id);
+    const { answers: weeklyAnswers, addAnswer: addWeeklyAnswer } = useWeeklyQuestions(careCircle?.id);
 
-    // Phase 5: Emotional Connection state (still localStorage for now - can migrate later)
-    const [weeklyAnswers, setWeeklyAnswers] = useState([]);
+    // Local state for features not yet migrated to Firestore
     const [helpOffers, setHelpOffers] = useState([]);
     const [helpRequests, setHelpRequests] = useState([]);
     const [lastCheckIn, setLastCheckIn] = useState(null);
@@ -88,8 +89,8 @@ export default function TrygAppCore({
         }
     };
 
-    const handleWeeklyAnswer = (answer) => {
-        setWeeklyAnswers(prev => [answer, ...prev]);
+    const handleWeeklyAnswer = async (answer) => {
+        await addWeeklyAnswer(answer);
     };
 
     const handleHelpOffer = (offer) => {
@@ -100,8 +101,9 @@ export default function TrygAppCore({
         setHelpRequests(prev => [{ ...request, timestamp: new Date().toISOString() }, ...prev]);
     };
 
-    // Get display name based on role
-    const seniorName = careCircle?.seniorName || 'Birthe';
+    // Get display names from care circle and user profile
+    const seniorName = careCircle?.seniorName || userProfile?.displayName || 'Senior';
+    const relativeName = userProfile?.displayName || 'Pårørende';
     const profile = {
         ...SENIOR_PROFILE,
         name: seniorName,
@@ -132,7 +134,7 @@ export default function TrygAppCore({
                     )}
                 </div>
 
-                {/* View Toggle + User Menu */}
+                {/* Header with role indicator */}
                 <div className="absolute top-0 left-0 right-0 h-16 bg-black/5 z-50 flex justify-center items-center backdrop-blur-sm px-2">
                     {/* Settings button (left) */}
                     <button
@@ -143,20 +145,10 @@ export default function TrygAppCore({
                         <Share2 className="w-5 h-5 text-stone-600" />
                     </button>
 
-                    {/* View toggle (center) */}
-                    <div className="bg-white/80 p-1 rounded-full flex text-xs font-bold shadow-lg">
-                        <button
-                            onClick={() => setView('senior')}
-                            className={`px-4 py-2 rounded-full transition-colors ${view === 'senior' ? 'bg-teal-600 text-white' : 'text-stone-600 hover:bg-stone-100'}`}
-                        >
-                            Senior View
-                        </button>
-                        <button
-                            onClick={() => setView('relative')}
-                            className={`px-4 py-2 rounded-full transition-colors ${view === 'relative' ? 'bg-indigo-600 text-white' : 'text-stone-600 hover:bg-stone-100'}`}
-                        >
-                            Pårørende View
-                        </button>
+                    {/* Role indicator (center) - no toggle */}
+                    <div className={`px-4 py-2 rounded-full text-sm font-bold shadow-lg ${isSenior ? 'bg-teal-600 text-white' : 'bg-indigo-600 text-white'
+                        }`}>
+                        {isSenior ? `👤 ${seniorName}` : `👥 ${relativeName}`}
                     </div>
 
                     {/* Sign out button (right) */}
@@ -215,14 +207,14 @@ export default function TrygAppCore({
 
                 <div className="pt-14 h-full">
                     {/* Ping Notification */}
-                    {activePing && activePing.toView === view && (
+                    {activePing && activePing.toView === (isSenior ? 'senior' : 'relative') && (
                         <PingNotification
                             ping={activePing}
                             onDismiss={() => setActivePing(null)}
                         />
                     )}
 
-                    {view === 'senior' ? (
+                    {isSenior ? (
                         <SeniorView
                             tasks={tasks}
                             toggleTask={handleToggleTask}
@@ -236,6 +228,8 @@ export default function TrygAppCore({
                             helpRequests={helpRequests}
                             onHelpOffer={handleHelpOffer}
                             onHelpRequest={handleHelpRequest}
+                            userName={seniorName}
+                            relativeName={relativeName}
                         />
                     ) : (
                         <RelativeView
@@ -246,12 +240,14 @@ export default function TrygAppCore({
                             onAddTask={handleAddTaskFromRelative}
                             familyStatus={familyStatus}
                             onFamilyStatusChange={setFamilyStatus}
-                            onSendPing={() => handleSendPing(userProfile?.displayName || 'Louise', 'senior')}
+                            onSendPing={() => handleSendPing(relativeName, 'senior')}
                             weeklyAnswers={weeklyAnswers}
                             onWeeklyAnswer={handleWeeklyAnswer}
                             helpOffers={helpOffers}
                             helpRequests={helpRequests}
                             onOpenSettings={() => setShowPrivacySettings(true)}
+                            userName={relativeName}
+                            seniorName={seniorName}
                         />
                     )}
                 </div>

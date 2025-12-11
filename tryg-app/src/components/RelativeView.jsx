@@ -20,7 +20,7 @@ import { FEATURES } from '../config/features';
 export const RelativeView = ({
     tasks, profile, lastCheckIn, symptomLogs, onAddTask, familyStatus,
     onFamilyStatusChange, onSendPing, weeklyAnswers, onWeeklyAnswer,
-    helpOffers, helpRequests, onOpenSettings
+    helpOffers, helpRequests, onOpenSettings, userName = 'Pårørende', seniorName = 'Mor'
 }) => {
     const [showAddModal, setShowAddModal] = useState(false);
     const [showReport, setShowReport] = useState(false);
@@ -38,7 +38,7 @@ export const RelativeView = ({
             title: newTaskTitle.trim(),
             time: '14:00',
             type: 'appointment',
-            description: 'Tilføjet af Louise',
+            description: `Tilføjet af ${userName}`,
             period: 'eftermiddag'
         });
         setNewTaskTitle('');
@@ -58,7 +58,7 @@ export const RelativeView = ({
                         <div className="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-700 font-bold">
                             L
                         </div>
-                        <span className="font-semibold text-slate-700">Hej, Louise</span>
+                        <span className="font-semibold text-slate-700">Hej, {userName}</span>
                     </div>
                     <div className="flex items-center gap-2">
                         {/* Compact ping button in header */}
@@ -119,7 +119,7 @@ export const RelativeView = ({
                         <WeeklyQuestionCard
                             onAnswer={onWeeklyAnswer}
                             answers={weeklyAnswers}
-                            userName="Louise"
+                            userName={userName}
                         />
 
                         {/* Show active help offers/requests from senior */}
