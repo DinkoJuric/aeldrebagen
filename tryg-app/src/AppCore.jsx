@@ -12,6 +12,8 @@ import { useSymptoms } from './hooks/useSymptoms';
 import { useSettings } from './hooks/useSettings';
 import { useWeeklyQuestions } from './hooks/useWeeklyQuestions';
 import { usePings } from './hooks/usePings';
+import { useHelpExchange } from './hooks/useHelpExchange';
+import { useCheckIn } from './hooks/useCheckIn';
 import { SENIOR_PROFILE } from './data/constants';
 import { playCompletionSound, playSuccessSound, playPingSound } from './utils/sounds';
 import { FEATURES } from './config/features';
@@ -40,11 +42,8 @@ export default function TrygAppCore({
     const { familyStatus, setFamilyStatus } = useSettings(careCircle?.id);
     const { answers: weeklyAnswers, addAnswer: addWeeklyAnswer } = useWeeklyQuestions(careCircle?.id);
     const { latestPing, sendPing, dismissPing } = usePings(careCircle?.id, user?.uid);
-
-    // Local state for features not yet migrated to Firestore
-    const [helpOffers, setHelpOffers] = useState([]);
-    const [helpRequests, setHelpRequests] = useState([]);
-    const [lastCheckIn, setLastCheckIn] = useState(null);
+    const { helpOffers, helpRequests, addOffer, addRequest } = useHelpExchange(careCircle?.id);
+    const { lastCheckIn, recordCheckIn } = useCheckIn(careCircle?.id);
 
     // Handle incoming pings from Firestore
     useEffect(() => {
@@ -98,12 +97,12 @@ export default function TrygAppCore({
         await addWeeklyAnswer(answer);
     };
 
-    const handleHelpOffer = (offer) => {
-        setHelpOffers(prev => [{ ...offer, timestamp: new Date().toISOString() }, ...prev]);
+    const handleHelpOffer = async (offer) => {
+        await addOffer(offer);
     };
 
-    const handleHelpRequest = (request) => {
-        setHelpRequests(prev => [{ ...request, timestamp: new Date().toISOString() }, ...prev]);
+    const handleHelpRequest = async (request) => {
+        await addRequest(request);
     };
 
     // Get display names from care circle and user profile
