@@ -6,6 +6,7 @@ import { PingNotification } from './components/ThinkingOfYou';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { INITIAL_TASKS, SENIOR_PROFILE } from './data/constants';
 import { playCompletionSound, playSuccessSound, playPingSound } from './utils/sounds';
+import { FEATURES } from './config/features';
 import './index.css';
 
 export default function TrygApp() {
@@ -22,8 +23,9 @@ export default function TrygApp() {
   const [helpOffers, setHelpOffers] = useLocalStorage('tryg-help-offers', []);
   const [helpRequests, setHelpRequests] = useLocalStorage('tryg-help-requests', []);
 
-  // Simulated notification after 5 seconds
+  // Simulated notification after 5 seconds (only if enabled)
   useEffect(() => {
+    if (!FEATURES.demoNotification) return;
     const timer = setTimeout(() => {
       setNotification({
         title: "Husk at drikke vand",

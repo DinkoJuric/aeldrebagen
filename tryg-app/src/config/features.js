@@ -24,6 +24,9 @@ export const FEATURES = {
     // Sounds
     completionSounds: true,    // Task completion chimes
     pingSound: true,           // Ping notification sound
+
+    // Demo/Testing
+    demoNotification: true,    // Water reminder notification (5s after load)
 };
 
 // Helper to check if feature is enabled

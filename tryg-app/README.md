@@ -89,3 +89,41 @@ See [IOS_DEPLOYMENT.md](./IOS_DEPLOYMENT.md) for TestFlight instructions.
 - Capacitor (iOS)
 - Web Audio API (sounds)
 - localStorage (persistence)
+
+---
+
+## Version Control & Reverting Changes
+
+### Git Tags (Checkpoints)
+
+Tags are permanent bookmarks in Git history. Use them to safely experiment:
+
+```bash
+# List all tags
+git tag
+
+# View a tag's details
+git show v1.3-before-tabs
+
+# Temporarily view old version
+git checkout v1.3-before-tabs
+
+# Return to current version
+git checkout main
+```
+
+### How to Revert
+
+**Easy way** (keep code, just hide): Set feature flag to `false` in `features.js`
+
+**Hard revert** (remove all code since a tag):
+```bash
+git revert --no-commit v1.3-before-tabs..HEAD
+git commit -m "Revert to pre-tabs version"
+```
+
+### Current Tags
+
+| Tag | Description |
+|-----|-------------|
+| `v1.3-before-tabs` | Before tabbed layout experiment |

@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
 
-// Body regions for pain mapping - senior-friendly large touch targets
+// Body regions for pain mapping - ordered anatomically (top → bottom)
 const BODY_REGIONS = [
     { id: 'head', label: 'Hoved', emoji: '🧠' },
     { id: 'neck', label: 'Nakke', emoji: '🦴' },
     { id: 'chest', label: 'Bryst', emoji: '❤️' },
+    { id: 'back', label: 'Ryg', emoji: '🔙' },
+    { id: 'stomach', label: 'Mave', emoji: '🤢' },
     { id: 'leftArm', label: 'Venstre arm', emoji: '💪' },
     { id: 'rightArm', label: 'Højre arm', emoji: '💪' },
-    { id: 'stomach', label: 'Mave', emoji: '🤢' },
-    { id: 'back', label: 'Ryg', emoji: '🔙' },
     { id: 'leftLeg', label: 'Venstre ben', emoji: '🦵' },
     { id: 'rightLeg', label: 'Højre ben', emoji: '🦵' },
 ];
