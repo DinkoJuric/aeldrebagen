@@ -14,6 +14,8 @@ import { Modal } from './ui/Modal';
 import { StatusSelector, STATUS_OPTIONS } from './FamilyStatusCard';
 import { ThinkingOfYouButton } from './ThinkingOfYou';
 import { WeeklyQuestionCard } from './WeeklyQuestion';
+import { TabNavigation } from './TabNavigation';
+import { FEATURES } from '../config/features';
 
 export const RelativeView = ({
     tasks, profile, lastCheckIn, symptomLogs, onAddTask, familyStatus,
@@ -24,6 +26,7 @@ export const RelativeView = ({
     const [showReport, setShowReport] = useState(false);
     const [newTaskTitle, setNewTaskTitle] = useState('');
     const [showStatusPicker, setShowStatusPicker] = useState(false);
+    const [activeTab, setActiveTab] = useState('daily'); // 'daily' = Oversigt, 'family' = Familie
 
     const completionRate = tasks.length > 0
         ? Math.round((tasks.filter(t => t.completed).length / tasks.length) * 100)
@@ -63,63 +66,78 @@ export const RelativeView = ({
 
             <main className="p-4 space-y-6 overflow-y-auto pb-24">
 
-                {/* Reciprocity Feature: Status Sharing - Now with picker */}
-                <div className="bg-indigo-600 rounded-xl p-4 text-white shadow-lg">
-                    <div className="flex justify-between items-center mb-3">
-                        <h3 className="font-bold text-indigo-100 text-sm uppercase tracking-wider">Din status hos mor</h3>
-                        <span className="bg-indigo-500 px-2 py-0.5 rounded text-xs">Synlig for Birthe</span>
-                    </div>
+                {/* Tab Navigation - only show if tabbedLayout enabled */}
+                {FEATURES.tabbedLayout && (
+                    <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
+                )}
 
-                    {showStatusPicker ? (
-                        <div className="bg-white/10 rounded-xl p-3">
-                            <StatusSelector
-                                currentStatus={familyStatus}
-                                onStatusChange={(newStatus) => {
-                                    onFamilyStatusChange(newStatus);
-                                    setShowStatusPicker(false);
-                                }}
-                            />
-                        </div>
-                    ) : (
-                        <div className="flex items-center gap-3" onClick={() => setShowStatusPicker(true)}>
-                            <div className="p-2 bg-indigo-500 rounded-lg">
-                                <StatusIcon className="w-6 h-6 text-white" />
+                {/* ===== DAILY/OVERVIEW TAB ===== */}
+                {(!FEATURES.tabbedLayout || activeTab === 'daily') && (
+                    <>
+                        {/* Reciprocity Feature: Status Sharing - Now with picker */}
+                        <div className="bg-indigo-600 rounded-xl p-4 text-white shadow-lg">
+                            <div className="flex justify-between items-center mb-3">
+                                <h3 className="font-bold text-indigo-100 text-sm uppercase tracking-wider">Din status hos mor</h3>
+                                <span className="bg-indigo-500 px-2 py-0.5 rounded text-xs">Synlig for Birthe</span>
                             </div>
-                            <div className="flex-1">
-                                <p className="font-bold">{currentStatusInfo.label}</p>
-                                <p className="text-indigo-200 text-xs">Tryk for at ændre</p>
+
+                            {showStatusPicker ? (
+                                <div className="bg-white/10 rounded-xl p-3">
+                                    <StatusSelector
+                                        currentStatus={familyStatus}
+                                        onStatusChange={(newStatus) => {
+                                            onFamilyStatusChange(newStatus);
+                                            setShowStatusPicker(false);
+                                        }}
+                                    />
+                                </div>
+                            ) : (
+                                <div className="flex items-center gap-3" onClick={() => setShowStatusPicker(true)}>
+                                    <div className="p-2 bg-indigo-500 rounded-lg">
+                                        <StatusIcon className="w-6 h-6 text-white" />
+                                    </div>
+                                    <div className="flex-1">
+                                        <p className="font-bold">{currentStatusInfo.label}</p>
+                                        <p className="text-indigo-200 text-xs">Tryk for at ændre</p>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </>
+                )}
+
+                {/* ===== FAMILY TAB ===== */}
+                {(!FEATURES.tabbedLayout || activeTab === 'family') && (
+                    <>
+                        {/* Thinking of You - send ping to mom */}
+                        <ThinkingOfYouButton onSendPing={onSendPing} fromName="Louise" />
+
+                        {/* Weekly Question Ritual - same question, family answers together */}
+                        <WeeklyQuestionCard
+                            onAnswer={onWeeklyAnswer}
+                            answers={weeklyAnswers}
+                            userName="Louise"
+                        />
+
+                        {/* Show active help offers/requests from senior */}
+                        {(helpOffers?.length > 0 || helpRequests?.length > 0) && (
+                            <div className="bg-teal-50 border border-teal-200 rounded-xl p-4">
+                                <h4 className="text-teal-700 font-bold mb-2">Fra mor:</h4>
+                                <div className="space-y-2 text-sm">
+                                    {helpOffers?.map((offer, i) => (
+                                        <div key={`o-${i}`} className="text-teal-600">
+                                            💚 {offer.label}
+                                        </div>
+                                    ))}
+                                    {helpRequests?.map((req, i) => (
+                                        <div key={`r-${i}`} className="text-indigo-600">
+                                            💜 {req.label}
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
-                        </div>
-                    )}
-                </div>
-
-                {/* Thinking of You - send ping to mom */}
-                <ThinkingOfYouButton onSendPing={onSendPing} fromName="Louise" />
-
-                {/* Weekly Question Ritual - same question, family answers together */}
-                <WeeklyQuestionCard
-                    onAnswer={onWeeklyAnswer}
-                    answers={weeklyAnswers}
-                    userName="Louise"
-                />
-
-                {/* Show active help offers/requests from senior */}
-                {(helpOffers?.length > 0 || helpRequests?.length > 0) && (
-                    <div className="bg-teal-50 border border-teal-200 rounded-xl p-4">
-                        <h4 className="text-teal-700 font-bold mb-2">Fra mor:</h4>
-                        <div className="space-y-2 text-sm">
-                            {helpOffers?.map((offer, i) => (
-                                <div key={`o-${i}`} className="text-teal-600">
-                                    💚 {offer.label}
-                                </div>
-                            ))}
-                            {helpRequests?.map((req, i) => (
-                                <div key={`r-${i}`} className="text-indigo-600">
-                                    💜 {req.label}
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+                        )}
+                    </>
                 )}
 
                 {/* Peace of Mind Status Card */}
