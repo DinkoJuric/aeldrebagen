@@ -4,6 +4,7 @@ import { SeniorView } from './components/SeniorView';
 import { RelativeView } from './components/RelativeView';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { INITIAL_TASKS, SENIOR_PROFILE } from './data/constants';
+import { playCompletionSound, playSuccessSound, playPingSound } from './utils/sounds';
 import './index.css';
 
 export default function TrygApp() {
@@ -34,9 +35,17 @@ export default function TrygApp() {
   }, [notification]);
 
   const toggleTask = (id) => {
+    const task = tasks.find(t => t.id === id);
+    const willBeCompleted = task && !task.completed;
+
     setTasks(tasks.map(t =>
       t.id === id ? { ...t, completed: !t.completed } : t
     ));
+
+    // Play sound when completing (not uncompleting)
+    if (willBeCompleted) {
+      playCompletionSound();
+    }
   };
 
   const handleCheckIn = (status) => {
@@ -44,7 +53,7 @@ export default function TrygApp() {
     const timeString = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
     setLastCheckIn(timeString);
     if (status === 'checked-in') {
-      // Could be a toast notification instead of alert in production
+      playSuccessSound(); // Celebratory sound for check-in
       console.log('Check-in registered:', timeString);
     }
   };

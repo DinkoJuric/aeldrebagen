@@ -2,7 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0] - 2025-12-11
+
+### 🛡️ Stability & Emotional Feedback (Phase 1)
+
+**Error Handling**
+- Added React Error Boundary with Danish fallback UI and retry button
+- Global `window.onerror` and `onunhandledrejection` handlers
+- Prepared for Sentry integration (TODOs in place)
+
+**Emotional Feedback Sounds**
+- Gentle two-note chime on task completion (Web Audio API)
+- Celebration arpeggio on "Jeg har det godt" check-in
+- "Thinking of you" ping sound for future connection features
+
+---
+
 ## [1.0.0] - 2025-12-11
+
 
 ### 🎉 Initial MVP Release
 
