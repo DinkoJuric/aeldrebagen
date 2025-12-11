@@ -177,24 +177,24 @@ export const SeniorView = ({
                                 <Button
                                     variant="primary"
                                     size="large"
-                                    className="w-full h-32"
+                                    className="w-full min-h-32 py-4"
                                     onClick={() => updateStatus('checked-in')}
                                 >
-                                    <div className="flex flex-col items-center gap-2">
-                                        <CheckCircle className="w-10 h-10" />
-                                        <span>Jeg har det godt</span>
+                                    <div className="flex flex-col items-center gap-2 text-center">
+                                        <CheckCircle className="w-10 h-10 shrink-0" />
+                                        <span className="text-sm leading-tight">Jeg har det godt</span>
                                     </div>
                                 </Button>
 
                                 <Button
                                     variant="secondary"
                                     size="large"
-                                    className="w-full h-32 bg-orange-50 text-orange-800 border-2 border-orange-100 hover:bg-orange-100"
+                                    className="w-full min-h-32 py-4 bg-orange-50 text-orange-800 border-2 border-orange-100 hover:bg-orange-100"
                                     onClick={() => setShowSymptomModal(true)}
                                 >
-                                    <div className="flex flex-col items-center gap-2">
-                                        <Heart className="w-10 h-10 text-orange-500" />
-                                        <span>Jeg har ondt</span>
+                                    <div className="flex flex-col items-center gap-2 text-center">
+                                        <Heart className="w-10 h-10 text-orange-500 shrink-0" />
+                                        <span className="text-sm leading-tight">Jeg har ondt</span>
                                     </div>
                                 </Button>
                             </div>
