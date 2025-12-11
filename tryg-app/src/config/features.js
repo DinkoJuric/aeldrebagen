@@ -2,6 +2,9 @@
 // Set to false to temporarily disable a feature
 
 export const FEATURES = {
+    // Layout
+    tabbedLayout: true,        // Use tabs instead of scrolling (experimental)
+
     // Phase 5: Emotional Connection
     weeklyQuestion: true,      // Weekly Question of the Week card
     memoryTriggers: false,      // "Husker du da...?" memories

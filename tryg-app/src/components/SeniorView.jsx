@@ -18,6 +18,7 @@ import { ThinkingOfYouButton } from './ThinkingOfYou';
 import { BodyPainSelector } from './BodyPainSelector';
 import { WeeklyQuestionCard, MemoryTrigger } from './WeeklyQuestion';
 import { HelpExchange } from './HelpExchange';
+import { TabNavigation } from './TabNavigation';
 import { SYMPTOMS_LIST } from '../data/constants';
 import { FEATURES } from '../config/features';
 
@@ -28,6 +29,7 @@ export const SeniorView = ({
     const [showCallModal, setShowCallModal] = useState(false);
     const [showSymptomModal, setShowSymptomModal] = useState(false);
     const [activePeriod, setActivePeriod] = useState('morgen');
+    const [activeTab, setActiveTab] = useState('daily'); // 'daily' or 'family'
 
     // Two-step symptom flow: symptom type → body location (for pain)
     const [selectedSymptom, setSelectedSymptom] = useState(null);
@@ -132,102 +134,117 @@ export const SeniorView = ({
             {/* Main Content - Scrollable */}
             <main className="flex-1 overflow-y-auto p-4 space-y-4 pb-24">
 
-                {/* Family Status - toggle with FEATURES.familyStatusCard */}
-                {FEATURES.familyStatusCard && (
-                    <FamilyStatusCard familyStatus={familyStatus} familyName="Louise" />
+                {/* Tab Navigation - only show if tabbedLayout enabled */}
+                {FEATURES.tabbedLayout && (
+                    <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
                 )}
 
-                {/* Thinking of You - toggle with FEATURES.thinkingOfYou */}
-                {FEATURES.thinkingOfYou && (
-                    <ThinkingOfYouButton onSendPing={onSendPing} fromName="Birthe" />
-                )}
-
-                {/* Weekly Question Ritual - toggle with FEATURES.weeklyQuestion */}
-                {FEATURES.weeklyQuestion && (
-                    <WeeklyQuestionCard
-                        onAnswer={onWeeklyAnswer}
-                        answers={weeklyAnswers}
-                        userName="Birthe"
-                    />
-                )}
-
-                {/* Memory Trigger - toggle with FEATURES.memoryTriggers */}
-                {FEATURES.memoryTriggers && <MemoryTrigger />}
-
-                {/* Dignity-Preserving Help Exchange - toggle with FEATURES.helpExchange */}
-                {FEATURES.helpExchange && (
-                    <HelpExchange
-                        onOffer={onHelpOffer}
-                        onRequest={onHelpRequest}
-                        activeOffers={helpOffers}
-                        activeRequests={helpRequests}
-                    />
-                )}
-
-                {/* Reward Card (Behavioral Hook) */}
-                <div className={`
+                {/* ===== DAILY TAB ===== */}
+                {(!FEATURES.tabbedLayout || activeTab === 'daily') && (
+                    <>
+                        {/* Reward Card (Behavioral Hook) */}
+                        <div className={`
                     rounded-3xl p-6 mb-6 transition-all duration-500 border-2 overflow-hidden relative
                     ${isMorningComplete ? 'bg-indigo-600 border-indigo-600 text-white' : 'bg-white border-dashed border-stone-300'}
                 `}>
-                    {isMorningComplete ? (
-                        <div className="animate-fade-in text-center">
-                            <div className="flex items-center justify-center gap-2 mb-2">
-                                <ImageIcon className="w-6 h-6 text-indigo-200" />
-                                <span className="font-bold text-indigo-100 uppercase tracking-widest text-sm">Dagens Billede</span>
-                            </div>
-                            <div className="w-full h-48 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-xl mb-3 overflow-hidden shadow-lg transform rotate-2 hover:rotate-0 transition-transform duration-500 flex items-center justify-center">
-                                <span className="text-white/80 text-6xl">🌳👨‍👩‍👧‍👦</span>
-                            </div>
-                            <p className="font-bold text-lg">Godt klaret, Farmor! ❤️</p>
-                            <p className="text-indigo-200 text-sm">Her er et billede fra vores tur i skoven.</p>
+                            {isMorningComplete ? (
+                                <div className="animate-fade-in text-center">
+                                    <div className="flex items-center justify-center gap-2 mb-2">
+                                        <ImageIcon className="w-6 h-6 text-indigo-200" />
+                                        <span className="font-bold text-indigo-100 uppercase tracking-widest text-sm">Dagens Billede</span>
+                                    </div>
+                                    <div className="w-full h-48 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-xl mb-3 overflow-hidden shadow-lg transform rotate-2 hover:rotate-0 transition-transform duration-500 flex items-center justify-center">
+                                        <span className="text-white/80 text-6xl">🌳👨‍👩‍👧‍👦</span>
+                                    </div>
+                                    <p className="font-bold text-lg">Godt klaret, Farmor! ❤️</p>
+                                    <p className="text-indigo-200 text-sm">Her er et billede fra vores tur i skoven.</p>
+                                </div>
+                            ) : (
+                                <div className="flex flex-col items-center justify-center text-center py-4 opacity-60">
+                                    <div className="w-16 h-16 bg-stone-100 rounded-full flex items-center justify-center mb-2">
+                                        <ImageIcon className="w-8 h-8 text-stone-400" />
+                                    </div>
+                                    <h3 className="font-bold text-stone-500 text-lg">Dagens Billede</h3>
+                                    <p className="text-stone-400 text-sm">Gør din morgen færdig for at se billedet</p>
+                                </div>
+                            )}
                         </div>
-                    ) : (
-                        <div className="flex flex-col items-center justify-center text-center py-4 opacity-60">
-                            <div className="w-16 h-16 bg-stone-100 rounded-full flex items-center justify-center mb-2">
-                                <ImageIcon className="w-8 h-8 text-stone-400" />
+
+                        {/* Check-in Status */}
+                        <div className="bg-white rounded-3xl p-6 shadow-sm border-2 border-teal-100 mb-8">
+                            <h2 className="text-xl font-semibold text-stone-800 mb-4">Hvordan har du det?</h2>
+                            <div className="grid grid-cols-2 gap-4">
+                                <Button
+                                    variant="primary"
+                                    size="large"
+                                    className="w-full h-32"
+                                    onClick={() => updateStatus('checked-in')}
+                                >
+                                    <div className="flex flex-col items-center gap-2">
+                                        <CheckCircle className="w-10 h-10" />
+                                        <span>Jeg har det godt</span>
+                                    </div>
+                                </Button>
+
+                                <Button
+                                    variant="secondary"
+                                    size="large"
+                                    className="w-full h-32 bg-orange-50 text-orange-800 border-2 border-orange-100 hover:bg-orange-100"
+                                    onClick={() => setShowSymptomModal(true)}
+                                >
+                                    <div className="flex flex-col items-center gap-2">
+                                        <Heart className="w-10 h-10 text-orange-500" />
+                                        <span>Jeg har ondt</span>
+                                    </div>
+                                </Button>
                             </div>
-                            <h3 className="font-bold text-stone-500 text-lg">Dagens Billede</h3>
-                            <p className="text-stone-400 text-sm">Gør din morgen færdig for at se billedet</p>
                         </div>
-                    )}
-                </div>
 
-                {/* Check-in Status */}
-                <div className="bg-white rounded-3xl p-6 shadow-sm border-2 border-teal-100 mb-8">
-                    <h2 className="text-xl font-semibold text-stone-800 mb-4">Hvordan har du det?</h2>
-                    <div className="grid grid-cols-2 gap-4">
-                        <Button
-                            variant="primary"
-                            size="large"
-                            className="w-full h-32"
-                            onClick={() => updateStatus('checked-in')}
-                        >
-                            <div className="flex flex-col items-center gap-2">
-                                <CheckCircle className="w-10 h-10" />
-                                <span>Jeg har det godt</span>
-                            </div>
-                        </Button>
+                        {/* Contextual Task Lists */}
+                        {renderTaskSection('Morgen (Kl. 8-11)', 'morgen', <Coffee className="w-6 h-6 text-stone-600" />)}
+                        <div className="h-px bg-stone-200 my-4" />
+                        {renderTaskSection('Frokost (Kl. 12-13)', 'frokost', <Sun className="w-6 h-6 text-stone-600" />)}
+                        <div className="h-px bg-stone-200 my-4" />
+                        {renderTaskSection('Eftermiddag (Kl. 14-17)', 'eftermiddag', <Moon className="w-6 h-6 text-stone-600" />)}
+                    </>
+                )}
 
-                        <Button
-                            variant="secondary"
-                            size="large"
-                            className="w-full h-32 bg-orange-50 text-orange-800 border-2 border-orange-100 hover:bg-orange-100"
-                            onClick={() => setShowSymptomModal(true)}
-                        >
-                            <div className="flex flex-col items-center gap-2">
-                                <Heart className="w-10 h-10 text-orange-500" />
-                                <span>Jeg har ondt</span>
-                            </div>
-                        </Button>
-                    </div>
-                </div>
+                {/* ===== FAMILY TAB ===== */}
+                {(!FEATURES.tabbedLayout || activeTab === 'family') && (
+                    <>
+                        {/* Family Status - toggle with FEATURES.familyStatusCard */}
+                        {FEATURES.familyStatusCard && (
+                            <FamilyStatusCard familyStatus={familyStatus} familyName="Louise" />
+                        )}
 
-                {/* Contextual Task Lists */}
-                {renderTaskSection('Morgen (Kl. 8-11)', 'morgen', <Coffee className="w-6 h-6 text-stone-600" />)}
-                <div className="h-px bg-stone-200 my-4" />
-                {renderTaskSection('Frokost (Kl. 12-13)', 'frokost', <Sun className="w-6 h-6 text-stone-600" />)}
-                <div className="h-px bg-stone-200 my-4" />
-                {renderTaskSection('Eftermiddag (Kl. 14-17)', 'eftermiddag', <Moon className="w-6 h-6 text-stone-600" />)}
+                        {/* Thinking of You - toggle with FEATURES.thinkingOfYou */}
+                        {FEATURES.thinkingOfYou && (
+                            <ThinkingOfYouButton onSendPing={onSendPing} fromName="Birthe" />
+                        )}
+
+                        {/* Weekly Question Ritual - toggle with FEATURES.weeklyQuestion */}
+                        {FEATURES.weeklyQuestion && (
+                            <WeeklyQuestionCard
+                                onAnswer={onWeeklyAnswer}
+                                answers={weeklyAnswers}
+                                userName="Birthe"
+                            />
+                        )}
+
+                        {/* Memory Trigger - toggle with FEATURES.memoryTriggers */}
+                        {FEATURES.memoryTriggers && <MemoryTrigger />}
+
+                        {/* Dignity-Preserving Help Exchange - toggle with FEATURES.helpExchange */}
+                        {FEATURES.helpExchange && (
+                            <HelpExchange
+                                onOffer={onHelpOffer}
+                                onRequest={onHelpRequest}
+                                activeOffers={helpOffers}
+                                activeRequests={helpRequests}
+                            />
+                        )}
+                    </>
+                )}
 
             </main>
 
