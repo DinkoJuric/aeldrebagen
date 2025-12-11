@@ -75,3 +75,11 @@ description: Learnings from past projects to apply in future work
 - **Agency controls**: "Pause" mode, temporary sharing, notification when viewed
 - **Meaningful goals**: "Dancing at the wedding" > abstract health metrics
 
+## Development Process Insights
+- **Changelog timing**: Create at first stable milestone, update with each feature release
+- **Ideation docs**: Capture future ideas immediately to maintain focus on current sprint
+- **Mirror components**: For two-sided apps, create matching components (FamilyStatusCard for senior, StatusSelector for relative)
+- **LocalStorage for MVP**: Enables quick iteration without backend complexity
+- **Browser testing**: Use element indices for reliable click testing, pixel coordinates unreliable in scrollable areas
+- **Reflect periodically**: Pause after each feature to update learnings.md - prevents knowledge loss
+
