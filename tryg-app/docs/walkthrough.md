@@ -55,12 +55,27 @@ tryg-app/
 | `src/hooks/useTasks.js` | Real-time task sync |
 | `src/hooks/useSymptoms.js` | Real-time symptom sync |
 | `src/hooks/useSettings.js` | Family status sync |
+| `src/hooks/useWeeklyQuestions.js` | Weekly answers sync |
+| `src/hooks/usePings.js` | "Thinking of you" ping sync |
 | `src/components/AuthScreen.jsx` | Login/signup UI (Danish) |
 | `src/components/CircleSetup.jsx` | Create/join circle UI |
+| `src/components/ConsentModal.jsx` | GDPR consent flow |
+| `src/components/PrivacySettings.jsx` | Data export/deletion |
 | `src/AppWithAuth.jsx` | Auth flow wrapper |
 | `src/AppCore.jsx` | Main app with Firebase hooks |
 
 Toggle with `useFirebase: true/false` in features.js.
+
+### v1.4.1 - Bug Fixes from Testing 🐛
+**Issues discovered during first real-user testing**
+
+- Removed view toggle (users only see their own role's view)
+- Fixed hardcoded "Birthe"/"Louise" → dynamic names from care circle
+- Fixed signup flow → consent modal shows correctly after registration
+- Added circle members list in settings panel
+- Real-time sync for weekly questions and thinking-of-you pings
+
+> See [firebase_learnings.md](./firebase_learnings.md) for detailed lessons learned
 
 ### v1.3.0 - Emotional Connection
 - Weekly question ritual
