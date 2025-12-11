@@ -22,15 +22,19 @@ export const Button = ({
     variant = 'primary',
     className = '',
     size = 'normal',
-    disabled = false
+    disabled = false,
+    'aria-label': ariaLabel,
+    ...props
 }) => {
-    const baseStyle = "rounded-2xl font-semibold transition-all duration-200 flex items-center justify-center relative overflow-hidden";
+    const baseStyle = "rounded-2xl font-semibold transition-all duration-200 flex items-center justify-center relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500";
 
     return (
         <button
             onClick={onClick}
             disabled={disabled}
+            aria-label={ariaLabel}
             className={`${baseStyle} ${disabled ? variants.locked : variants[variant]} ${sizes[size]} ${className}`}
+            {...props}
         >
             {children}
         </button>

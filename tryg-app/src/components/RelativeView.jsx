@@ -52,7 +52,7 @@ export const RelativeView = ({ tasks, profile, lastCheckIn, symptomLogs, onAddTa
                         </div>
                         <span className="font-semibold text-slate-700">Hej, Louise</span>
                     </div>
-                    <Button variant="ghost" size="small"><Settings className="w-5 h-5" /></Button>
+                    <Button variant="ghost" size="small" aria-label="Indstillinger"><Settings className="w-5 h-5" /></Button>
                 </div>
             </header>
 
@@ -142,15 +142,20 @@ export const RelativeView = ({ tasks, profile, lastCheckIn, symptomLogs, onAddTa
                         <div className="space-y-2">
                             {symptomLogs.map((log, i) => (
                                 <div key={i} className="flex items-center justify-between text-sm text-orange-900 bg-white/50 p-2 rounded-lg">
-                                    <div className="flex items-center gap-2">
+                                    <div className="flex flex-wrap items-center gap-2">
                                         <span className="font-medium">{log.label}</span>
                                         {log.bodyLocation && (
                                             <span className="text-orange-600 text-xs bg-orange-100 px-2 py-0.5 rounded-full">
                                                 {log.bodyLocation.emoji} {log.bodyLocation.label}
                                             </span>
                                         )}
+                                        {log.bodyLocation?.severity && (
+                                            <span className="text-xs bg-orange-200 px-2 py-0.5 rounded-full">
+                                                {log.bodyLocation.severity.emoji} {log.bodyLocation.severity.label}
+                                            </span>
+                                        )}
                                     </div>
-                                    <span className="text-orange-500 text-xs">{log.time}</span>
+                                    <span className="text-orange-500 text-xs whitespace-nowrap">{log.time}</span>
                                 </div>
                             ))}
                         </div>
@@ -248,8 +253,11 @@ export const RelativeView = ({ tasks, profile, lastCheckIn, symptomLogs, onAddTa
                                             <span className="text-slate-400 ml-auto">{log.time}</span>
                                         </div>
                                         {log.bodyLocation && (
-                                            <div className="ml-8 text-xs text-slate-500">
-                                                📍 Lokation: <span className="font-medium">{log.bodyLocation.emoji} {log.bodyLocation.label}</span>
+                                            <div className="ml-8 text-xs text-slate-500 space-y-1">
+                                                <div>📍 Lokation: <span className="font-medium">{log.bodyLocation.emoji} {log.bodyLocation.label}</span></div>
+                                                {log.bodyLocation.severity && (
+                                                    <div>📊 Intensitet: <span className="font-medium">{log.bodyLocation.severity.emoji} {log.bodyLocation.severity.label}</span></div>
+                                                )}
                                             </div>
                                         )}
                                     </li>

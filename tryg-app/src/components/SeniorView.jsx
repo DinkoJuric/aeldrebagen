@@ -115,11 +115,12 @@ export const SeniorView = ({ tasks, toggleTask, updateStatus, addSymptom, family
             <header className="p-6 bg-white shadow-sm rounded-b-3xl z-10">
                 <div className="flex justify-between items-center mb-2">
                     <h1 className="text-3xl font-bold text-stone-800">{greeting}, Birthe</h1>
-                    <div className="bg-teal-100 p-2 rounded-full">
-                        <Sun className="text-teal-600 w-8 h-8" />
+                    <div className="bg-amber-100 p-2 rounded-full animate-sun-pulse">
+                        <Sun className="text-amber-500 w-8 h-8" />
                     </div>
                 </div>
                 <p className="text-stone-500 text-lg capitalize">{dateString}</p>
+                <p className="text-teal-600 text-sm mt-1 font-medium">Alt er vel ✨</p>
             </header>
 
             {/* Main Content - Scrollable */}
