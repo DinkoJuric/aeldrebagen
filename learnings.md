@@ -4,85 +4,130 @@ description: Learnings from past projects to apply in future work
 
 # Cross-Project Learnings
 
-## Windows/PowerShell
-- Use `;` to chain commands, NOT `&&` (Bash syntax)
-- Use `Move-Item` instead of `mv` for file operations
+Actionable learnings for avoiding roadblocks. Format: **Problem** → **Action Taken** → **Future Prevention**
 
-## GitHub Pages
-- `index.html` MUST be at repository root (not in subfolder)
-- 404 errors usually mean file structure issue
-- Wait 60s after push for changes to propagate
+---
 
-## Google Apps Script (Sheets API)
-- Use `URLSearchParams` for form-encoded POST (avoids CORS preflight)
-- Always `decodeURIComponent()` on received form data
-- Must redeploy as "New Version" after code changes (old ID = old code)
-- User must click "Advanced" → "Go to unsafe" for personal scripts
+## Shell & Environment
 
-## User Communication
-- When providing code snippets, warn not to copy markdown formatting (` ```javascript`)
-- For IDs/keys, explicitly show "copy ONLY this part: `ABC123`"
-- Test APIs directly in browser before debugging client code
+### PowerShell Command Chaining
+- **Problem**: `&&` syntax failed to chain commands
+- **Action**: Researched PowerShell docs, found `;` is the correct operator
+- **Future**: On Windows, always use `;` for command chaining. `&&` is Bash-only.
 
-## Git Workflow
-- Commit frequently with descriptive messages
-- Push after every significant change
-- `.gitignore` entries take effect immediately if file not already tracked
+### File Operations on Windows
+- **Problem**: `mv` command not recognized
+- **Action**: Used PowerShell-native `Move-Item`
+- **Future**: Use `Move-Item`, `Copy-Item`, `Remove-Item` on Windows, not Unix aliases.
 
-## React + Vite Development
-- Use `npx -y create-vite@latest` for non-interactive project scaffolding
-- For Tailwind v4+, use `@tailwindcss/vite` plugin instead of PostCSS config
-- `useLocalStorage` custom hook enables simple state persistence without backend
-- GitHub Actions workflow can deploy Vite apps to Pages with `base` path config
+---
 
-## Product & UX Insights
-- **Changelog timing**: Create at first stable milestone (MVP), not after
-- **Ideation docs**: Keep a running list of ideas - prevents scope creep by capturing "later" features
-- **Two-sided apps**: Design both user types simultaneously to ensure symmetry (e.g., what senior sees vs. what relative sees)
-- **Behavioral hooks**: Small rewards (photos, streaks) dramatically increase engagement for habit-forming apps
-- **Offline-first**: localStorage MVP proves value before investing in backend sync
+## Git & Deployment
 
-## Component Design Patterns
-- Modal as slide-up sheet on mobile feels native and less jarring
-- Large touch targets (48px+) are essential for accessibility
-- Period-based task grouping reduces cognitive load for seniors (Habit Stacking)
-- Pictogram-based inputs work better than text for quick selections
+### GitHub Pages 404 Errors
+- **Problem**: Deployed site showed 404, files were present
+- **Action**: Discovered `index.html` must be at repo root
+- **Future**: Verify file structure before debugging. Wait 60s after push for propagation.
 
-## Capacitor / iOS Deployment
-- Use `base: './'` in Vite for Capacitor (not absolute paths)
-- Run `npm run build && npx cap sync ios` after every web change
-- Xcode project lives in `ios/App/App.xcworkspace`
-- Bundle ID format: `tld.company.appname` (e.g., `dk.tryg.app`)
+### Gitignore Not Working
+- **Problem**: `.gitignore` entries ignored for already-tracked files
+- **Action**: Had to `git rm --cached <file>` first
+- **Future**: Add files to `.gitignore` BEFORE first commit. If already tracked, must explicitly untrack.
 
-## Behavioral Science for Health Apps
-- **Fogg Model**: Behavior = Motivation × Ability × Prompt (reduce friction first)
-- **Implementation intentions**: "After X, I will do Y" prompts increase adherence
-- **Gentle streaks**: Celebrate consistency without punishing breaks
-- **Pre-filled defaults**: Reduce cognitive load for seniors
-- **Autonomy-respecting design**: Avoid surveillance feeling, emphasize mutual care
+---
 
-## Senior Accessibility (WCAG 2.1 AA+)
-- Minimum 18px font, 7:1 contrast ratio
-- Touch targets: 48x48px minimum
-- Debounce taps (300ms) to prevent accidental double-activation
-- Support iOS Dynamic Type for system font scaling
-- Visible focus indicators for all interactive elements
+## React & Vite
 
-## Connection-First Design (Anti-Surveillance)
-- **Reciprocity by default**: If family sees senior's status, senior sees family's status
-- **Senior as contributor**: Offer ways to give help, not just receive
-- **Shared experiences > monitoring**: Photo exchanges, voice notes, rituals
-- **Agency controls**: "Pause" mode, temporary sharing, notification when viewed
-- **Meaningful goals**: "Dancing at the wedding" > abstract health metrics
+### Tailwind v4 Setup Confusion
+- **Problem**: PostCSS config approach from docs didn't work
+- **Action**: Found Tailwind v4 uses `@tailwindcss/vite` plugin instead
+- **Future**: Check major version of dependencies - v4 has different setup than v3.
 
-## Development Process Insights
-- **Changelog timing**: Create at first stable milestone, update with each feature release
-- **Ideation docs**: Capture future ideas immediately to maintain focus on current sprint
-- **Mirror components**: For two-sided apps, create matching components (FamilyStatusCard for senior, StatusSelector for relative)
-- **LocalStorage for MVP**: Enables quick iteration without backend complexity
-- **Browser testing**: Use element indices for reliable click testing, pixel coordinates unreliable in scrollable areas
-- **Reflect periodically**: Pause after each feature to update learnings.md - prevents knowledge loss
-- **Animation for feedback**: Animated states (heart fill, sparkles) provide better emotional feedback than static changes
-- **Toast notifications**: Auto-dismiss with tap-to-dismiss option respects user agency
-- **Bidirectional features**: When adding communication features, always implement in both directions (senior→relative AND relative→senior)
+### Vite Base Path for Capacitor
+- **Problem**: iOS build showed broken paths (404 for assets)
+- **Action**: Changed `base: '/absolute/'` to `base: './'` for relative paths
+- **Future**: Use `base: './'` for Capacitor/mobile builds. Absolute paths break in WebView.
 
+### State Persistence Without Backend
+- **Problem**: Needed data persistence but no time for backend setup
+- **Action**: Created `useLocalStorage` hook for MVP
+- **Future**: localStorage is sufficient for MVP validation. Only add backend when sync is actually needed.
+
+---
+
+## Google Apps Script
+
+### CORS Preflight Failures
+- **Problem**: Fetch POST to Apps Script triggered CORS error
+- **Action**: Switched to `URLSearchParams` body format to avoid preflight
+- **Future**: Use form-encoded POST (`URLSearchParams`) for Apps Script. JSON triggers CORS preflight.
+
+### Script Changes Not Reflecting
+- **Problem**: Updated script code but behavior unchanged
+- **Action**: Had to redeploy as "New Version" - old deployment ID caches old code
+- **Future**: After ANY code change in Apps Script, must: Deploy → New Deployment → Get new URL.
+
+---
+
+## Browser Automation Testing
+
+### Pixel Click Coordinates Unreliable
+- **Problem**: Browser subagent clicks missed elements in scrollable areas
+- **Action**: Switched to element index-based clicking
+- **Future**: Use element indices for click testing. Pixel coordinates fail in scrollable containers.
+
+### Dev Server Connection Timeouts
+- **Problem**: Browser tests failed after long sessions (~4 hours)
+- **Action**: Restarted dev server, but port changed (5173 → 5174)
+- **Future**: Check dev server is running AND note the current port before browser tests.
+
+---
+
+## Documentation & Workflow
+
+### Completed Work Not Tracked
+- **Problem**: ROADMAP.md and IDEATION.md didn't show what was done vs TODO
+- **Action**: Added Status column with ✅ Done / ⏳ TODO markers
+- **Future**: Add Status column to roadmap tables from the start. Update immediately after completing items.
+
+### Vague Changelog Timing
+- **Problem**: Unclear when to create CHANGELOG vs just commit messages
+- **Action**: Created at first stable milestone (v1.0.0 MVP)
+- **Future**: Create CHANGELOG after first shippable version. Not before, not after next feature.
+
+### Knowledge Loss Between Sessions
+- **Problem**: Forgot what was learned in previous session
+- **Action**: Updated learnings.md but content was too app-specific
+- **Future**: Learnings must be: cross-project applicable + actionable + include prevention steps.
+
+---
+
+## iOS/Capacitor
+
+### Bundle ID Format
+- **Problem**: Xcode rejected bundle ID with wrong format
+- **Action**: Used `tld.company.appname` format (e.g., `dk.tryg.app`)
+- **Future**: Always use reverse DNS format for bundle IDs.
+
+### Capacitor Sync After Web Changes
+- **Problem**: iOS build showed old web content
+- **Action**: Manual `npm run build && npx cap sync ios` required
+- **Future**: Run sync after EVERY web build. It copies dist/ to iOS project.
+
+---
+
+## Component Design
+
+### Two-Sided App Symmetry
+- **Problem**: Feature only worked in one direction (senior → relative but not reverse)
+- **Action**: Had to go back and add bidirectional support
+- **Future**: For communication features, always design both directions simultaneously.
+
+### Modal Animation Feel
+- **Problem**: Modal appeared jarring/sudden
+- **Action**: Added slide-up animation with fade-in overlay
+- **Future**: Use slide-up for mobile modals. Feels more native than instant appear.
+
+---
+
+*Format reminder: Problem → Action → Future Prevention*
