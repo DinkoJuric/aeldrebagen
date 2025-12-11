@@ -1,0 +1,669 @@
+import React, { useState, useEffect } from 'react';
+import {
+    CheckCircle,
+    AlertCircle,
+    Clock,
+    Phone,
+    Heart,
+    Settings,
+    User,
+    Activity,
+    Plus,
+    Sun,
+    Moon,
+    Pill,
+    Thermometer,
+    Zap,
+    Brain,
+    Frown,
+    FileText,
+    X,
+    Image as ImageIcon,
+    Coffee,
+    ArrowLeft
+} from 'lucide-react';
+
+// --- Mock Data & Types ---
+
+// Added "period" to group tasks logically for seniors (Habit Stacking)
+const INITIAL_TASKS = [
+    { id: 1, title: 'Morgenpiller', type: 'medication', time: '08:00', period: 'morgen', completed: false, description: 'Hjertemedicin (2 piller)' },
+    { id: 2, title: 'Drik vand', type: 'hydration', time: '10:00', period: 'morgen', completed: false, description: 'Et stort glas' },
+    { id: 3, title: 'Frokostmedicin', type: 'medication', time: '12:00', period: 'frokost', completed: false, description: 'Vitaminer' },
+    { id: 4, title: 'Gåtur', type: 'activity', time: '14:00', period: 'eftermiddag', completed: false, description: '15 min i haven' },
+];
+
+const SYMPTOMS_LIST = [
+    { id: 'pain', label: 'Smerter', icon: Zap, color: 'bg-red-100 text-red-600' },
+    { id: 'dizzy', label: 'Svimmel', icon: Brain, color: 'bg-purple-100 text-purple-600' },
+    { id: 'nausea', label: 'Kvalme', icon: Frown, color: 'bg-orange-100 text-orange-600' },
+    { id: 'fever', label: 'Feber', icon: Thermometer, color: 'bg-amber-100 text-amber-600' },
+];
+
+const SENIOR_PROFILE = {
+    name: 'Birthe Jensen',
+    age: 78,
+    status: 'active', // active, inactive, warning
+    lastActive: new Date().toISOString(),
+    batteryLevel: 85,
+};
+
+// --- Components ---
+
+const Button = ({ children, onClick, variant = 'primary', className = '', size = 'normal', disabled = false }) => {
+    const baseStyle = "rounded-2xl font-semibold transition-all duration-200 flex items-center justify-center relative overflow-hidden";
+
+    const variants = {
+        primary: "bg-teal-600 text-white shadow-lg shadow-teal-200 hover:bg-teal-700 active:scale-95",
+        secondary: "bg-stone-100 text-stone-800 hover:bg-stone-200",
+        danger: "bg-rose-100 text-rose-700 hover:bg-rose-200 border-2 border-rose-200",
+        outline: "border-2 border-teal-600 text-teal-700 hover:bg-teal-50",
+        ghost: "bg-transparent text-stone-500 hover:text-stone-800",
+        locked: "bg-stone-200 text-stone-400 cursor-not-allowed"
+    };
+
+    const sizes = {
+        small: "py-2 px-4 text-sm",
+        normal: "py-3 px-6 text-base",
+        large: "py-6 px-8 text-xl h-24",
+        xl: "py-8 px-8 text-2xl h-32"
+    };
+
+    return (
+        <button
+            onClick={onClick}
+            disabled={disabled}
+            className={`${baseStyle} ${disabled ? variants.locked : variants[variant]} ${sizes[size]} ${className}`}
+        >
+            {children}
+        </button>
+    );
+};
+
+const Modal = ({ isOpen, onClose, title, children }) => {
+    if (!isOpen) return null;
+    return (
+        <div className="absolute inset-0 bg-black/60 z-50 flex items-end sm:items-center justify-center animation-fade-in">
+            <div className="bg-white w-full max-w-sm rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl animate-slide-up">
+                <div className="flex justify-between items-center mb-6">
+                    <h3 className="text-xl font-bold text-stone-800">{title}</h3>
+                    <button onClick={onClose} className="p-2 bg-stone-100 rounded-full">
+                        <X className="w-6 h-6 text-stone-600" />
+                    </button>
+                </div>
+                {children}
+            </div>
+        </div>
+    );
+};
+
+// --- Senior View (The User) ---
+
+const SeniorView = ({ tasks, toggleTask, updateStatus, addSymptom }) => {
+    const [showCallModal, setShowCallModal] = useState(false);
+    const [showSymptomModal, setShowSymptomModal] = useState(false);
+    const [activePeriod, setActivePeriod] = useState('morgen'); // Contextual Focus
+
+    // Reward Logic
+    const morningTasksTotal = tasks.filter(t => t.period === 'morgen').length;
+    const morningTasksDone = tasks.filter(t => t.period === 'morgen' && t.completed).length;
+    const isMorningComplete = morningTasksTotal > 0 && morningTasksTotal === morningTasksDone;
+
+    // Get current time greeting
+    const hour = new Date().getHours();
+    const greeting = hour < 12 ? 'Godmorgen' : hour < 18 ? 'Goddag' : 'Godaften';
+
+    // Helper to render period sections
+    const renderTaskSection = (periodTitle, periodKey, icon) => {
+        const periodTasks = tasks.filter(t => t.period === periodKey);
+        if (periodTasks.length === 0) return null;
+
+        const isActive = activePeriod === periodKey;
+
+        return (
+            <div className={`transition-all duration-500 ${isActive ? 'opacity-100' : 'opacity-50 grayscale'}`}>
+                <div
+                    className="flex items-center gap-2 mb-4 cursor-pointer"
+                    onClick={() => setActivePeriod(periodKey)}
+                >
+                    {icon}
+                    <h2 className="text-xl font-bold text-stone-800">{periodTitle}</h2>
+                    {!isActive && <span className="text-sm text-stone-400">(Tryk for at se)</span>}
+                </div>
+
+                {isActive && (
+                    <div className="space-y-4 mb-8">
+                        {periodTasks.map(task => (
+                            <div
+                                key={task.id}
+                                onClick={() => toggleTask(task.id)}
+                                className={`
+                        relative p-4 rounded-2xl border-2 transition-all duration-300 cursor-pointer
+                        ${task.completed
+                                        ? 'bg-stone-100 border-stone-200'
+                                        : 'bg-white border-stone-200 shadow-sm hover:border-teal-400'
+                                    }
+                        `}
+                            >
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-4">
+                                        {/* Pictogram Container */}
+                                        <div className={`
+                            w-16 h-16 rounded-2xl flex items-center justify-center shadow-inner
+                            ${task.completed ? 'bg-stone-200 text-stone-400' : 'bg-blue-50 text-blue-600'}
+                            `}>
+                                            {task.type === 'medication' && <Pill className="w-8 h-8" />}
+                                            {task.type === 'hydration' && <Activity className="w-8 h-8" />}
+                                            {task.type === 'activity' && <Sun className="w-8 h-8" />}
+                                            {task.type === 'appointment' && <Clock className="w-8 h-8" />}
+                                        </div>
+
+                                        <div>
+                                            <h3 className={`text-xl font-bold ${task.completed ? 'text-stone-500 line-through' : 'text-stone-800'}`}>
+                                                {task.title}
+                                            </h3>
+                                            <p className="text-stone-500 font-medium">{task.time}</p>
+                                        </div>
+                                    </div>
+
+                                    {/* Checkbox Representation */}
+                                    <div className={`
+                            w-12 h-12 rounded-full border-4 flex items-center justify-center transition-colors
+                            ${task.completed ? 'bg-teal-500 border-teal-500' : 'border-stone-200 bg-white'}
+                        `}>
+                                        {task.completed && <CheckCircle className="text-white w-8 h-8" />}
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+        );
+    };
+
+    return (
+        <div className="flex flex-col h-full bg-stone-50 relative">
+            {/* Header */}
+            <header className="p-6 bg-white shadow-sm rounded-b-3xl z-10">
+                <div className="flex justify-between items-center mb-2">
+                    <h1 className="text-3xl font-bold text-stone-800">{greeting}, Birthe</h1>
+                    <div className="bg-teal-100 p-2 rounded-full">
+                        <Sun className="text-teal-600 w-8 h-8" />
+                    </div>
+                </div>
+                <p className="text-stone-500 text-lg">Onsdag, 10. December</p>
+            </header>
+
+            {/* Main Content - Scrollable */}
+            <main className="flex-1 overflow-y-auto p-4 space-y-2 pb-24">
+
+                {/* The Reward Card (Behavioral Hook) */}
+                <div className={`
+            rounded-3xl p-6 mb-6 transition-all duration-500 border-2 overflow-hidden relative
+            ${isMorningComplete ? 'bg-indigo-600 border-indigo-600 text-white' : 'bg-white border-dashed border-stone-300'}
+        `}>
+                    {isMorningComplete ? (
+                        <div className="animate-fade-in text-center">
+                            <div className="flex items-center justify-center gap-2 mb-2">
+                                <ImageIcon className="w-6 h-6 text-indigo-200" />
+                                <span className="font-bold text-indigo-100 uppercase tracking-widest text-sm">Dagens Billede</span>
+                            </div>
+                            <div className="w-full h-48 bg-stone-200 rounded-xl mb-3 overflow-hidden shadow-lg transform rotate-2 hover:rotate-0 transition-transform duration-500">
+                                {/* Placeholder for grandchild image */}
+                                <img src="/api/placeholder/400/300" alt="Grandchildren" className="w-full h-full object-cover" />
+                            </div>
+                            <p className="font-bold text-lg">Godt klaret, Farmor! ❤️</p>
+                            <p className="text-indigo-200 text-sm">Her er et billede fra vores tur i skoven.</p>
+                        </div>
+                    ) : (
+                        <div className="flex flex-col items-center justify-center text-center py-4 opacity-60">
+                            <div className="w-16 h-16 bg-stone-100 rounded-full flex items-center justify-center mb-2">
+                                <ImageIcon className="w-8 h-8 text-stone-400" />
+                            </div>
+                            <h3 className="font-bold text-stone-500 text-lg">Dagens Billede</h3>
+                            <p className="text-stone-400 text-sm">Gør din morgen færdig for at se billedet</p>
+                        </div>
+                    )}
+                </div>
+
+                {/* Check-in Status */}
+                <div className="bg-white rounded-3xl p-6 shadow-sm border-2 border-teal-100 mb-8">
+                    <h2 className="text-xl font-semibold text-stone-800 mb-4">Hvordan har du det?</h2>
+                    <div className="grid grid-cols-2 gap-4">
+                        <Button
+                            variant="primary"
+                            size="large"
+                            className="w-full h-32"
+                            onClick={() => updateStatus('checked-in')}
+                        >
+                            <div className="flex flex-col items-center gap-2">
+                                <CheckCircle className="w-10 h-10" />
+                                <span>Jeg har det godt</span>
+                            </div>
+                        </Button>
+
+                        <Button
+                            variant="secondary"
+                            size="large"
+                            className="w-full h-32 bg-orange-50 text-orange-800 border-2 border-orange-100 hover:bg-orange-100"
+                            onClick={() => setShowSymptomModal(true)}
+                        >
+                            <div className="flex flex-col items-center gap-2">
+                                <Heart className="w-10 h-10 text-orange-500" />
+                                <span>Jeg har ondt</span>
+                            </div>
+                        </Button>
+                    </div>
+                </div>
+
+                {/* Contextual Task Lists */}
+                {renderTaskSection('Morgen (Kl. 8-11)', 'morgen', <Coffee className="w-6 h-6 text-stone-600" />)}
+                <div className="h-px bg-stone-200 my-4" />
+                {renderTaskSection('Frokost (Kl. 12-13)', 'frokost', <Sun className="w-6 h-6 text-stone-600" />)}
+                <div className="h-px bg-stone-200 my-4" />
+                {renderTaskSection('Eftermiddag (Kl. 14-17)', 'eftermiddag', <Moon className="w-6 h-6 text-stone-600" />)}
+
+            </main>
+
+            {/* Emergency / Contact Footer */}
+            <footer className="p-4 bg-white border-t border-stone-200">
+                <Button variant="danger" size="large" className="w-full" onClick={() => setShowCallModal(true)}>
+                    <div className="flex items-center gap-3">
+                        <Phone className="w-8 h-8" />
+                        <span>Ring til Louise</span>
+                    </div>
+                </Button>
+            </footer>
+
+            {/* Symptom Modal */}
+            <Modal
+                isOpen={showSymptomModal}
+                onClose={() => setShowSymptomModal(false)}
+                title="Hvor har du ondt?"
+            >
+                <div className="grid grid-cols-2 gap-4">
+                    {SYMPTOMS_LIST.map(sym => (
+                        <button
+                            key={sym.id}
+                            onClick={() => {
+                                addSymptom(sym);
+                                setShowSymptomModal(false);
+                            }}
+                            className={`
+                        flex flex-col items-center justify-center gap-2 p-6 rounded-2xl
+                        transition-transform active:scale-95 border-2 border-transparent hover:border-stone-300
+                        ${sym.color}
+                    `}
+                        >
+                            <sym.icon className="w-10 h-10" />
+                            <span className="font-bold">{sym.label}</span>
+                        </button>
+                    ))}
+                </div>
+            </Modal>
+
+            {/* Simulation Modal for Call */}
+            {showCallModal && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+                    <div className="bg-white rounded-3xl p-8 w-full max-w-sm text-center">
+                        <div className="w-20 h-20 bg-rose-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <Phone className="w-10 h-10 text-rose-600" />
+                        </div>
+                        <h3 className="text-2xl font-bold text-stone-800 mb-2">Ringer op...</h3>
+                        <p className="text-stone-500 mb-8">Ringer til Louise</p>
+                        <Button variant="danger" onClick={() => setShowCallModal(false)}>Afslut opkald</Button>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
+
+// --- Relative View (The Dashboard) ---
+
+const RelativeView = ({ tasks, profile, lastCheckIn, symptomLogs, onAddTask }) => {
+    const [showAddModal, setShowAddModal] = useState(false);
+    const [showReport, setShowReport] = useState(false);
+    const [newTaskTitle, setNewTaskTitle] = useState('');
+
+    const completionRate = Math.round((tasks.filter(t => t.completed).length / tasks.length) * 100);
+
+    const handleAddTask = () => {
+        if (!newTaskTitle) return;
+        onAddTask({
+            title: newTaskTitle,
+            time: '14:00', // Default mock time
+            type: 'appointment',
+            description: 'Tilføjet af Louise',
+            period: 'eftermiddag'
+        });
+        setNewTaskTitle('');
+        setShowAddModal(false);
+    };
+
+    return (
+        <div className="flex flex-col h-full bg-slate-50 relative">
+            {/* Header */}
+            <header className="bg-white p-4 shadow-sm border-b border-slate-200 sticky top-0 z-10">
+                <div className="flex justify-between items-center">
+                    <div className="flex items-center gap-2">
+                        <div className="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-700 font-bold">
+                            L
+                        </div>
+                        <span className="font-semibold text-slate-700">Hej, Louise</span>
+                    </div>
+                    <Button variant="ghost" size="small"><Settings className="w-5 h-5" /></Button>
+                </div>
+            </header>
+
+            <main className="p-4 space-y-6 overflow-y-auto pb-24">
+
+                {/* Reciprocity Feature: Status Sharing */}
+                <div className="bg-indigo-600 rounded-xl p-4 text-white shadow-lg">
+                    <div className="flex justify-between items-center mb-2">
+                        <h3 className="font-bold text-indigo-100 text-sm uppercase tracking-wider">Din status hos mor</h3>
+                        <span className="bg-indigo-500 px-2 py-0.5 rounded text-xs">Synlig</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                        <div className="p-2 bg-indigo-500 rounded-lg">
+                            <User className="w-6 h-6 text-white" />
+                        </div>
+                        <div>
+                            <p className="font-bold">Louise er på arbejde</p>
+                            <p className="text-indigo-200 text-xs">Opdateret kl 08:30</p>
+                        </div>
+                        <Button size="small" variant="secondary" className="ml-auto h-8 text-xs">Ændr</Button>
+                    </div>
+                </div>
+
+                {/* Peace of Mind Status Card */}
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <div className="flex justify-between items-start mb-4">
+                        <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 bg-stone-200 rounded-full overflow-hidden">
+                                <div className="w-full h-full bg-stone-300 flex items-center justify-center text-stone-500">
+                                    <User className="w-6 h-6" />
+                                </div>
+                            </div>
+                            <div>
+                                <h2 className="text-lg font-bold text-slate-800">{profile.name}</h2>
+                                <div className="flex items-center gap-1 text-xs text-slate-500">
+                                    <span>Batteri: {profile.batteryLevel}%</span>
+                                    <span>•</span>
+                                    <span>Opdateret: Lige nu</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="px-3 py-1 rounded-full text-sm font-medium border bg-emerald-100 text-emerald-800 border-emerald-200">
+                            Alt er vel
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4 mt-6">
+                        <div className="bg-slate-50 p-4 rounded-xl">
+                            <p className="text-xs text-slate-500 uppercase font-bold tracking-wider mb-1">Sidst Aktiv</p>
+                            <div className="flex items-center gap-2 text-slate-800">
+                                <Clock className="w-4 h-4 text-indigo-500" />
+                                <span className="font-semibold">{lastCheckIn || '08:15'}</span>
+                            </div>
+                        </div>
+                        <div className="bg-slate-50 p-4 rounded-xl">
+                            <p className="text-xs text-slate-500 uppercase font-bold tracking-wider mb-1">Medicin</p>
+                            <div className="flex items-center gap-2 text-slate-800">
+                                <Pill className="w-4 h-4 text-indigo-500" />
+                                <span className="font-semibold">{completionRate}% taget</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Symptom Alerts */}
+                {symptomLogs.length > 0 && (
+                    <div className="bg-orange-50 border border-orange-100 rounded-xl p-4">
+                        <h4 className="text-orange-800 font-bold flex items-center gap-2 mb-2">
+                            <AlertCircle className="w-5 h-5" />
+                            Nye symptomer registreret
+                        </h4>
+                        <div className="space-y-2">
+                            {symptomLogs.map((log, i) => (
+                                <div key={i} className="flex items-center justify-between text-sm text-orange-900 bg-white/50 p-2 rounded-lg">
+                                    <span className="font-medium">{log.label}</span>
+                                    <span className="text-orange-500 text-xs">{log.time}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* Timeline / Feed */}
+                <div>
+                    <h3 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3 pl-1">I dag</h3>
+                    <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                        {tasks.map((task, idx) => (
+                            <div key={task.id} className={`p-4 flex items-center gap-4 ${idx !== tasks.length - 1 ? 'border-b border-slate-100' : ''}`}>
+                                <div className={`p-2 rounded-full ${task.completed ? 'bg-indigo-100 text-indigo-600' : 'bg-slate-100 text-slate-400'}`}>
+                                    {task.type === 'medication' ? <Pill className="w-5 h-5" /> :
+                                        task.type === 'appointment' ? <Clock className="w-5 h-5" /> :
+                                            <Activity className="w-5 h-5" />}
+                                </div>
+                                <div className="flex-1">
+                                    <p className={`text-sm font-semibold ${task.completed ? 'text-slate-800' : 'text-slate-600'}`}>
+                                        {task.title}
+                                    </p>
+                                    <p className="text-xs text-slate-500">{task.description}</p>
+                                </div>
+                                {task.completed && (
+                                    <span className="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded-full">UDFØRT</span>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Quick Actions */}
+                <div className="grid grid-cols-2 gap-4">
+                    <Button variant="outline" className="h-auto py-4 bg-white" onClick={() => setShowAddModal(true)}>
+                        <div className="flex flex-col items-center gap-2">
+                            <Plus className="w-6 h-6" />
+                            <span className="text-sm">Tilføj påmindelse</span>
+                        </div>
+                    </Button>
+                    <Button variant="outline" className="h-auto py-4 bg-white" onClick={() => setShowReport(true)}>
+                        <div className="flex flex-col items-center gap-2">
+                            <FileText className="w-6 h-6" />
+                            <span className="text-sm">Helbredsrapport</span>
+                        </div>
+                    </Button>
+                </div>
+            </main>
+
+            {/* Add Task Modal */}
+            <Modal isOpen={showAddModal} onClose={() => setShowAddModal(false)} title="Ny påmindelse">
+                <div className="space-y-4">
+                    <div>
+                        <label className="block text-sm font-medium text-slate-700 mb-1">Titel</label>
+                        <input
+                            type="text"
+                            className="w-full p-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none"
+                            placeholder="F.eks. Lægebesøg"
+                            value={newTaskTitle}
+                            onChange={(e) => setNewTaskTitle(e.target.value)}
+                        />
+                    </div>
+                    <div className="p-3 bg-blue-50 text-blue-800 text-sm rounded-xl">
+                        Denne påmindelse vil straks dukke op på Birthes skærm.
+                    </div>
+                    <Button className="w-full" onClick={handleAddTask}>Tilføj</Button>
+                </div>
+            </Modal>
+
+            {/* Doctor Report Modal */}
+            <Modal isOpen={showReport} onClose={() => setShowReport(false)} title="Rapport til Lægen">
+                <div className="space-y-6">
+                    <div className="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                        <h4 className="font-bold text-slate-800 mb-2">Overholdelse af medicin (7 dage)</h4>
+                        <div className="flex items-end gap-2 h-24 pb-2">
+                            {[80, 90, 100, 85, 95, 100, completionRate].map((h, i) => (
+                                <div key={i} className="flex-1 bg-indigo-500 rounded-t-sm opacity-80 hover:opacity-100 transition-opacity" style={{ height: `${h}%` }}></div>
+                            ))}
+                        </div>
+                        <div className="flex justify-between text-xs text-slate-400">
+                            <span>Man</span><span>...</span><span>I dag</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 className="font-bold text-slate-800 mb-2">Symptom Log</h4>
+                        {symptomLogs.length === 0 ? (
+                            <p className="text-slate-500 text-sm italic">Ingen symptomer registreret denne uge.</p>
+                        ) : (
+                            <ul className="space-y-2">
+                                {symptomLogs.map((log, i) => (
+                                    <li key={i} className="flex items-center gap-3 text-sm p-3 bg-white border rounded-lg">
+                                        <log.icon className="w-5 h-5 text-slate-400" />
+                                        <span className="font-medium text-slate-700">{log.label}</span>
+                                        <span className="text-slate-400 ml-auto">{log.time}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
+                </div>
+            </Modal>
+
+        </div>
+    );
+};
+
+// --- Main App Controller ---
+
+export default function TrygApp() {
+    const [view, setView] = useState('senior');
+    const [tasks, setTasks] = useState(INITIAL_TASKS);
+    const [lastCheckIn, setLastCheckIn] = useState(null);
+    const [symptomLogs, setSymptomLogs] = useState([]);
+    const [notification, setNotification] = useState(null);
+
+    // Simulated Notification System
+    useEffect(() => {
+        // Simulate a push notification after 5 seconds
+        const timer = setTimeout(() => {
+            setNotification({
+                title: "Husk at drikke vand",
+                body: "Det er tid til dit glas vand kl. 10:00",
+                icon: Activity
+            });
+        }, 5000);
+        return () => clearTimeout(timer);
+    }, []);
+
+    // Clear notification after 4 seconds
+    useEffect(() => {
+        if (notification) {
+            const timer = setTimeout(() => setNotification(null), 4000);
+            return () => clearTimeout(timer);
+        }
+    }, [notification]);
+
+    const toggleTask = (id) => {
+        setTasks(tasks.map(t =>
+            t.id === id ? { ...t, completed: !t.completed } : t
+        ));
+    };
+
+    const handleCheckIn = (status) => {
+        const now = new Date();
+        const timeString = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+        setLastCheckIn(timeString);
+        if (status === 'checked-in') {
+            alert("Godt at høre! Din familie har fået besked.");
+        }
+    };
+
+    const addSymptom = (symptomType) => {
+        const now = new Date();
+        const timeString = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+
+        setSymptomLogs(prev => [{
+            ...symptomType,
+            time: timeString,
+            date: new Date().toLocaleDateString()
+        }, ...prev]);
+
+        alert(`Noteret: ${symptomType.label}. Din familie kan se dette.`);
+    };
+
+    const handleAddTaskFromRelative = (newTask) => {
+        const newId = Math.max(...tasks.map(t => t.id)) + 1;
+        setTasks(prev => [...prev, { ...newTask, id: newId, completed: false }]);
+    };
+
+    return (
+        <div className="flex justify-center items-center min-h-screen bg-zinc-800 p-4 font-sans">
+
+            {/* Phone Frame Simulator */}
+            <div className="relative w-full max-w-md h-[850px] bg-white rounded-[3rem] overflow-hidden border-8 border-zinc-900 shadow-2xl ring-1 ring-zinc-400/50">
+
+                {/* Mock Push Notification Banner */}
+                <div className={`
+            absolute top-4 left-4 right-4 bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-xl z-[60]
+            transform transition-all duration-500 ease-out border border-stone-200
+            ${notification ? 'translate-y-12 opacity-100' : '-translate-y-40 opacity-0'}
+        `}>
+                    {notification && (
+                        <div className="flex gap-3 items-center">
+                            <div className="bg-teal-100 p-2 rounded-xl">
+                                <notification.icon className="w-6 h-6 text-teal-600" />
+                            </div>
+                            <div>
+                                <h4 className="font-bold text-stone-800 text-sm">{notification.title}</h4>
+                                <p className="text-stone-500 text-xs">{notification.body}</p>
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                {/* View Toggle */}
+                <div className="absolute top-0 left-0 right-0 h-16 bg-black/5 z-50 flex justify-center items-center backdrop-blur-sm">
+                    <div className="bg-white/80 p-1 rounded-full flex text-xs font-bold shadow-lg">
+                        <button
+                            onClick={() => setView('senior')}
+                            className={`px-4 py-2 rounded-full transition-colors ${view === 'senior' ? 'bg-teal-600 text-white' : 'text-stone-600 hover:bg-stone-100'}`}
+                        >
+                            Senior View
+                        </button>
+                        <button
+                            onClick={() => setView('relative')}
+                            className={`px-4 py-2 rounded-full transition-colors ${view === 'relative' ? 'bg-indigo-600 text-white' : 'text-stone-600 hover:bg-stone-100'}`}
+                        >
+                            Pårørende View
+                        </button>
+                    </div>
+                </div>
+
+                <div className="pt-14 h-full">
+                    {view === 'senior' ? (
+                        <SeniorView
+                            tasks={tasks}
+                            toggleTask={toggleTask}
+                            updateStatus={handleCheckIn}
+                            addSymptom={addSymptom}
+                            status={SENIOR_PROFILE.status}
+                        />
+                    ) : (
+                        <RelativeView
+                            tasks={tasks}
+                            profile={SENIOR_PROFILE}
+                            lastCheckIn={lastCheckIn}
+                            symptomLogs={symptomLogs}
+                            onAddTask={handleAddTaskFromRelative}
+                        />
+                    )}
+                </div>
+
+                <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 w-32 h-1.5 bg-black/20 rounded-full z-50"></div>
+            </div>
+        </div>
+    );
+}
