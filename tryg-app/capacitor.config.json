@@ -1,0 +1,12 @@
+{
+  "appId": "dk.tryg.app",
+  "appName": "Tryg",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  },
+  "ios": {
+    "contentInset": "automatic",
+    "preferredContentMode": "mobile"
+  }
+}

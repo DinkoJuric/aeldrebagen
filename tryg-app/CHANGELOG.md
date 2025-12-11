@@ -29,6 +29,9 @@ All notable changes to this project will be documented in this file.
 - localStorage persistence for offline-first operation
 - GitHub Actions deployment pipeline to GitHub Pages
 - Mobile-first responsive design with phone frame simulator
+- **Capacitor iOS** wrapper for TestFlight distribution
+- Xcode project ready for App Store submission
+
 
 ---
 

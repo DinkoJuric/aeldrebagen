@@ -5,9 +5,11 @@ import tailwindcss from '@tailwindcss/vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  base: '/aeldrebagen/', // GitHub Pages deployment path
+  // Use relative paths for Capacitor iOS build
+  base: './',
   build: {
     outDir: 'dist',
     sourcemap: false
   }
 })
+
