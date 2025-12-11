@@ -153,12 +153,14 @@ export default function TrygAppCore({
                         >
                             <Share2 className="w-5 h-5 text-stone-600" />
                         </button>
-                        <PhotoCaptureButton
-                            onCapture={async (file) => {
-                                await uploadPhoto(file, userProfile?.displayName || 'Familie');
-                            }}
-                            disabled={uploading}
-                        />
+                        {FEATURES.photoSharing && (
+                            <PhotoCaptureButton
+                                onCapture={async (file) => {
+                                    await uploadPhoto(file, userProfile?.displayName || 'Familie');
+                                }}
+                                disabled={uploading}
+                            />
+                        )}
                     </div>
 
                     {/* Role indicator (center) - no toggle */}

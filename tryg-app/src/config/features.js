@@ -30,6 +30,7 @@ export const FEATURES = {
 
     // Backend
     useFirebase: true,         // Use Firebase for multi-user sync (false = localStorage demo mode)
+    photoSharing: false,       // Ephemeral photo sharing (requires Firebase Storage = Blaze plan)
 };
 
 // Helper to check if feature is enabled
