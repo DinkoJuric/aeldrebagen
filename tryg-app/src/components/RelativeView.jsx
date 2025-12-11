@@ -20,7 +20,7 @@ import { FEATURES } from '../config/features';
 export const RelativeView = ({
     tasks, profile, lastCheckIn, symptomLogs, onAddTask, familyStatus,
     onFamilyStatusChange, onSendPing, weeklyAnswers, onWeeklyAnswer,
-    helpOffers, helpRequests
+    helpOffers, helpRequests, onOpenSettings
 }) => {
     const [showAddModal, setShowAddModal] = useState(false);
     const [showReport, setShowReport] = useState(false);
@@ -65,7 +65,7 @@ export const RelativeView = ({
                         {FEATURES.thinkingOfYou && (
                             <ThinkingOfYouIconButton onSendPing={onSendPing} />
                         )}
-                        <Button variant="ghost" size="small" aria-label="Indstillinger"><Settings className="w-5 h-5" /></Button>
+                        <Button variant="ghost" size="small" aria-label="Indstillinger" onClick={onOpenSettings}><Settings className="w-5 h-5" /></Button>
                     </div>
                 </div>
             </header>

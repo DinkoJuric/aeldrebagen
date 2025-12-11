@@ -26,7 +26,10 @@ export const FEATURES = {
     pingSound: true,           // Ping notification sound
 
     // Demo/Testing
-    demoNotification: false,    // Water reminder notification (5s after load)
+    demoNotification: false,   // Water reminder notification (5s after load)
+
+    // Backend
+    useFirebase: true,         // Use Firebase for multi-user sync (false = localStorage demo mode)
 };
 
 // Helper to check if feature is enabled

@@ -1,6 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import TrygApp from './App.jsx'
+import AppWithAuth from './AppWithAuth.jsx'
 import ErrorBoundary from './components/ErrorBoundary.jsx'
 import './index.css'
 
@@ -18,7 +18,7 @@ window.onunhandledrejection = (event) => {
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ErrorBoundary>
-      <TrygApp />
+      <AppWithAuth />
     </ErrorBoundary>
   </StrictMode>,
 )

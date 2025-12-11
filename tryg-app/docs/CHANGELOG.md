@@ -2,48 +2,6 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.4.0] - 2025-12-11
-
-### 🔥 Firebase Multi-User Backend
-
-**Authentication**
-- Email/password login and signup
-- Google OAuth integration
-- Role selection: Senior or Pårørende (Relative)
-- Danish-localized auth screens
-
-**Care Circles**
-- Seniors create a "care circle" on first login
-- 6-character invite codes for relatives to join
-- Real-time membership sync
-
-**Real-Time Data Sync**
-- Tasks sync across all family members instantly
-- Symptoms logged to Firestore with timestamps
-- Family status (work/home/traveling) syncs in real-time
-- Offline-first with IndexedDB persistence
-
-**New Files**
-| File | Purpose |
-|------|---------|
-| `src/config/firebase.js` | Config + offline persistence |
-| `src/hooks/useAuth.js` | Auth state management |
-| `src/hooks/useCareCircle.js` | Circle create/join logic |
-| `src/hooks/useTasks.js` | Task sync |
-| `src/hooks/useSymptoms.js` | Symptom sync |
-| `src/hooks/useSettings.js` | Settings sync |
-| `src/components/AuthScreen.jsx` | Login/signup UI |
-| `src/components/CircleSetup.jsx` | Circle onboarding |
-| `src/AppWithAuth.jsx` | Auth wrapper |
-| `src/AppCore.jsx` | Firebase-connected app |
-
-**Feature Flag**
-Toggle `useFirebase: true/false` in `features.js` to switch between:
-- `true`: Full Firebase multi-user mode
-- `false`: Demo mode with localStorage
-
----
-
 ## [1.3.0] - 2025-12-11
 
 ### 🎨 Phase 4: Polish & Accessibility
