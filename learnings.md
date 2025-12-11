@@ -34,3 +34,16 @@ description: Learnings from past projects to apply in future work
 - For Tailwind v4+, use `@tailwindcss/vite` plugin instead of PostCSS config
 - `useLocalStorage` custom hook enables simple state persistence without backend
 - GitHub Actions workflow can deploy Vite apps to Pages with `base` path config
+
+## Product & UX Insights
+- **Changelog timing**: Create at first stable milestone (MVP), not after
+- **Ideation docs**: Keep a running list of ideas - prevents scope creep by capturing "later" features
+- **Two-sided apps**: Design both user types simultaneously to ensure symmetry (e.g., what senior sees vs. what relative sees)
+- **Behavioral hooks**: Small rewards (photos, streaks) dramatically increase engagement for habit-forming apps
+- **Offline-first**: localStorage MVP proves value before investing in backend sync
+
+## Component Design Patterns
+- Modal as slide-up sheet on mobile feels native and less jarring
+- Large touch targets (48px+) are essential for accessibility
+- Period-based task grouping reduces cognitive load for seniors (Habit Stacking)
+- Pictogram-based inputs work better than text for quick selections
