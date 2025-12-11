@@ -11,11 +11,13 @@ import {
 } from 'lucide-react';
 import { Button } from './ui/Button';
 import { Modal } from './ui/Modal';
+import { StatusSelector, STATUS_OPTIONS } from './FamilyStatusCard';
 
-export const RelativeView = ({ tasks, profile, lastCheckIn, symptomLogs, onAddTask }) => {
+export const RelativeView = ({ tasks, profile, lastCheckIn, symptomLogs, onAddTask, familyStatus, onFamilyStatusChange }) => {
     const [showAddModal, setShowAddModal] = useState(false);
     const [showReport, setShowReport] = useState(false);
     const [newTaskTitle, setNewTaskTitle] = useState('');
+    const [showStatusPicker, setShowStatusPicker] = useState(false);
 
     const completionRate = tasks.length > 0
         ? Math.round((tasks.filter(t => t.completed).length / tasks.length) * 100)
@@ -34,6 +36,10 @@ export const RelativeView = ({ tasks, profile, lastCheckIn, symptomLogs, onAddTa
         setShowAddModal(false);
     };
 
+    // Get current status info
+    const currentStatusInfo = STATUS_OPTIONS.find(s => s.id === familyStatus) || STATUS_OPTIONS[0];
+    const StatusIcon = currentStatusInfo.icon;
+
     return (
         <div className="flex flex-col h-full bg-slate-50 relative">
             {/* Header */}
@@ -51,22 +57,34 @@ export const RelativeView = ({ tasks, profile, lastCheckIn, symptomLogs, onAddTa
 
             <main className="p-4 space-y-6 overflow-y-auto pb-24">
 
-                {/* Reciprocity Feature: Status Sharing */}
+                {/* Reciprocity Feature: Status Sharing - Now with picker */}
                 <div className="bg-indigo-600 rounded-xl p-4 text-white shadow-lg">
-                    <div className="flex justify-between items-center mb-2">
+                    <div className="flex justify-between items-center mb-3">
                         <h3 className="font-bold text-indigo-100 text-sm uppercase tracking-wider">Din status hos mor</h3>
-                        <span className="bg-indigo-500 px-2 py-0.5 rounded text-xs">Synlig</span>
+                        <span className="bg-indigo-500 px-2 py-0.5 rounded text-xs">Synlig for Birthe</span>
                     </div>
-                    <div className="flex items-center gap-3">
-                        <div className="p-2 bg-indigo-500 rounded-lg">
-                            <User className="w-6 h-6 text-white" />
+
+                    {showStatusPicker ? (
+                        <div className="bg-white/10 rounded-xl p-3">
+                            <StatusSelector
+                                currentStatus={familyStatus}
+                                onStatusChange={(newStatus) => {
+                                    onFamilyStatusChange(newStatus);
+                                    setShowStatusPicker(false);
+                                }}
+                            />
                         </div>
-                        <div>
-                            <p className="font-bold">Louise er på arbejde</p>
-                            <p className="text-indigo-200 text-xs">Opdateret kl 08:30</p>
+                    ) : (
+                        <div className="flex items-center gap-3" onClick={() => setShowStatusPicker(true)}>
+                            <div className="p-2 bg-indigo-500 rounded-lg">
+                                <StatusIcon className="w-6 h-6 text-white" />
+                            </div>
+                            <div className="flex-1">
+                                <p className="font-bold">{currentStatusInfo.label}</p>
+                                <p className="text-indigo-200 text-xs">Tryk for at ændre</p>
+                            </div>
                         </div>
-                        <Button size="small" variant="secondary" className="ml-auto h-8 text-xs">Ændr</Button>
-                    </div>
+                    )}
                 </div>
 
                 {/* Peace of Mind Status Card */}

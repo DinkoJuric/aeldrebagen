@@ -12,6 +12,7 @@ export default function TrygApp() {
   const [tasks, setTasks] = useLocalStorage('tryg-tasks', INITIAL_TASKS);
   const [lastCheckIn, setLastCheckIn] = useLocalStorage('tryg-checkin', null);
   const [symptomLogs, setSymptomLogs] = useLocalStorage('tryg-symptoms', []);
+  const [familyStatus, setFamilyStatus] = useLocalStorage('tryg-family-status', 'work');
   const [notification, setNotification] = useState(null);
 
   // Simulated notification after 5 seconds
@@ -126,6 +127,7 @@ export default function TrygApp() {
               toggleTask={toggleTask}
               updateStatus={handleCheckIn}
               addSymptom={addSymptom}
+              familyStatus={familyStatus}
             />
           ) : (
             <RelativeView
@@ -134,6 +136,8 @@ export default function TrygApp() {
               lastCheckIn={lastCheckIn}
               symptomLogs={symptomLogs}
               onAddTask={handleAddTaskFromRelative}
+              familyStatus={familyStatus}
+              onFamilyStatusChange={setFamilyStatus}
             />
           )}
         </div>

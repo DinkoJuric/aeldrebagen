@@ -13,9 +13,10 @@ import {
 } from 'lucide-react';
 import { Button } from './ui/Button';
 import { Modal } from './ui/Modal';
+import { FamilyStatusCard } from './FamilyStatusCard';
 import { SYMPTOMS_LIST } from '../data/constants';
 
-export const SeniorView = ({ tasks, toggleTask, updateStatus, addSymptom }) => {
+export const SeniorView = ({ tasks, toggleTask, updateStatus, addSymptom, familyStatus }) => {
     const [showCallModal, setShowCallModal] = useState(false);
     const [showSymptomModal, setShowSymptomModal] = useState(false);
     const [activePeriod, setActivePeriod] = useState('morgen');
@@ -117,6 +118,9 @@ export const SeniorView = ({ tasks, toggleTask, updateStatus, addSymptom }) => {
 
             {/* Main Content - Scrollable */}
             <main className="flex-1 overflow-y-auto p-4 space-y-2 pb-24">
+
+                {/* Family Status - Reciprocity: Senior sees what family is doing */}
+                <FamilyStatusCard familyStatus={familyStatus} familyName="Louise" />
 
                 {/* Reward Card (Behavioral Hook) */}
                 <div className={`

@@ -2,7 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2025-12-11
+
+### 🤝 Two-Way Family Status (Phase 2 - Connection)
+
+**Anti-Surveillance Reciprocity**
+- **Senior View**: New `FamilyStatusCard` showing relative's current status
+- **Relative View**: Status picker with 5 options (work, home, traveling, available, busy)
+- Status persists in localStorage and syncs instantly between views
+- Status options: På arbejde, Hjemme, Undervejs, Har tid til en snak, Optaget
+
+> This is the core "mirror feature" - if senior can be monitored, senior can also see what family is up to. Reduces surveillance feeling.
+
+---
+
 ## [1.1.0] - 2025-12-11
+
 
 ### 🛡️ Stability & Emotional Feedback (Phase 1)
 
