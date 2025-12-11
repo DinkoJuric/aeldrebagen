@@ -16,9 +16,14 @@ import { Modal } from './ui/Modal';
 import { FamilyStatusCard } from './FamilyStatusCard';
 import { ThinkingOfYouButton } from './ThinkingOfYou';
 import { BodyPainSelector } from './BodyPainSelector';
+import { WeeklyQuestionCard, MemoryTrigger } from './WeeklyQuestion';
+import { HelpExchange } from './HelpExchange';
 import { SYMPTOMS_LIST } from '../data/constants';
 
-export const SeniorView = ({ tasks, toggleTask, updateStatus, addSymptom, familyStatus, onSendPing }) => {
+export const SeniorView = ({
+    tasks, toggleTask, updateStatus, addSymptom, familyStatus, onSendPing,
+    weeklyAnswers, onWeeklyAnswer, helpOffers, helpRequests, onHelpOffer, onHelpRequest
+}) => {
     const [showCallModal, setShowCallModal] = useState(false);
     const [showSymptomModal, setShowSymptomModal] = useState(false);
     const [activePeriod, setActivePeriod] = useState('morgen');
@@ -124,13 +129,31 @@ export const SeniorView = ({ tasks, toggleTask, updateStatus, addSymptom, family
             </header>
 
             {/* Main Content - Scrollable */}
-            <main className="flex-1 overflow-y-auto p-4 space-y-2 pb-24">
+            <main className="flex-1 overflow-y-auto p-4 space-y-4 pb-24">
 
                 {/* Family Status - Reciprocity: Senior sees what family is doing */}
                 <FamilyStatusCard familyStatus={familyStatus} familyName="Louise" />
 
                 {/* Thinking of You - one tap warmth */}
                 <ThinkingOfYouButton onSendPing={onSendPing} fromName="Birthe" />
+
+                {/* Weekly Question Ritual */}
+                <WeeklyQuestionCard
+                    onAnswer={onWeeklyAnswer}
+                    answers={weeklyAnswers}
+                    userName="Birthe"
+                />
+
+                {/* Memory Trigger - "Husker du da...?" */}
+                <MemoryTrigger />
+
+                {/* Dignity-Preserving Help Exchange */}
+                <HelpExchange
+                    onOffer={onHelpOffer}
+                    onRequest={onHelpRequest}
+                    activeOffers={helpOffers}
+                    activeRequests={helpRequests}
+                />
 
                 {/* Reward Card (Behavioral Hook) */}
                 <div className={`

@@ -17,6 +17,11 @@ export default function TrygApp() {
   const [activePing, setActivePing] = useState(null);
   const [notification, setNotification] = useState(null);
 
+  // Phase 5: Emotional Connection state
+  const [weeklyAnswers, setWeeklyAnswers] = useLocalStorage('tryg-weekly-answers', []);
+  const [helpOffers, setHelpOffers] = useLocalStorage('tryg-help-offers', []);
+  const [helpRequests, setHelpRequests] = useLocalStorage('tryg-help-requests', []);
+
   // Simulated notification after 5 seconds
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -91,6 +96,20 @@ export default function TrygApp() {
     });
   };
 
+  // Weekly question answer handler
+  const handleWeeklyAnswer = (answer) => {
+    setWeeklyAnswers(prev => [answer, ...prev]);
+  };
+
+  // Help exchange handlers
+  const handleHelpOffer = (offer) => {
+    setHelpOffers(prev => [{ ...offer, timestamp: new Date().toISOString() }, ...prev]);
+  };
+
+  const handleHelpRequest = (request) => {
+    setHelpRequests(prev => [{ ...request, timestamp: new Date().toISOString() }, ...prev]);
+  };
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-zinc-800 p-4 font-sans">
 
@@ -151,6 +170,12 @@ export default function TrygApp() {
               addSymptom={addSymptom}
               familyStatus={familyStatus}
               onSendPing={() => handleSendPing('Birthe', 'relative')}
+              weeklyAnswers={weeklyAnswers}
+              onWeeklyAnswer={handleWeeklyAnswer}
+              helpOffers={helpOffers}
+              helpRequests={helpRequests}
+              onHelpOffer={handleHelpOffer}
+              onHelpRequest={handleHelpRequest}
             />
           ) : (
             <RelativeView
@@ -162,6 +187,10 @@ export default function TrygApp() {
               familyStatus={familyStatus}
               onFamilyStatusChange={setFamilyStatus}
               onSendPing={() => handleSendPing('Louise', 'senior')}
+              weeklyAnswers={weeklyAnswers}
+              onWeeklyAnswer={handleWeeklyAnswer}
+              helpOffers={helpOffers}
+              helpRequests={helpRequests}
             />
           )}
         </div>

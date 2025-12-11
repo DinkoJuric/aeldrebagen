@@ -13,8 +13,13 @@ import { Button } from './ui/Button';
 import { Modal } from './ui/Modal';
 import { StatusSelector, STATUS_OPTIONS } from './FamilyStatusCard';
 import { ThinkingOfYouButton } from './ThinkingOfYou';
+import { WeeklyQuestionCard } from './WeeklyQuestion';
 
-export const RelativeView = ({ tasks, profile, lastCheckIn, symptomLogs, onAddTask, familyStatus, onFamilyStatusChange, onSendPing }) => {
+export const RelativeView = ({
+    tasks, profile, lastCheckIn, symptomLogs, onAddTask, familyStatus,
+    onFamilyStatusChange, onSendPing, weeklyAnswers, onWeeklyAnswer,
+    helpOffers, helpRequests
+}) => {
     const [showAddModal, setShowAddModal] = useState(false);
     const [showReport, setShowReport] = useState(false);
     const [newTaskTitle, setNewTaskTitle] = useState('');
@@ -90,6 +95,32 @@ export const RelativeView = ({ tasks, profile, lastCheckIn, symptomLogs, onAddTa
 
                 {/* Thinking of You - send ping to mom */}
                 <ThinkingOfYouButton onSendPing={onSendPing} fromName="Louise" />
+
+                {/* Weekly Question Ritual - same question, family answers together */}
+                <WeeklyQuestionCard
+                    onAnswer={onWeeklyAnswer}
+                    answers={weeklyAnswers}
+                    userName="Louise"
+                />
+
+                {/* Show active help offers/requests from senior */}
+                {(helpOffers?.length > 0 || helpRequests?.length > 0) && (
+                    <div className="bg-teal-50 border border-teal-200 rounded-xl p-4">
+                        <h4 className="text-teal-700 font-bold mb-2">Fra mor:</h4>
+                        <div className="space-y-2 text-sm">
+                            {helpOffers?.map((offer, i) => (
+                                <div key={`o-${i}`} className="text-teal-600">
+                                    💚 {offer.label}
+                                </div>
+                            ))}
+                            {helpRequests?.map((req, i) => (
+                                <div key={`r-${i}`} className="text-indigo-600">
+                                    💜 {req.label}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
 
                 {/* Peace of Mind Status Card */}
                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
