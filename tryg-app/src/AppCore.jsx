@@ -7,6 +7,7 @@ import { SeniorView } from './components/SeniorView';
 import { RelativeView } from './components/RelativeView';
 import { PingNotification } from './components/ThinkingOfYou';
 import { PrivacySettings } from './components/PrivacySettings';
+import { PhotoCaptureButton, PhotoUploadModal, PhotoViewerModal, PhotoNotificationBadge } from './components/PhotoShare';
 import { useTasks } from './hooks/useTasks';
 import { useSymptoms } from './hooks/useSymptoms';
 import { useSettings } from './hooks/useSettings';
@@ -14,6 +15,7 @@ import { useWeeklyQuestions } from './hooks/useWeeklyQuestions';
 import { usePings } from './hooks/usePings';
 import { useHelpExchange } from './hooks/useHelpExchange';
 import { useCheckIn } from './hooks/useCheckIn';
+import { usePhotos } from './hooks/usePhotos';
 import { SENIOR_PROFILE } from './data/constants';
 import { playCompletionSound, playSuccessSound, playPingSound } from './utils/sounds';
 import { FEATURES } from './config/features';
@@ -35,6 +37,7 @@ export default function TrygAppCore({
     const [notification, setNotification] = useState(null);
     const [showSettings, setShowSettings] = useState(false);
     const [showPrivacySettings, setShowPrivacySettings] = useState(false);
+    const [showPhotoViewer, setShowPhotoViewer] = useState(false);
 
     // Firebase hooks for real-time data
     const { tasks, toggleTask, addTask } = useTasks(careCircle?.id);
@@ -44,6 +47,7 @@ export default function TrygAppCore({
     const { latestPing, sendPing, dismissPing } = usePings(careCircle?.id, user?.uid);
     const { helpOffers, helpRequests, addOffer, addRequest } = useHelpExchange(careCircle?.id);
     const { lastCheckIn, recordCheckIn } = useCheckIn(careCircle?.id);
+    const { latestPhoto, uploading, uploadPhoto, deletePhoto } = usePhotos(careCircle?.id, user?.uid);
 
     // Handle incoming pings from Firestore
     useEffect(() => {
@@ -141,13 +145,21 @@ export default function TrygAppCore({
                 {/* Header with role indicator */}
                 <div className="absolute top-0 left-0 right-0 h-16 bg-black/5 z-50 flex justify-center items-center backdrop-blur-sm px-2">
                     {/* Settings button (left) */}
-                    <button
-                        onClick={() => setShowSettings(!showSettings)}
-                        className="absolute left-4 p-2 rounded-full hover:bg-white/50 transition-colors"
-                        aria-label="Indstillinger"
-                    >
-                        <Share2 className="w-5 h-5 text-stone-600" />
-                    </button>
+                    <div className="absolute left-4 flex items-center gap-2">
+                        <button
+                            onClick={() => setShowSettings(!showSettings)}
+                            className="p-2 rounded-full hover:bg-white/50 transition-colors"
+                            aria-label="Indstillinger"
+                        >
+                            <Share2 className="w-5 h-5 text-stone-600" />
+                        </button>
+                        <PhotoCaptureButton
+                            onCapture={async (file) => {
+                                await uploadPhoto(file, userProfile?.displayName || 'Familie');
+                            }}
+                            disabled={uploading}
+                        />
+                    </div>
 
                     {/* Role indicator (center) - no toggle */}
                     <div className={`px-4 py-2 rounded-full text-sm font-bold shadow-lg ${isSenior ? 'bg-teal-600 text-white' : 'bg-indigo-600 text-white'
@@ -283,7 +295,31 @@ export default function TrygAppCore({
                             seniorName={seniorName}
                         />
                     )}
+
+                    {/* Photo notification badge */}
+                    {latestPhoto && (
+                        <div className="absolute bottom-24 left-4 right-4 z-40 flex justify-center">
+                            <PhotoNotificationBadge
+                                photo={latestPhoto}
+                                onClick={() => setShowPhotoViewer(true)}
+                            />
+                        </div>
+                    )}
                 </div>
+
+                {/* Photo upload modal */}
+                <PhotoUploadModal isOpen={uploading} />
+
+                {/* Photo viewer modal */}
+                {showPhotoViewer && latestPhoto && (
+                    <PhotoViewerModal
+                        photo={latestPhoto}
+                        onDelete={async (id, path) => {
+                            await deletePhoto(id, path);
+                            setShowPhotoViewer(false);
+                        }}
+                    />
+                )}
 
                 {/* Home indicator */}
                 <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 w-32 h-1.5 bg-black/20 rounded-full z-50"></div>

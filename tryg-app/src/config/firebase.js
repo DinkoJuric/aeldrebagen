@@ -8,6 +8,7 @@ import {
     connectFirestoreEmulator,
     enableIndexedDbPersistence
 } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
     apiKey: "AIzaSyAwOIfKLSKMedGPcgAi9Qkxh5jeWD5-h5E",
@@ -24,6 +25,7 @@ const app = initializeApp(firebaseConfig);
 // Initialize services
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+export const storage = getStorage(app);
 
 // Enable offline persistence for Firestore
 // This allows the app to work offline and sync when back online
