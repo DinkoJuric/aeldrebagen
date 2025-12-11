@@ -68,3 +68,10 @@ description: Learnings from past projects to apply in future work
 - Support iOS Dynamic Type for system font scaling
 - Visible focus indicators for all interactive elements
 
+## Connection-First Design (Anti-Surveillance)
+- **Reciprocity by default**: If family sees senior's status, senior sees family's status
+- **Senior as contributor**: Offer ways to give help, not just receive
+- **Shared experiences > monitoring**: Photo exchanges, voice notes, rituals
+- **Agency controls**: "Pause" mode, temporary sharing, notification when viewed
+- **Meaningful goals**: "Dancing at the wedding" > abstract health metrics
+
