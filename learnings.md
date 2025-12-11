@@ -53,6 +53,21 @@ Actionable learnings for avoiding roadblocks. Format: **Problem** → **Action T
 - **Action**: Created `useLocalStorage` hook for MVP
 - **Future**: localStorage is sufficient for MVP validation. Only add backend when sync is actually needed.
 
+### Vite Host Blocking on Tunnels (LocalTunnel/Ngrok)
+- **Problem**: LocalTunnel showed "Blocked request. This host is not allowed"
+- **Action**: Added `server: { allowedHosts: 'all' }` to vite.config.js
+- **Future**: When using ANY tunneling service (localtunnel, ngrok, cloudflare), add `allowedHosts: 'all'` to Vite server config BEFORE starting the tunnel. This is a Vite 5+ security feature.
+
+### Vite Base Path Conflicts (Capacitor vs GitHub Pages)
+- **Problem**: Capacitor needs `base: './'` (relative) but GitHub Pages needs `base: '/repo-name/'` (absolute)
+- **Action**: Used mode-based conditional: `base: mode === 'pages' ? '/repo-name/' : './'`
+- **Future**: Create separate build scripts from the start: `build:pages` and `build:ios`. Don't try to use one config for both.
+
+### GitHub Pages 404 After Deploy
+- **Problem**: GitHub Pages showed 404, workflow ran successfully
+- **Action**: Check: 1) Pages enabled in repo Settings, 2) Source = "GitHub Actions", 3) Correct base path
+- **Future**: Before first GitHub Pages deploy: 1) Enable Pages in Settings → Pages, 2) Set Source to "GitHub Actions" (not "Deploy from branch"), 3) Ensure base path matches repo name.
+
 ---
 
 ## Google Apps Script

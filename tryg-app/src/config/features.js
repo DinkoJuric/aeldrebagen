@@ -4,7 +4,7 @@
 export const FEATURES = {
     // Phase 5: Emotional Connection
     weeklyQuestion: true,      // Weekly Question of the Week card
-    memoryTriggers: true,      // "Husker du da...?" memories
+    memoryTriggers: false,      // "Husker du da...?" memories
     helpExchange: true,        // Dignity-preserving help offers/requests
 
     // Phase 4: Polish

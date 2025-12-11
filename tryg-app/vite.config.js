@@ -11,5 +11,9 @@ export default defineConfig(({ mode }) => ({
   build: {
     outDir: 'dist',
     sourcemap: false
+  },
+  // Allow external hosts for tunneling (localtunnel, ngrok, etc.)
+  server: {
+    allowedHosts: 'all'
   }
 }))
