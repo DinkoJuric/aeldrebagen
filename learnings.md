@@ -47,3 +47,10 @@ description: Learnings from past projects to apply in future work
 - Large touch targets (48px+) are essential for accessibility
 - Period-based task grouping reduces cognitive load for seniors (Habit Stacking)
 - Pictogram-based inputs work better than text for quick selections
+
+## Capacitor / iOS Deployment
+- Use `base: './'` in Vite for Capacitor (not absolute paths)
+- Run `npm run build && npx cap sync ios` after every web change
+- Xcode project lives in `ios/App/App.xcworkspace`
+- Bundle ID format: `tld.company.appname` (e.g., `dk.tryg.app`)
+
