@@ -35,10 +35,10 @@ export const SeniorView = ({
     const [selectedSymptom, setSelectedSymptom] = useState(null);
     const [showBodySelector, setShowBodySelector] = useState(false);
 
-    // Reward Logic - unlock photo when morning tasks complete
-    const morningTasksTotal = tasks.filter(t => t.period === 'morgen').length;
-    const morningTasksDone = tasks.filter(t => t.period === 'morgen' && t.completed).length;
-    const isMorningComplete = morningTasksTotal > 0 && morningTasksTotal === morningTasksDone;
+    // Reward Logic - unlock photo when ALL tasks complete
+    const totalTasks = tasks.length;
+    const completedTasks = tasks.filter(t => t.completed).length;
+    const allTasksComplete = totalTasks > 0 && totalTasks === completedTasks;
 
     // Dynamic greeting based on time
     const hour = new Date().getHours();
@@ -142,13 +142,10 @@ export const SeniorView = ({
                 {/* ===== DAILY TAB ===== */}
                 {(!FEATURES.tabbedLayout || activeTab === 'daily') && (
                     <>
-                        {/* Reward Card (Behavioral Hook) */}
-                        <div className={`
-                    rounded-3xl p-6 mb-6 transition-all duration-500 border-2 overflow-hidden relative
-                    ${isMorningComplete ? 'bg-indigo-600 border-indigo-600 text-white' : 'bg-white border-dashed border-stone-300'}
-                `}>
-                            {isMorningComplete ? (
-                                <div className="animate-fade-in text-center">
+                        {/* Reward Card (Behavioral Hook) - Hidden until ALL tasks complete */}
+                        {allTasksComplete ? (
+                            <div className="rounded-3xl p-6 mb-6 bg-indigo-600 border-2 border-indigo-600 text-white animate-fade-in">
+                                <div className="text-center">
                                     <div className="flex items-center justify-center gap-2 mb-2">
                                         <ImageIcon className="w-6 h-6 text-indigo-200" />
                                         <span className="font-bold text-indigo-100 uppercase tracking-widest text-sm">Dagens Billede</span>
@@ -159,16 +156,8 @@ export const SeniorView = ({
                                     <p className="font-bold text-lg">Godt klaret, Farmor! ❤️</p>
                                     <p className="text-indigo-200 text-sm">Her er et billede fra vores tur i skoven.</p>
                                 </div>
-                            ) : (
-                                <div className="flex flex-col items-center justify-center text-center py-4 opacity-60">
-                                    <div className="w-16 h-16 bg-stone-100 rounded-full flex items-center justify-center mb-2">
-                                        <ImageIcon className="w-8 h-8 text-stone-400" />
-                                    </div>
-                                    <h3 className="font-bold text-stone-500 text-lg">Dagens Billede</h3>
-                                    <p className="text-stone-400 text-sm">Gør din morgen færdig for at se billedet</p>
-                                </div>
-                            )}
-                        </div>
+                            </div>
+                        ) : null}
 
                         {/* Check-in Status */}
                         <div className="bg-white rounded-3xl p-6 shadow-sm border-2 border-teal-100 mb-8">

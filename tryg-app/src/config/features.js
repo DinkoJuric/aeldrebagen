@@ -26,7 +26,7 @@ export const FEATURES = {
     pingSound: true,           // Ping notification sound
 
     // Demo/Testing
-    demoNotification: true,    // Water reminder notification (5s after load)
+    demoNotification: false,    // Water reminder notification (5s after load)
 };
 
 // Helper to check if feature is enabled

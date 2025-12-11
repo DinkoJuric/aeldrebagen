@@ -1,4 +1,4 @@
-import { Zap, Brain, Frown, Thermometer } from 'lucide-react';
+import { Zap, Brain, Frown, Thermometer, Moon, Droplets, Utensils } from 'lucide-react';
 
 // Initial tasks grouped by time of day (Habit Stacking)
 export const INITIAL_TASKS = [
@@ -14,6 +14,9 @@ export const SYMPTOMS_LIST = [
     { id: 'dizzy', label: 'Svimmel', icon: Brain, color: 'bg-purple-100 text-purple-600' },
     { id: 'nausea', label: 'Kvalme', icon: Frown, color: 'bg-orange-100 text-orange-600' },
     { id: 'fever', label: 'Feber', icon: Thermometer, color: 'bg-amber-100 text-amber-600' },
+    { id: 'sleep', label: 'Søvnbesvær', icon: Moon, color: 'bg-indigo-100 text-indigo-600' },
+    { id: 'sweats', label: 'Nattesved', icon: Droplets, color: 'bg-sky-100 text-sky-600' },
+    { id: 'appetite', label: 'Appetit', icon: Utensils, color: 'bg-emerald-100 text-emerald-600' },
 ];
 
 // Senior profile defaults
