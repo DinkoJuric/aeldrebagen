@@ -19,6 +19,7 @@ import { BodyPainSelector } from './BodyPainSelector';
 import { WeeklyQuestionCard, MemoryTrigger } from './WeeklyQuestion';
 import { HelpExchange } from './HelpExchange';
 import { SYMPTOMS_LIST } from '../data/constants';
+import { FEATURES } from '../config/features';
 
 export const SeniorView = ({
     tasks, toggleTask, updateStatus, addSymptom, familyStatus, onSendPing,
@@ -131,29 +132,37 @@ export const SeniorView = ({
             {/* Main Content - Scrollable */}
             <main className="flex-1 overflow-y-auto p-4 space-y-4 pb-24">
 
-                {/* Family Status - Reciprocity: Senior sees what family is doing */}
-                <FamilyStatusCard familyStatus={familyStatus} familyName="Louise" />
+                {/* Family Status - toggle with FEATURES.familyStatusCard */}
+                {FEATURES.familyStatusCard && (
+                    <FamilyStatusCard familyStatus={familyStatus} familyName="Louise" />
+                )}
 
-                {/* Thinking of You - one tap warmth */}
-                <ThinkingOfYouButton onSendPing={onSendPing} fromName="Birthe" />
+                {/* Thinking of You - toggle with FEATURES.thinkingOfYou */}
+                {FEATURES.thinkingOfYou && (
+                    <ThinkingOfYouButton onSendPing={onSendPing} fromName="Birthe" />
+                )}
 
-                {/* Weekly Question Ritual */}
-                <WeeklyQuestionCard
-                    onAnswer={onWeeklyAnswer}
-                    answers={weeklyAnswers}
-                    userName="Birthe"
-                />
+                {/* Weekly Question Ritual - toggle with FEATURES.weeklyQuestion */}
+                {FEATURES.weeklyQuestion && (
+                    <WeeklyQuestionCard
+                        onAnswer={onWeeklyAnswer}
+                        answers={weeklyAnswers}
+                        userName="Birthe"
+                    />
+                )}
 
-                {/* Memory Trigger - "Husker du da...?" */}
-                <MemoryTrigger />
+                {/* Memory Trigger - toggle with FEATURES.memoryTriggers */}
+                {FEATURES.memoryTriggers && <MemoryTrigger />}
 
-                {/* Dignity-Preserving Help Exchange */}
-                <HelpExchange
-                    onOffer={onHelpOffer}
-                    onRequest={onHelpRequest}
-                    activeOffers={helpOffers}
-                    activeRequests={helpRequests}
-                />
+                {/* Dignity-Preserving Help Exchange - toggle with FEATURES.helpExchange */}
+                {FEATURES.helpExchange && (
+                    <HelpExchange
+                        onOffer={onHelpOffer}
+                        onRequest={onHelpRequest}
+                        activeOffers={helpOffers}
+                        activeRequests={helpRequests}
+                    />
+                )}
 
                 {/* Reward Card (Behavioral Hook) */}
                 <div className={`
