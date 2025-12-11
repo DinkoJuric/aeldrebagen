@@ -28,3 +28,9 @@ description: Learnings from past projects to apply in future work
 - Commit frequently with descriptive messages
 - Push after every significant change
 - `.gitignore` entries take effect immediately if file not already tracked
+
+## React + Vite Development
+- Use `npx -y create-vite@latest` for non-interactive project scaffolding
+- For Tailwind v4+, use `@tailwindcss/vite` plugin instead of PostCSS config
+- `useLocalStorage` custom hook enables simple state persistence without backend
+- GitHub Actions workflow can deploy Vite apps to Pages with `base` path config
