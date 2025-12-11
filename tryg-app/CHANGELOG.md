@@ -2,6 +2,49 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.0] - 2025-12-11
+
+### 🎨 Phase 4: Polish & Accessibility
+
+**Pain Severity Scale**
+- 3-level pain scale: Lidt (🙂), Noget (😐), Meget (😣)
+- Two-step flow: body location → severity
+- Displayed in symptom alerts and doctor report
+
+**Accessibility Enhancements**
+- aria-labels for all icon-only buttons
+- Button focus indicators (`focus:ring-2`)
+- Global `focus-visible` CSS outline
+- localStorage graceful degradation check
+
+**Emotional Design**
+- Morning sun-pulse animation (amber glow)
+- "Alt er vel ✨" reassuring micro-copy in header
+
+---
+
+### 💜 Phase 5: Emotional Connection
+
+**Weekly Question Ritual**
+- `WeeklyQuestionCard.jsx` - rotating question based on week number
+- 8 questions: "Hvad var det bedste øjeblik denne uge?", etc.
+- Shared answers carousel - family and senior answer together
+- Displayed in both SeniorView and RelativeView
+
+**Memory Triggers**
+- `MemoryTrigger` component - "Husker du da...?"
+- Rotating memories every 10 seconds
+- Warm amber styling for nostalgic feel
+
+**Dignity-Preserving Help Exchange**
+- `HelpExchange.jsx` - senior can offer AND request help
+- Offers: "Jeg kan hjælpe med at lytte", recipes, conversation
+- Requests: Phone calls, shopping help, doctor escort
+- Two-direction flow respects senior's agency
+- Success feedback with emoji confirmation
+
+---
+
 ## [1.2.0] - 2025-12-11
 
 ### 🤝 Two-Way Family Status (Phase 2 - Connection)

@@ -42,14 +42,15 @@ Replace "health dashboard" with **shared experiences**.
 
 ---
 
-### Weekly Rituals
+### Weekly Rituals ✅ IMPLEMENTED
 
 **Family Question of the Week**
 > "Hvad var det bedste øjeblik denne uge?"
 
-- Everyone answers (family + senior)
-- Creates shared stories and memories
-- Displayed as a carousel of answers
+- ✅ Everyone answers (family + senior) via `WeeklyQuestionCard.jsx`
+- ✅ Creates shared stories and memories
+- ✅ Displayed as a carousel of answers
+- ✅ 8 rotating questions based on week number
 
 **Sunday Coffee Chat**
 - Scheduled video drop-in time
@@ -58,7 +59,7 @@ Replace "health dashboard" with **shared experiences**.
 
 ---
 
-### Dignity-Preserving Help Requests
+### Dignity-Preserving Help Requests ✅ IMPLEMENTED
 
 Instead of: "Alert: Mom needs help"
 Reframe as: **Mutual exchange**
@@ -71,6 +72,8 @@ Reframe as: **Mutual exchange**
 
 **The senior contributes value, not just receives care.**
 
+✅ `HelpExchange.jsx` - Two-way offers/requests with success feedback
+
 ---
 
 ## 💡 "Dancing at the Wedding" Features
@@ -82,10 +85,10 @@ Features that connect health goals to **meaningful life moments**:
 - "Klar til at danse til Emmas bryllup"
 - Connect streaks to personal goals, not abstract metrics
 
-### Memory Triggers
-- "I dag for 3 år siden: Familietur til Skagen"
-- Photo memories from family shared album
-- "Husker du da...?" conversation starters
+### Memory Triggers ✅ IMPLEMENTED
+- ✅ "Husker du da...?" via `MemoryTrigger` component
+- ✅ Rotating memories every 10 seconds
+- ⏳ Photo memories from family shared album (TODO)
 
 ### Anticipation Calendar
 - Countdown to family events
