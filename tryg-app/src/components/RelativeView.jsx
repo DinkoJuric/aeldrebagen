@@ -12,8 +12,9 @@ import {
 import { Button } from './ui/Button';
 import { Modal } from './ui/Modal';
 import { StatusSelector, STATUS_OPTIONS } from './FamilyStatusCard';
+import { ThinkingOfYouButton } from './ThinkingOfYou';
 
-export const RelativeView = ({ tasks, profile, lastCheckIn, symptomLogs, onAddTask, familyStatus, onFamilyStatusChange }) => {
+export const RelativeView = ({ tasks, profile, lastCheckIn, symptomLogs, onAddTask, familyStatus, onFamilyStatusChange, onSendPing }) => {
     const [showAddModal, setShowAddModal] = useState(false);
     const [showReport, setShowReport] = useState(false);
     const [newTaskTitle, setNewTaskTitle] = useState('');
@@ -86,6 +87,9 @@ export const RelativeView = ({ tasks, profile, lastCheckIn, symptomLogs, onAddTa
                         </div>
                     )}
                 </div>
+
+                {/* Thinking of You - send ping to mom */}
+                <ThinkingOfYouButton onSendPing={onSendPing} fromName="Louise" />
 
                 {/* Peace of Mind Status Card */}
                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">

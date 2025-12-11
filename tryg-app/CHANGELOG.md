@@ -14,6 +14,13 @@ All notable changes to this project will be documented in this file.
 
 > This is the core "mirror feature" - if senior can be monitored, senior can also see what family is up to. Reduces surveillance feeling.
 
+**"Tænker på dig" One-Tap Ping**
+- Pink heart button in both views - one tap sends warmth
+- Animated heart with "Sendt! ❤️" confirmation
+- Pink toast notification appears in recipient's view
+- Auto-dismisses after 5 seconds or tap to dismiss
+- Uses Web Audio ping sound for emotional feedback
+
 ---
 
 ## [1.1.0] - 2025-12-11

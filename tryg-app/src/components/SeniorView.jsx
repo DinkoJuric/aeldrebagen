@@ -14,9 +14,10 @@ import {
 import { Button } from './ui/Button';
 import { Modal } from './ui/Modal';
 import { FamilyStatusCard } from './FamilyStatusCard';
+import { ThinkingOfYouButton } from './ThinkingOfYou';
 import { SYMPTOMS_LIST } from '../data/constants';
 
-export const SeniorView = ({ tasks, toggleTask, updateStatus, addSymptom, familyStatus }) => {
+export const SeniorView = ({ tasks, toggleTask, updateStatus, addSymptom, familyStatus, onSendPing }) => {
     const [showCallModal, setShowCallModal] = useState(false);
     const [showSymptomModal, setShowSymptomModal] = useState(false);
     const [activePeriod, setActivePeriod] = useState('morgen');
@@ -121,6 +122,9 @@ export const SeniorView = ({ tasks, toggleTask, updateStatus, addSymptom, family
 
                 {/* Family Status - Reciprocity: Senior sees what family is doing */}
                 <FamilyStatusCard familyStatus={familyStatus} familyName="Louise" />
+
+                {/* Thinking of You - one tap warmth */}
+                <ThinkingOfYouButton onSendPing={onSendPing} fromName="Birthe" />
 
                 {/* Reward Card (Behavioral Hook) */}
                 <div className={`

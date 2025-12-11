@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Activity } from 'lucide-react';
 import { SeniorView } from './components/SeniorView';
 import { RelativeView } from './components/RelativeView';
+import { PingNotification } from './components/ThinkingOfYou';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { INITIAL_TASKS, SENIOR_PROFILE } from './data/constants';
 import { playCompletionSound, playSuccessSound, playPingSound } from './utils/sounds';
@@ -13,6 +14,7 @@ export default function TrygApp() {
   const [lastCheckIn, setLastCheckIn] = useLocalStorage('tryg-checkin', null);
   const [symptomLogs, setSymptomLogs] = useLocalStorage('tryg-symptoms', []);
   const [familyStatus, setFamilyStatus] = useLocalStorage('tryg-family-status', 'work');
+  const [activePing, setActivePing] = useState(null);
   const [notification, setNotification] = useState(null);
 
   // Simulated notification after 5 seconds
@@ -77,6 +79,18 @@ export default function TrygApp() {
     setTasks(prev => [...prev, { ...newTask, id: newId, completed: false }]);
   };
 
+  // Send "thinking of you" ping
+  const handleSendPing = (fromName, toView) => {
+    const now = new Date();
+    const timeString = now.getHours().toString().padStart(2, '0') + ':' +
+      now.getMinutes().toString().padStart(2, '0');
+    setActivePing({
+      fromName,
+      toView,
+      time: timeString
+    });
+  };
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-zinc-800 p-4 font-sans">
 
@@ -121,6 +135,14 @@ export default function TrygApp() {
         </div>
 
         <div className="pt-14 h-full">
+          {/* Ping Notification - shows when receiving a ping in current view */}
+          {activePing && activePing.toView === view && (
+            <PingNotification
+              ping={activePing}
+              onDismiss={() => setActivePing(null)}
+            />
+          )}
+
           {view === 'senior' ? (
             <SeniorView
               tasks={tasks}
@@ -128,6 +150,7 @@ export default function TrygApp() {
               updateStatus={handleCheckIn}
               addSymptom={addSymptom}
               familyStatus={familyStatus}
+              onSendPing={() => handleSendPing('Birthe', 'relative')}
             />
           ) : (
             <RelativeView
@@ -138,6 +161,7 @@ export default function TrygApp() {
               onAddTask={handleAddTaskFromRelative}
               familyStatus={familyStatus}
               onFamilyStatusChange={setFamilyStatus}
+              onSendPing={() => handleSendPing('Louise', 'senior')}
             />
           )}
         </div>
