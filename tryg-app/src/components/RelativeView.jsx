@@ -84,7 +84,7 @@ export const RelativeView = ({
                         <div className="bg-indigo-600 rounded-xl p-4 text-white shadow-lg">
                             <div className="flex justify-between items-center mb-3">
                                 <h3 className="font-bold text-indigo-100 text-sm uppercase tracking-wider">Din status hos mor</h3>
-                                <span className="bg-indigo-500 px-2 py-0.5 rounded text-xs">Synlig for Birthe</span>
+                                <span className="bg-indigo-500 px-2 py-0.5 rounded text-xs">Synlig for {seniorName}</span>
                             </div>
 
                             {showStatusPicker ? (
@@ -270,7 +270,7 @@ export const RelativeView = ({
                         />
                     </div>
                     <div className="p-3 bg-blue-50 text-blue-800 text-sm rounded-xl">
-                        Denne påmindelse vil straks dukke op på Birthes skærm.
+                        Denne påmindelse vil straks dukke op på {seniorName}s skærm.
                     </div>
                     <Button className="w-full" onClick={handleAddTask}>Tilføj</Button>
                 </div>

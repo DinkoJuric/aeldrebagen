@@ -68,10 +68,18 @@ export function useAuth() {
             await updateProfile(newUser, { displayName });
 
             // Create Firestore profile
-            await createUserProfile(newUser.uid, {
+            const profileData = {
                 email,
                 displayName,
                 role, // 'senior' or 'relative'
+            };
+            await createUserProfile(newUser.uid, profileData);
+
+            // Set userProfile immediately so consent flow works
+            setUserProfile({
+                ...profileData,
+                consentGiven: false,
+                consentTimestamp: null,
             });
 
             return newUser;

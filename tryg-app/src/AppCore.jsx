@@ -2,7 +2,7 @@
 // This is the main app UI that receives Firebase state from AppWithAuth
 
 import React, { useState, useEffect } from 'react';
-import { Activity, LogOut, Share2, Settings } from 'lucide-react';
+import { Activity, LogOut, Share2, Settings, Users } from 'lucide-react';
 import { SeniorView } from './components/SeniorView';
 import { RelativeView } from './components/RelativeView';
 import { PingNotification } from './components/ThinkingOfYou';
@@ -11,6 +11,7 @@ import { useTasks } from './hooks/useTasks';
 import { useSymptoms } from './hooks/useSymptoms';
 import { useSettings } from './hooks/useSettings';
 import { useWeeklyQuestions } from './hooks/useWeeklyQuestions';
+import { usePings } from './hooks/usePings';
 import { SENIOR_PROFILE } from './data/constants';
 import { playCompletionSound, playSuccessSound, playPingSound } from './utils/sounds';
 import { FEATURES } from './config/features';
@@ -22,7 +23,8 @@ export default function TrygAppCore({
     careCircle,
     onSignOut,
     inviteCode,
-    onGetInviteCode
+    onGetInviteCode,
+    members = []
 }) {
     // View is determined by user role - no toggle allowed
     const isRelative = userProfile?.role === 'relative';
@@ -37,11 +39,19 @@ export default function TrygAppCore({
     const { symptoms, addSymptom } = useSymptoms(careCircle?.id);
     const { familyStatus, setFamilyStatus } = useSettings(careCircle?.id);
     const { answers: weeklyAnswers, addAnswer: addWeeklyAnswer } = useWeeklyQuestions(careCircle?.id);
+    const { latestPing, sendPing, dismissPing } = usePings(careCircle?.id, user?.uid);
 
     // Local state for features not yet migrated to Firestore
     const [helpOffers, setHelpOffers] = useState([]);
     const [helpRequests, setHelpRequests] = useState([]);
     const [lastCheckIn, setLastCheckIn] = useState(null);
+
+    // Handle incoming pings from Firestore
+    useEffect(() => {
+        if (latestPing && FEATURES.pingSound) {
+            playPingSound();
+        }
+    }, [latestPing]);
 
     // Clear notification after 4 seconds
     useEffect(() => {
@@ -79,14 +89,9 @@ export default function TrygAppCore({
         await addTask(newTask);
     };
 
-    const handleSendPing = (fromName, toView) => {
-        const now = new Date();
-        const timeString = now.getHours().toString().padStart(2, '0') + ':' +
-            now.getMinutes().toString().padStart(2, '0');
-        setActivePing({ fromName, toView, time: timeString });
-        if (FEATURES.pingSound) {
-            playPingSound();
-        }
+    const handleSendPing = async (fromName, toRole) => {
+        // Send ping via Firestore for real-time sync
+        await sendPing(fromName, user?.uid, toRole);
     };
 
     const handleWeeklyAnswer = async (answer) => {
@@ -193,6 +198,31 @@ export default function TrygAppCore({
                         <p className="text-xs text-stone-400 mt-3">
                             Logget ind som: {user?.email}
                         </p>
+
+                        {/* Circle members list */}
+                        {members.length > 0 && (
+                            <div className="mt-3 pt-3 border-t border-stone-200">
+                                <div className="flex items-center gap-2 mb-2">
+                                    <Users className="w-4 h-4 text-stone-500" />
+                                    <span className="text-sm font-medium text-stone-600">Medlemmer</span>
+                                </div>
+                                <div className="space-y-2">
+                                    {members.map((member) => (
+                                        <div key={member.id} className="flex items-center gap-2 text-sm">
+                                            <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${member.role === 'senior' ? 'bg-teal-100 text-teal-700' : 'bg-indigo-100 text-indigo-700'
+                                                }`}>
+                                                {member.displayName?.charAt(0) || '?'}
+                                            </div>
+                                            <span className="text-stone-700">{member.displayName || 'Ukendt'}</span>
+                                            <span className={`text-xs px-1.5 py-0.5 rounded ${member.role === 'senior' ? 'bg-teal-50 text-teal-600' : 'bg-indigo-50 text-indigo-600'
+                                                }`}>
+                                                {member.role === 'senior' ? 'Senior' : 'Pårørende'}
+                                            </span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 )}
 
@@ -206,11 +236,15 @@ export default function TrygAppCore({
                 )}
 
                 <div className="pt-14 h-full">
-                    {/* Ping Notification */}
-                    {activePing && activePing.toView === (isSenior ? 'senior' : 'relative') && (
+                    {/* Ping Notification from Firestore */}
+                    {latestPing && (
                         <PingNotification
-                            ping={activePing}
-                            onDismiss={() => setActivePing(null)}
+                            ping={{
+                                fromName: latestPing.fromName,
+                                toView: latestPing.toRole,
+                                time: latestPing.sentAt?.toLocaleTimeString?.('da-DK', { hour: '2-digit', minute: '2-digit' }) || ''
+                            }}
+                            onDismiss={dismissPing}
                         />
                     )}
 

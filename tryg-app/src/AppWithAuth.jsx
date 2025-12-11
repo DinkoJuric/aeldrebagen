@@ -45,6 +45,7 @@ function FirebaseApp() {
 
     const {
         careCircle,
+        members,
         loading: circleLoading,
         error: circleError,
         createCareCircle,
@@ -135,6 +136,7 @@ function FirebaseApp() {
             onSignOut={signOut}
             inviteCode={inviteCode}
             onGetInviteCode={getInviteCode}
+            members={members}
         />
     );
 }
