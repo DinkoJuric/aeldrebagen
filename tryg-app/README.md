@@ -58,12 +58,21 @@ Auto-deploys on every push to `main`.
 ### Option 2: LocalTunnel (Temporary)
 
 ```bash
+# Start tunnel
 npx localtunnel --port 5174
+
+# Stop tunnel
+# Press Ctrl+C in the terminal where tunnel is running
 ```
 
 Share the generated URL (e.g., `https://xyz.loca.lt`) + your tunnel password (your public IP).
 
 Get your password: visit https://loca.lt/mytunnelpassword
+
+**Troubleshooting:**
+- 503 errors = LocalTunnel servers overloaded, try again later
+- Slow/hanging = Consider alternatives: ngrok, Cloudflare Tunnel, or Vercel
+- LocalTunnel is free but unreliable; GitHub Pages is more stable for sharing
 
 ---
 
