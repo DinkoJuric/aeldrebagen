@@ -46,6 +46,40 @@ export const ThinkingOfYouButton = ({ onSendPing, fromName = 'Louise' }) => {
     );
 };
 
+// Compact icon-only version for header placement
+export const ThinkingOfYouIconButton = ({ onSendPing }) => {
+    const [isSending, setIsSending] = useState(false);
+
+    const handleSend = () => {
+        setIsSending(true);
+        playPingSound();
+        onSendPing?.();
+        setTimeout(() => setIsSending(false), 1500);
+    };
+
+    return (
+        <button
+            onClick={handleSend}
+            disabled={isSending}
+            aria-label="Send kærlighed"
+            className={`
+                p-2 rounded-full transition-all duration-300 relative
+                ${isSending
+                    ? 'bg-pink-200 scale-110'
+                    : 'bg-pink-50 hover:bg-pink-100 active:scale-95'
+                }
+            `}
+        >
+            <Heart
+                className={`w-5 h-5 transition-all duration-300 ${isSending ? 'text-pink-500 fill-pink-500' : 'text-pink-400'}`}
+            />
+            {isSending && (
+                <Sparkles className="absolute -top-1 -right-1 w-3 h-3 text-pink-400 animate-ping" />
+            )}
+        </button>
+    );
+};
+
 // Ping notification that appears in recipient's view
 export const PingNotification = ({ ping, onDismiss }) => {
     const [isVisible, setIsVisible] = useState(false);

@@ -12,7 +12,7 @@ import {
 import { Button } from './ui/Button';
 import { Modal } from './ui/Modal';
 import { StatusSelector, STATUS_OPTIONS } from './FamilyStatusCard';
-import { ThinkingOfYouButton } from './ThinkingOfYou';
+import { ThinkingOfYouButton, ThinkingOfYouIconButton } from './ThinkingOfYou';
 import { WeeklyQuestionCard } from './WeeklyQuestion';
 import { TabNavigation } from './TabNavigation';
 import { FEATURES } from '../config/features';
@@ -51,7 +51,7 @@ export const RelativeView = ({
 
     return (
         <div className="flex flex-col h-full bg-slate-50 relative">
-            {/* Header */}
+            {/* Header with ping button */}
             <header className="bg-white p-4 shadow-sm border-b border-slate-200 sticky top-0 z-10">
                 <div className="flex justify-between items-center">
                     <div className="flex items-center gap-2">
@@ -60,7 +60,13 @@ export const RelativeView = ({
                         </div>
                         <span className="font-semibold text-slate-700">Hej, Louise</span>
                     </div>
-                    <Button variant="ghost" size="small" aria-label="Indstillinger"><Settings className="w-5 h-5" /></Button>
+                    <div className="flex items-center gap-2">
+                        {/* Compact ping button in header */}
+                        {FEATURES.thinkingOfYou && (
+                            <ThinkingOfYouIconButton onSendPing={onSendPing} />
+                        )}
+                        <Button variant="ghost" size="small" aria-label="Indstillinger"><Settings className="w-5 h-5" /></Button>
+                    </div>
                 </div>
             </header>
 
@@ -109,9 +115,6 @@ export const RelativeView = ({
                 {/* ===== FAMILY TAB ===== */}
                 {(!FEATURES.tabbedLayout || activeTab === 'family') && (
                     <>
-                        {/* Thinking of You - send ping to mom */}
-                        <ThinkingOfYouButton onSendPing={onSendPing} fromName="Louise" />
-
                         {/* Weekly Question Ritual - same question, family answers together */}
                         <WeeklyQuestionCard
                             onAnswer={onWeeklyAnswer}
