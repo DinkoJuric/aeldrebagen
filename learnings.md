@@ -54,3 +54,17 @@ description: Learnings from past projects to apply in future work
 - Xcode project lives in `ios/App/App.xcworkspace`
 - Bundle ID format: `tld.company.appname` (e.g., `dk.tryg.app`)
 
+## Behavioral Science for Health Apps
+- **Fogg Model**: Behavior = Motivation × Ability × Prompt (reduce friction first)
+- **Implementation intentions**: "After X, I will do Y" prompts increase adherence
+- **Gentle streaks**: Celebrate consistency without punishing breaks
+- **Pre-filled defaults**: Reduce cognitive load for seniors
+- **Autonomy-respecting design**: Avoid surveillance feeling, emphasize mutual care
+
+## Senior Accessibility (WCAG 2.1 AA+)
+- Minimum 18px font, 7:1 contrast ratio
+- Touch targets: 48x48px minimum
+- Debounce taps (300ms) to prevent accidental double-activation
+- Support iOS Dynamic Type for system font scaling
+- Visible focus indicators for all interactive elements
+
