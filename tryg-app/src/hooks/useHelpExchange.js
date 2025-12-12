@@ -74,6 +74,20 @@ export function useHelpExchange(circleId) {
         };
     }, [circleId]);
 
+    // Helper to sanitize data for Firestore
+    const sanitizeData = (data) => {
+        // Create a clean object with only serializable primitive values
+        const clean = {};
+        Object.keys(data).forEach(key => {
+            const value = data[key];
+            // Skip symbols, functions, and undefined
+            if (typeof value === 'symbol' || typeof value === 'function' || value === undefined) return;
+            // Copy valid values
+            clean[key] = value;
+        });
+        return clean;
+    };
+
     // Add a help offer
     const addOffer = useCallback(async (offer) => {
         if (!circleId) return;
@@ -83,7 +97,7 @@ export function useHelpExchange(circleId) {
 
         try {
             await setDoc(offerRef, {
-                ...offer,
+                ...sanitizeData(offer),
                 createdAt: serverTimestamp(),
             });
             return offerId;
@@ -103,7 +117,7 @@ export function useHelpExchange(circleId) {
 
         try {
             await setDoc(requestRef, {
-                ...request,
+                ...sanitizeData(request),
                 createdAt: serverTimestamp(),
             });
             return requestId;
