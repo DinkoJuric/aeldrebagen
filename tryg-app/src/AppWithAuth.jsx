@@ -116,20 +116,14 @@ function FirebaseApp() {
     // Authenticated but no care circle - show setup
     if (!careCircle) {
         return (
-            <>
-                {/* Debug: Show userId for troubleshooting */}
-                <div className="fixed top-2 left-2 bg-black/80 text-white text-xs p-2 rounded z-50">
-                    Debug: userId = {user?.uid || 'none'}
-                </div>
-                <CircleSetup
-                    userRole={userProfile?.role || 'relative'}
-                    userName={userProfile?.displayName || user.displayName || 'Bruger'}
-                    onCreateCircle={createCareCircle}
-                    onJoinCircle={joinCareCircle}
-                    loading={circleLoading}
-                    error={circleError}
-                />
-            </>
+            <CircleSetup
+                userRole={userProfile?.role || 'relative'}
+                userName={userProfile?.displayName || user.displayName || 'Bruger'}
+                onCreateCircle={createCareCircle}
+                onJoinCircle={joinCareCircle}
+                loading={circleLoading}
+                error={circleError}
+            />
         );
     }
 

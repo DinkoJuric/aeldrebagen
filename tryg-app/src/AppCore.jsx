@@ -109,9 +109,12 @@ export default function TrygAppCore({
         await addRequest(request);
     };
 
-    // Get display names from care circle and user profile
-    const seniorName = careCircle?.seniorName || userProfile?.displayName || 'Senior';
-    const relativeName = userProfile?.displayName || 'Pårørende';
+    // Get display names
+    const seniorName = careCircle?.seniorName || (userProfile?.role === 'senior' ? userProfile?.displayName : 'Senior');
+
+    // Find the relative's name from members list
+    const relativeMember = members.find(m => m.role === 'relative');
+    const relativeName = relativeMember?.displayName || 'Pårørende';
     const profile = {
         ...SENIOR_PROFILE,
         name: seniorName,
