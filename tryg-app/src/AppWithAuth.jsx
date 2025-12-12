@@ -113,6 +113,35 @@ function FirebaseApp() {
         return <LoadingScreen message="Finder din familie..." />;
     }
 
+    // Handle connection errors (e.g., offline) explicitly
+    // instead of falling back to setup screen
+    if (circleError) {
+        return (
+            <div className="min-h-screen bg-stone-50 flex items-center justify-center p-4">
+                <div className="bg-white p-8 rounded-3xl shadow-xl max-w-md w-full text-center">
+                    <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span className="text-2xl">⚠️</span>
+                    </div>
+                    <h2 className="text-xl font-bold text-stone-800 mb-2">Der opstod en fejl</h2>
+                    <p className="text-stone-500 mb-6">
+                        Vi kunne ikke hente dine oplysninger. Det kan skyldes manglende internetforbindelse via firewall eller VPN.
+                        <br />
+                        <span className="text-xs font-mono mt-2 block bg-stone-100 p-2 rounded text-red-500">
+                            {circleError}
+                        </span>
+                    </p>
+                    <button
+                        onClick={() => window.location.reload()}
+                        className="bg-stone-800 text-white px-6 py-3 rounded-xl font-bold hover:bg-stone-900 transition-colors w-full"
+                    >
+                        Prøv igen
+                    </button>
+                    {/* Fallback to setup if user insists (optional, maybe hidden) */}
+                </div>
+            </div>
+        );
+    }
+
     // Authenticated but no care circle - show setup
     if (!careCircle) {
         return (
