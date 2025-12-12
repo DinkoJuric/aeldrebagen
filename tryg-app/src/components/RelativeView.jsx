@@ -155,9 +155,7 @@ export const RelativeView = ({
                             <div>
                                 <h2 className="text-lg font-bold text-slate-800">{profile.name}</h2>
                                 <div className="flex items-center gap-1 text-xs text-slate-500">
-                                    <span>App åben</span>
-                                    <span>•</span>
-                                    <span>Opdateret: {lastCheckIn ? `kl. ${lastCheckIn}` : 'Venter på check-in'}</span>
+                                    <span>Sidst tjekket ind: {lastCheckIn || 'Ingen endnu'}</span>
                                 </div>
                             </div>
                         </div>
@@ -168,10 +166,10 @@ export const RelativeView = ({
 
                     <div className="grid grid-cols-2 gap-4 mt-6">
                         <div className="bg-slate-50 p-4 rounded-xl">
-                            <p className="text-xs text-slate-500 uppercase font-bold tracking-wider mb-1">Sidst Check-in</p>
+                            <p className="text-xs text-slate-500 uppercase font-bold tracking-wider mb-1">Sidst Tjekket Ind</p>
                             <div className="flex items-center gap-2 text-slate-800">
                                 <Clock className="w-4 h-4 text-indigo-500" />
-                                <span className="font-semibold">{lastCheckIn || 'Ikke endnu'}</span>
+                                <span className="font-semibold">{lastCheckIn || 'Venter...'}</span>
                             </div>
                         </div>
                         <div className="bg-slate-50 p-4 rounded-xl">

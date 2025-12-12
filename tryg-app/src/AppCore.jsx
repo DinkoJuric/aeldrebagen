@@ -64,21 +64,21 @@ export default function TrygAppCore({
         }
     }, [notification]);
 
-    const handleToggleTask = (id) => {
+    const handleToggleTask = async (id) => {
         const task = tasks.find(t => t.id === id || t.id === `task_${id}`);
         const willBeCompleted = task && !task.completed;
 
-        toggleTask(id);
+        // Wait for Firestore update to complete
+        await toggleTask(id);
 
         if (willBeCompleted && FEATURES.completionSounds) {
             playCompletionSound();
         }
     };
 
-    const handleCheckIn = (status) => {
-        const now = new Date();
-        const timeString = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-        setLastCheckIn(timeString);
+    const handleCheckIn = async (status) => {
+        // Record check-in to Firestore for real-time sync
+        await recordCheckIn();
         if (status === 'checked-in' && FEATURES.completionSounds) {
             playSuccessSound();
         }
