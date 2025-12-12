@@ -129,3 +129,28 @@ Before deploying multi-user features:
 - [Implementation Plan](./implementation_plan.md) - Original Firebase architecture
 - [IDEATION.md](./IDEATION.md) - Anti-surveillance philosophy (why view isolation matters)
 - [Competitor Analysis](./competitor_analysis.md) - Why invite codes over email lookup
+
+---
+
+## 6. Secrets Don't Trigger Builds
+
+**Issue**: User added GitHub Secrets, but app showed white screen 8 hours later.
+
+**Root Cause**: Adding secrets to GitHub doesn't trigger a workflow run. The previous build had empty `import.meta.env.*` values baked in.
+
+**What Should Have Happened**:
+```bash
+# After adding secrets, always trigger rebuild
+git commit --allow-empty -m "chore: trigger rebuild with secrets"
+git push
+```
+
+**Lesson for Agents**: When a user says "push" after a CI/CD configuration change (secrets, env vars, workflow edits), don't check `git status` - think about whether a **rebuild** is needed, not whether there are file changes.
+
+**Pattern to Recognize**:
+- User adds GitHub Secrets → Need rebuild
+- User edits workflow file → Will auto-rebuild on push
+- User changes env vars in Vercel/Netlify → Usually auto-rebuilds
+- User changes Firebase config → May need cache clear
+
+**Prevention**: After any environment/secrets change, always ask: "Do we need to trigger a new build for this to take effect?"

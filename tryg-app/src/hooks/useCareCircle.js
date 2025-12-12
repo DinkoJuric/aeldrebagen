@@ -42,6 +42,8 @@ export function useCareCircle(userId, userProfile) {
 
         const findCareCircle = async () => {
             try {
+                console.log('[useCareCircle] Looking for circle memberships for user:', userId);
+
                 // First, check if user is a member of any circle
                 const membershipsQuery = query(
                     collection(db, 'careCircleMemberships'),
@@ -49,18 +51,32 @@ export function useCareCircle(userId, userProfile) {
                 );
                 const membershipsSnapshot = await getDocs(membershipsQuery);
 
+                console.log('[useCareCircle] Found memberships:', membershipsSnapshot.size);
+
                 if (!membershipsSnapshot.empty) {
                     const membership = membershipsSnapshot.docs[0].data();
+                    console.log('[useCareCircle] Membership found:', membership);
+
                     const circleRef = doc(db, 'careCircles', membership.circleId);
                     const circleDoc = await getDoc(circleRef);
 
                     if (circleDoc.exists()) {
+                        console.log('[useCareCircle] Circle found:', circleDoc.id);
                         setCareCircle({ id: circleDoc.id, ...circleDoc.data() });
+                    } else {
+                        console.warn('[useCareCircle] Circle doc does not exist:', membership.circleId);
                     }
+                } else {
+                    console.log('[useCareCircle] No memberships found for user');
                 }
             } catch (err) {
-                console.error('Error finding care circle:', err);
-                setError(err.message);
+                console.error('[useCareCircle] Error finding care circle:', err);
+                // Check if it's a missing index error
+                if (err.message?.includes('index')) {
+                    setError('Database index mangler. Kontakt support.');
+                } else {
+                    setError(err.message);
+                }
             } finally {
                 setLoading(false);
             }
