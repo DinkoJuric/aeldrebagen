@@ -44,14 +44,41 @@ export function useCareCircle(userId, userProfile) {
             try {
                 console.log('[useCareCircle] Looking for circle memberships for user:', userId);
 
-                // First, check if user is a member of any circle
+                // First, try the indexed query
                 const membershipsQuery = query(
                     collection(db, 'careCircleMemberships'),
                     where('userId', '==', userId)
                 );
-                const membershipsSnapshot = await getDocs(membershipsQuery);
+                let membershipsSnapshot = await getDocs(membershipsQuery);
 
-                console.log('[useCareCircle] Found memberships:', membershipsSnapshot.size);
+                console.log('[useCareCircle] Query returned:', membershipsSnapshot.size, 'results');
+
+                // FALLBACK: If query returns 0, try fetching all and filtering
+                // This works around potential index issues
+                if (membershipsSnapshot.empty) {
+                    console.log('[useCareCircle] Query empty, trying fallback (fetch all)...');
+                    const allMembershipsSnapshot = await getDocs(collection(db, 'careCircleMemberships'));
+                    console.log('[useCareCircle] All memberships count:', allMembershipsSnapshot.size);
+
+                    // Log all memberships for debugging
+                    allMembershipsSnapshot.docs.forEach(doc => {
+                        const data = doc.data();
+                        console.log('[useCareCircle] Membership:', doc.id, 'userId:', data.userId);
+                    });
+
+                    // Filter client-side
+                    const matchingDocs = allMembershipsSnapshot.docs.filter(
+                        doc => doc.data().userId === userId
+                    );
+                    console.log('[useCareCircle] Client-side filter found:', matchingDocs.length);
+
+                    if (matchingDocs.length > 0) {
+                        membershipsSnapshot = {
+                            empty: false,
+                            docs: matchingDocs
+                        };
+                    }
+                }
 
                 if (!membershipsSnapshot.empty) {
                     const membership = membershipsSnapshot.docs[0].data();
@@ -67,7 +94,7 @@ export function useCareCircle(userId, userProfile) {
                         console.warn('[useCareCircle] Circle doc does not exist:', membership.circleId);
                     }
                 } else {
-                    console.log('[useCareCircle] No memberships found for user');
+                    console.log('[useCareCircle] No memberships found for user (even with fallback)');
                 }
             } catch (err) {
                 console.error('[useCareCircle] Error finding care circle:', err);
