@@ -23,7 +23,7 @@ import { SYMPTOMS_LIST } from '../data/constants';
 import { FEATURES } from '../config/features';
 
 export const SeniorView = ({
-    tasks, toggleTask, updateStatus, addSymptom, familyStatus, onSendPing,
+    tasks, toggleTask, updateStatus, addSymptom, familyStatus, statusLastUpdated, onSendPing,
     weeklyAnswers, onWeeklyAnswer, helpOffers, helpRequests, onHelpOffer, onHelpRequest,
     userName = 'Senior', relativeName = 'Familie'
 }) => {
@@ -204,7 +204,7 @@ export const SeniorView = ({
                     <>
                         {/* Family Status - toggle with FEATURES.familyStatusCard */}
                         {FEATURES.familyStatusCard && (
-                            <FamilyStatusCard familyStatus={familyStatus} familyName={relativeName} />
+                            <FamilyStatusCard familyStatus={familyStatus} familyName={relativeName} lastUpdated={statusLastUpdated} />
                         )}
 
                         {/* Thinking of You - toggle with FEATURES.thinkingOfYou */}

@@ -11,14 +11,18 @@ const STATUS_OPTIONS = [
 ];
 
 // What the SENIOR sees about their family member
-export const FamilyStatusCard = ({ familyStatus, familyName = 'Louise' }) => {
+export const FamilyStatusCard = ({ familyStatus, familyName = 'Louise', lastUpdated }) => {
     const status = STATUS_OPTIONS.find(s => s.id === familyStatus) || STATUS_OPTIONS[0];
     const StatusIcon = status.icon;
 
-    // Format current time for "last updated"
-    const now = new Date();
-    const timeString = now.getHours().toString().padStart(2, '0') + ':' +
-        now.getMinutes().toString().padStart(2, '0');
+    // Format timestamp
+    let timeString = '';
+    if (lastUpdated) {
+        const date = typeof lastUpdated.toDate === 'function' ? lastUpdated.toDate() : new Date(lastUpdated);
+        timeString = date.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' });
+    } else {
+        timeString = '-';
+    }
 
     return (
         <div className="bg-white rounded-2xl p-4 shadow-sm border-2 border-indigo-100 mb-4">

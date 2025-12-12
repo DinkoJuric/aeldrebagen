@@ -42,7 +42,7 @@ export default function TrygAppCore({
     // Firebase hooks for real-time data
     const { tasks, toggleTask, addTask } = useTasks(careCircle?.id);
     const { symptoms, addSymptom } = useSymptoms(careCircle?.id);
-    const { familyStatus, setFamilyStatus } = useSettings(careCircle?.id);
+    const { settings, familyStatus, setFamilyStatus } = useSettings(careCircle?.id);
     const { answers: weeklyAnswers, addAnswer: addWeeklyAnswer } = useWeeklyQuestions(careCircle?.id);
     const { latestPing, sendPing, dismissPing } = usePings(careCircle?.id, user?.uid);
     const { helpOffers, helpRequests, addOffer, addRequest } = useHelpExchange(careCircle?.id);
@@ -271,6 +271,7 @@ export default function TrygAppCore({
                             updateStatus={handleCheckIn}
                             addSymptom={handleAddSymptom}
                             familyStatus={familyStatus}
+                            statusLastUpdated={settings?.lastUpdated}
                             onSendPing={() => handleSendPing(seniorName, 'relative')}
                             weeklyAnswers={weeklyAnswers}
                             onWeeklyAnswer={handleWeeklyAnswer}
