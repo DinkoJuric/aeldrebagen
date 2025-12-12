@@ -146,3 +146,32 @@ Actionable learnings for avoiding roadblocks. Format: **Problem** → **Action T
 ---
 
 *Format reminder: Problem → Action → Future Prevention*
+
+---
+
+## Firebase & Auth
+
+### Signup State Race Condition
+- **Problem**: New users saw wrong screen after signup (circle setup instead of consent)
+- **Action**: Set userProfile state immediately after createUserProfile(), not waiting for onAuthStateChanged
+- **Future**: When creating user documents, update local state synchronously. Don't rely on Firestore listeners for immediate UI.
+
+### localStorage to Firestore Migration
+- **Problem**: Some features still used useState after "migrating" to Firestore
+- **Action**: Created checklist and audited every piece of shared state
+- **Future**: Create explicit checklist of all shared state. Check off each item as migrated.
+
+### Firebase Authorized Domains
+- **Problem**: Google OAuth returned "Requested action is invalid"
+- **Action**: Added deployment domain to Firebase Auth settings
+- **Future**: When deploying to new domains, check: 1) Firebase Auth authorized domains, 2) CORS settings, 3) OAuth redirect URIs.
+
+### Secrets Don't Trigger Builds
+- **Problem**: Added GitHub Secrets but app showed white screen (old build had empty env vars)
+- **Action**: Pushed empty commit to trigger rebuild
+- **Future**: After adding secrets, always `git commit --allow-empty -m "trigger rebuild" && git push`
+
+### Role-Based View Isolation
+- **Problem**: Dev convenience toggle let users see both views, violating privacy
+- **Action**: Removed toggle, view determined solely by userProfile.role
+- **Future**: Development conveniences should be behind feature flags or removed before release.
