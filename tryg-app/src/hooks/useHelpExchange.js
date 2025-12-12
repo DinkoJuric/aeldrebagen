@@ -74,16 +74,16 @@ export function useHelpExchange(circleId) {
         };
     }, [circleId]);
 
-    // Helper to sanitize data for Firestore
-    const sanitizeData = (data) => {
-        // Create a clean object with only serializable primitive values
+    // Whitelist of safe fields to save to Firestore
+    // React components (icon) and their Symbol properties are NOT safe
+    const SAFE_HELP_FIELDS = ['id', 'label', 'emoji'];
+
+    const sanitizeHelpData = (data) => {
         const clean = {};
-        Object.keys(data).forEach(key => {
-            const value = data[key];
-            // Skip symbols, functions, and undefined
-            if (typeof value === 'symbol' || typeof value === 'function' || value === undefined) return;
-            // Copy valid values
-            clean[key] = value;
+        SAFE_HELP_FIELDS.forEach(key => {
+            if (data[key] !== undefined && typeof data[key] !== 'function' && typeof data[key] !== 'symbol') {
+                clean[key] = data[key];
+            }
         });
         return clean;
     };
@@ -97,7 +97,7 @@ export function useHelpExchange(circleId) {
 
         try {
             await setDoc(offerRef, {
-                ...sanitizeData(offer),
+                ...sanitizeHelpData(offer),
                 createdAt: serverTimestamp(),
             });
             return offerId;
@@ -117,7 +117,7 @@ export function useHelpExchange(circleId) {
 
         try {
             await setDoc(requestRef, {
-                ...sanitizeData(request),
+                ...sanitizeHelpData(request),
                 createdAt: serverTimestamp(),
             });
             return requestId;

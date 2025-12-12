@@ -50,16 +50,16 @@ export function useSymptoms(circleId) {
         return () => unsubscribe();
     }, [circleId]);
 
-    // Helper to sanitize data for Firestore
-    const sanitizeData = (data) => {
+    // Whitelist of safe fields to save to Firestore
+    // React components and their Symbol properties are NOT safe
+    const SAFE_SYMPTOM_FIELDS = ['id', 'label', 'color', 'bodyLocation'];
+
+    const sanitizeSymptomData = (data) => {
         const clean = {};
-        Object.keys(data).forEach(key => {
-            const value = data[key];
-            // Skip symbols, functions, and undefined
-            if (typeof value === 'symbol' || typeof value === 'function' || value === undefined) return;
-            // Skip React-specific props
-            if (key.startsWith('_') || key === 'nativeEvent' || key === 'target') return;
-            clean[key] = value;
+        SAFE_SYMPTOM_FIELDS.forEach(key => {
+            if (data[key] !== undefined && typeof data[key] !== 'function' && typeof data[key] !== 'symbol') {
+                clean[key] = data[key];
+            }
         });
         return clean;
     };
@@ -78,7 +78,7 @@ export function useSymptoms(circleId) {
 
         try {
             await setDoc(symptomRef, {
-                ...sanitizeData(symptomData),
+                ...sanitizeSymptomData(symptomData),
                 time: timeString,
                 date: dateString,
                 loggedAt: serverTimestamp(),
