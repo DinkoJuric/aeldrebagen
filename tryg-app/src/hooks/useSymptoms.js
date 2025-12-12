@@ -50,6 +50,20 @@ export function useSymptoms(circleId) {
         return () => unsubscribe();
     }, [circleId]);
 
+    // Helper to sanitize data for Firestore
+    const sanitizeData = (data) => {
+        const clean = {};
+        Object.keys(data).forEach(key => {
+            const value = data[key];
+            // Skip symbols, functions, and undefined
+            if (typeof value === 'symbol' || typeof value === 'function' || value === undefined) return;
+            // Skip React-specific props
+            if (key.startsWith('_') || key === 'nativeEvent' || key === 'target') return;
+            clean[key] = value;
+        });
+        return clean;
+    };
+
     // Add a new symptom log
     const addSymptom = useCallback(async (symptomData) => {
         if (!circleId) return;
@@ -64,7 +78,7 @@ export function useSymptoms(circleId) {
 
         try {
             await setDoc(symptomRef, {
-                ...symptomData,
+                ...sanitizeData(symptomData),
                 time: timeString,
                 date: dateString,
                 loggedAt: serverTimestamp(),
