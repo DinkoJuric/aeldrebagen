@@ -1,5 +1,6 @@
 // Firebase configuration for Tryg App
-// https://console.firebase.google.com/project/tryg-app-c1a93
+// Values loaded from environment variables (.env.local for dev, GitHub Secrets for prod)
+// See .env.example for required variables
 
 import { initializeApp } from 'firebase/app';
 import { getAuth, connectAuthEmulator } from 'firebase/auth';
@@ -11,12 +12,12 @@ import {
 import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyAwOIfKLSKMedGPcgAi9Qkxh5jeWD5-h5E",
-    authDomain: "tryg-app-c1a93.firebaseapp.com",
-    projectId: "tryg-app-c1a93",
-    storageBucket: "tryg-app-c1a93.firebasestorage.app",
-    messagingSenderId: "173732222262",
-    appId: "1:173732222262:web:f7fead43fed4f5d14f8f97"
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
 // Initialize Firebase

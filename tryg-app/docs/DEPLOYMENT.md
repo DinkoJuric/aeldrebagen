@@ -1,0 +1,128 @@
+# Deployment Guide
+
+> How to deploy and maintain Tryg App
+
+## Hosting Architecture
+
+```
+GitHub Repository (DinkoJuric/aeldrebagen)
+         ↓ push to main
+GitHub Actions (build workflow)
+         ↓ npm run build:pages
+GitHub Pages (static hosting)
+         ↓
+https://dinkojuric.github.io/aeldrebagen/
+```
+
+---
+
+## Environment Variables
+
+### Local Development
+
+1. Copy `.env.example` to `.env.local`:
+   ```bash
+   cp .env.example .env.local
+   ```
+
+2. Fill in your Firebase values (from Firebase Console):
+   ```
+   VITE_FIREBASE_API_KEY=AIzaSy...
+   VITE_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
+   VITE_FIREBASE_PROJECT_ID=your-project-id
+   VITE_FIREBASE_STORAGE_BUCKET=your-project.firebasestorage.app
+   VITE_FIREBASE_MESSAGING_SENDER_ID=123456789
+   VITE_FIREBASE_APP_ID=1:123456789:web:abc123
+   ```
+
+3. Start dev server:
+   ```bash
+   npm run dev
+   ```
+
+### Production (GitHub Actions)
+
+Add secrets to GitHub repository:
+
+1. Go to: https://github.com/DinkoJuric/aeldrebagen/settings/secrets/actions
+2. Click "New repository secret"
+3. Add each variable:
+   - `VITE_FIREBASE_API_KEY`
+   - `VITE_FIREBASE_AUTH_DOMAIN`
+   - `VITE_FIREBASE_PROJECT_ID`
+   - `VITE_FIREBASE_STORAGE_BUCKET`
+   - `VITE_FIREBASE_MESSAGING_SENDER_ID`
+   - `VITE_FIREBASE_APP_ID`
+
+---
+
+## Deploy Commands
+
+| Command | Purpose |
+|---------|---------|
+| `npm run dev` | Local development server |
+| `npm run build` | Production build (local testing) |
+| `npm run build:pages` | Production build for GitHub Pages |
+| `npm run preview` | Preview production build locally |
+
+---
+
+## Firebase Setup
+
+### Required Services
+
+- **Authentication**: Email/Password + Google OAuth
+- **Firestore**: Real-time database
+- **Storage**: Photo uploads (requires Blaze plan)
+
+### Console Links
+
+- [Firebase Console](https://console.firebase.google.com/project/tryg-app-c1a93)
+- [Auth Settings](https://console.firebase.google.com/project/tryg-app-c1a93/authentication)
+- [Firestore](https://console.firebase.google.com/project/tryg-app-c1a93/firestore)
+- [Storage](https://console.firebase.google.com/project/tryg-app-c1a93/storage)
+
+### Deploy Security Rules
+
+Firestore rules (in `firestore.rules`):
+```bash
+firebase deploy --only firestore:rules
+```
+
+Storage rules (in `storage.rules`):
+```bash
+firebase deploy --only storage:rules
+```
+
+Or deploy via Firebase Console directly.
+
+---
+
+## Authorized Domains
+
+Add deployment domains to Firebase Auth:
+1. Go to: Firebase Console → Authentication → Settings → Authorized domains
+2. Add: `dinkojuric.github.io`
+
+---
+
+## Troubleshooting
+
+### Build Fails on GitHub Actions
+- Check secrets are set correctly
+- Verify secret names match exactly (case-sensitive)
+
+### Auth "Invalid action" Error
+- Add domain to Firebase authorized domains list
+
+### App Shows Blank Screen
+- Check browser console for errors
+- Verify environment variables are set
+- Try hard refresh (Ctrl+Shift+R)
+
+---
+
+## Related
+
+- [ARCHITECTURE.md](./ARCHITECTURE.md) - System overview
+- [SECURITY.md](./SECURITY.md) - Security configuration
