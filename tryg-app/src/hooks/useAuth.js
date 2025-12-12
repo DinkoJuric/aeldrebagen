@@ -36,6 +36,8 @@ export function useAuth() {
                     }
                 } catch (err) {
                     console.error('Error fetching user profile:', err);
+                    // Propagate error so AppWithAuth can show error screen
+                    setError(err.message || 'Could not load profile');
                 }
             } else {
                 setUserProfile(null);

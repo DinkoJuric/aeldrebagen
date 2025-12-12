@@ -115,7 +115,9 @@ function FirebaseApp() {
 
     // Handle connection errors (e.g., offline) explicitly
     // instead of falling back to setup screen
-    if (circleError) {
+    // Check BOTH auth errors (profile fetch) and circle errors
+    const connectionError = authError || circleError;
+    if (connectionError) {
         return (
             <div className="min-h-screen bg-stone-50 flex items-center justify-center p-4">
                 <div className="bg-white p-8 rounded-3xl shadow-xl max-w-md w-full text-center">
@@ -127,7 +129,7 @@ function FirebaseApp() {
                         Vi kunne ikke hente dine oplysninger. Det kan skyldes manglende internetforbindelse via firewall eller VPN.
                         <br />
                         <span className="text-xs font-mono mt-2 block bg-stone-100 p-2 rounded text-red-500">
-                            {circleError}
+                            {connectionError}
                         </span>
                     </p>
                     <button
