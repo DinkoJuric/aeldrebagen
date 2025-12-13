@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.5.0] - 2025-12-13
+
+### 🎨 RelativeView Visual Parity
+
+**UI Polish**
+- Unified `stone-*` color scheme across both SeniorView and RelativeView
+- Header now uses `rounded-b-3xl` corners for consistent styling
+- Senior status card with teal-themed avatar and larger font
+- Task cards with `rounded-xl` icon containers and blue accents
+- Completed tasks accordion styled with teal theme
+
+**Bug Fix**
+- Fixed "last time online" not reflecting senior's check-in time
+- Improved `useCheckIn` hook error handling for new circles
+
+**Developer Experience**
+- Added `scripts/create-test-user.mjs` for E2E testing without OAuth
+- Test credentials: `louise.relative@test.com` / `Test1234!`
+- Documented color system in PROJECT_CONTEXT.md
+
+---
+
 ## [1.4.0] - 2025-12-11
 
 ### 🔥 Firebase Multi-User Backend
