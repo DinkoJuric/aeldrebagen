@@ -262,3 +262,8 @@ Actionable learnings for avoiding roadblocks. Format: **Problem** → **Action T
 - **Action**: Firestore snapshot was adding `id: doc.id` but items also had original `id` field ('listen'). Renamed to `docId`
 - **Future**: When fetching Firestore docs with existing `id` fields, use `docId` for the Firestore document ID to avoid collision.
 
+### Browser Automation Input Fields
+- **Problem**: Browser subagent appended text to existing input values, causing "email@test.comemail@test.com"
+- **Action**: Input commands need to explicitly clear the field first with `ClearText: true`
+- **Future**: When automating form inputs, always use `ClearText: true` to ensure clean input. Also clear fields manually with the user's browser before retrying automation.
+
