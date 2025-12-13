@@ -121,10 +121,11 @@ export default function TrygAppCore({
     };
 
     return (
-        <div className="flex justify-center items-center min-h-screen bg-zinc-800 p-4 font-sans">
+        <div className="flex justify-center items-center min-h-screen bg-stone-50 sm:bg-zinc-800 sm:p-4 font-sans">
 
-            {/* Phone Frame Simulator */}
-            <div className="relative w-full max-w-md h-[850px] bg-white rounded-[3rem] overflow-hidden border-8 border-zinc-900 shadow-2xl ring-1 ring-zinc-400/50">
+            {/* Phone Frame Simulator (Responsive) */}
+            {/* Mobile: Full screen, no border. Desktop: Phone frame with border. */}
+            <div className="relative w-full sm:max-w-md h-[100dvh] sm:h-[850px] bg-white sm:rounded-[3rem] overflow-hidden sm:border-8 sm:border-zinc-900 shadow-2xl sm:ring-1 sm:ring-zinc-400/50">
 
                 {/* Push Notification Banner */}
                 <div className={`
