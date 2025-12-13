@@ -6,6 +6,7 @@ import { WeeklyQuestionWidget, WeeklyQuestionModal } from './WeeklyQuestionWidge
 import { RelativeBottomNavigation } from './RelativeBottomNavigation';
 import { PeaceOfMindTab } from './PeaceOfMindTab';
 import { CoordinationTab } from './CoordinationTab';
+import { MatchCelebration } from './MatchCelebration';
 import { FEATURES } from '../config/features';
 import { SYMPTOMS_LIST } from '../data/constants';
 import { AlertCircle } from 'lucide-react';
@@ -20,6 +21,24 @@ export const RelativeView = ({
     const [showWeeklyModal, setShowWeeklyModal] = useState(false);
     const [newTaskTitle, setNewTaskTitle] = useState('');
     const [activeTab, setActiveTab] = useState('daily'); // 'daily' = Peace of Mind, 'family' = Coordination
+
+    // Relative's offers and requests (local state for now, could be synced to Firestore)
+    const [relativeOffers, setRelativeOffers] = useState([]);
+    const [relativeRequests, setRelativeRequests] = useState([]);
+    const [activeMatch, setActiveMatch] = useState(null);
+
+    const handleAddRelativeOffer = (offer) => {
+        setRelativeOffers(prev => [...prev, { ...offer, createdBy: profile?.userId }]);
+    };
+    const handleRemoveRelativeOffer = (offerId) => {
+        setRelativeOffers(prev => prev.filter(o => o.id !== offerId));
+    };
+    const handleAddRelativeRequest = (request) => {
+        setRelativeRequests(prev => [...prev, { ...request, createdBy: profile?.userId }]);
+    };
+    const handleRemoveRelativeRequest = (requestId) => {
+        setRelativeRequests(prev => prev.filter(r => r.id !== requestId));
+    };
 
     const openTasks = tasks.filter(t => !t.completed);
     const completedTasksList = tasks.filter(t => t.completed);
@@ -98,11 +117,18 @@ export const RelativeView = ({
                         onFamilyStatusChange={onFamilyStatusChange}
                         helpOffers={helpOffers}
                         helpRequests={helpRequests}
+                        relativeOffers={relativeOffers}
+                        relativeRequests={relativeRequests}
+                        onAddRelativeOffer={handleAddRelativeOffer}
+                        onRemoveRelativeOffer={handleRemoveRelativeOffer}
+                        onAddRelativeRequest={handleAddRelativeRequest}
+                        onRemoveRelativeRequest={handleRemoveRelativeRequest}
                         openTasks={openTasks}
                         completedTasks={completedTasksList}
                         symptomLogs={symptomLogs}
                         onAddTask={() => setShowAddModal(true)}
                         onViewReport={() => setShowReport(true)}
+                        onMatchAction={(match) => setActiveMatch(match)}
                     />
                 )}
             </main>
@@ -220,6 +246,20 @@ export const RelativeView = ({
                 onAnswer={onWeeklyAnswer}
                 userName={userName}
             />
+
+            {/* Match Celebration Modal */}
+            {activeMatch && (
+                <MatchCelebration
+                    match={activeMatch}
+                    seniorName={seniorName}
+                    onDismiss={() => setActiveMatch(null)}
+                    onAction={(action) => {
+                        console.log('Match action:', action);
+                        // TODO: Implement specific actions (call, plan, etc.)
+                        setActiveMatch(null);
+                    }}
+                />
+            )}
         </div>
     );
 };
