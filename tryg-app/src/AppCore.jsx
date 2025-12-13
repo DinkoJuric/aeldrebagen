@@ -49,6 +49,26 @@ export default function TrygAppCore({
     const { lastCheckIn, recordCheckIn } = useCheckIn(careCircle?.id);
     const { latestPhoto, uploading, uploadPhoto, deletePhoto } = usePhotos(careCircle?.id, user?.uid);
 
+    // Dummy state for relative offers/requests (for demo/match detection)
+    // Ideally this would come from a useRelativeHelpExchange hook backed by Firestore
+    const [relativeOffers, setRelativeOffers] = useState([
+        { id: 'garden', label: 'Hjælpe i haven', emoji: '🌿', createdBy: 'fatima', createdByRole: 'relative' }
+    ]);
+    const [relativeRequests, setRelativeRequests] = useState([]);
+
+    const handleAddRelativeOffer = (offer) => {
+        setRelativeOffers(prev => [...prev, { ...offer, createdBy: userProfile?.userId }]);
+    };
+    const handleRemoveRelativeOffer = (offerId) => {
+        setRelativeOffers(prev => prev.filter(o => o.id !== offerId));
+    };
+    const handleAddRelativeRequest = (request) => {
+        setRelativeRequests(prev => [...prev, { ...request, createdBy: userProfile?.userId }]);
+    };
+    const handleRemoveRelativeRequest = (requestId) => {
+        setRelativeRequests(prev => prev.filter(r => r.id !== requestId));
+    };
+
     // Handle incoming pings from Firestore
     useEffect(() => {
         if (latestPing && FEATURES.pingSound) {
@@ -301,6 +321,8 @@ export default function TrygAppCore({
                             onWeeklyAnswer={handleWeeklyAnswer}
                             helpOffers={helpOffers}
                             helpRequests={helpRequests}
+                            relativeOffers={relativeOffers}
+                            relativeRequests={relativeRequests}
                             onHelpOffer={handleHelpOffer}
                             onHelpRequest={handleHelpRequest}
                             onRemoveOffer={removeOffer}
@@ -323,6 +345,12 @@ export default function TrygAppCore({
                             onWeeklyAnswer={handleWeeklyAnswer}
                             helpOffers={helpOffers}
                             helpRequests={helpRequests}
+                            relativeOffers={relativeOffers}
+                            relativeRequests={relativeRequests}
+                            onAddRelativeOffer={handleAddRelativeOffer}
+                            onRemoveRelativeOffer={handleRemoveRelativeOffer}
+                            onAddRelativeRequest={handleAddRelativeRequest}
+                            onRemoveRelativeRequest={handleRemoveRelativeRequest}
                             onOpenSettings={() => setShowPrivacySettings(true)}
                             userName={relativeName}
                             seniorName={seniorName}

@@ -24,10 +24,13 @@ import { HelpExchange } from './HelpExchange';
 import { BottomNavigation } from './BottomNavigation';
 import { SYMPTOMS_LIST } from '../data/constants';
 import { FEATURES } from '../config/features';
+import { useHelpExchangeMatch } from '../hooks/useHelpExchangeMatch';
+import { MatchCelebration } from './MatchCelebration';
 
 export const SeniorView = ({
     tasks, toggleTask, updateStatus, addSymptom, familyStatus, statusLastUpdated, onSendPing,
-    weeklyAnswers, onWeeklyAnswer, helpOffers, helpRequests, onHelpOffer, onHelpRequest,
+    weeklyAnswers, onWeeklyAnswer, helpOffers, helpRequests, relativeOffers = [], relativeRequests = [],
+    onHelpOffer, onHelpRequest,
     onRemoveOffer, onRemoveRequest, members = [],
     userName = 'Senior', relativeName = 'Familie'
 }) => {
@@ -37,6 +40,15 @@ export const SeniorView = ({
     const [showCompletedTasks, setShowCompletedTasks] = useState(false);
     const [activePeriod, setActivePeriod] = useState('morgen');
     const [activeTab, setActiveTab] = useState('daily'); // 'daily' or 'family'
+
+    // Detect matches between Senior and Relative
+    const { match, dismissMatch } = useHelpExchangeMatch(
+        helpOffers,
+        helpRequests,
+        relativeOffers,
+        relativeRequests,
+        familyStatus // Senior doesn't see status matches (Relative status matching Senior request), but logic handles it
+    );
 
     // Two-step symptom flow: symptom type → body location (for pain)
     const [selectedSymptom, setSelectedSymptom] = useState(null);
@@ -392,6 +404,14 @@ export const SeniorView = ({
                 onAnswer={onWeeklyAnswer}
                 userName={userName}
             />
+            {/* Match Celebration Modal - full screen confetti! */}
+            {match && (
+                <MatchCelebration
+                    match={match}
+                    onDismiss={dismissMatch}
+                    onAction={(action) => console.log('Senior action:', action)}
+                />
+            )}
         </div >
     );
 };

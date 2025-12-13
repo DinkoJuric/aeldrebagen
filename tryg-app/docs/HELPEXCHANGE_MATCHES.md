@@ -29,27 +29,28 @@ When someone's **status** aligns with another's **request**.
 
 ---
 
-## Senior's Available Offers (HELP_OFFERS in constants.js)
+## Senior's Available Offers (SENIOR_OFFERS in helpExchangeConfig.js)
 
 | ID | Label | Emoji |
 |----|-------|-------|
-| `listen` | Har tid til at snakke | 👂 |
-| `stories` | Vil gerne fortælle historier | 📖 |
+| `listen` | Jeg kan hjælpe med at lytte | 👂 |
+| `recipe` | Jeg har en god opskrift | 👩‍🍳 |
+| `stories` | Vil gerne høre om jeres dag | 💬 |
 | `cook` | Kan lave mad til os | 🍳 |
 | `teach` | Vil gerne lære fra mig | 📚 |
-| `projects` | Har et projekt I kan hjælpe med | 🔧 |
 
 ---
 
-## Senior's Available Requests (HELP_REQUESTS in constants.js)
+## Senior's Available Requests (SENIOR_REQUESTS in helpExchangeConfig.js)
 
 | ID | Label | Emoji |
 |----|-------|-------|
-| `shop` | Hjælp til storindkøb | 🛒 |
-| `transport` | Transport til læge/aftale | 🚗 |
-| `outdoors` | Gå en tur sammen | 🚶 |
-| `tech` | Hjælp med telefon/computer | 📱 |
+| `call` | Kan nogen ringe mig i dag? | 📞 |
+| `shop` | Hjælp til indkøb denne uge | 🛒 |
+| `transport` | Følgeskab til lægen/aftale | 🚗 |
 | `company` | Bare noget selskab | ☕ |
+| `outdoor` | Gå en tur sammen | 🌿 |
+| `help-tech` | Hjælp med telefon/computer | 📱 |
 
 ---
 

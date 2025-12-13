@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Heart, HelpCircle, ChevronRight, X } from 'lucide-react';
+import { Heart, HandHeart, X, Plus } from 'lucide-react';
 import { SENIOR_OFFERS, SENIOR_REQUESTS } from '../config/helpExchangeConfig';
 
-// Dignity-preserving help exchange - senior contributes, not just receives
+// Dashboard-style HelpExchange for Senior (aligned with RelativeView)
 export const HelpExchange = ({
     onOffer,
     onRequest,
@@ -11,140 +11,146 @@ export const HelpExchange = ({
     activeOffers = [],
     activeRequests = []
 }) => {
-    const [mode, setMode] = useState(null); // 'offer' or 'request'
-    const [showSuccess, setShowSuccess] = useState(false);
-    const [successMessage, setSuccessMessage] = useState('');
+    const [showOfferPicker, setShowOfferPicker] = useState(false);
+    const [showRequestPicker, setShowRequestPicker] = useState(false);
 
-    const handleSelect = (item, type) => {
-        if (type === 'offer') {
-            onOffer?.(item);
-            setSuccessMessage('✨ Familie kan nu se, at du gerne vil hjælpe');
-        } else {
-            onRequest?.(item);
-            setSuccessMessage('💕 Familie har modtaget din besked');
-        }
-        setShowSuccess(true);
-        setMode(null);
-        setTimeout(() => setShowSuccess(false), 3000);
-    };
+    // Filter out already active items
+    const availableOffers = SENIOR_OFFERS.filter(o => !activeOffers.some(active => active.id === o.id));
+    const availableRequests = SENIOR_REQUESTS.filter(r => !activeRequests.some(active => active.id === r.id));
 
-    if (showSuccess) {
-        return (
-            <div className="bg-teal-50 border border-teal-200 rounded-2xl p-4 text-center">
-                <p className="text-teal-700 font-medium text-lg">{successMessage}</p>
-            </div>
-        );
-    }
+    return (
+        <div className="bg-white border border-stone-200 rounded-2xl p-4 space-y-5">
+            <h3 className="text-stone-700 font-bold flex items-center gap-2">
+                <HandHeart className="w-5 h-5 text-teal-600" />
+                Familie-udveksling
+            </h3>
 
-    if (mode === null) {
-        return (
-            <div className="bg-white border border-stone-200 rounded-2xl p-4 space-y-3">
-                <h3 className="text-stone-700 font-bold text-center mb-2">Familie-udveksling</h3>
+            {/* OFFERS SECTION */}
+            <div className="space-y-3">
+                <div className="flex justify-between items-center">
+                    <p className="text-sm font-bold text-stone-500 uppercase tracking-wide">Du tilbyder:</p>
+                </div>
 
-                <button
-                    onClick={() => setMode('offer')}
-                    className="w-full p-4 bg-teal-50 rounded-xl border-2 border-teal-200 
-                        hover:bg-teal-100 transition-colors flex items-center gap-3
-                        focus:outline-none focus:ring-2 focus:ring-teal-400"
-                    aria-label="Tilbyd at hjælpe"
-                >
-                    <div className="p-2 bg-teal-100 rounded-full">
-                        <Heart className="w-5 h-5 text-teal-600" />
-                    </div>
-                    <div className="flex-1 text-left">
-                        <p className="font-semibold text-teal-700">Jeg kan tilbyde...</p>
-                        <p className="text-sm text-teal-600">Del hvad du gerne vil bidrage med</p>
-                    </div>
-                    <ChevronRight className="w-5 h-5 text-teal-400" />
-                </button>
+                <div className="flex flex-wrap gap-2">
+                    {/* Active Offers */}
+                    {activeOffers.map((item) => (
+                        <span
+                            key={item.docId}
+                            className="bg-teal-500 text-white px-3 py-2 rounded-xl flex items-center gap-2 shadow-sm animate-in fade-in zoom-in duration-200"
+                        >
+                            <span className="text-lg">{item.emoji}</span>
+                            <span className="font-medium text-sm">{item.label}</span>
+                            <button
+                                onClick={() => onRemoveOffer?.(item.docId)}
+                                className="ml-1 p-0.5 hover:bg-teal-600 rounded-full transition-colors"
+                            >
+                                <X className="w-4 h-4" />
+                            </button>
+                        </span>
+                    ))}
 
-                <button
-                    onClick={() => setMode('request')}
-                    className="w-full p-4 bg-indigo-50 rounded-xl border-2 border-indigo-200 
-                        hover:bg-indigo-100 transition-colors flex items-center gap-3
-                        focus:outline-none focus:ring-2 focus:ring-indigo-400"
-                    aria-label="Bed om hjælp"
-                >
-                    <div className="p-2 bg-indigo-100 rounded-full">
-                        <HelpCircle className="w-5 h-5 text-indigo-600" />
-                    </div>
-                    <div className="flex-1 text-left">
-                        <p className="font-semibold text-indigo-700">Jeg kunne godt bruge...</p>
-                        <p className="text-sm text-indigo-600">Fortæl hvad du har brug for</p>
-                    </div>
-                    <ChevronRight className="w-5 h-5 text-indigo-400" />
-                </button>
+                    {/* Add Button */}
+                    <button
+                        onClick={() => setShowOfferPicker(!showOfferPicker)}
+                        className={`px-3 py-2 rounded-xl flex items-center gap-2 border-2 border-dashed transition-all
+                            ${showOfferPicker
+                                ? 'bg-teal-50 border-teal-300 text-teal-700'
+                                : 'border-stone-200 text-stone-500 hover:border-teal-300 hover:text-teal-600 hover:bg-teal-50'}
+                        `}
+                    >
+                        <Plus className="w-4 h-4" />
+                        <span className="font-medium text-sm">Tilbyd</span>
+                    </button>
+                </div>
 
-                {/* Show active items with dismiss buttons */}
-                {(activeOffers.length > 0 || activeRequests.length > 0) && (
-                    <div className="pt-2 mt-2 border-t border-stone-100">
-                        <p className="text-xs text-stone-400 mb-2">Aktive (tryk for at fjerne):</p>
+                {/* Offer Picker */}
+                {showOfferPicker && (
+                    <div className="bg-stone-50 rounded-xl p-3 border border-stone-200 animate-in slide-in-from-top-2">
+                        <p className="text-xs text-stone-500 mb-2 font-medium">Vælg hvad du vil tilbyde:</p>
                         <div className="flex flex-wrap gap-2">
-                            {activeOffers.map((item) => (
+                            {availableOffers.map(item => (
                                 <button
-                                    key={item.docId}
-                                    onClick={() => onRemoveOffer?.(item.docId)}
-                                    className="text-xs bg-teal-100 text-teal-700 px-2 py-1 rounded-full 
-                                        flex items-center gap-1 hover:bg-teal-200 transition-colors
-                                        focus:outline-none focus:ring-2 focus:ring-teal-400"
-                                    aria-label={`Fjern ${item.label}`}
+                                    key={item.id}
+                                    onClick={() => {
+                                        onOffer?.(item);
+                                        setShowOfferPicker(false);
+                                    }}
+                                    className="bg-white border border-stone-200 hover:border-teal-400 hover:bg-teal-50 px-3 py-2 rounded-lg 
+                                        flex items-center gap-2 text-sm transition-colors text-left shadow-sm"
                                 >
-                                    {item.emoji} {item.label?.split(' ').slice(0, 2).join(' ')}...
-                                    <X className="w-3 h-3" />
-                                </button>
-                            ))}
-                            {activeRequests.map((item) => (
-                                <button
-                                    key={item.docId}
-                                    onClick={() => onRemoveRequest?.(item.docId)}
-                                    className="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full 
-                                        flex items-center gap-1 hover:bg-indigo-200 transition-colors
-                                        focus:outline-none focus:ring-2 focus:ring-indigo-400"
-                                    aria-label={`Fjern ${item.label}`}
-                                >
-                                    {item.emoji} {item.label?.split(' ').slice(0, 2).join(' ')}...
-                                    <X className="w-3 h-3" />
+                                    <span className="text-lg">{item.emoji}</span>
+                                    <span className="text-stone-700">{item.label}</span>
                                 </button>
                             ))}
                         </div>
                     </div>
                 )}
             </div>
-        );
-    }
 
-    // Show offer or request options
-    const items = mode === 'offer' ? SENIOR_OFFERS : SENIOR_REQUESTS;
-    const colors = mode === 'offer'
-        ? { bg: 'bg-teal-50', border: 'border-teal-200', text: 'text-teal-700', icon: 'text-teal-600' }
-        : { bg: 'bg-indigo-50', border: 'border-indigo-200', text: 'text-indigo-700', icon: 'text-indigo-600' };
+            {/* SEPARATOR */}
+            <div className="border-t border-stone-100"></div>
 
-    return (
-        <div className={`${colors.bg} border ${colors.border} rounded-2xl p-4 space-y-3`}>
-            <h3 className={`${colors.text} font-bold text-center`}>
-                {mode === 'offer' ? 'Hvad vil du gerne tilbyde?' : 'Hvad har du brug for?'}
-            </h3>
+            {/* REQUESTS SECTION */}
+            <div className="space-y-3">
+                <div className="flex justify-between items-center">
+                    <p className="text-sm font-bold text-stone-500 uppercase tracking-wide">Du ønsker:</p>
+                </div>
 
-            {items.map(item => (
-                <button
-                    key={item.id}
-                    onClick={() => handleSelect(item, mode)}
-                    className={`w-full p-4 bg-white rounded-xl border-2 ${colors.border}
-                        hover:shadow-md transition-all flex items-center gap-3
-                        focus:outline-none focus:ring-2 focus:ring-offset-1`}
-                    aria-label={item.label}
-                >
-                    <span className="text-2xl">{item.emoji}</span>
-                    <span className={`font-medium ${colors.text}`}>{item.label}</span>
-                </button>
-            ))}
+                <div className="flex flex-wrap gap-2">
+                    {/* Active Requests */}
+                    {activeRequests.map((item) => (
+                        <span
+                            key={item.docId}
+                            className="bg-indigo-500 text-white px-3 py-2 rounded-xl flex items-center gap-2 shadow-sm animate-in fade-in zoom-in duration-200"
+                        >
+                            <span className="text-lg">{item.emoji}</span>
+                            <span className="font-medium text-sm">{item.label}</span>
+                            <button
+                                onClick={() => onRemoveRequest?.(item.docId)}
+                                className="ml-1 p-0.5 hover:bg-indigo-600 rounded-full transition-colors"
+                            >
+                                <X className="w-4 h-4" />
+                            </button>
+                        </span>
+                    ))}
 
-            <button
-                onClick={() => setMode(null)}
-                className="w-full p-2 text-stone-500 text-sm hover:text-stone-700"
-            >
-                ← Tilbage
-            </button>
+                    {/* Add Button */}
+                    <button
+                        onClick={() => setShowRequestPicker(!showRequestPicker)}
+                        className={`px-3 py-2 rounded-xl flex items-center gap-2 border-2 border-dashed transition-all
+                            ${showRequestPicker
+                                ? 'bg-indigo-50 border-indigo-300 text-indigo-700'
+                                : 'border-stone-200 text-stone-500 hover:border-indigo-300 hover:text-indigo-600 hover:bg-indigo-50'}
+                        `}
+                    >
+                        <Plus className="w-4 h-4" />
+                        <span className="font-medium text-sm">Bed om</span>
+                    </button>
+                </div>
+
+                {/* Request Picker */}
+                {showRequestPicker && (
+                    <div className="bg-stone-50 rounded-xl p-3 border border-stone-200 animate-in slide-in-from-top-2">
+                        <p className="text-xs text-stone-500 mb-2 font-medium">Hvad har du brug for?</p>
+                        <div className="flex flex-wrap gap-2">
+                            {availableRequests.map(item => (
+                                <button
+                                    key={item.id}
+                                    onClick={() => {
+                                        onRequest?.(item);
+                                        setShowRequestPicker(false);
+                                    }}
+                                    className="bg-white border border-stone-200 hover:border-indigo-400 hover:bg-indigo-50 px-3 py-2 rounded-lg 
+                                        flex items-center gap-2 text-sm transition-colors text-left shadow-sm"
+                                >
+                                    <span className="text-lg">{item.emoji}</span>
+                                    <span className="text-stone-700">{item.label}</span>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                )}
+            </div>
         </div>
     );
 };
