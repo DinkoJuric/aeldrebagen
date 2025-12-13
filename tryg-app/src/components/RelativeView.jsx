@@ -15,6 +15,7 @@ import {
 import { Button } from './ui/Button';
 import { Modal } from './ui/Modal';
 import { StatusSelector, STATUS_OPTIONS } from './FamilyStatusCard';
+import { SeniorStatusCard } from './SeniorStatusCard';
 import { ThinkingOfYouButton, ThinkingOfYouIconButton } from './ThinkingOfYou';
 import { WeeklyQuestionWidget, WeeklyQuestionModal } from './WeeklyQuestionWidget';
 import { TabNavigation } from './TabNavigation';
@@ -155,43 +156,12 @@ export const RelativeView = ({
                     </>
                 )}
 
-                {/* Peace of Mind Status Card */}
-                <div className="bg-white p-6 rounded-3xl shadow-sm border-2 border-teal-100">
-                    <div className="flex justify-between items-start mb-4">
-                        <div className="flex items-center gap-3">
-                            <div className="w-14 h-14 bg-teal-100 rounded-full overflow-hidden flex items-center justify-center">
-                                <User className="w-7 h-7 text-teal-600" />
-                            </div>
-                            <div>
-                                <h2 className="text-xl font-bold text-stone-800">{profile.name}</h2>
-                                <div className="flex items-center gap-1 text-sm text-stone-500">
-                                    <Clock className="w-3 h-3" />
-                                    <span>Sidst tjekket ind: {lastCheckIn || 'Ingen endnu'}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="px-4 py-1.5 rounded-full text-sm font-bold bg-emerald-100 text-emerald-700 border border-emerald-200 shadow-sm">
-                            Alt er vel
-                        </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4 mt-6">
-                        <div className="bg-stone-50 p-4 rounded-2xl border border-stone-100">
-                            <p className="text-xs text-stone-500 uppercase font-bold tracking-wider mb-1">Sidst Tjekket</p>
-                            <div className="flex items-center gap-2 text-stone-800">
-                                <Clock className="w-4 h-4 text-teal-500" />
-                                <span className="font-semibold">{lastCheckIn || 'Venter...'}</span>
-                            </div>
-                        </div>
-                        <div className="bg-stone-50 p-4 rounded-2xl border border-stone-100">
-                            <p className="text-xs text-stone-500 uppercase font-bold tracking-wider mb-1">Medicin</p>
-                            <div className="flex items-center gap-2 text-stone-800">
-                                <Pill className="w-4 h-4 text-teal-500" />
-                                <span className="font-semibold">{completionRate}% taget</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {/* Peace of Mind Status Card - Modular Component */}
+                <SeniorStatusCard
+                    seniorName={profile.name}
+                    lastCheckIn={lastCheckIn}
+                    completionRate={completionRate}
+                />
 
                 {/* Symptom Alerts */}
                 {symptomLogs.length > 0 && (

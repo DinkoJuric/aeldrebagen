@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Heart, HelpCircle, Phone, ShoppingCart, Car, ChefHat, Ear, ChevronRight } from 'lucide-react';
+import { Heart, HelpCircle, Phone, ShoppingCart, Car, ChefHat, Ear, ChevronRight, X } from 'lucide-react';
 
 // What senior can offer to family
 const OFFERS = [
@@ -16,7 +16,14 @@ const REQUESTS = [
 ];
 
 // Dignity-preserving help exchange - senior contributes, not just receives
-export const HelpExchange = ({ onOffer, onRequest, activeOffers = [], activeRequests = [] }) => {
+export const HelpExchange = ({
+    onOffer,
+    onRequest,
+    onRemoveOffer,
+    onRemoveRequest,
+    activeOffers = [],
+    activeRequests = []
+}) => {
     const [mode, setMode] = useState(null); // 'offer' or 'request'
     const [showSuccess, setShowSuccess] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
@@ -81,20 +88,36 @@ export const HelpExchange = ({ onOffer, onRequest, activeOffers = [], activeRequ
                     <ChevronRight className="w-5 h-5 text-indigo-400" />
                 </button>
 
-                {/* Show active items */}
+                {/* Show active items with dismiss buttons */}
                 {(activeOffers.length > 0 || activeRequests.length > 0) && (
                     <div className="pt-2 mt-2 border-t border-stone-100">
-                        <p className="text-xs text-stone-400 mb-2">Aktive:</p>
+                        <p className="text-xs text-stone-400 mb-2">Aktive (tryk for at fjerne):</p>
                         <div className="flex flex-wrap gap-2">
-                            {activeOffers.map((item, i) => (
-                                <span key={`o-${i}`} className="text-xs bg-teal-100 text-teal-700 px-2 py-1 rounded-full">
-                                    {item.emoji} {item.label.split(' ').slice(0, 3).join(' ')}...
-                                </span>
+                            {activeOffers.map((item) => (
+                                <button
+                                    key={item.id}
+                                    onClick={() => onRemoveOffer?.(item.id)}
+                                    className="text-xs bg-teal-100 text-teal-700 px-2 py-1 rounded-full 
+                                        flex items-center gap-1 hover:bg-teal-200 transition-colors
+                                        focus:outline-none focus:ring-2 focus:ring-teal-400"
+                                    aria-label={`Fjern ${item.label}`}
+                                >
+                                    {item.emoji} {item.label?.split(' ').slice(0, 2).join(' ')}...
+                                    <X className="w-3 h-3" />
+                                </button>
                             ))}
-                            {activeRequests.map((item, i) => (
-                                <span key={`r-${i}`} className="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full">
-                                    {item.emoji} {item.label.split(' ').slice(0, 3).join(' ')}...
-                                </span>
+                            {activeRequests.map((item) => (
+                                <button
+                                    key={item.id}
+                                    onClick={() => onRemoveRequest?.(item.id)}
+                                    className="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full 
+                                        flex items-center gap-1 hover:bg-indigo-200 transition-colors
+                                        focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                                    aria-label={`Fjern ${item.label}`}
+                                >
+                                    {item.emoji} {item.label?.split(' ').slice(0, 2).join(' ')}...
+                                    <X className="w-3 h-3" />
+                                </button>
                             ))}
                         </div>
                     </div>

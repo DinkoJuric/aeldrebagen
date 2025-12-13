@@ -84,5 +84,48 @@ export const StatusSelector = ({ currentStatus, onStatusChange }) => {
     );
 };
 
+// List of family members with their status - for SeniorView with multiple relatives
+// Caps at 3 displayed, shows "+N more" for additional members
+export const FamilyStatusList = ({
+    members = [],
+    familyStatus,
+    lastUpdated,
+    maxDisplay = 3
+}) => {
+    // Filter to only relatives (not the senior themselves)
+    const relatives = members.filter(m => m.role === 'relative');
+
+    if (relatives.length === 0) {
+        return (
+            <div className="bg-white rounded-2xl p-4 shadow-sm border-2 border-stone-100 mb-4">
+                <p className="text-stone-400 text-sm text-center">Ingen pårørende endnu</p>
+            </div>
+        );
+    }
+
+    const displayedMembers = relatives.slice(0, maxDisplay);
+    const hiddenCount = Math.max(0, relatives.length - maxDisplay);
+
+    return (
+        <div className="space-y-2 mb-4">
+            {displayedMembers.map((member) => (
+                <FamilyStatusCard
+                    key={member.userId || member.id}
+                    familyName={member.displayName}
+                    familyStatus={familyStatus}
+                    lastUpdated={lastUpdated}
+                />
+            ))}
+            {hiddenCount > 0 && (
+                <div className="text-center py-2">
+                    <span className="text-sm text-stone-400">
+                        +{hiddenCount} {hiddenCount === 1 ? 'mere' : 'andre'}
+                    </span>
+                </div>
+            )}
+        </div>
+    );
+};
+
 export { STATUS_OPTIONS };
 export default FamilyStatusCard;

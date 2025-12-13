@@ -45,7 +45,7 @@ export default function TrygAppCore({
     const { settings, familyStatus, setFamilyStatus } = useSettings(careCircle?.id);
     const { answers: weeklyAnswers, addAnswer: addWeeklyAnswer } = useWeeklyQuestions(careCircle?.id);
     const { latestPing, sendPing, dismissPing } = usePings(careCircle?.id, user?.uid);
-    const { helpOffers, helpRequests, addOffer, addRequest } = useHelpExchange(careCircle?.id);
+    const { helpOffers, helpRequests, addOffer, addRequest, removeOffer, removeRequest } = useHelpExchange(careCircle?.id);
     const { lastCheckIn, recordCheckIn } = useCheckIn(careCircle?.id);
     const { latestPhoto, uploading, uploadPhoto, deletePhoto } = usePhotos(careCircle?.id, user?.uid);
 
@@ -280,6 +280,9 @@ export default function TrygAppCore({
                             helpRequests={helpRequests}
                             onHelpOffer={handleHelpOffer}
                             onHelpRequest={handleHelpRequest}
+                            onRemoveOffer={removeOffer}
+                            onRemoveRequest={removeRequest}
+                            members={members}
                             userName={seniorName}
                             relativeName={relativeName}
                         />

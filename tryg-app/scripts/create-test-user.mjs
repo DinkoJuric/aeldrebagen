@@ -45,7 +45,7 @@ const db = getFirestore(app);
 const TEST_USER = {
     email: 'louise.relative@test.com',
     password: 'Test1234!',
-    displayName: 'Louise Test',
+    displayName: 'Fatima',
     role: 'relative'
 };
 

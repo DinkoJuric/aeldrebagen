@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import { Button } from './ui/Button';
 import { Modal } from './ui/Modal';
-import { FamilyStatusCard } from './FamilyStatusCard';
+import { FamilyStatusCard, FamilyStatusList } from './FamilyStatusCard';
 import { ThinkingOfYouButton } from './ThinkingOfYou';
 import { BodyPainSelector } from './BodyPainSelector';
 import { MemoryTrigger } from './WeeklyQuestion';
@@ -28,6 +28,7 @@ import { FEATURES } from '../config/features';
 export const SeniorView = ({
     tasks, toggleTask, updateStatus, addSymptom, familyStatus, statusLastUpdated, onSendPing,
     weeklyAnswers, onWeeklyAnswer, helpOffers, helpRequests, onHelpOffer, onHelpRequest,
+    onRemoveOffer, onRemoveRequest, members = [],
     userName = 'Senior', relativeName = 'Familie'
 }) => {
     const [showCallModal, setShowCallModal] = useState(false);
@@ -266,7 +267,11 @@ export const SeniorView = ({
                     <>
                         {/* Family Status - toggle with FEATURES.familyStatusCard */}
                         {FEATURES.familyStatusCard && (
-                            <FamilyStatusCard familyStatus={familyStatus} familyName={relativeName} lastUpdated={statusLastUpdated} />
+                            <FamilyStatusList
+                                members={members}
+                                familyStatus={familyStatus}
+                                lastUpdated={statusLastUpdated}
+                            />
                         )}
 
                         {/* Thinking of You - toggle with FEATURES.thinkingOfYou */}
@@ -284,6 +289,8 @@ export const SeniorView = ({
                             <HelpExchange
                                 onOffer={onHelpOffer}
                                 onRequest={onHelpRequest}
+                                onRemoveOffer={onRemoveOffer}
+                                onRemoveRequest={onRemoveRequest}
                                 activeOffers={helpOffers}
                                 activeRequests={helpRequests}
                             />
