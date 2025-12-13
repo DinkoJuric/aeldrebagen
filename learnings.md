@@ -257,3 +257,8 @@ Actionable learnings for avoiding roadblocks. Format: **Problem** → **Action T
 - **Action**: Removed emojis from script output, used plain text markers like `[OK]`, `[+]`
 - **Future**: Avoid emojis in script output when running on Windows. PowerShell's default encoding garbles UTF-8 emojis.
 
+### Firestore Document ID vs Item ID Collision
+- **Problem**: HelpExchange dismiss buttons didn't work - deleteDoc received wrong ID
+- **Action**: Firestore snapshot was adding `id: doc.id` but items also had original `id` field ('listen'). Renamed to `docId`
+- **Future**: When fetching Firestore docs with existing `id` fields, use `docId` for the Firestore document ID to avoid collision.
+

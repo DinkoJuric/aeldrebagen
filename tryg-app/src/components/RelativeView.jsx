@@ -20,6 +20,7 @@ import { ThinkingOfYouButton, ThinkingOfYouIconButton } from './ThinkingOfYou';
 import { WeeklyQuestionWidget, WeeklyQuestionModal } from './WeeklyQuestionWidget';
 import { TabNavigation } from './TabNavigation';
 import { FEATURES } from '../config/features';
+import { SYMPTOMS_LIST } from '../data/constants';
 
 export const RelativeView = ({
     tasks, profile, lastCheckIn, symptomLogs, onAddTask, familyStatus,
@@ -308,23 +309,29 @@ export const RelativeView = ({
                             <p className="text-slate-500 text-sm italic">Ingen symptomer registreret denne uge.</p>
                         ) : (
                             <ul className="space-y-2">
-                                {symptomLogs.map((log, i) => (
-                                    <li key={i} className="flex flex-col gap-1 text-sm p-3 bg-white border rounded-lg">
-                                        <div className="flex items-center gap-3">
-                                            <log.icon className="w-5 h-5 text-slate-400" />
-                                            <span className="font-medium text-slate-700">{log.label}</span>
-                                            <span className="text-slate-400 ml-auto">{log.time}</span>
-                                        </div>
-                                        {log.bodyLocation && (
-                                            <div className="ml-8 text-xs text-slate-500 space-y-1">
-                                                <div>📍 Lokation: <span className="font-medium">{log.bodyLocation.emoji} {log.bodyLocation.label}</span></div>
-                                                {log.bodyLocation.severity && (
-                                                    <div>📊 Intensitet: <span className="font-medium">{log.bodyLocation.severity.emoji} {log.bodyLocation.severity.label}</span></div>
-                                                )}
+                                {symptomLogs.map((log, i) => {
+                                    // Lookup icon from SYMPTOMS_LIST by ID
+                                    const symptomDef = SYMPTOMS_LIST.find(s => s.id === log.id) || {};
+                                    const SymptomIcon = symptomDef.icon || AlertCircle;
+
+                                    return (
+                                        <li key={i} className="flex flex-col gap-1 text-sm p-3 bg-white border rounded-lg">
+                                            <div className="flex items-center gap-3">
+                                                <SymptomIcon className="w-5 h-5 text-slate-400" />
+                                                <span className="font-medium text-slate-700">{log.label}</span>
+                                                <span className="text-slate-400 ml-auto">{log.time}</span>
                                             </div>
-                                        )}
-                                    </li>
-                                ))}
+                                            {log.bodyLocation && (
+                                                <div className="ml-8 text-xs text-slate-500 space-y-1">
+                                                    <div>📍 Lokation: <span className="font-medium">{log.bodyLocation.emoji} {log.bodyLocation.label}</span></div>
+                                                    {log.bodyLocation.severity && (
+                                                        <div>📊 Intensitet: <span className="font-medium">{log.bodyLocation.severity.emoji} {log.bodyLocation.severity.label}</span></div>
+                                                    )}
+                                                </div>
+                                            )}
+                                        </li>
+                                    );
+                                })}
                             </ul>
                         )}
                     </div>

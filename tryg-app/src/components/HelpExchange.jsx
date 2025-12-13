@@ -96,7 +96,10 @@ export const HelpExchange = ({
                             {activeOffers.map((item) => (
                                 <button
                                     key={item.docId}
-                                    onClick={() => onRemoveOffer?.(item.docId)}
+                                    onClick={() => {
+                                        console.log('[HelpExchange] Removing offer:', item.docId, 'onRemoveOffer:', typeof onRemoveOffer);
+                                        onRemoveOffer?.(item.docId);
+                                    }}
                                     className="text-xs bg-teal-100 text-teal-700 px-2 py-1 rounded-full 
                                         flex items-center gap-1 hover:bg-teal-200 transition-colors
                                         focus:outline-none focus:ring-2 focus:ring-teal-400"
