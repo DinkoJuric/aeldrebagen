@@ -144,20 +144,20 @@ A prioritized plan to make Tryg robust, accessible, and emotionally resonant.
 ### Technical Debt
 | Task | Priority | Notes |
 |------|----------|-------|
-| Refactoring | 🟡 Medium | General code cleanup |
+| Refactoring | 🟡 Medium | General code cleanup | ✅ Done |
 | Test suite update | 🟡 Medium | Ensure tests reflect new Firebase architecture |
 
 ### Question of the Week Feature
 | Task | Priority | Notes |
 |------|----------|-------|
-| Investigate storage location | 🔴 High | Where is question of week data stored? |
-| UI space optimization | 🟡 Medium | Feature uses too much screen real estate - ideate improvements |
+| Investigate storage location | ✅ Done | Stored at `careCircles/{circleId}/weeklyAnswers/` |
+| UI space optimization | ✅ Done | Moved to header widget with modal |
 | Message reactions | 🟢 Feature | Add ability to react to each other's messages |
 
 ### Daily Tasks Feature
 | Task | Priority | Notes |
 |------|----------|-------|
-| Completed tasks UX | 🟡 Medium | Move completed tasks to collapsible section at bottom |
+| Completed tasks UX | ✅ Done | Collapsible section at bottom in both views |
 
 ### Design Reflection
 | Task | Priority | Notes |

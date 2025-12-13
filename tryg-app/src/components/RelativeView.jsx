@@ -7,13 +7,16 @@ import {
     Plus,
     Pill,
     FileText,
-    AlertCircle
+    AlertCircle,
+    ChevronDown,
+    ChevronUp,
+    CheckCircle
 } from 'lucide-react';
 import { Button } from './ui/Button';
 import { Modal } from './ui/Modal';
 import { StatusSelector, STATUS_OPTIONS } from './FamilyStatusCard';
 import { ThinkingOfYouButton, ThinkingOfYouIconButton } from './ThinkingOfYou';
-import { WeeklyQuestionCard } from './WeeklyQuestion';
+import { WeeklyQuestionWidget, WeeklyQuestionModal } from './WeeklyQuestionWidget';
 import { TabNavigation } from './TabNavigation';
 import { FEATURES } from '../config/features';
 
@@ -24,9 +27,14 @@ export const RelativeView = ({
 }) => {
     const [showAddModal, setShowAddModal] = useState(false);
     const [showReport, setShowReport] = useState(false);
+    const [showWeeklyModal, setShowWeeklyModal] = useState(false);
+    const [showCompletedTasks, setShowCompletedTasks] = useState(false);
     const [newTaskTitle, setNewTaskTitle] = useState('');
     const [showStatusPicker, setShowStatusPicker] = useState(false);
     const [activeTab, setActiveTab] = useState('daily'); // 'daily' = Oversigt, 'family' = Familie
+
+    const openTasks = tasks.filter(t => !t.completed);
+    const completedTasksList = tasks.filter(t => t.completed);
 
     const completionRate = tasks.length > 0
         ? Math.round((tasks.filter(t => t.completed).length / tasks.length) * 100)
@@ -61,6 +69,15 @@ export const RelativeView = ({
                         <span className="font-semibold text-slate-700">Hej, {userName}</span>
                     </div>
                     <div className="flex items-center gap-2">
+                        {/* Weekly Question widget on Family tab */}
+                        {FEATURES.weeklyQuestion && activeTab === 'family' && (
+                            <WeeklyQuestionWidget
+                                answers={weeklyAnswers}
+                                userName={userName}
+                                hasUnread={true}
+                                onClick={() => setShowWeeklyModal(true)}
+                            />
+                        )}
                         {/* Compact ping button in header */}
                         {FEATURES.thinkingOfYou && (
                             <ThinkingOfYouIconButton onSendPing={onSendPing} />
@@ -115,12 +132,7 @@ export const RelativeView = ({
                 {/* ===== FAMILY TAB ===== */}
                 {(!FEATURES.tabbedLayout || activeTab === 'family') && (
                     <>
-                        {/* Weekly Question Ritual - same question, family answers together */}
-                        <WeeklyQuestionCard
-                            onAnswer={onWeeklyAnswer}
-                            answers={weeklyAnswers}
-                            userName={userName}
-                        />
+                        {/* Weekly Question now in header widget - removed from here */}
 
                         {/* Show active help offers/requests from senior */}
                         {(helpOffers?.length > 0 || helpRequests?.length > 0) && (
@@ -212,30 +224,62 @@ export const RelativeView = ({
                     </div>
                 )}
 
-                {/* Timeline / Feed */}
-                <div>
-                    <h3 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3 pl-1">I dag</h3>
-                    <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                        {tasks.map((task, idx) => (
-                            <div key={task.id} className={`p-4 flex items-center gap-4 ${idx !== tasks.length - 1 ? 'border-b border-slate-100' : ''}`}>
-                                <div className={`p-2 rounded-full ${task.completed ? 'bg-indigo-100 text-indigo-600' : 'bg-slate-100 text-slate-400'}`}>
-                                    {task.type === 'medication' ? <Pill className="w-5 h-5" /> :
-                                        task.type === 'appointment' ? <Clock className="w-5 h-5" /> :
-                                            <Activity className="w-5 h-5" />}
+                {/* Open Tasks */}
+                {openTasks.length > 0 && (
+                    <div>
+                        <h3 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3 pl-1">Åbne opgaver ({openTasks.length})</h3>
+                        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                            {openTasks.map((task, idx) => (
+                                <div key={task.id} className={`p-4 flex items-center gap-4 ${idx !== openTasks.length - 1 ? 'border-b border-slate-100' : ''}`}>
+                                    <div className="p-2 rounded-full bg-slate-100 text-slate-400">
+                                        {task.type === 'medication' ? <Pill className="w-5 h-5" /> :
+                                            task.type === 'appointment' ? <Clock className="w-5 h-5" /> :
+                                                <Activity className="w-5 h-5" />}
+                                    </div>
+                                    <div className="flex-1">
+                                        <p className="text-sm font-semibold text-slate-600">{task.title}</p>
+                                        <p className="text-xs text-slate-500">{task.description}</p>
+                                    </div>
                                 </div>
-                                <div className="flex-1">
-                                    <p className={`text-sm font-semibold ${task.completed ? 'text-slate-800' : 'text-slate-600'}`}>
-                                        {task.title}
-                                    </p>
-                                    <p className="text-xs text-slate-500">{task.description}</p>
-                                </div>
-                                {task.completed && (
-                                    <span className="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded-full">UDFØRT</span>
-                                )}
-                            </div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
-                </div>
+                )}
+
+                {/* Completed Tasks - Collapsible */}
+                {completedTasksList.length > 0 && (
+                    <div>
+                        <button
+                            onClick={() => setShowCompletedTasks(!showCompletedTasks)}
+                            className="w-full flex items-center justify-between p-3 bg-emerald-50 rounded-xl border border-emerald-200 hover:bg-emerald-100 transition-colors mb-3"
+                        >
+                            <div className="flex items-center gap-2">
+                                <CheckCircle className="w-5 h-5 text-emerald-600" />
+                                <span className="font-bold text-emerald-800 text-sm">Udførte ({completedTasksList.length})</span>
+                            </div>
+                            {showCompletedTasks ? <ChevronUp className="w-4 h-4 text-emerald-600" /> : <ChevronDown className="w-4 h-4 text-emerald-600" />}
+                        </button>
+
+                        {showCompletedTasks && (
+                            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                                {completedTasksList.map((task, idx) => (
+                                    <div key={task.id} className={`p-4 flex items-center gap-4 ${idx !== completedTasksList.length - 1 ? 'border-b border-slate-100' : ''}`}>
+                                        <div className="p-2 rounded-full bg-emerald-100 text-emerald-600">
+                                            {task.type === 'medication' ? <Pill className="w-5 h-5" /> :
+                                                task.type === 'appointment' ? <Clock className="w-5 h-5" /> :
+                                                    <Activity className="w-5 h-5" />}
+                                        </div>
+                                        <div className="flex-1">
+                                            <p className="text-sm font-semibold text-slate-800 line-through">{task.title}</p>
+                                            <p className="text-xs text-slate-500">{task.description}</p>
+                                        </div>
+                                        <span className="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded-full">UDFØRT</span>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                )}
 
                 {/* Quick Actions */}
                 <div className="grid grid-cols-2 gap-4">
@@ -317,6 +361,15 @@ export const RelativeView = ({
                     </div>
                 </div>
             </Modal>
+
+            {/* Weekly Question Modal */}
+            <WeeklyQuestionModal
+                isOpen={showWeeklyModal}
+                onClose={() => setShowWeeklyModal(false)}
+                answers={weeklyAnswers}
+                onAnswer={onWeeklyAnswer}
+                userName={userName}
+            />
         </div>
     );
 };

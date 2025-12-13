@@ -42,35 +42,19 @@ export function useCareCircle(userId, userProfile) {
 
         const findCareCircle = async () => {
             try {
-                console.log('[useCareCircle] Looking for circle memberships for user:', userId);
-
-                // First, try the indexed query
+                // Query for user's circle memberships
                 const membershipsQuery = query(
                     collection(db, 'careCircleMemberships'),
                     where('userId', '==', userId)
                 );
                 let membershipsSnapshot = await getDocs(membershipsQuery);
 
-                console.log('[useCareCircle] Query returned:', membershipsSnapshot.size, 'results');
-
-                // FALLBACK: If query returns 0, try fetching all and filtering
-                // This works around potential index issues
                 if (membershipsSnapshot.empty) {
-                    console.log('[useCareCircle] Query empty, trying fallback (fetch all)...');
+                    // FALLBACK: Fetch all and filter client-side (works around index issues)
                     const allMembershipsSnapshot = await getDocs(collection(db, 'careCircleMemberships'));
-                    console.log('[useCareCircle] All memberships count:', allMembershipsSnapshot.size);
-
-                    // Log all memberships for debugging
-                    allMembershipsSnapshot.docs.forEach(doc => {
-                        const data = doc.data();
-                        console.log('[useCareCircle] Membership:', doc.id, 'userId:', data.userId);
-                    });
-
-                    // Filter client-side
                     const matchingDocs = allMembershipsSnapshot.docs.filter(
                         doc => doc.data().userId === userId
                     );
-                    console.log('[useCareCircle] Client-side filter found:', matchingDocs.length);
 
                     if (matchingDocs.length > 0) {
                         membershipsSnapshot = {
@@ -82,19 +66,14 @@ export function useCareCircle(userId, userProfile) {
 
                 if (!membershipsSnapshot.empty) {
                     const membership = membershipsSnapshot.docs[0].data();
-                    console.log('[useCareCircle] Membership found:', membership);
-
                     const circleRef = doc(db, 'careCircles', membership.circleId);
                     const circleDoc = await getDoc(circleRef);
 
                     if (circleDoc.exists()) {
-                        console.log('[useCareCircle] Circle found:', circleDoc.id);
                         setCareCircle({ id: circleDoc.id, ...circleDoc.data() });
                     } else {
                         console.warn('[useCareCircle] Circle doc does not exist:', membership.circleId);
                     }
-                } else {
-                    console.log('[useCareCircle] No memberships found for user (even with fallback)');
                 }
             } catch (err) {
                 console.error('[useCareCircle] Error finding care circle:', err);

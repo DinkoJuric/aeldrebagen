@@ -44,7 +44,6 @@ export function useAuth() {
 
                             // If offline error and we have retries left, wait and retry
                             if (err.message?.includes('offline') && attempt < retries) {
-                                console.log(`Firestore offline, retrying in ${delay}ms...`);
                                 await new Promise(resolve => setTimeout(resolve, delay));
                                 delay *= 2; // Exponential backoff
                             } else if (attempt === retries) {

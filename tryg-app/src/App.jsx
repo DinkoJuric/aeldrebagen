@@ -64,7 +64,6 @@ export default function TrygApp() {
     setLastCheckIn(timeString);
     if (status === 'checked-in') {
       playSuccessSound(); // Celebratory sound for check-in
-      console.log('Check-in registered:', timeString);
     }
   };
 

@@ -9,14 +9,17 @@ import {
     Moon,
     Clock,
     Coffee,
-    Image as ImageIcon
+    Image as ImageIcon,
+    ChevronDown,
+    ChevronUp
 } from 'lucide-react';
 import { Button } from './ui/Button';
 import { Modal } from './ui/Modal';
 import { FamilyStatusCard } from './FamilyStatusCard';
 import { ThinkingOfYouButton } from './ThinkingOfYou';
 import { BodyPainSelector } from './BodyPainSelector';
-import { WeeklyQuestionCard, MemoryTrigger } from './WeeklyQuestion';
+import { MemoryTrigger } from './WeeklyQuestion';
+import { WeeklyQuestionWidget, WeeklyQuestionModal } from './WeeklyQuestionWidget';
 import { HelpExchange } from './HelpExchange';
 import { TabNavigation } from './TabNavigation';
 import { SYMPTOMS_LIST } from '../data/constants';
@@ -29,6 +32,8 @@ export const SeniorView = ({
 }) => {
     const [showCallModal, setShowCallModal] = useState(false);
     const [showSymptomModal, setShowSymptomModal] = useState(false);
+    const [showWeeklyModal, setShowWeeklyModal] = useState(false);
+    const [showCompletedTasks, setShowCompletedTasks] = useState(false);
     const [activePeriod, setActivePeriod] = useState('morgen');
     const [activeTab, setActiveTab] = useState('daily'); // 'daily' or 'family'
 
@@ -49,9 +54,9 @@ export const SeniorView = ({
     const dateOptions = { weekday: 'long', day: 'numeric', month: 'long' };
     const dateString = new Date().toLocaleDateString('da-DK', dateOptions);
 
-    // Render task section by period
+    // Render task section by period (only incomplete tasks)
     const renderTaskSection = (periodTitle, periodKey, icon) => {
-        const periodTasks = tasks.filter(t => t.period === periodKey);
+        const periodTasks = tasks.filter(t => t.period === periodKey && !t.completed);
         if (periodTasks.length === 0) return null;
 
         const isActive = activePeriod === periodKey;
@@ -124,9 +129,19 @@ export const SeniorView = ({
             <header className="p-6 bg-white shadow-sm rounded-b-3xl z-10">
                 <div className="flex justify-between items-center mb-2">
                     <h1 className="text-3xl font-bold text-stone-800">{greeting}, {userName}</h1>
-                    <div className="bg-amber-100 p-2 rounded-full animate-sun-pulse">
-                        <Sun className="text-amber-500 w-8 h-8" />
-                    </div>
+                    {/* Swap sun for Weekly Question widget on Family tab */}
+                    {FEATURES.weeklyQuestion && activeTab === 'family' ? (
+                        <WeeklyQuestionWidget
+                            answers={weeklyAnswers}
+                            userName={userName}
+                            hasUnread={true}
+                            onClick={() => setShowWeeklyModal(true)}
+                        />
+                    ) : (
+                        <div className="bg-amber-100 p-2 rounded-full animate-sun-pulse">
+                            <Sun className="text-amber-500 w-8 h-8" />
+                        </div>
+                    )}
                 </div>
                 <p className="text-stone-500 text-lg capitalize">{dateString}</p>
                 <p className="text-teal-600 text-sm mt-1 font-medium">Alt er vel ✨</p>
@@ -196,6 +211,56 @@ export const SeniorView = ({
                         {renderTaskSection('Frokost (Kl. 12-13)', 'frokost', <Sun className="w-6 h-6 text-stone-600" />)}
                         <div className="h-px bg-stone-200 my-4" />
                         {renderTaskSection('Eftermiddag (Kl. 14-17)', 'eftermiddag', <Moon className="w-6 h-6 text-stone-600" />)}
+
+                        {/* Completed Tasks - Collapsible Section */}
+                        {completedTasks > 0 && (
+                            <div className="mt-6">
+                                <button
+                                    onClick={() => setShowCompletedTasks(!showCompletedTasks)}
+                                    className="w-full flex items-center justify-between p-4 bg-teal-50 rounded-2xl border-2 border-teal-100 hover:bg-teal-100 transition-colors"
+                                >
+                                    <div className="flex items-center gap-3">
+                                        <CheckCircle className="w-6 h-6 text-teal-600" />
+                                        <span className="font-bold text-teal-800">Udførte opgaver ({completedTasks})</span>
+                                    </div>
+                                    {showCompletedTasks ? (
+                                        <ChevronUp className="w-5 h-5 text-teal-600" />
+                                    ) : (
+                                        <ChevronDown className="w-5 h-5 text-teal-600" />
+                                    )}
+                                </button>
+
+                                {showCompletedTasks && (
+                                    <div className="mt-3 space-y-3">
+                                        {tasks.filter(t => t.completed).map(task => (
+                                            <div
+                                                key={task.id}
+                                                onClick={() => toggleTask(task.id)}
+                                                className="p-4 rounded-2xl bg-stone-100 border-2 border-stone-200 cursor-pointer hover:border-stone-300 transition-colors"
+                                            >
+                                                <div className="flex items-center justify-between">
+                                                    <div className="flex items-center gap-4">
+                                                        <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-stone-200 text-stone-400">
+                                                            {task.type === 'medication' && <Pill className="w-6 h-6" />}
+                                                            {task.type === 'hydration' && <Activity className="w-6 h-6" />}
+                                                            {task.type === 'activity' && <Sun className="w-6 h-6" />}
+                                                            {task.type === 'appointment' && <Clock className="w-6 h-6" />}
+                                                        </div>
+                                                        <div>
+                                                            <h3 className="text-lg font-bold text-stone-500 line-through">{task.title}</h3>
+                                                            <p className="text-stone-400 text-sm">{task.time}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div className="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center">
+                                                        <CheckCircle className="text-white w-6 h-6" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        )}
                     </>
                 )}
 
@@ -212,14 +277,7 @@ export const SeniorView = ({
                             <ThinkingOfYouButton onSendPing={onSendPing} fromName={userName} />
                         )}
 
-                        {/* Weekly Question Ritual - toggle with FEATURES.weeklyQuestion */}
-                        {FEATURES.weeklyQuestion && (
-                            <WeeklyQuestionCard
-                                onAnswer={onWeeklyAnswer}
-                                answers={weeklyAnswers}
-                                userName={userName}
-                            />
-                        )}
+                        {/* Weekly Question now in header - removed from here */}
 
                         {/* Memory Trigger - toggle with FEATURES.memoryTriggers */}
                         {FEATURES.memoryTriggers && <MemoryTrigger />}
@@ -320,6 +378,15 @@ export const SeniorView = ({
                     </div>
                 </div>
             )}
+
+            {/* Weekly Question Modal */}
+            <WeeklyQuestionModal
+                isOpen={showWeeklyModal}
+                onClose={() => setShowWeeklyModal(false)}
+                answers={weeklyAnswers}
+                onAnswer={onWeeklyAnswer}
+                userName={userName}
+            />
         </div>
     );
 };
