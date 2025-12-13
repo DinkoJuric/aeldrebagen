@@ -22,6 +22,16 @@ All notable changes to this project will be documented in this file.
 - Test credentials: `louise.relative@test.com` / `Test1234!`
 - Documented color system in PROJECT_CONTEXT.md
 
+### 📱 Bottom Navigation + Modal Fixes
+
+**Navigation**
+- Replaced `TabNavigation` with `BottomNavigation` for mobile-native feel
+- Fixed navigation bar overlapping content
+
+**Modal Improvements**
+- Fixed Symptom Modal scroll behavior (content now scrollable)
+- Improved modal height constraints (`max-h-[85vh]`)
+
 ---
 
 ## [1.4.0] - 2025-12-11
