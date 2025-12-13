@@ -7,6 +7,9 @@ Last updated: 2025-12-13
 - **State Management**: Firebase hooks with `onSnapshot` for real-time sync
 - **Routing**: Role-based views (`SeniorView` vs `RelativeView`) determined by `userProfile.role`
 - **Data Flow**: Real-time sync via Firestore listeners in custom hooks (`useAuth`, `useSettings`, `useTasks`, etc.)
+- **Match System**: `useHelpExchangeMatch` detects alignment (Offer ↔ Request) and triggers `MatchCelebration`
+- **Tab Differentiation**: RelativeView splits emotional reassurance ("Min Dag") from logistical work ("Familie" Tab)
+- **UI Consistency**: Senior UI aligns with Relative UI (Tag-based Dashboards) to empower seniors
 - **Feature Flags**: Toggle in `src/config/features.js`
 - **Error Handling**: Whitelist sanitization for Firestore data (prevents Symbol property serialization errors)
 - **Responsive Strategy**: Mobile-first full width (`100dvh`) vs Desktop Phone Simulator (`AppCore.jsx`)
@@ -15,14 +18,15 @@ Last updated: 2025-12-13
 
 | File | Purpose |
 |------|---------|
-| `src/AppCore.jsx` | Main app entry, initializes all Firebase hooks |
-| `src/AppWithAuth.jsx` | Authentication wrapper, handles circle setup flow |
-| `src/hooks/useAuth.js` | Authentication state and user profile |
-| `src/hooks/useSettings.js` | Real-time settings sync (family status) |
-| `src/hooks/useTasks.js` | Task management with Firestore |
-| `src/hooks/useCareCircle.js` | Care circle membership queries |
-| `src/components/SeniorView.jsx` | Elder-facing interface |
-| `src/components/RelativeView.jsx` | Family dashboard |
+| `src/AppCore.jsx` | Main app logic & state hub (Real-time data hooks) |
+| `src/components/SeniorView.jsx` | Elder-facing interface (Tag-based dashboard) |
+| `src/components/RelativeView.jsx` | Family dashboard (Split: PeaceOfMind / Coordination) |
+| `src/components/PeaceOfMindTab.jsx` | Relative's "Min Dag" tab (Emotional reassurance) |
+| `src/components/CoordinationTab.jsx` | Relative's "Familie" tab (Tasks & HelpExchange) |
+| `src/components/HelpExchange.jsx` | Bidirectional help component (Shared design) |
+| `src/components/MatchCelebration.jsx` | "Confetti" modal for help matches |
+| `src/config/helpExchangeConfig.js` | Central config for Match Pairs, Offers, and Requests |
+| `src/hooks/useHelpExchangeMatch.js` | Match detection logic (Senior Request ↔ Relative Offer) |
 | `src/config/firebase.js` | Firebase initialization |
 
 ## Active Issues
