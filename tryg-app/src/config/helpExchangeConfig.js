@@ -107,4 +107,23 @@ export const RELATIVE_REQUESTS = [
     { id: 'craft', label: 'Lave noget kreativt sammen', emoji: '🎨' }
 ];
 
-export default { MATCH_PAIRS, STATUS_MATCHES, RELATIVE_OFFERS, RELATIVE_REQUESTS };
+// Senior's available offers (what they can contribute)
+export const SENIOR_OFFERS = [
+    { id: 'listen', label: 'Jeg kan hjælpe med at lytte', emoji: '👂' },
+    { id: 'recipe', label: 'Jeg har en god opskrift', emoji: '👩‍🍳' },
+    { id: 'stories', label: 'Vil gerne høre om jeres dag', emoji: '💬' },
+    { id: 'cook', label: 'Kan lave mad til os', emoji: '🍳' }, // Match for shop
+    { id: 'teach', label: 'Vil gerne lære fra mig', emoji: '📚' }
+];
+
+// Senior's available requests (what they need)
+export const SENIOR_REQUESTS = [
+    { id: 'call', label: 'Kan nogen ringe mig i dag?', emoji: '📞' },
+    { id: 'shop', label: 'Hjælp til indkøb denne uge', emoji: '🛒' }, // Match for cook
+    { id: 'transport', label: 'Følgeskab til lægen/aftale', emoji: '🚗' }, // Match for drive
+    { id: 'company', label: 'Bare noget selskab', emoji: '☕' }, // Match for visit
+    { id: 'outdoor', label: 'Gå en tur sammen', emoji: '🌿' }, // Match for garden
+    { id: 'help-tech', label: 'Hjælp med telefon/computer', emoji: '📱' } // Match for tech
+];
+
+export default { MATCH_PAIRS, STATUS_MATCHES, RELATIVE_OFFERS, RELATIVE_REQUESTS, SENIOR_OFFERS, SENIOR_REQUESTS };

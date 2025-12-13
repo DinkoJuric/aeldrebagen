@@ -1,19 +1,6 @@
 import React, { useState } from 'react';
-import { Heart, HelpCircle, Phone, ShoppingCart, Car, ChefHat, Ear, ChevronRight, X } from 'lucide-react';
-
-// What senior can offer to family
-const OFFERS = [
-    { id: 'listen', label: 'Jeg kan hjælpe med at lytte', emoji: '👂', icon: Ear },
-    { id: 'recipe', label: 'Jeg har en god opskrift', emoji: '👩‍🍳', icon: ChefHat },
-    { id: 'stories', label: 'Vil gerne høre om jeres dag', emoji: '💬', icon: Heart },
-];
-
-// What senior can request from family
-const REQUESTS = [
-    { id: 'call', label: 'Kan nogen ringe mig i dag?', emoji: '📞', icon: Phone },
-    { id: 'shopping', label: 'Hjælp til indkøb denne uge', emoji: '🛒', icon: ShoppingCart },
-    { id: 'escort', label: 'Følgeskab til lægen', emoji: '🚗', icon: Car },
-];
+import { Heart, HelpCircle, ChevronRight, X } from 'lucide-react';
+import { SENIOR_OFFERS, SENIOR_REQUESTS } from '../config/helpExchangeConfig';
 
 // Dignity-preserving help exchange - senior contributes, not just receives
 export const HelpExchange = ({
@@ -127,7 +114,7 @@ export const HelpExchange = ({
     }
 
     // Show offer or request options
-    const items = mode === 'offer' ? OFFERS : REQUESTS;
+    const items = mode === 'offer' ? SENIOR_OFFERS : SENIOR_REQUESTS;
     const colors = mode === 'offer'
         ? { bg: 'bg-teal-50', border: 'border-teal-200', text: 'text-teal-700', icon: 'text-teal-600' }
         : { bg: 'bg-indigo-50', border: 'border-indigo-200', text: 'text-indigo-700', icon: 'text-indigo-600' };
@@ -162,5 +149,4 @@ export const HelpExchange = ({
     );
 };
 
-export { OFFERS, REQUESTS };
 export default HelpExchange;
