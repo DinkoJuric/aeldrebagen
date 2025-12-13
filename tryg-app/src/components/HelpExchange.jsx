@@ -95,8 +95,8 @@ export const HelpExchange = ({
                         <div className="flex flex-wrap gap-2">
                             {activeOffers.map((item) => (
                                 <button
-                                    key={item.id}
-                                    onClick={() => onRemoveOffer?.(item.id)}
+                                    key={item.docId}
+                                    onClick={() => onRemoveOffer?.(item.docId)}
                                     className="text-xs bg-teal-100 text-teal-700 px-2 py-1 rounded-full 
                                         flex items-center gap-1 hover:bg-teal-200 transition-colors
                                         focus:outline-none focus:ring-2 focus:ring-teal-400"
@@ -108,8 +108,8 @@ export const HelpExchange = ({
                             ))}
                             {activeRequests.map((item) => (
                                 <button
-                                    key={item.id}
-                                    onClick={() => onRemoveRequest?.(item.id)}
+                                    key={item.docId}
+                                    onClick={() => onRemoveRequest?.(item.docId)}
                                     className="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full 
                                         flex items-center gap-1 hover:bg-indigo-200 transition-colors
                                         focus:outline-none focus:ring-2 focus:ring-indigo-400"

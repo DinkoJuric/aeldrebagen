@@ -36,9 +36,9 @@ export function useHelpExchange(circleId) {
 
         const unsubOffers = onSnapshot(offersQuery,
             (snapshot) => {
-                const offersList = snapshot.docs.map(doc => ({
-                    id: doc.id,
-                    ...doc.data()
+                const offersList = snapshot.docs.map(docSnap => ({
+                    docId: docSnap.id,  // Firestore document ID for delete operations
+                    ...docSnap.data()
                 }));
                 setHelpOffers(offersList);
             },
@@ -54,9 +54,9 @@ export function useHelpExchange(circleId) {
 
         const unsubRequests = onSnapshot(requestsQuery,
             (snapshot) => {
-                const requestsList = snapshot.docs.map(doc => ({
-                    id: doc.id,
-                    ...doc.data()
+                const requestsList = snapshot.docs.map(docSnap => ({
+                    docId: docSnap.id,  // Firestore document ID for delete operations
+                    ...docSnap.data()
                 }));
                 setHelpRequests(requestsList);
                 setLoading(false);
