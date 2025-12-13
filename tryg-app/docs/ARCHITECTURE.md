@@ -111,6 +111,68 @@ careCircleMemberships/
 
 ---
 
+## HelpExchange Match System
+
+Bidirectional offer/request system with match celebration when offers align with requests.
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    HelpExchange Flow                         │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│   SENIOR                           RELATIVE                  │
+│   ┌─────────────┐                 ┌─────────────┐           │
+│   │ 💚 Offers   │                 │ 💚 Offers   │           │
+│   │ 💜 Requests │                 │ 💜 Requests │           │
+│   └──────┬──────┘                 └──────┬──────┘           │
+│          │                               │                   │
+│          └───────────┬───────────────────┘                   │
+│                      ↓                                       │
+│         ┌────────────────────────┐                          │
+│         │  useHelpExchangeMatch  │                          │
+│         │  (Detection Hook)      │                          │
+│         └───────────┬────────────┘                          │
+│                     ↓                                        │
+│         ┌────────────────────────┐                          │
+│         │  🎉 Match Celebration  │                          │
+│         │  (Modal/Banner)        │                          │
+│         └────────────────────────┘                          │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Key Files:**
+- `src/config/helpExchangeConfig.js` - Match pairs, status matches, offer/request options
+- `src/hooks/useHelpExchangeMatch.js` - Match detection logic
+- `src/components/MatchCelebration.jsx` - Celebration UI (modal + banner)
+
+**See:** [HELPEXCHANGE_MATCHES.md](./HELPEXCHANGE_MATCHES.md) for complete match pairs reference.
+
+---
+
+## RelativeView Tab Architecture
+
+```
+RelativeView
+├── PeaceOfMindTab (Min Dag)        ← Emotional reassurance
+│   ├── Hero "Alt er vel" card
+│   ├── Progress ring (completion %)
+│   └── Quick glance stats
+│
+├── CoordinationTab (Familie)        ← Practical coordination
+│   ├── Status picker (visible to senior)
+│   ├── HelpExchange (bidirectional)
+│   ├── Match banners
+│   ├── Task lists (open/completed)
+│   └── Symptom summary
+│
+└── RelativeBottomNavigation         ← Tab switching
+    ├── ❤️ Min dag (peace of mind)
+    ├── 👥 Familie (coordination)
+    └── 📄 Rapport (shortcut)
+```
+
+---
+
 ## Key Patterns
 
 ### 1. Firebase Hooks Pattern
