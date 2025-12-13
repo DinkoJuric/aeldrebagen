@@ -203,5 +203,24 @@ Actionable learnings for avoiding roadblocks. Format: **Problem** → **Action T
 ### Whitespace in GitHub Secrets
 - **Problem**: Firebase threw "client is offline" errors on prod, despite authorized domains and existing secrets
 - **Action**: Discovered a trailing space in a `VITE_FIREBASE_*` secret value
-- **Future**: "Offline" errors often mask config issues. Always sanitize whitespace when pasting into GitHub Secrets. 
+- **Future**: "Offline" errors often mask config issues. Always sanitize whitespace when pasting into GitHub Secrets.
+
+---
+
+## Agent & Environment Interop
+
+### Windows Firewall vs. Local Tools
+- **Problem**: Browser agent failed to connect to `localhost:5173` ("Access Denied" / Timeout)
+- **Action**: User identified a closed Node.js firewall popup. Unblocked via PowerShell: `Set-NetFirewallRule -DisplayName "Node.js JavaScript Runtime" -Action Allow`
+- **Future**: If local tools fail silently or timeout, check Windows Firewall first. verify connectivity with `curl -v`.
+
+### The "Double-Boxing" Simulator Trap
+- **Problem**: "Phone Simulator" frame looked great on desktop but created a "phone inside a phone" detail on actual mobile devices (gaps, double borders)
+- **Action**: Made `AppCore` responsive: Mobile = `100dvh` full screen (no frame), Desktop = Phone Simulator frame
+- **Future**: Simulators are validation tools, not production intent. Always strip simulator frames on mobile breakpoints (`sm:`).
+
+### PWA Viewport Scrolling (iPhone)
+- **Problem**: iPhone address bar caused "double scroll" and layout gaps
+- **Action**: Enforced `height: 100dvh` and `width: 100vw` on `body` and `#root`
+- **Future**: For PWAs/App-like sites, use `100dvh` (Dynamic Viewport Height) to handle mobile browser UI chrome. 
 

@@ -9,6 +9,7 @@ Last updated: 2025-12-13
 - **Data Flow**: Real-time sync via Firestore listeners in custom hooks (`useAuth`, `useSettings`, `useTasks`, etc.)
 - **Feature Flags**: Toggle in `src/config/features.js`
 - **Error Handling**: Whitelist sanitization for Firestore data (prevents Symbol property serialization errors)
+- **Responsive Strategy**: Mobile-first full width (`100dvh`) vs Desktop Phone Simulator (`AppCore.jsx`)
 
 ## Key Files
 
@@ -27,7 +28,7 @@ Last updated: 2025-12-13
 ## Active Issues
 
 - [ ] Production deployment shows stale content until hard refresh
-- [ ] Offline error handling shows generic error instead of specific message
+- [ ] Production deployment shows stale content until hard refresh
 
 ## Recent Decisions
 
@@ -36,3 +37,5 @@ Last updated: 2025-12-13
 | 2025-12-12 | Whitelist sanitization in hooks | Symbol properties from Lucide icons broke Firestore serialization |
 | 2025-12-12 | Propagate authError to AppWithAuth | Prevents wrong setup flow when offline |
 | 2025-12-12 | Global workflows in `~/.gemini/antigravity/global_workflows/` | Correct Antigravity path for cross-project workflows |
+| 2025-12-13 | Responsive Phone Simulator | Remove simulator frame on mobile (`sm:` breakpoint) for native feeling |
+| 2025-12-13 | Auth/Profile Loading Guard | Wait for `userProfile` before rendering main app to prevent `RelativeView` flash |

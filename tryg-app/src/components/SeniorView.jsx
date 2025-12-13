@@ -126,9 +126,9 @@ export const SeniorView = ({
     return (
         <div className="flex flex-col h-full bg-stone-50 relative overflow-hidden">
             {/* Header */}
-            <header className="p-6 bg-white shadow-sm rounded-b-3xl z-10">
-                <div className="flex justify-between items-center mb-2">
-                    <h1 className="text-3xl font-bold text-stone-800">{greeting}, {userName}</h1>
+            <header className="p-4 bg-white shadow-sm rounded-b-3xl z-10 shrink-0">
+                <div className="flex justify-between items-center mb-1">
+                    <h1 className="text-2xl font-bold text-stone-800">{greeting}, {userName}</h1>
                     {/* Swap sun for Weekly Question widget on Family tab */}
                     {FEATURES.weeklyQuestion && activeTab === 'family' ? (
                         <WeeklyQuestionWidget
@@ -143,8 +143,8 @@ export const SeniorView = ({
                         </div>
                     )}
                 </div>
-                <p className="text-stone-500 text-lg capitalize">{dateString}</p>
-                <p className="text-teal-600 text-sm mt-1 font-medium">Alt er vel ✨</p>
+                <p className="text-stone-500 text-base capitalize">{dateString}</p>
+                <p className="text-teal-600 text-xs mt-0.5 font-medium">Alt er vel ✨</p>
             </header>
 
             {/* Main Content - Scrollable with padding for bottom nav */}
