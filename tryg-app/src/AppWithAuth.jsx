@@ -30,6 +30,7 @@ export default function AppWithAuth() {
 // Firebase-enabled app
 function FirebaseApp() {
     const [consentLoading, setConsentLoading] = useState(false);
+    const [authFormError, setAuthFormError] = useState(null); // Track sign-in/signup errors
 
     const {
         user,
@@ -56,6 +57,7 @@ function FirebaseApp() {
 
     // Auth handler for AuthScreen
     const handleAuth = async (type, data) => {
+        setAuthFormError(null); // Clear previous errors
         try {
             if (type === 'login') {
                 await signIn(data.email, data.password);
@@ -66,6 +68,17 @@ function FirebaseApp() {
             }
         } catch (err) {
             console.error('Auth error:', err);
+            // Set user-friendly error message
+            let message = err.message || 'Der opstod en fejl ved login';
+            // Clean up Firebase error messages
+            if (message.includes('auth/popup-closed-by-user')) {
+                message = 'Login-vinduet blev lukket. Prøv igen.';
+            } else if (message.includes('auth/unauthorized-domain')) {
+                message = 'Denne side er ikke godkendt til login. Kontakt support.';
+            } else if (message.includes('auth/network-request-failed')) {
+                message = 'Netværksfejl. Tjek din internetforbindelse.';
+            }
+            setAuthFormError(message);
         }
     };
 
@@ -91,7 +104,7 @@ function FirebaseApp() {
         return (
             <AuthScreen
                 onAuth={handleAuth}
-                error={authError}
+                error={authFormError || authError}
                 loading={authLoading}
             />
         );
