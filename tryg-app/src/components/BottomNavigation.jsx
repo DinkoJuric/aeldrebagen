@@ -3,7 +3,7 @@ import { Home, Users, Phone } from 'lucide-react';
 
 export const BottomNavigation = ({ activeTab, onTabChange, onCall }) => {
     return (
-        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-stone-200 px-6 py-3 pb-6 safe-area-bottom z-40 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
+        <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-stone-200 px-6 py-3 pb-6 safe-area-bottom z-40 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
             <div className="flex justify-between items-center max-w-sm mx-auto">
                 {/* Min dag */}
                 <button

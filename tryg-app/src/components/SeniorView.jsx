@@ -124,7 +124,7 @@ export const SeniorView = ({
     };
 
     return (
-        <div className="flex flex-col h-full bg-stone-50 relative">
+        <div className="flex flex-col h-full bg-stone-50 relative overflow-hidden">
             {/* Header */}
             <header className="p-6 bg-white shadow-sm rounded-b-3xl z-10">
                 <div className="flex justify-between items-center mb-2">
