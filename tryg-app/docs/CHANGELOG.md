@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.6.0] - 2025-12-13
+
+### 👨‍👩‍👧 Family Features Enhancement
+
+**HelpExchange Reset**
+- Added dismiss (×) buttons to active offers/requests
+- Seniors can now clear their help selections
+
+**Multiple Relatives Display**
+- New `FamilyStatusList` component for SeniorView
+- Shows up to 3 relatives, "+N more" for additional
+- Isolated care circles support multiple pilot families
+
+**Modular Status Cards**
+- Extracted `SeniorStatusCard` component for RelativeView
+- Dynamic status badge based on task completion rate
+- Consistent design with `FamilyStatusCard`
+
+---
+
 ## [1.5.0] - 2025-12-13
 
 ### 🎨 RelativeView Visual Parity
