@@ -162,4 +162,6 @@ A prioritized plan to make Tryg robust, accessible, and emotionally resonant.
 ### Design Reflection
 | Task | Priority | Notes |
 |------|----------|-------|
-| Communication feel | 🟡 Medium | App conveys wholesome vibes but doesn't feel like communication yet - ideate |
+| Symptom Modal Scroll | ✅ Done | Expanded modal height, moved outside main |
+| Bottom Navigation | ✅ Done | Added persistent bottom bar "Min dag / Familie / Ring" |
+| Consent Modal | 🟡 Medium | Verify on small screens |

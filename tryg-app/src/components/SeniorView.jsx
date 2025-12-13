@@ -21,7 +21,7 @@ import { BodyPainSelector } from './BodyPainSelector';
 import { MemoryTrigger } from './WeeklyQuestion';
 import { WeeklyQuestionWidget, WeeklyQuestionModal } from './WeeklyQuestionWidget';
 import { HelpExchange } from './HelpExchange';
-import { TabNavigation } from './TabNavigation';
+import { BottomNavigation } from './BottomNavigation';
 import { SYMPTOMS_LIST } from '../data/constants';
 import { FEATURES } from '../config/features';
 
@@ -147,16 +147,11 @@ export const SeniorView = ({
                 <p className="text-teal-600 text-sm mt-1 font-medium">Alt er vel ✨</p>
             </header>
 
-            {/* Main Content - Scrollable */}
+            {/* Main Content - Scrollable with padding for bottom nav */}
             <main className="flex-1 overflow-y-auto p-4 space-y-4 pb-24">
 
-                {/* Tab Navigation - only show if tabbedLayout enabled */}
-                {FEATURES.tabbedLayout && (
-                    <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
-                )}
-
                 {/* ===== DAILY TAB ===== */}
-                {(!FEATURES.tabbedLayout || activeTab === 'daily') && (
+                {activeTab === 'daily' && (
                     <>
                         {/* Reward Card (Behavioral Hook) - Hidden until ALL tasks complete */}
                         {allTasksComplete ? (
@@ -296,16 +291,6 @@ export const SeniorView = ({
 
             </main>
 
-            {/* Emergency Contact Footer */}
-            <footer className="p-4 bg-white border-t border-stone-200">
-                <Button variant="danger" size="large" className="w-full" onClick={() => setShowCallModal(true)}>
-                    <div className="flex items-center gap-3">
-                        <Phone className="w-8 h-8" />
-                        <span>Ring til {relativeName}</span>
-                    </div>
-                </Button>
-            </footer>
-
             {/* Symptom Modal - Two-step flow for pain */}
             <Modal
                 isOpen={showSymptomModal}
@@ -365,19 +350,30 @@ export const SeniorView = ({
                 )}
             </Modal>
 
+
+
+            {/* Bottom Navigation */}
+            <BottomNavigation
+                activeTab={activeTab}
+                onTabChange={setActiveTab}
+                onCall={() => setShowCallModal(true)}
+            />
+
             {/* Call Modal */}
-            {showCallModal && (
-                <div className="absolute inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-                    <div className="bg-white rounded-3xl p-8 w-full max-w-sm text-center animate-slide-up">
-                        <div className="w-20 h-20 bg-rose-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <Phone className="w-10 h-10 text-rose-600" />
+            {
+                showCallModal && (
+                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+                        <div className="bg-white rounded-3xl p-8 w-full max-w-sm text-center animate-slide-up">
+                            <div className="w-20 h-20 bg-rose-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <Phone className="w-10 h-10 text-rose-600" />
+                            </div>
+                            <h3 className="text-2xl font-bold text-stone-800 mb-2">Ringer op...</h3>
+                            <p className="text-stone-500 mb-8">Ringer til {relativeName}</p>
+                            <Button variant="danger" onClick={() => setShowCallModal(false)}>Afslut opkald</Button>
                         </div>
-                        <h3 className="text-2xl font-bold text-stone-800 mb-2">Ringer op...</h3>
-                        <p className="text-stone-500 mb-8">Ringer til {relativeName}</p>
-                        <Button variant="danger" onClick={() => setShowCallModal(false)}>Afslut opkald</Button>
                     </div>
-                </div>
-            )}
+                )
+            }
 
             {/* Weekly Question Modal */}
             <WeeklyQuestionModal
@@ -387,7 +383,7 @@ export const SeniorView = ({
                 onAnswer={onWeeklyAnswer}
                 userName={userName}
             />
-        </div>
+        </div >
     );
 };
 
