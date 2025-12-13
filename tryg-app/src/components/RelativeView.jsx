@@ -58,15 +58,15 @@ export const RelativeView = ({
     const StatusIcon = currentStatusInfo.icon;
 
     return (
-        <div className="flex flex-col h-full bg-slate-50 relative">
+        <div className="flex flex-col h-full bg-stone-50 relative overflow-hidden">
             {/* Header with ping button */}
-            <header className="bg-white p-4 shadow-sm border-b border-slate-200 sticky top-0 z-10">
+            <header className="p-4 bg-white shadow-sm rounded-b-3xl z-10 shrink-0">
                 <div className="flex justify-between items-center">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-700 font-bold">
-                            L
+                            {userName?.charAt(0) || 'P'}
                         </div>
-                        <span className="font-semibold text-slate-700">Hej, {userName}</span>
+                        <span className="font-semibold text-stone-700">Hej, {userName}</span>
                     </div>
                     <div className="flex items-center gap-2">
                         {/* Weekly Question widget on Family tab */}
@@ -156,38 +156,37 @@ export const RelativeView = ({
                 )}
 
                 {/* Peace of Mind Status Card */}
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <div className="bg-white p-6 rounded-3xl shadow-sm border-2 border-teal-100">
                     <div className="flex justify-between items-start mb-4">
                         <div className="flex items-center gap-3">
-                            <div className="w-12 h-12 bg-stone-200 rounded-full overflow-hidden">
-                                <div className="w-full h-full bg-stone-300 flex items-center justify-center text-stone-500">
-                                    <User className="w-6 h-6" />
-                                </div>
+                            <div className="w-14 h-14 bg-teal-100 rounded-full overflow-hidden flex items-center justify-center">
+                                <User className="w-7 h-7 text-teal-600" />
                             </div>
                             <div>
-                                <h2 className="text-lg font-bold text-slate-800">{profile.name}</h2>
-                                <div className="flex items-center gap-1 text-xs text-slate-500">
+                                <h2 className="text-xl font-bold text-stone-800">{profile.name}</h2>
+                                <div className="flex items-center gap-1 text-sm text-stone-500">
+                                    <Clock className="w-3 h-3" />
                                     <span>Sidst tjekket ind: {lastCheckIn || 'Ingen endnu'}</span>
                                 </div>
                             </div>
                         </div>
-                        <div className="px-3 py-1 rounded-full text-sm font-medium border bg-emerald-100 text-emerald-800 border-emerald-200">
+                        <div className="px-4 py-1.5 rounded-full text-sm font-bold bg-emerald-100 text-emerald-700 border border-emerald-200 shadow-sm">
                             Alt er vel
                         </div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4 mt-6">
-                        <div className="bg-slate-50 p-4 rounded-xl">
-                            <p className="text-xs text-slate-500 uppercase font-bold tracking-wider mb-1">Sidst Tjekket Ind</p>
-                            <div className="flex items-center gap-2 text-slate-800">
-                                <Clock className="w-4 h-4 text-indigo-500" />
+                        <div className="bg-stone-50 p-4 rounded-2xl border border-stone-100">
+                            <p className="text-xs text-stone-500 uppercase font-bold tracking-wider mb-1">Sidst Tjekket</p>
+                            <div className="flex items-center gap-2 text-stone-800">
+                                <Clock className="w-4 h-4 text-teal-500" />
                                 <span className="font-semibold">{lastCheckIn || 'Venter...'}</span>
                             </div>
                         </div>
-                        <div className="bg-slate-50 p-4 rounded-xl">
-                            <p className="text-xs text-slate-500 uppercase font-bold tracking-wider mb-1">Medicin</p>
-                            <div className="flex items-center gap-2 text-slate-800">
-                                <Pill className="w-4 h-4 text-indigo-500" />
+                        <div className="bg-stone-50 p-4 rounded-2xl border border-stone-100">
+                            <p className="text-xs text-stone-500 uppercase font-bold tracking-wider mb-1">Medicin</p>
+                            <div className="flex items-center gap-2 text-stone-800">
+                                <Pill className="w-4 h-4 text-teal-500" />
                                 <span className="font-semibold">{completionRate}% taget</span>
                             </div>
                         </div>
@@ -196,14 +195,14 @@ export const RelativeView = ({
 
                 {/* Symptom Alerts */}
                 {symptomLogs.length > 0 && (
-                    <div className="bg-orange-50 border border-orange-100 rounded-xl p-4">
-                        <h4 className="text-orange-800 font-bold flex items-center gap-2 mb-2">
+                    <div className="bg-orange-50 border-2 border-orange-100 rounded-2xl p-4">
+                        <h4 className="text-orange-800 font-bold flex items-center gap-2 mb-3">
                             <AlertCircle className="w-5 h-5" />
                             Nye symptomer registreret
                         </h4>
                         <div className="space-y-2">
                             {symptomLogs.map((log, i) => (
-                                <div key={i} className="flex items-center justify-between text-sm text-orange-900 bg-white/50 p-2 rounded-lg">
+                                <div key={i} className="flex items-center justify-between text-sm text-orange-900 bg-white/70 p-3 rounded-xl">
                                     <div className="flex flex-wrap items-center gap-2">
                                         <span className="font-medium">{log.label}</span>
                                         {log.bodyLocation && (
@@ -227,18 +226,18 @@ export const RelativeView = ({
                 {/* Open Tasks */}
                 {openTasks.length > 0 && (
                     <div>
-                        <h3 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3 pl-1">Åbne opgaver ({openTasks.length})</h3>
-                        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                        <h3 className="text-sm font-bold text-stone-500 uppercase tracking-wider mb-3 pl-1">Åbne opgaver ({openTasks.length})</h3>
+                        <div className="bg-white rounded-2xl shadow-sm border-2 border-stone-100 overflow-hidden">
                             {openTasks.map((task, idx) => (
-                                <div key={task.id} className={`p-4 flex items-center gap-4 ${idx !== openTasks.length - 1 ? 'border-b border-slate-100' : ''}`}>
-                                    <div className="p-2 rounded-full bg-slate-100 text-slate-400">
+                                <div key={task.id} className={`p-4 flex items-center gap-4 ${idx !== openTasks.length - 1 ? 'border-b border-stone-100' : ''}`}>
+                                    <div className="p-2.5 rounded-xl bg-blue-50 text-blue-600">
                                         {task.type === 'medication' ? <Pill className="w-5 h-5" /> :
                                             task.type === 'appointment' ? <Clock className="w-5 h-5" /> :
                                                 <Activity className="w-5 h-5" />}
                                     </div>
                                     <div className="flex-1">
-                                        <p className="text-sm font-semibold text-slate-600">{task.title}</p>
-                                        <p className="text-xs text-slate-500">{task.description}</p>
+                                        <p className="text-sm font-semibold text-stone-700">{task.title}</p>
+                                        <p className="text-xs text-stone-500">{task.description}</p>
                                     </div>
                                 </div>
                             ))}
@@ -251,29 +250,29 @@ export const RelativeView = ({
                     <div>
                         <button
                             onClick={() => setShowCompletedTasks(!showCompletedTasks)}
-                            className="w-full flex items-center justify-between p-3 bg-emerald-50 rounded-xl border border-emerald-200 hover:bg-emerald-100 transition-colors mb-3"
+                            className="w-full flex items-center justify-between p-4 bg-teal-50 rounded-2xl border-2 border-teal-100 hover:bg-teal-100 transition-colors mb-3"
                         >
-                            <div className="flex items-center gap-2">
-                                <CheckCircle className="w-5 h-5 text-emerald-600" />
-                                <span className="font-bold text-emerald-800 text-sm">Udførte ({completedTasksList.length})</span>
+                            <div className="flex items-center gap-3">
+                                <CheckCircle className="w-6 h-6 text-teal-600" />
+                                <span className="font-bold text-teal-800">Udførte opgaver ({completedTasksList.length})</span>
                             </div>
-                            {showCompletedTasks ? <ChevronUp className="w-4 h-4 text-emerald-600" /> : <ChevronDown className="w-4 h-4 text-emerald-600" />}
+                            {showCompletedTasks ? <ChevronUp className="w-5 h-5 text-teal-600" /> : <ChevronDown className="w-5 h-5 text-teal-600" />}
                         </button>
 
                         {showCompletedTasks && (
-                            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                            <div className="bg-white rounded-2xl shadow-sm border-2 border-stone-100 overflow-hidden">
                                 {completedTasksList.map((task, idx) => (
-                                    <div key={task.id} className={`p-4 flex items-center gap-4 ${idx !== completedTasksList.length - 1 ? 'border-b border-slate-100' : ''}`}>
-                                        <div className="p-2 rounded-full bg-emerald-100 text-emerald-600">
+                                    <div key={task.id} className={`p-4 flex items-center gap-4 ${idx !== completedTasksList.length - 1 ? 'border-b border-stone-100' : ''}`}>
+                                        <div className="p-2.5 rounded-xl bg-teal-100 text-teal-600">
                                             {task.type === 'medication' ? <Pill className="w-5 h-5" /> :
                                                 task.type === 'appointment' ? <Clock className="w-5 h-5" /> :
                                                     <Activity className="w-5 h-5" />}
                                         </div>
                                         <div className="flex-1">
-                                            <p className="text-sm font-semibold text-slate-800 line-through">{task.title}</p>
-                                            <p className="text-xs text-slate-500">{task.description}</p>
+                                            <p className="text-sm font-semibold text-stone-500 line-through">{task.title}</p>
+                                            <p className="text-xs text-stone-400">{task.description}</p>
                                         </div>
-                                        <span className="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded-full">UDFØRT</span>
+                                        <span className="text-[10px] text-teal-600 font-bold bg-teal-50 px-2 py-0.5 rounded-full border border-teal-200">UDFØRT</span>
                                     </div>
                                 ))}
                             </div>

@@ -39,3 +39,28 @@ Last updated: 2025-12-13
 | 2025-12-12 | Global workflows in `~/.gemini/antigravity/global_workflows/` | Correct Antigravity path for cross-project workflows |
 | 2025-12-13 | Responsive Phone Simulator | Remove simulator frame on mobile (`sm:` breakpoint) for native feeling |
 | 2025-12-13 | Auth/Profile Loading Guard | Wait for `userProfile` before rendering main app to prevent `RelativeView` flash |
+| 2025-12-13 | RelativeView visual parity | Unified `stone-*` color scheme across both views, consistent `rounded-b-3xl` headers |
+| 2025-12-13 | Test user script | Created `scripts/create-test-user.mjs` for E2E testing without OAuth |
+
+---
+
+## Test Credentials
+
+For automated testing and development:
+
+| Role | Email | Password | Circle |
+|------|-------|----------|--------|
+| Relative | `louise.relative@test.com` | `Test1234!` | 6C9Y3M |
+
+> **Note**: These credentials work on localhost and production. Use for testing RelativeView and cross-role sync scenarios.
+
+---
+
+## Color System
+
+| Element | Senior (teal) | Relative (indigo) | Neutral |
+|---------|---------------|-------------------|---------|
+| Primary accent | `teal-600` | `indigo-600` | - |
+| Light background | `teal-50` | `indigo-50` | `stone-50` |
+| Avatar background | `teal-100` | `indigo-100` | `stone-200` |
+| Text | `teal-700` | `indigo-700` | `stone-700` |

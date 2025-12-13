@@ -29,17 +29,24 @@ export function useCheckIn(circleId) {
             (snapshot) => {
                 if (snapshot.exists()) {
                     const data = snapshot.data();
-                    // Format time string from timestamp
                     if (data.lastCheckIn) {
-                        const date = data.lastCheckIn.toDate?.() || new Date(data.lastCheckIn);
-                        const timeString = date.toLocaleTimeString('da-DK', {
-                            hour: '2-digit',
-                            minute: '2-digit'
-                        });
-                        setLastCheckIn(timeString);
+                        try {
+                            const date = data.lastCheckIn.toDate?.() || new Date(data.lastCheckIn);
+                            const timeString = date.toLocaleTimeString('da-DK', {
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            });
+                            setLastCheckIn(timeString);
+                        } catch (err) {
+                            console.error('[useCheckIn] Error parsing timestamp:', err);
+                            setLastCheckIn(null);
+                        }
                     } else {
                         setLastCheckIn(null);
                     }
+                } else {
+                    // Document doesn't exist yet - this is normal for new circles
+                    setLastCheckIn(null);
                 }
                 setLoading(false);
             },

@@ -224,3 +224,36 @@ Actionable learnings for avoiding roadblocks. Format: **Problem** → **Action T
 - **Action**: Enforced `height: 100dvh` and `width: 100vw` on `body` and `#root`
 - **Future**: For PWAs/App-like sites, use `100dvh` (Dynamic Viewport Height) to handle mobile browser UI chrome. 
 
+---
+
+## UI Polish & Consistency
+
+### Visual Parity Blind Spots
+- **Problem**: Applied UI polish to SeniorView but forgot RelativeView needed the same treatment
+- **Action**: Had to do a second pass to bring RelativeView to visual parity
+- **Future**: When doing UI polish on one view, ALWAYS audit ALL other views for consistency. UI polish is a cross-cutting concern, not a file-by-file task.
+
+### Color Scheme Consistency
+- **Problem**: RelativeView used `slate-*` colors while SeniorView used `stone-*`, creating inconsistent feel
+- **Action**: Unified to `stone-*` for neutral backgrounds across both views
+- **Future**: Establish a color token system early. Document primary (teal/indigo by role) and neutral (stone) palettes in a design system file.
+
+---
+
+## Browser Automation & Testing
+
+### OAuth Popup Blocking
+- **Problem**: Browser automation agent couldn't complete Google OAuth login (popup blocked/cancelled)
+- **Action**: Created email/password test user via Node.js script instead
+- **Future**: For apps with OAuth, always create email/password test accounts for automated testing. OAuth popups are unreliable in headless/automated browsers.
+
+### Test User Creation Script
+- **Problem**: Couldn't test RelativeView without a logged-in user in the circle
+- **Action**: Created `scripts/create-test-user.mjs` to programmatically create/join users to circles
+- **Future**: Maintain test user creation scripts for any app with authentication. Enables E2E testing without manual setup. Test credentials: `louise.relative@test.com` / `Test1234!`
+
+### PowerShell Emoji Encoding
+- **Problem**: Console output with emojis (✅, 🔹) appeared garbled in PowerShell
+- **Action**: Removed emojis from script output, used plain text markers like `[OK]`, `[+]`
+- **Future**: Avoid emojis in script output when running on Windows. PowerShell's default encoding garbles UTF-8 emojis.
+
