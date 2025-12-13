@@ -19,6 +19,7 @@ import { SeniorStatusCard } from './SeniorStatusCard';
 import { ThinkingOfYouButton, ThinkingOfYouIconButton } from './ThinkingOfYou';
 import { WeeklyQuestionWidget, WeeklyQuestionModal } from './WeeklyQuestionWidget';
 import { TabNavigation } from './TabNavigation';
+import { SymptomSummary } from './SymptomSummary';
 import { FEATURES } from '../config/features';
 import { SYMPTOMS_LIST } from '../data/constants';
 
@@ -164,35 +165,11 @@ export const RelativeView = ({
                     completionRate={completionRate}
                 />
 
-                {/* Symptom Alerts */}
-                {symptomLogs.length > 0 && (
-                    <div className="bg-orange-50 border-2 border-orange-100 rounded-2xl p-4">
-                        <h4 className="text-orange-800 font-bold flex items-center gap-2 mb-3">
-                            <AlertCircle className="w-5 h-5" />
-                            Nye symptomer registreret
-                        </h4>
-                        <div className="space-y-2">
-                            {symptomLogs.map((log, i) => (
-                                <div key={i} className="flex items-center justify-between text-sm text-orange-900 bg-white/70 p-3 rounded-xl">
-                                    <div className="flex flex-wrap items-center gap-2">
-                                        <span className="font-medium">{log.label}</span>
-                                        {log.bodyLocation && (
-                                            <span className="text-orange-600 text-xs bg-orange-100 px-2 py-0.5 rounded-full">
-                                                {log.bodyLocation.emoji} {log.bodyLocation.label}
-                                            </span>
-                                        )}
-                                        {log.bodyLocation?.severity && (
-                                            <span className="text-xs bg-orange-200 px-2 py-0.5 rounded-full">
-                                                {log.bodyLocation.severity.emoji} {log.bodyLocation.severity.label}
-                                            </span>
-                                        )}
-                                    </div>
-                                    <span className="text-orange-500 text-xs whitespace-nowrap">{log.time}</span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )}
+                {/* Symptom Summary - Today + 7-day overview */}
+                <SymptomSummary
+                    symptomLogs={symptomLogs}
+                    onViewReport={() => setShowReport(true)}
+                />
 
                 {/* Open Tasks */}
                 {openTasks.length > 0 && (
@@ -291,15 +268,47 @@ export const RelativeView = ({
             {/* Doctor Report Modal */}
             <Modal isOpen={showReport} onClose={() => setShowReport(false)} title="Rapport til Lægen">
                 <div className="space-y-6">
+                    {/* 14-day symptom overview chart */}
+                    <div className="p-4 bg-orange-50 rounded-xl border border-orange-200">
+                        <h4 className="font-bold text-slate-800 mb-2">Symptom-oversigt (14 dage)</h4>
+                        <div className="flex items-end gap-1 h-20 pb-2">
+                            {(() => {
+                                // Generate 14-day symptom counts
+                                const days = Array(14).fill(0);
+                                symptomLogs.forEach(log => {
+                                    const date = log.loggedAt?.toDate ? log.loggedAt.toDate() : new Date(log.loggedAt);
+                                    const daysAgo = Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24));
+                                    if (daysAgo >= 0 && daysAgo < 14) {
+                                        days[13 - daysAgo]++;
+                                    }
+                                });
+                                const max = Math.max(...days, 1);
+                                return days.map((count, i) => (
+                                    <div
+                                        key={i}
+                                        className={`flex-1 rounded-t-sm transition-opacity ${count > 0 ? 'bg-orange-400 hover:bg-orange-500' : 'bg-slate-200'
+                                            }`}
+                                        style={{ height: `${Math.max((count / max) * 100, 5)}%` }}
+                                        title={`${count} symptomer`}
+                                    />
+                                ));
+                            })()}
+                        </div>
+                        <div className="flex justify-between text-xs text-slate-400">
+                            <span>-14 dage</span>
+                            <span>I dag</span>
+                        </div>
+                    </div>
+
                     <div className="p-4 bg-slate-50 rounded-xl border border-slate-200">
                         <h4 className="font-bold text-slate-800 mb-2">Overholdelse af medicin (7 dage)</h4>
-                        <div className="flex items-end gap-2 h-24 pb-2">
+                        <div className="flex items-end gap-2 h-20 pb-2">
                             {[80, 90, 100, 85, 95, 100, completionRate].map((h, i) => (
                                 <div key={i} className="flex-1 bg-indigo-500 rounded-t-sm opacity-80 hover:opacity-100 transition-opacity" style={{ height: `${h}%` }}></div>
                             ))}
                         </div>
                         <div className="flex justify-between text-xs text-slate-400">
-                            <span>Man</span><span>...</span><span>I dag</span>
+                            <span>-7 dage</span><span>I dag</span>
                         </div>
                     </div>
 

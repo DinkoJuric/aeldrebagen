@@ -267,3 +267,42 @@ Actionable learnings for avoiding roadblocks. Format: **Problem** → **Action T
 - **Action**: Input commands need to explicitly clear the field first with `ClearText: true`
 - **Future**: When automating form inputs, always use `ClearText: true` to ensure clean input. Also clear fields manually with the user's browser before retrying automation.
 
+---
+
+## Troubleshooting Methodology
+
+### When Debugging UI Interactions That "Don't Work"
+
+1. **Trace the prop chain first**: Before adding debug logging, verify props are passed correctly:
+   - Check the hook/source → parent component → child component chain
+   - Use `grep_search` to find all usages of the prop name
+   - Verify each handoff point has correct destructuring
+
+2. **Check for ID collisions**: When Firestore returns documents with `id: doc.id`:
+   - If the original data also has an `id` field, they collide
+   - Use `docId` for Firestore document IDs to avoid collision
+   
+3. **Add debug logging at the trigger point**:
+   ```javascript
+   onClick={() => {
+       console.log('[ComponentName] Action:', contextData, 'Handler:', typeof handler);
+       handler?.(data);
+   }}
+   ```
+
+4. **Use browser automation for verification**:
+   - Always use `ClearText: true` for form inputs
+   - Take screenshots before and after actions
+   - Multiple removal tests confirm consistency
+
+### When Components Crash on Render
+
+1. **Check for undefined references to React components**:
+   - Firestore cannot store React components (functions/symbols)
+   - If code does `<item.icon />`, ensure `item.icon` is resolved at render time
+   - Lookup icons from constants by ID: `CONSTANTS.find(c => c.id === item.id)?.icon`
+
+2. **Check the error message carefully**:
+   - "Element type is invalid" = undefined component being rendered
+   - Look for dynamic component references like `<item.icon />` or `<Component />`
+
