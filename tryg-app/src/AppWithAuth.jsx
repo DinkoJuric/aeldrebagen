@@ -94,9 +94,10 @@ function FirebaseApp() {
         }
     };
 
-    // Loading state
-    if (authLoading) {
-        return <LoadingScreen message="Logger ind..." />;
+    // Loading state - Wait for BOTH auth and profile to resolve
+    // This prevents the "flash" of Relative view before Senior view
+    if (authLoading || (user && !userProfile && !authError)) {
+        return <LoadingScreen message="Indlæser profil..." />;
     }
 
     // Not authenticated - show auth screen

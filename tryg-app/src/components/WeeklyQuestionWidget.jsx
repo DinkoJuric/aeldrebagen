@@ -73,9 +73,12 @@ export const WeeklyQuestionModal = ({ isOpen, onClose, answers = [], onAnswer, u
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-end justify-center">
-            <div className="bg-white w-full max-w-md rounded-t-3xl max-h-[85vh] flex flex-col animate-slide-up">
-                {/* Header */}
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-end justify-center animate-fade-in pb-0 sm:pb-0">
+            <div className="bg-white w-full max-w-md rounded-t-[2.5rem] max-h-[85vh] flex flex-col animate-slide-up shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.3)] safe-area-bottom">
+                {/* Drag Handle Indicator */}
+                <div className="w-full flex justify-center pt-3 pb-1" onTouchStart={onClose}>
+                    <div className="w-12 h-1.5 bg-stone-200 rounded-full" />
+                </div>
                 <div className="flex items-center justify-between p-4 border-b border-stone-200">
                     <div className="flex items-center gap-2">
                         <div className="bg-indigo-100 p-2 rounded-full">

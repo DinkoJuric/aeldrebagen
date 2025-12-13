@@ -54,6 +54,15 @@
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
+  height: 100dvh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+#root {
+  height: 100dvh;
+  width: 100vw;
+  overflow: hidden;
 }
 
 /* Visible focus indicators for accessibility */
