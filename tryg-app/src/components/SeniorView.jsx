@@ -66,7 +66,7 @@ export const SeniorView = ({
             <div className={`transition-all duration-500 ${isActive ? 'opacity-100' : 'opacity-50 grayscale'}`}>
                 <div
                     className="flex items-center gap-2 mb-4 cursor-pointer"
-                    onClick={() => setActivePeriod(periodKey)}
+                    onClick={() => setActivePeriod(activePeriod === periodKey ? null : periodKey)}
                 >
                     {icon}
                     <h2 className="text-xl font-bold text-stone-800">{periodTitle}</h2>

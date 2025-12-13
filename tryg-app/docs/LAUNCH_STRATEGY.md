@@ -115,6 +115,24 @@ New feature? Wrap it in a flag. Always.
 
 ---
 
+## Messaging & Pitching
+
+### The Porch Light Metaphor
+
+> *"Tryg is like leaving the porch light on for your parents — a quiet signal that says 'I'm thinking of you' without the intrusion of knocking on their door five times a day."*
+
+Use this to differentiate from Life360 and medical alert buttons (surveillance vs. connection).
+
+### 1-Sentence Pitch (for elevators)
+
+> *"Tryg gives adult children daily peace of mind that their aging parent is okay — without surveillance, micromanagement, or awkward daily phone calls."*
+
+### 3-Sentence Pitch (for meetings)
+
+> *"Tryg is a Danish elder care app that replaces the 'daily worry call' with a simple 'mor har det godt' check-in system. Unlike GPS trackers that treat seniors like children, Tryg is bidirectional — parents can see what their adult kids are up to too, making it feel like connection, not surveillance. It bundles medication reminders, symptom tracking, and family status into one calm interface designed for 70+ year olds with tremors, reduced vision, and Danish sensibilities."*
+
+---
+
 ## Your Immediate Next Steps
 
 1. **Get designer feedback** on GitHub Pages deployment

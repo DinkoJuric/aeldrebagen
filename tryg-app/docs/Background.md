@@ -32,3 +32,51 @@ A dual-interface daily tracker designed for the Danish market that connects elde
 *   Built in **React** using **Tailwind CSS**.
 *   Uses **Lucide React** for iconography.
 *   Currently a single-file prototype simulating a mobile experience.
+
+---
+
+## App Pitches
+
+### 1-Sentence Pitch
+
+> *"Tryg gives adult children daily peace of mind that their aging parent is okay — without surveillance, micromanagement, or awkward daily phone calls."*
+
+### 3-Sentence Pitch
+
+> *"Tryg is a Danish elder care app that replaces the 'daily worry call' with a simple 'mor har det godt' check-in system. Unlike GPS trackers that treat seniors like children, Tryg is bidirectional — parents can see what their adult kids are up to too, making it feel like connection, not surveillance. It bundles medication reminders, symptom tracking, and family status into one calm interface designed for 70+ year olds with tremors, reduced vision, and Danish sensibilities."*
+
+---
+
+## The Porch Light Metaphor
+
+> *"Tryg is like leaving the porch light on for your parents — a quiet signal that says 'I'm thinking of you' without the intrusion of knocking on their door five times a day.*
+> 
+> *Other solutions (Life360, medical alert buttons) treat elders like packages to track or emergencies waiting to happen. Tryg treats them like autonomous adults who just need a simple way to say 'alt er vel' — and for their family to exhale."*
+
+### Why the Metaphor Works
+
+| Element | Meaning |
+|---------|---------|
+| **Porch light** | Passive, non-intrusive, warm, familiar |
+| **Knocking 5 times** | The current reality of anxious adult children calling repeatedly |
+| **Package tracking** | What competitors feel like (surveillance) |
+| **"Alt er vel"** | The Danish concept of everything being well — culturally resonant |
+
+---
+
+## Tab Differentiation Strategy (RelativeView)
+
+The two tabs should serve distinct emotional needs:
+
+| Tab | Focus | Content |
+|-----|-------|---------|
+| **Min Dag** | 😌 Peace of Mind | "Alt er vel" hero card, quick glance (meds %, symptoms), connection history ("Du sendte knus") |
+| **Familie** | 🤝 Coordination | Family status, HelpExchange, detailed task list, health report button |
+
+### Rationale from Strategy Docs
+
+- *"Make peace of mind summary FIRST thing relatives see"*
+- *"Sell peace of mind, not task management"*
+- *"Your real customer is the adult child... build for their anxiety"*
+
+**The differentiation:** Min Dag = emotional reassurance, Familie = practical coordination.
