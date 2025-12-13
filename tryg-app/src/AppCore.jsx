@@ -216,30 +216,53 @@ export default function TrygAppCore({
                             Logget ind som: {user?.email}
                         </p>
 
-                        {/* Circle members list */}
-                        {members.length > 0 && (
-                            <div className="mt-3 pt-3 border-t border-stone-200">
-                                <div className="flex items-center gap-2 mb-2">
-                                    <Users className="w-4 h-4 text-stone-500" />
-                                    <span className="text-sm font-medium text-stone-600">Medlemmer</span>
-                                </div>
-                                <div className="space-y-2">
-                                    {members.map((member) => (
-                                        <div key={member.id} className="flex items-center gap-2 text-sm">
-                                            <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${member.role === 'senior' ? 'bg-teal-100 text-teal-700' : 'bg-indigo-100 text-indigo-700'
-                                                }`}>
-                                                {member.displayName?.charAt(0) || '?'}
+                        {/* Circle members list - Elder first */}
+                        {members.length > 0 && (() => {
+                            // Sort senior to top
+                            const senior = members.find(m => m.role === 'senior');
+                            const relatives = members.filter(m => m.role !== 'senior');
+
+                            return (
+                                <div className="mt-4 pt-4 border-t border-stone-200">
+                                    <div className="flex items-center gap-2 mb-3">
+                                        <Users className="w-4 h-4 text-stone-500" />
+                                        <span className="text-sm font-medium text-stone-600">Vores Familie</span>
+                                    </div>
+
+                                    {/* The Elder - Distinguished at top */}
+                                    {senior && (
+                                        <div className="bg-gradient-to-r from-amber-50 to-teal-50 rounded-xl p-3 mb-3 border border-amber-200/50">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-md">
+                                                    {senior.displayName?.charAt(0) || '👴'}
+                                                </div>
+                                                <div className="flex-1">
+                                                    <p className="font-semibold text-stone-800">{senior.displayName || 'Vores Elder'}</p>
+                                                    <p className="text-xs text-amber-600 flex items-center gap-1">
+                                                        <span>👑</span> Familiens hjerte
+                                                    </p>
+                                                </div>
                                             </div>
-                                            <span className="text-stone-700">{member.displayName || 'Ukendt'}</span>
-                                            <span className={`text-xs px-1.5 py-0.5 rounded ${member.role === 'senior' ? 'bg-teal-50 text-teal-600' : 'bg-indigo-50 text-indigo-600'
-                                                }`}>
-                                                {member.role === 'senior' ? 'Senior' : 'Pårørende'}
-                                            </span>
                                         </div>
-                                    ))}
+                                    )}
+
+                                    {/* Pårørende - Simpler styling */}
+                                    {relatives.length > 0 && (
+                                        <div className="space-y-2 pl-2">
+                                            {relatives.map((member) => (
+                                                <div key={member.id} className="flex items-center gap-2 text-sm">
+                                                    <div className="w-7 h-7 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-700 font-bold text-xs">
+                                                        {member.displayName?.charAt(0) || '?'}
+                                                    </div>
+                                                    <span className="text-stone-700">{member.displayName || 'Ukendt'}</span>
+                                                    <span className="text-xs text-indigo-500">Pårørende</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
-                            </div>
-                        )}
+                            );
+                        })()}
                     </div>
                 )}
 
@@ -334,6 +357,6 @@ export default function TrygAppCore({
                 {/* Home indicator */}
                 <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 w-32 h-1.5 bg-black/20 rounded-full z-50"></div>
             </div>
-        </div>
+        </div >
     );
 }
