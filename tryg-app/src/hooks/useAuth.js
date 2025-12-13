@@ -28,17 +28,34 @@ export function useAuth() {
             setUser(firebaseUser);
 
             if (firebaseUser) {
-                // Fetch user profile from Firestore
-                try {
-                    const profileDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
-                    if (profileDoc.exists()) {
-                        setUserProfile(profileDoc.data());
+                // Fetch user profile from Firestore with retry logic
+                // Firestore may not be ready when auth fires from cache
+                const fetchProfileWithRetry = async (retries = 3, delay = 500) => {
+                    for (let attempt = 1; attempt <= retries; attempt++) {
+                        try {
+                            const profileDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
+                            if (profileDoc.exists()) {
+                                setUserProfile(profileDoc.data());
+                                setError(null); // Clear any previous error
+                            }
+                            return; // Success, exit
+                        } catch (err) {
+                            console.error(`Error fetching user profile (attempt ${attempt}/${retries}):`, err);
+
+                            // If offline error and we have retries left, wait and retry
+                            if (err.message?.includes('offline') && attempt < retries) {
+                                console.log(`Firestore offline, retrying in ${delay}ms...`);
+                                await new Promise(resolve => setTimeout(resolve, delay));
+                                delay *= 2; // Exponential backoff
+                            } else if (attempt === retries) {
+                                // Final attempt failed
+                                setError(err.message || 'Could not load profile');
+                            }
+                        }
                     }
-                } catch (err) {
-                    console.error('Error fetching user profile:', err);
-                    // Propagate error so AppWithAuth can show error screen
-                    setError(err.message || 'Could not load profile');
-                }
+                };
+
+                await fetchProfileWithRetry();
             } else {
                 setUserProfile(null);
             }

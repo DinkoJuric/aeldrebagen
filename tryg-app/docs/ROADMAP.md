@@ -66,7 +66,7 @@ A prioritized plan to make Tryg robust, accessible, and emotionally resonant.
 
 | Feature | Behavioral Principle | Effort |
 |---------|---------------------|--------|
-| **5-second check-in**: Single tap "Jeg har det godt" | Reduce friction → Habit stickiness | 1h |
+| **5-second check-in**: Single tap "Jeg har det godt" | Reduce friction → Habit stickiness | 1h | ✅ Done |
 | **Implementation intentions**: "After breakfast, I will..." prompts | Fogg Behavior Model | 3h |
 | **Gentle streaks**: "4 days in a row ✓" (no punishment for breaks) | Intrinsic motivation | 2h |
 | **Pre-filled defaults**: Remember last medication dose | Reduce cognitive load | 2h |
@@ -77,7 +77,7 @@ A prioritized plan to make Tryg robust, accessible, and emotionally resonant.
 |---------|----------------------|--------|--------|
 | **Success sounds**: Gentle chime on task completion | Positive reinforcement | 1h | ✅ Done |
 | **Calm color palette audit**: Remove any anxiety-inducing reds | Emotional safety | 2h | ⏳ TODO |
-| **Reassuring micro-copy**: "Alt er godt" instead of clinical language | Dignity preservation | 2h | ⏳ TODO |
+| **Reassuring micro-copy**: "Alt er godt" instead of clinical language | Dignity preservation | 2h | ✅ Done |
 | **Family photo personalization**: Let relatives upload real photos | Emotional connection | 4h | ⏳ TODO |
 
 ---
@@ -136,3 +136,30 @@ A prioritized plan to make Tryg robust, accessible, and emotionally resonant.
 ---
 
 *This roadmap balances technical robustness with behavioral science insights for elderly-specific engagement.*
+
+---
+
+## Backlog
+
+### Technical Debt
+| Task | Priority | Notes |
+|------|----------|-------|
+| Refactoring | 🟡 Medium | General code cleanup |
+| Test suite update | 🟡 Medium | Ensure tests reflect new Firebase architecture |
+
+### Question of the Week Feature
+| Task | Priority | Notes |
+|------|----------|-------|
+| Investigate storage location | 🔴 High | Where is question of week data stored? |
+| UI space optimization | 🟡 Medium | Feature uses too much screen real estate - ideate improvements |
+| Message reactions | 🟢 Feature | Add ability to react to each other's messages |
+
+### Daily Tasks Feature
+| Task | Priority | Notes |
+|------|----------|-------|
+| Completed tasks UX | 🟡 Medium | Move completed tasks to collapsible section at bottom |
+
+### Design Reflection
+| Task | Priority | Notes |
+|------|----------|-------|
+| Communication feel | 🟡 Medium | App conveys wholesome vibes but doesn't feel like communication yet - ideate |

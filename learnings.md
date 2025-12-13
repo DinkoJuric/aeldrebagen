@@ -200,4 +200,8 @@ Actionable learnings for avoiding roadblocks. Format: **Problem** → **Action T
 - **Action**: Correct path is `~/.gemini/antigravity/global_workflows/`
 - **Future**: Global workflows go in `~/.gemini/antigravity/global_workflows/`. Workspace workflows go in `<project>/.agent/workflows/`.
 
+### Whitespace in GitHub Secrets
+- **Problem**: Firebase threw "client is offline" errors on prod, despite authorized domains and existing secrets
+- **Action**: Discovered a trailing space in a `VITE_FIREBASE_*` secret value
+- **Future**: "Offline" errors often mask config issues. Always sanitize whitespace when pasting into GitHub Secrets. 
 
