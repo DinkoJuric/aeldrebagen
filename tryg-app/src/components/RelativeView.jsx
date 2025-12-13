@@ -59,16 +59,16 @@ export const RelativeView = ({
 
     return (
         <div className="flex flex-col h-full bg-stone-50 relative overflow-hidden">
-            {/* Header with ping button */}
-            <header className="p-4 bg-white shadow-sm rounded-b-3xl z-10 shrink-0">
+            {/* Header with ping button - COMPACT */}
+            <header className="px-4 py-2 bg-white shadow-sm rounded-b-3xl z-10 shrink-0">
                 <div className="flex justify-between items-center">
-                    <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-700 font-bold">
+                    <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-700 font-bold text-sm">
                             {userName?.charAt(0) || 'P'}
                         </div>
-                        <span className="font-semibold text-stone-700">Hej, {userName}</span>
+                        <span className="font-semibold text-stone-700 text-sm">Hej, {userName}</span>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1">
                         {/* Weekly Question widget on Family tab */}
                         {FEATURES.weeklyQuestion && activeTab === 'family' && (
                             <WeeklyQuestionWidget
@@ -82,7 +82,7 @@ export const RelativeView = ({
                         {FEATURES.thinkingOfYou && (
                             <ThinkingOfYouIconButton onSendPing={onSendPing} />
                         )}
-                        <Button variant="ghost" size="small" aria-label="Indstillinger" onClick={onOpenSettings}><Settings className="w-5 h-5" /></Button>
+                        <Button variant="ghost" size="small" aria-label="Indstillinger" onClick={onOpenSettings}><Settings className="w-4 h-4" /></Button>
                     </div>
                 </div>
             </header>

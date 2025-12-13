@@ -125,10 +125,10 @@ export const SeniorView = ({
 
     return (
         <div className="flex flex-col h-full bg-stone-50 relative overflow-hidden">
-            {/* Header */}
-            <header className="p-4 bg-white shadow-sm rounded-b-3xl z-10 shrink-0">
-                <div className="flex justify-between items-center mb-1">
-                    <h1 className="text-2xl font-bold text-stone-800">{greeting}, {userName}</h1>
+            {/* Header - COMPACT */}
+            <header className="px-4 py-2 bg-white shadow-sm rounded-b-3xl z-10 shrink-0">
+                <div className="flex justify-between items-center">
+                    <h1 className="text-xl font-bold text-stone-800">{greeting}, {userName}</h1>
                     {/* Swap sun for Weekly Question widget on Family tab */}
                     {FEATURES.weeklyQuestion && activeTab === 'family' ? (
                         <WeeklyQuestionWidget
@@ -138,13 +138,15 @@ export const SeniorView = ({
                             onClick={() => setShowWeeklyModal(true)}
                         />
                     ) : (
-                        <div className="bg-amber-100 p-2 rounded-full animate-sun-pulse">
-                            <Sun className="text-amber-500 w-8 h-8" />
+                        <div className="bg-amber-100 p-1.5 rounded-full animate-sun-pulse">
+                            <Sun className="text-amber-500 w-6 h-6" />
                         </div>
                     )}
                 </div>
-                <p className="text-stone-500 text-base capitalize">{dateString}</p>
-                <p className="text-teal-600 text-xs mt-0.5 font-medium">Alt er vel ✨</p>
+                <div className="flex items-center gap-2 text-sm">
+                    <span className="text-stone-500 capitalize">{dateString}</span>
+                    <span className="text-teal-600 font-medium">· Alt er vel ✨</span>
+                </div>
             </header>
 
             {/* Main Content - Scrollable with padding for bottom nav */}

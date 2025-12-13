@@ -146,16 +146,16 @@ export default function TrygAppCore({
                     )}
                 </div>
 
-                {/* Header with role indicator */}
-                <div className="absolute top-0 left-0 right-0 h-16 bg-black/5 z-50 flex justify-center items-center backdrop-blur-sm px-2">
+                {/* Header with role indicator - COMPACT */}
+                <div className="absolute top-0 left-0 right-0 h-10 bg-black/5 z-50 flex justify-center items-center backdrop-blur-sm px-2">
                     {/* Settings button (left) */}
-                    <div className="absolute left-4 flex items-center gap-2">
+                    <div className="absolute left-3 flex items-center gap-1">
                         <button
                             onClick={() => setShowSettings(!showSettings)}
-                            className="p-2 rounded-full hover:bg-white/50 transition-colors"
+                            className="p-1.5 rounded-full hover:bg-white/50 transition-colors"
                             aria-label="Indstillinger"
                         >
-                            <Share2 className="w-5 h-5 text-stone-600" />
+                            <Share2 className="w-4 h-4 text-stone-600" />
                         </button>
                         {FEATURES.photoSharing && (
                             <PhotoCaptureButton
@@ -167,8 +167,8 @@ export default function TrygAppCore({
                         )}
                     </div>
 
-                    {/* Role indicator (center) - no toggle */}
-                    <div className={`px-4 py-2 rounded-full text-sm font-bold shadow-lg ${isSenior ? 'bg-teal-600 text-white' : 'bg-indigo-600 text-white'
+                    {/* Role indicator (center) - compact */}
+                    <div className={`px-3 py-1 rounded-full text-xs font-bold shadow-md ${isSenior ? 'bg-teal-600 text-white' : 'bg-indigo-600 text-white'
                         }`}>
                         {isSenior ? `👤 ${seniorName}` : `👥 ${relativeName}`}
                     </div>
@@ -176,16 +176,16 @@ export default function TrygAppCore({
                     {/* Sign out button (right) */}
                     <button
                         onClick={onSignOut}
-                        className="absolute right-4 p-2 rounded-full hover:bg-white/50 transition-colors"
+                        className="absolute right-3 p-1.5 rounded-full hover:bg-white/50 transition-colors"
                         aria-label="Log ud"
                     >
-                        <LogOut className="w-5 h-5 text-stone-600" />
+                        <LogOut className="w-4 h-4 text-stone-600" />
                     </button>
                 </div>
 
                 {/* Settings panel (invite code + privacy) */}
                 {showSettings && (
-                    <div className="absolute top-16 left-4 right-4 bg-white rounded-2xl shadow-lg p-4 z-40 border border-stone-200">
+                    <div className="absolute top-10 left-4 right-4 bg-white rounded-2xl shadow-lg p-4 z-40 border border-stone-200">
                         <h3 className="font-bold text-stone-800 mb-2">Familie-cirkel</h3>
                         {inviteCode ? (
                             <div className="bg-stone-100 rounded-xl p-3 text-center mb-3">
@@ -252,7 +252,7 @@ export default function TrygAppCore({
                     />
                 )}
 
-                <div className="pt-14 h-full">
+                <div className="pt-10 h-full">
                     {/* Ping Notification from Firestore */}
                     {latestPing && (
                         <PingNotification
