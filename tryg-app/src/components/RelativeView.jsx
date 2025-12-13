@@ -32,6 +32,8 @@ export const RelativeView = ({
     const [showReport, setShowReport] = useState(false);
     const [showWeeklyModal, setShowWeeklyModal] = useState(false);
     const [showCompletedTasks, setShowCompletedTasks] = useState(false);
+    const [showSymptoms, setShowSymptoms] = useState(true);  // Collapsible symptoms
+    const [showOpenTasks, setShowOpenTasks] = useState(true); // Collapsible open tasks
     const [newTaskTitle, setNewTaskTitle] = useState('');
     const [showStatusPicker, setShowStatusPicker] = useState(false);
     const [activeTab, setActiveTab] = useState('daily'); // 'daily' = Oversigt, 'family' = Familie
@@ -165,31 +167,60 @@ export const RelativeView = ({
                     completionRate={completionRate}
                 />
 
-                {/* Symptom Summary - Today + 7-day overview */}
-                <SymptomSummary
-                    symptomLogs={symptomLogs}
-                    onViewReport={() => setShowReport(true)}
-                />
+                {/* Symptom Summary - Collapsible */}
+                {symptomLogs.length > 0 && (
+                    <div>
+                        <button
+                            onClick={() => setShowSymptoms(!showSymptoms)}
+                            className="w-full flex items-center justify-between text-sm font-bold text-stone-500 uppercase tracking-wider mb-3 pl-1"
+                        >
+                            <span>Symptomer ({symptomLogs.length})</span>
+                            {showSymptoms ? (
+                                <ChevronUp className="w-4 h-4" />
+                            ) : (
+                                <ChevronDown className="w-4 h-4" />
+                            )}
+                        </button>
+                        {showSymptoms && (
+                            <SymptomSummary
+                                symptomLogs={symptomLogs}
+                                onViewReport={() => setShowReport(true)}
+                            />
+                        )}
+                    </div>
+                )}
 
-                {/* Open Tasks */}
+                {/* Open Tasks - Collapsible */}
                 {openTasks.length > 0 && (
                     <div>
-                        <h3 className="text-sm font-bold text-stone-500 uppercase tracking-wider mb-3 pl-1">Åbne opgaver ({openTasks.length})</h3>
-                        <div className="bg-white rounded-2xl shadow-sm border-2 border-stone-100 overflow-hidden">
-                            {openTasks.map((task, idx) => (
-                                <div key={task.id} className={`p-4 flex items-center gap-4 ${idx !== openTasks.length - 1 ? 'border-b border-stone-100' : ''}`}>
-                                    <div className="p-2.5 rounded-xl bg-blue-50 text-blue-600">
-                                        {task.type === 'medication' ? <Pill className="w-5 h-5" /> :
-                                            task.type === 'appointment' ? <Clock className="w-5 h-5" /> :
-                                                <Activity className="w-5 h-5" />}
+                        <button
+                            onClick={() => setShowOpenTasks(!showOpenTasks)}
+                            className="w-full flex items-center justify-between text-sm font-bold text-stone-500 uppercase tracking-wider mb-3 pl-1"
+                        >
+                            <span>Åbne opgaver ({openTasks.length})</span>
+                            {showOpenTasks ? (
+                                <ChevronUp className="w-4 h-4" />
+                            ) : (
+                                <ChevronDown className="w-4 h-4" />
+                            )}
+                        </button>
+                        {showOpenTasks && (
+                            <div className="bg-white rounded-2xl shadow-sm border-2 border-stone-100 overflow-hidden">
+                                {openTasks.map((task, idx) => (
+                                    <div key={task.id} className={`p-4 flex items-center gap-4 ${idx !== openTasks.length - 1 ? 'border-b border-stone-100' : ''}`}>
+                                        <div className="p-2.5 rounded-xl bg-blue-50 text-blue-600">
+                                            {task.type === 'medication' ? <Pill className="w-5 h-5" /> :
+                                                task.type === 'appointment' ? <Clock className="w-5 h-5" /> :
+                                                    <Activity className="w-5 h-5" />}
+                                        </div>
+                                        <div className="flex-1">
+                                            <p className="text-sm font-semibold text-stone-700">{task.title}</p>
+                                            <p className="text-xs text-stone-500">{task.description}</p>
+                                        </div>
                                     </div>
-                                    <div className="flex-1">
-                                        <p className="text-sm font-semibold text-stone-700">{task.title}</p>
-                                        <p className="text-xs text-stone-500">{task.description}</p>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 )}
 
