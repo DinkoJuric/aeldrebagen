@@ -64,6 +64,40 @@ export const RelativeView = ({
         setShowAddModal(false);
     };
 
+    // Generate activity feed from tasks and symptoms
+    const recentActivity = useMemo(() => {
+        const activities = [];
+
+        // Add completed tasks
+        tasks.filter(t => t.completed && t.completedAt).forEach(t => {
+            activities.push({
+                type: 'task',
+                timestamp: t.completedAt?.toDate ? t.completedAt.toDate() : new Date(t.completedAt),
+                text: `Udført: ${t.title}`,
+                emoji: '✅'
+            });
+        });
+
+        // Add symptoms
+        symptomLogs.forEach(s => {
+            activities.push({
+                type: 'symptom',
+                timestamp: s.loggedAt?.toDate ? s.loggedAt.toDate() : new Date(s.loggedAt),
+                text: `Symptom: ${s.type}`,
+                emoji: '🩺'
+            });
+        });
+
+        // Sort by time (newest first)
+        return activities
+            .sort((a, b) => b.timestamp - a.timestamp)
+            .slice(0, 5)
+            .map(a => ({
+                ...a,
+                time: a.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            }));
+    }, [tasks, symptomLogs]);
+
     return (
         <div className="flex flex-col h-full bg-stone-50 relative overflow-hidden">
             {/* Header - COMPACT */}
@@ -106,24 +140,13 @@ export const RelativeView = ({
                         symptomCount={todaySymptomCount}
                         onSendPing={onSendPing}
                         onViewSymptoms={() => setActiveTab('family')}
-                        recentActivity={[]} // TODO: Build activity feed from pings, tasks, etc.
+                        recentActivity={recentActivity}
                     />
                 ) : (
                     <CoordinationTab
                         seniorName={seniorName}
                         userName={userName}
                         myStatus={myStatus}
-                        onMyStatusChange={onMyStatusChange}
-                        memberStatuses={memberStatuses}
-                        currentUserId={currentUserId}
-                        helpOffers={helpOffers}
-                        helpRequests={helpRequests}
-                        relativeOffers={relativeOffers}
-                        relativeRequests={relativeRequests}
-                        onAddRelativeOffer={onAddRelativeOffer}
-                        onRemoveRelativeOffer={onRemoveRelativeOffer}
-                        onAddRelativeRequest={onAddRelativeRequest}
-                        onRemoveRelativeRequest={onRemoveRelativeRequest}
                         openTasks={openTasks}
                         completedTasks={completedTasksList}
                         symptomLogs={symptomLogs}
