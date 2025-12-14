@@ -167,8 +167,12 @@ Bidirectional offer/request system with match celebration when offers align with
 RelativeView
 ├── PeaceOfMindTab (Min Dag)        ← Emotional reassurance
 │   ├── Hero "Alt er vel" card
-│   ├── Progress ring (completion %)
-│   └── Quick glance stats
+│   ├── ProgressRing (3-segment Gates)
+│   │   ├── ☀️ Morgen (6-12)
+│   │   ├── 🌤️ Eftermiddag (12-18)
+│   │   └── 🌙 Aften (18-22)
+│   │   Colors: 🟢 On-time | 🟡 Late | 🔴 Overdue
+│   └── Quick glance stats (Medicin, Symptomer)
 │
 ├── CoordinationTab (Familie)        ← Practical coordination
 │   ├── Status picker (visible to senior)
@@ -182,6 +186,16 @@ RelativeView
     ├── 👥 Familie (coordination)
     └── 📄 Rapport (shortcut)
 ```
+
+**ProgressRing Component** (`src/components/ProgressRing.jsx`):
+- Visual: 3-segment SVG ring representing day periods
+- Logic: Compares task `period` and `completed` status against current time
+- Colors:
+  - 🟢 Green (`#10B981`): Task completed within expected window (±2 hours)
+  - 🟡 Yellow (`#F59E0B`): Task completed outside expected window
+  - 🔴 Red (`#EF4444`): Task not completed, period has passed
+  - Gray (`#D1D5DB`): Future period, not yet actionable
+
 
 ---
 

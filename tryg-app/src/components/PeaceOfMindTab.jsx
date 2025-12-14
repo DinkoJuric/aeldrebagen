@@ -1,81 +1,141 @@
 import React from 'react';
-import { Heart, Clock, Pill } from 'lucide-react';
+import { Heart, Clock, Pill, CheckCircle, AlertCircle } from 'lucide-react';
 import { SeniorStatusCard } from './SeniorStatusCard';
 import { ThinkingOfYouIconButton } from './ThinkingOfYou';
+import { ProgressRing } from './ProgressRing';
 
 // Peace of Mind Tab - emotional reassurance focused
-// Shows: "Alt er vel" hero, quick glance stats, connection history
+// Shows: "Alt er vel" hero with Gates progress, quick glance stats, connection history
 export const PeaceOfMindTab = ({
     seniorName,
     lastCheckIn,
-    completionRate,
+    tasks = [],
     symptomCount = 0,
     onSendPing,
     recentActivity = []
 }) => {
+    // Calculate completion rate from tasks
+    const totalTasks = tasks.length;
+    const completedTasks = tasks.filter(t => t.completed).length;
+    const completionRate = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 100;
+
     // Determine peace of mind status
     const getPeaceOfMindStatus = () => {
-        if (completionRate >= 80) return { label: 'Alt er vel ✨', color: 'bg-emerald-500', textColor: 'text-emerald-700' };
-        if (completionRate >= 50) return { label: 'God dag', color: 'bg-amber-400', textColor: 'text-amber-700' };
-        return { label: 'Tjek ind', color: 'bg-orange-400', textColor: 'text-orange-700' };
+        // Check for overdue tasks
+        const currentHour = new Date().getHours();
+        const morningTasks = tasks.filter(t => t.period === 'morgen');
+        const morningComplete = morningTasks.every(t => t.completed);
+        const afternoonTasks = tasks.filter(t => t.period === 'eftermiddag');
+        const afternoonComplete = afternoonTasks.every(t => t.completed);
+
+        // If morning is past and tasks incomplete, show warning
+        if (currentHour >= 12 && morningTasks.length > 0 && !morningComplete) {
+            return {
+                label: 'Morgen mangler',
+                sublabel: 'Ikke alle morgenopgaver er udført',
+                color: 'from-orange-500 to-orange-600',
+                icon: AlertCircle,
+                urgent: true
+            };
+        }
+
+        // If afternoon is past and tasks incomplete
+        if (currentHour >= 18 && afternoonTasks.length > 0 && !afternoonComplete) {
+            return {
+                label: 'Eftermiddag mangler',
+                sublabel: 'Ikke alle eftermiddagsopgaver er udført',
+                color: 'from-amber-500 to-amber-600',
+                icon: AlertCircle,
+                urgent: true
+            };
+        }
+
+        if (completionRate >= 80) {
+            return {
+                label: 'Alt er vel ✨',
+                sublabel: `${seniorName} har det godt`,
+                color: 'from-teal-500 to-teal-600',
+                icon: CheckCircle,
+                urgent: false
+            };
+        }
+        if (completionRate >= 50) {
+            return {
+                label: 'God dag',
+                sublabel: 'Dagen skrider fremad',
+                color: 'from-teal-500 to-teal-600',
+                icon: CheckCircle,
+                urgent: false
+            };
+        }
+        return {
+            label: 'Tjek ind',
+            sublabel: 'Der er opgaver at følge op på',
+            color: 'from-amber-500 to-amber-600',
+            icon: Clock,
+            urgent: false
+        };
     };
 
     const status = getPeaceOfMindStatus();
+    const StatusIcon = status.icon;
+
+    // Get period-specific stats for quick glance
+    const getMedicineStatus = () => {
+        const medTasks = tasks.filter(t => t.title?.toLowerCase().includes('medicin') || t.title?.toLowerCase().includes('pille'));
+        if (medTasks.length === 0) return { text: 'Ingen planlagt', color: 'text-stone-500' };
+        const completed = medTasks.filter(t => t.completed).length;
+        const total = medTasks.length;
+        if (completed === total) return { text: 'Alle taget ✓', color: 'text-green-600' };
+        return { text: `${completed}/${total} taget`, color: completed > 0 ? 'text-amber-600' : 'text-red-600' };
+    };
+
+    const medicineStatus = getMedicineStatus();
 
     return (
         <div className="space-y-4">
-            {/* HERO: Peace of Mind Card */}
-            <div className="bg-gradient-to-br from-teal-500 to-teal-600 rounded-2xl p-6 text-white shadow-lg">
+            {/* HERO: Peace of Mind Card with Gates Progress */}
+            <div className={`bg-gradient-to-br ${status.color} rounded-2xl p-6 text-white shadow-lg`}>
                 <div className="flex justify-between items-start mb-4">
-                    <div>
-                        <h2 className="text-2xl font-bold mb-1">{status.label}</h2>
-                        <p className="text-teal-100 text-sm">{seniorName} har det godt</p>
+                    <div className="flex items-center gap-3">
+                        <StatusIcon className={`w-8 h-8 ${status.urgent ? 'animate-pulse' : ''}`} />
+                        <div>
+                            <h2 className="text-2xl font-bold mb-0.5">{status.label}</h2>
+                            <p className="text-white/80 text-sm">{status.sublabel}</p>
+                        </div>
                     </div>
                     <ThinkingOfYouIconButton onSendPing={onSendPing} />
                 </div>
 
-                {/* Progress Ring */}
-                <div className="flex items-center gap-4">
-                    <div className="relative w-20 h-20">
-                        <svg className="w-20 h-20 transform -rotate-90">
-                            <circle
-                                cx="40"
-                                cy="40"
-                                r="32"
-                                stroke="rgba(255,255,255,0.2)"
-                                strokeWidth="8"
-                                fill="none"
-                            />
-                            <circle
-                                cx="40"
-                                cy="40"
-                                r="32"
-                                stroke="white"
-                                strokeWidth="8"
-                                fill="none"
-                                strokeDasharray={`${completionRate * 2.01} 201`}
-                                strokeLinecap="round"
-                            />
-                        </svg>
-                        <span className="absolute inset-0 flex items-center justify-center text-lg font-bold">
-                            {completionRate}%
-                        </span>
-                    </div>
-                    <div>
-                        <p className="text-sm text-teal-100">Dagens fremskridt</p>
-                        <p className="text-teal-50">Sidst set {lastCheckIn || '-'}</p>
-                    </div>
+                {/* Gates Progress Ring */}
+                <div className="flex items-center justify-center py-2">
+                    <ProgressRing
+                        tasks={tasks}
+                        size={140}
+                        strokeWidth={14}
+                        showLabels={true}
+                    />
+                </div>
+
+                <div className="text-center mt-2">
+                    <p className="text-sm text-white/70">Sidst set {lastCheckIn || '-'}</p>
                 </div>
             </div>
 
-            {/* Quick Glance Cards */}
+            {/* Quick Glance Cards - with color-coded status */}
             <div className="grid grid-cols-2 gap-3">
-                <div className="bg-white rounded-xl p-4 border-2 border-stone-100 shadow-sm">
+                <div className={`bg-white rounded-xl p-4 border-2 ${medicineStatus.color.includes('red') ? 'border-red-200' :
+                        medicineStatus.color.includes('amber') ? 'border-amber-200' :
+                            medicineStatus.color.includes('green') ? 'border-green-200' : 'border-stone-100'
+                    } shadow-sm`}>
                     <div className="flex items-center gap-2 mb-1">
-                        <Pill className="w-4 h-4 text-teal-500" />
+                        <Pill className={`w-4 h-4 ${medicineStatus.color.includes('red') ? 'text-red-500' :
+                                medicineStatus.color.includes('amber') ? 'text-amber-500' :
+                                    'text-teal-500'
+                            }`} />
                         <span className="text-xs text-stone-500 font-medium">Medicin</span>
                     </div>
-                    <p className="text-lg font-bold text-stone-800">{completionRate}% taget</p>
+                    <p className={`text-lg font-bold ${medicineStatus.color}`}>{medicineStatus.text}</p>
                 </div>
                 <div className={`bg-white rounded-xl p-4 border-2 ${symptomCount > 0 ? 'border-orange-200' : 'border-stone-100'} shadow-sm`}>
                     <div className="flex items-center gap-2 mb-1">
@@ -108,3 +168,4 @@ export const PeaceOfMindTab = ({
 };
 
 export default PeaceOfMindTab;
+

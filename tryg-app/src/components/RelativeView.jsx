@@ -14,31 +14,17 @@ import { AlertCircle } from 'lucide-react';
 export const RelativeView = ({
     tasks, profile, lastCheckIn, symptomLogs, onAddTask, familyStatus,
     onFamilyStatusChange, onSendPing, weeklyAnswers, onWeeklyAnswer,
-    helpOffers, helpRequests, onOpenSettings, userName = 'Pårørende', seniorName = 'Mor'
+    helpOffers, helpRequests,
+    relativeOffers = [], relativeRequests = [],
+    onAddRelativeOffer, onRemoveRelativeOffer, onAddRelativeRequest, onRemoveRelativeRequest,
+    onOpenSettings, userName = 'Pårørende', seniorName = 'Mor'
 }) => {
     const [showAddModal, setShowAddModal] = useState(false);
     const [showReport, setShowReport] = useState(false);
     const [showWeeklyModal, setShowWeeklyModal] = useState(false);
     const [newTaskTitle, setNewTaskTitle] = useState('');
     const [activeTab, setActiveTab] = useState('daily'); // 'daily' = Peace of Mind, 'family' = Coordination
-
-    // Relative's offers and requests (local state for now, could be synced to Firestore)
-    const [relativeOffers, setRelativeOffers] = useState([]);
-    const [relativeRequests, setRelativeRequests] = useState([]);
     const [activeMatch, setActiveMatch] = useState(null);
-
-    const handleAddRelativeOffer = (offer) => {
-        setRelativeOffers(prev => [...prev, { ...offer, createdBy: profile?.userId }]);
-    };
-    const handleRemoveRelativeOffer = (offerId) => {
-        setRelativeOffers(prev => prev.filter(o => o.id !== offerId));
-    };
-    const handleAddRelativeRequest = (request) => {
-        setRelativeRequests(prev => [...prev, { ...request, createdBy: profile?.userId }]);
-    };
-    const handleRemoveRelativeRequest = (requestId) => {
-        setRelativeRequests(prev => prev.filter(r => r.id !== requestId));
-    };
 
     const openTasks = tasks.filter(t => !t.completed);
     const completedTasksList = tasks.filter(t => t.completed);
@@ -104,7 +90,7 @@ export const RelativeView = ({
                     <PeaceOfMindTab
                         seniorName={seniorName}
                         lastCheckIn={lastCheckIn}
-                        completionRate={completionRate}
+                        tasks={tasks}
                         symptomCount={todaySymptomCount}
                         onSendPing={onSendPing}
                         recentActivity={[]} // TODO: Build activity feed from pings, tasks, etc.
@@ -119,10 +105,10 @@ export const RelativeView = ({
                         helpRequests={helpRequests}
                         relativeOffers={relativeOffers}
                         relativeRequests={relativeRequests}
-                        onAddRelativeOffer={handleAddRelativeOffer}
-                        onRemoveRelativeOffer={handleRemoveRelativeOffer}
-                        onAddRelativeRequest={handleAddRelativeRequest}
-                        onRemoveRelativeRequest={handleRemoveRelativeRequest}
+                        onAddRelativeOffer={onAddRelativeOffer}
+                        onRemoveRelativeOffer={onRemoveRelativeOffer}
+                        onAddRelativeRequest={onAddRelativeRequest}
+                        onRemoveRelativeRequest={onRemoveRelativeRequest}
                         openTasks={openTasks}
                         completedTasks={completedTasksList}
                         symptomLogs={symptomLogs}
