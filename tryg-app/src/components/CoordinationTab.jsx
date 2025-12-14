@@ -7,16 +7,19 @@ import { Button } from './ui/Button';
 import { SymptomSummary } from './SymptomSummary';
 import { StatusSelector, STATUS_OPTIONS } from './FamilyStatusCard';
 import { MatchBanner } from './MatchCelebration';
+import { FamilyPresence } from './FamilyPresence';
 import { RELATIVE_OFFERS, RELATIVE_REQUESTS } from '../config/helpExchangeConfig';
 import { useHelpExchangeMatch } from '../hooks/useHelpExchangeMatch';
 
 // Coordination Tab - practical management focused
-// Shows: Your status, HelpExchange (bidirectional), tasks, symptom details
+// Shows: Family presence, Your status, HelpExchange (bidirectional), tasks, symptom details
 export const CoordinationTab = ({
     seniorName,
     userName,
     myStatus = 'home',
     onMyStatusChange,
+    memberStatuses = [],
+    currentUserId = null,
     helpOffers = [],
     helpRequests = [],
     relativeOffers = [],
@@ -66,6 +69,15 @@ export const CoordinationTab = ({
                 <MatchBanner
                     match={topMatch}
                     onClick={() => onMatchAction?.(topMatch)}
+                />
+            )}
+
+            {/* Family Presence - "Familien Nu" */}
+            {memberStatuses.length > 0 && (
+                <FamilyPresence
+                    memberStatuses={memberStatuses}
+                    currentUserId={currentUserId}
+                    seniorName={seniorName}
                 />
             )}
 

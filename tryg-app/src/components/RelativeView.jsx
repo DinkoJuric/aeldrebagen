@@ -14,6 +14,7 @@ import { AlertCircle } from 'lucide-react';
 export const RelativeView = ({
     tasks, profile, lastCheckIn, symptomLogs, onAddTask,
     myStatus = 'home', onMyStatusChange,
+    memberStatuses = [], currentUserId = null,
     onSendPing, weeklyAnswers, onWeeklyAnswer,
     helpOffers, helpRequests,
     relativeOffers = [], relativeRequests = [],
@@ -102,6 +103,8 @@ export const RelativeView = ({
                         userName={userName}
                         myStatus={myStatus}
                         onMyStatusChange={onMyStatusChange}
+                        memberStatuses={memberStatuses}
+                        currentUserId={currentUserId}
                         helpOffers={helpOffers}
                         helpRequests={helpRequests}
                         relativeOffers={relativeOffers}

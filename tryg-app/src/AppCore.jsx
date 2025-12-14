@@ -46,6 +46,7 @@ export default function TrygAppCore({
     const { settings } = useSettings(careCircle?.id);
     // Per-member status tracking (each member has their own status)
     const {
+        memberStatuses,
         myStatus,
         setMyStatus,
         relativeStatuses,
@@ -347,6 +348,8 @@ export default function TrygAppCore({
                             onAddTask={handleAddTaskFromRelative}
                             myStatus={myStatus}
                             onMyStatusChange={setMyStatus}
+                            memberStatuses={memberStatuses}
+                            currentUserId={user?.uid}
                             onSendPing={() => handleSendPing(relativeName, 'senior')}
                             weeklyAnswers={weeklyAnswers}
                             onWeeklyAnswer={handleWeeklyAnswer}
