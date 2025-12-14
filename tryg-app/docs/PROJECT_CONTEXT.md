@@ -8,11 +8,14 @@ Last updated: 2025-12-13
 - **Routing**: Role-based views (`SeniorView` vs `RelativeView`) determined by `userProfile.role`
 - **Data Flow**: Real-time sync via Firestore listeners in custom hooks (`useAuth`, `useSettings`, `useTasks`, etc.)
 - **Match System**: `useHelpExchangeMatch` detects alignment (Offer ↔ Request) and triggers `MatchCelebration`
+- **Connection History**: `PeceOfMindTab` aggregates completed tasks and symptoms into a "Familiens hjerteslag" feed
+- **Bidirectional Presence**: `FamilyPresence` component replciates status tracking for both Seniors (Health) and Relatives (Availability)
+- **Inline Gates**: `InlineGatesIndicator` replaces static status text in Senior View for real-time compliance feedback
 - **Tab Differentiation**: RelativeView splits emotional reassurance ("Min Dag") from logistical work ("Familie" Tab)
 - **UI Consistency**: Senior UI aligns with Relative UI (Tag-based Dashboards) to empower seniors
 - **Feature Flags**: Toggle in `src/config/features.js`
 - **Error Handling**: Whitelist sanitization for Firestore data (prevents Symbol property serialization errors)
-- **Responsive Strategy**: Mobile-first full width (`100dvh`) vs Desktop Phone Simulator (`AppCore.jsx`)
+- **Responsive Strategy**: Mobile-first full width (`100dvh`) with `viewport-fit=cover` for iOS safely handling safe areas
 
 ## Key Files
 

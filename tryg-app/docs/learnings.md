@@ -320,3 +320,29 @@ Actionable learnings for avoiding roadblocks. Format: **Problem** → **Action T
    - "Element type is invalid" = undefined component being rendered
    - Look for dynamic component references like `<item.icon />` or `<Component />`
 
+---
+
+## Mobile & UI
+
+### iOS Viewport Whitespace
+- **Problem**: White bar appeared above header on iOS devices (Senior View)
+- **Action**: Removed `viewport-fit=cover` from meta tag (or adjusted it)
+- **Learnings**: `viewport-fit=cover` expands content into the notch area. If you don't handle `safe-area-inset-top` padding manually, content gets obscured or creates awkward gaps.
+- **Future**: Use standard viewport for PWA unless specifically designing immersive edge-to-edge UI with safe-area env vars.
+
+---
+
+## Testing
+
+### Testing Case-Sensitive text
+- **Problem**: Integration tests failed because "Din Status" changed to "Din status"
+- **Action**: Used Regex with `i` flag: `screen.getByText(/Din status/i)`
+- **Learnings**: UI text capitalization changes often. Hardcoded string matchers are brittle.
+- **Future**: Always use case-insensitive Regex matchers (`/Text/i`) for UI labels in tests unless capitalization is critical to functionality.
+
+### PowerShell Command Chaining
+- **Problem**: Deployment command failed with `The token '&&' is not a valid statement separator`.
+- **Action**: Switched from `&&` (Bash/PS 7+) to `;` (Windows PS 5.1) or separate commands.
+- **Learnings**: Many Windows environments still run PowerShell 5.1 which does not support the `&&` operator.
+- **Future**: On Windows, use `;` to chain commands or `if ($?) { ... }` for conditional execution. Never assume `&&` support.
+

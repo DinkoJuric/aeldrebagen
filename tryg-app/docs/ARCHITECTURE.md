@@ -92,7 +92,7 @@ careCircles/
       ├── createdAt
       │
       ├── tasks/
-      │   └── {taskId}: title, time, period, completed
+      │   └── {taskId}: title, time, period, completed, completedAt  ← Used for activity feed
       │
       ├── symptoms/
       │   └── {symptomId}: type, location, timestamp

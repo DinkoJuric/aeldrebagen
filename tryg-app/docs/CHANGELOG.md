@@ -31,6 +31,18 @@ All notable changes to this project will be documented in this file.
 **Debug Logging**
 - Added `[useMemberStatus]` and `[SeniorView]` debug logs for status tracking
 
+**Families Hjerteslag (Connection History)**
+- New activity feed in RelativeView (Peace of Mind tab)
+- Aggregates completed tasks and logged symptoms into a chronological timeline
+- Gives relatives immediate context on senior's day
+
+**UI Polish & Refinements**
+- **Inline Gates**: Replaced static "Alt er vel" with dynamic 3-segment progress indicator in Senior Header
+- **Match Celebration**: Enhanced with premium gradients and pulsing animations
+- **Din Status**: Moved to top of Coordination tab in compact inline format
+- **iOS Fix**: Adjusted viewport meta tag to prevent top whitespace
+
+
 ---
 
 ## [1.6.0] - 2025-12-13
