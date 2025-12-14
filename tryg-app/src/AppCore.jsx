@@ -45,29 +45,25 @@ export default function TrygAppCore({
     const { settings, familyStatus, setFamilyStatus } = useSettings(careCircle?.id);
     const { answers: weeklyAnswers, addAnswer: addWeeklyAnswer } = useWeeklyQuestions(careCircle?.id);
     const { latestPing, sendPing, dismissPing } = usePings(careCircle?.id, user?.uid);
-    const { helpOffers, helpRequests, addOffer, addRequest, removeOffer, removeRequest } = useHelpExchange(careCircle?.id);
+    const {
+        helpOffers: allOffers,
+        helpRequests: allRequests,
+        addOffer,
+        addRequest,
+        removeOffer,
+        removeRequest
+    } = useHelpExchange(careCircle?.id, user?.uid, userProfile?.role);
     const { lastCheckIn, recordCheckIn } = useCheckIn(careCircle?.id);
     const { latestPhoto, uploading, uploadPhoto, deletePhoto } = usePhotos(careCircle?.id, user?.uid);
 
-    // Dummy state for relative offers/requests (for demo/match detection)
-    // Ideally this would come from a useRelativeHelpExchange hook backed by Firestore
-    const [relativeOffers, setRelativeOffers] = useState([
-        { id: 'garden', label: 'Hjælpe i haven', emoji: '🌿', createdBy: 'fatima', createdByRole: 'relative' }
-    ]);
-    const [relativeRequests, setRelativeRequests] = useState([]);
+    // Filter offers/requests by role for the Match System
+    // Senior's items: created by senior
+    const helpOffers = allOffers.filter(o => o.createdByRole === 'senior');
+    const helpRequests = allRequests.filter(r => r.createdByRole === 'senior');
+    // Relative's items: created by relatives
+    const relativeOffers = allOffers.filter(o => o.createdByRole === 'relative');
+    const relativeRequests = allRequests.filter(r => r.createdByRole === 'relative');
 
-    const handleAddRelativeOffer = (offer) => {
-        setRelativeOffers(prev => [...prev, { ...offer, createdBy: userProfile?.userId }]);
-    };
-    const handleRemoveRelativeOffer = (offerId) => {
-        setRelativeOffers(prev => prev.filter(o => o.id !== offerId));
-    };
-    const handleAddRelativeRequest = (request) => {
-        setRelativeRequests(prev => [...prev, { ...request, createdBy: userProfile?.userId }]);
-    };
-    const handleRemoveRelativeRequest = (requestId) => {
-        setRelativeRequests(prev => prev.filter(r => r.id !== requestId));
-    };
 
     // Handle incoming pings from Firestore
     useEffect(() => {
@@ -132,9 +128,11 @@ export default function TrygAppCore({
     // Get display names
     const seniorName = careCircle?.seniorName || (userProfile?.role === 'senior' ? userProfile?.displayName : 'Senior');
 
-    // Find the relative's name from members list
-    const relativeMember = members.find(m => m.role === 'relative');
-    const relativeName = relativeMember?.displayName || 'Pårørende';
+    // For relatives, use the LOGGED-IN user's name, not just any relative in the circle
+    const relativeName = userProfile?.role === 'relative'
+        ? userProfile?.displayName || 'Pårørende'
+        : members.find(m => m.role === 'relative')?.displayName || 'Pårørende';
+
     const profile = {
         ...SENIOR_PROFILE,
         name: seniorName,
@@ -347,10 +345,10 @@ export default function TrygAppCore({
                             helpRequests={helpRequests}
                             relativeOffers={relativeOffers}
                             relativeRequests={relativeRequests}
-                            onAddRelativeOffer={handleAddRelativeOffer}
-                            onRemoveRelativeOffer={handleRemoveRelativeOffer}
-                            onAddRelativeRequest={handleAddRelativeRequest}
-                            onRemoveRelativeRequest={handleRemoveRelativeRequest}
+                            onAddRelativeOffer={addOffer}
+                            onRemoveRelativeOffer={removeOffer}
+                            onAddRelativeRequest={addRequest}
+                            onRemoveRelativeRequest={removeRequest}
                             onOpenSettings={() => setShowPrivacySettings(true)}
                             userName={relativeName}
                             seniorName={seniorName}

@@ -15,7 +15,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../config/firebase';
 
-export function useHelpExchange(circleId) {
+export function useHelpExchange(circleId, userId = null, userRole = null) {
     const [helpOffers, setHelpOffers] = useState([]);
     const [helpRequests, setHelpRequests] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -98,6 +98,8 @@ export function useHelpExchange(circleId) {
         try {
             await setDoc(offerRef, {
                 ...sanitizeHelpData(offer),
+                createdByUid: userId,
+                createdByRole: userRole,
                 createdAt: serverTimestamp(),
             });
             return offerId;
@@ -106,7 +108,7 @@ export function useHelpExchange(circleId) {
             setError(err.message);
             throw err;
         }
-    }, [circleId]);
+    }, [circleId, userId, userRole]);
 
     // Add a help request
     const addRequest = useCallback(async (request) => {
@@ -118,6 +120,8 @@ export function useHelpExchange(circleId) {
         try {
             await setDoc(requestRef, {
                 ...sanitizeHelpData(request),
+                createdByUid: userId,
+                createdByRole: userRole,
                 createdAt: serverTimestamp(),
             });
             return requestId;
@@ -126,7 +130,7 @@ export function useHelpExchange(circleId) {
             setError(err.message);
             throw err;
         }
-    }, [circleId]);
+    }, [circleId, userId, userRole]);
 
     // Remove an offer
     const removeOffer = useCallback(async (offerId) => {
