@@ -232,24 +232,30 @@ export const CoordinationTab = ({
                 </div>
             </div>
 
-            {/* Symptoms - Collapsible */}
-            {symptomLogs.length > 0 && (
-                <div>
-                    <button
-                        onClick={() => setShowSymptoms(!showSymptoms)}
-                        className="w-full flex items-center justify-between text-sm font-bold text-stone-500 uppercase tracking-wider mb-3 pl-1"
-                    >
-                        <span className="flex items-center gap-2">
-                            <AlertCircle className="w-4 h-4 text-orange-500" />
-                            Symptomer ({symptomLogs.length})
-                        </span>
-                        {showSymptoms ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                    </button>
-                    {showSymptoms && (
-                        <SymptomSummary symptomLogs={symptomLogs} onViewReport={onViewReport} />
-                    )}
-                </div>
-            )}
+            {/* Symptoms - Collapsible (today's symptoms only in header) */}
+            {(() => {
+                const todaySymptoms = symptomLogs.filter(s => {
+                    const date = s.loggedAt?.toDate ? s.loggedAt.toDate() : new Date(s.loggedAt);
+                    return date.toDateString() === new Date().toDateString();
+                });
+                return symptomLogs.length > 0 && (
+                    <div>
+                        <button
+                            onClick={() => setShowSymptoms(!showSymptoms)}
+                            className="w-full flex items-center justify-between text-sm font-bold text-stone-500 uppercase tracking-wider mb-3 pl-1"
+                        >
+                            <span className="flex items-center gap-2">
+                                <AlertCircle className="w-4 h-4 text-orange-500" />
+                                Symptomer i dag ({todaySymptoms.length})
+                            </span>
+                            {showSymptoms ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                        </button>
+                        {showSymptoms && (
+                            <SymptomSummary symptomLogs={symptomLogs} onViewReport={onViewReport} />
+                        )}
+                    </div>
+                );
+            })()}
 
             {/* Open Tasks - Collapsible */}
             {openTasks.length > 0 && (

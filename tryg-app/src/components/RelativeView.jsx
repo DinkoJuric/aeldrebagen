@@ -105,6 +105,7 @@ export const RelativeView = ({
                         tasks={tasks}
                         symptomCount={todaySymptomCount}
                         onSendPing={onSendPing}
+                        onViewSymptoms={() => setActiveTab('family')}
                         recentActivity={[]} // TODO: Build activity feed from pings, tasks, etc.
                     />
                 ) : (
@@ -168,8 +169,8 @@ export const RelativeView = ({
                                     key={period.id}
                                     onClick={() => setNewTaskPeriod(period.id)}
                                     className={`p-3 rounded-xl border-2 text-left transition-all ${newTaskPeriod === period.id
-                                            ? 'border-indigo-500 bg-indigo-50'
-                                            : 'border-slate-200 hover:border-indigo-300'
+                                        ? 'border-indigo-500 bg-indigo-50'
+                                        : 'border-slate-200 hover:border-indigo-300'
                                         }`}
                                 >
                                     <span className="text-lg mr-1">{period.emoji}</span>
