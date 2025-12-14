@@ -102,6 +102,13 @@ careCircles/
       ├── pings/
       │   └── {pingId}: fromName, toRole, sentAt
       │
+      ├── memberStatuses/           ← NEW: Per-member status tracking
+      │   └── {userId}
+      │       ├── status: 'home' | 'work' | 'traveling' | 'available' | 'busy'
+      │       ├── displayName
+      │       ├── role: 'senior' | 'relative'
+      │       └── updatedAt
+      │
       ├── helpOffers/
       │   └── {offerId}
       │       ├── id, label, emoji

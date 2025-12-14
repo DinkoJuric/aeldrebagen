@@ -12,8 +12,9 @@ import { SYMPTOMS_LIST } from '../data/constants';
 import { AlertCircle } from 'lucide-react';
 
 export const RelativeView = ({
-    tasks, profile, lastCheckIn, symptomLogs, onAddTask, familyStatus,
-    onFamilyStatusChange, onSendPing, weeklyAnswers, onWeeklyAnswer,
+    tasks, profile, lastCheckIn, symptomLogs, onAddTask,
+    myStatus = 'home', onMyStatusChange,
+    onSendPing, weeklyAnswers, onWeeklyAnswer,
     helpOffers, helpRequests,
     relativeOffers = [], relativeRequests = [],
     onAddRelativeOffer, onRemoveRelativeOffer, onAddRelativeRequest, onRemoveRelativeRequest,
@@ -99,8 +100,8 @@ export const RelativeView = ({
                     <CoordinationTab
                         seniorName={seniorName}
                         userName={userName}
-                        familyStatus={familyStatus}
-                        onFamilyStatusChange={onFamilyStatusChange}
+                        myStatus={myStatus}
+                        onMyStatusChange={onMyStatusChange}
                         helpOffers={helpOffers}
                         helpRequests={helpRequests}
                         relativeOffers={relativeOffers}

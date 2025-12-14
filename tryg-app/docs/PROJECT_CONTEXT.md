@@ -45,6 +45,7 @@ Last updated: 2025-12-13
 | 2025-12-13 | Auth/Profile Loading Guard | Wait for `userProfile` before rendering main app to prevent `RelativeView` flash |
 | 2025-12-13 | RelativeView visual parity | Unified `stone-*` color scheme across both views, consistent `rounded-b-3xl` headers |
 | 2025-12-13 | Test user script | Created `scripts/create-test-user.mjs` for E2E testing without OAuth |
+| 2025-12-14 | Per-member status tracking | Each relative has own status in `memberStatuses/{userId}`, replaces shared `familyStatus` |
 
 ---
 

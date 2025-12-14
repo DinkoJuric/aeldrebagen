@@ -15,8 +15,8 @@ import { useHelpExchangeMatch } from '../hooks/useHelpExchangeMatch';
 export const CoordinationTab = ({
     seniorName,
     userName,
-    familyStatus,
-    onFamilyStatusChange,
+    myStatus = 'home',
+    onMyStatusChange,
     helpOffers = [],
     helpRequests = [],
     relativeOffers = [],
@@ -39,7 +39,7 @@ export const CoordinationTab = ({
     const [showOfferPicker, setShowOfferPicker] = useState(false);
     const [showRequestPicker, setShowRequestPicker] = useState(false);
 
-    const currentStatusInfo = STATUS_OPTIONS.find(s => s.id === familyStatus) || STATUS_OPTIONS[0];
+    const currentStatusInfo = STATUS_OPTIONS.find(s => s.id === myStatus) || STATUS_OPTIONS[0];
     const StatusIcon = currentStatusInfo.icon;
 
     // Combine all offers and requests for match detection
@@ -56,7 +56,7 @@ export const CoordinationTab = ({
     const { topMatch, hasMatches } = useHelpExchangeMatch({
         offers: allOffers,
         requests: allRequests,
-        familyStatus
+        familyStatus: myStatus
     });
 
     return (
@@ -79,9 +79,9 @@ export const CoordinationTab = ({
                 {showStatusPicker ? (
                     <div className="bg-white/10 rounded-xl p-3">
                         <StatusSelector
-                            currentStatus={familyStatus}
+                            currentStatus={myStatus}
                             onStatusChange={(newStatus) => {
-                                onFamilyStatusChange(newStatus);
+                                onMyStatusChange(newStatus);
                                 setShowStatusPicker(false);
                             }}
                         />

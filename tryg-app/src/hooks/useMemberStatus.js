@@ -1,0 +1,107 @@
+// Member Status hook - per-member status tracking via Firestore
+// Allows each family member to have their own status (visible to others in the circle)
+
+import { useState, useEffect, useCallback } from 'react';
+import {
+    collection,
+    doc,
+    setDoc,
+    onSnapshot,
+    serverTimestamp,
+    query
+} from 'firebase/firestore';
+import { db } from '../config/firebase';
+
+/**
+ * Hook to manage per-member status in a care circle
+ * Each member's status is stored separately in memberStatuses/{userId}
+ * 
+ * @param {string} circleId - The care circle ID
+ * @param {string} userId - Current user's ID
+ * @param {string} displayName - Current user's display name
+ * @param {string} role - Current user's role ('senior' | 'relative')
+ */
+export function useMemberStatus(circleId, userId, displayName, role) {
+    const [memberStatuses, setMemberStatuses] = useState([]);
+    const [myStatus, setMyStatusState] = useState('home');
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    // Subscribe to all member statuses in the circle
+    useEffect(() => {
+        if (!circleId) {
+            setMemberStatuses([]);
+            setLoading(false);
+            return;
+        }
+
+        const statusesRef = collection(db, 'careCircles', circleId, 'memberStatuses');
+        const statusesQuery = query(statusesRef);
+
+        const unsubscribe = onSnapshot(statusesQuery,
+            (snapshot) => {
+                const statuses = snapshot.docs.map(docSnap => ({
+                    odId: docSnap.id, // This is the userId
+                    ...docSnap.data()
+                }));
+                setMemberStatuses(statuses);
+
+                // Update my own status from the fetched data
+                const myStatusDoc = statuses.find(s => s.odId === userId);
+                if (myStatusDoc) {
+                    setMyStatusState(myStatusDoc.status);
+                }
+
+                setLoading(false);
+            },
+            (err) => {
+                console.error('Error fetching member statuses:', err);
+                setError(err.message);
+                setLoading(false);
+            }
+        );
+
+        return () => unsubscribe();
+    }, [circleId, userId]);
+
+    // Update current user's status
+    const setMyStatus = useCallback(async (status) => {
+        if (!circleId || !userId) return;
+
+        const statusRef = doc(db, 'careCircles', circleId, 'memberStatuses', userId);
+
+        try {
+            await setDoc(statusRef, {
+                status,
+                displayName: displayName || 'Ukendt',
+                role: role || 'relative',
+                updatedAt: serverTimestamp(),
+            }, { merge: true });
+
+            // Optimistic update
+            setMyStatusState(status);
+        } catch (err) {
+            console.error('Error updating member status:', err);
+            setError(err.message);
+            throw err;
+        }
+    }, [circleId, userId, displayName, role]);
+
+    // Get relative statuses only (for senior to see)
+    const relativeStatuses = memberStatuses.filter(s => s.role === 'relative');
+
+    // Get senior status (for relatives to see)
+    const seniorStatus = memberStatuses.find(s => s.role === 'senior');
+
+    return {
+        memberStatuses,      // All members' statuses
+        relativeStatuses,    // Only relatives (for SeniorView)
+        seniorStatus,        // Only senior (for RelativeView)
+        myStatus,            // Current user's status
+        setMyStatus,         // Update current user's status
+        loading,
+        error,
+    };
+}
+
+export default useMemberStatus;

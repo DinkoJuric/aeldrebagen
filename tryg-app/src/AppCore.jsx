@@ -16,6 +16,7 @@ import { usePings } from './hooks/usePings';
 import { useHelpExchange } from './hooks/useHelpExchange';
 import { useCheckIn } from './hooks/useCheckIn';
 import { usePhotos } from './hooks/usePhotos';
+import { useMemberStatus } from './hooks/useMemberStatus';
 import { SENIOR_PROFILE } from './data/constants';
 import { playCompletionSound, playSuccessSound, playPingSound } from './utils/sounds';
 import { FEATURES } from './config/features';
@@ -42,7 +43,14 @@ export default function TrygAppCore({
     // Firebase hooks for real-time data
     const { tasks, toggleTask, addTask } = useTasks(careCircle?.id);
     const { symptoms, addSymptom } = useSymptoms(careCircle?.id);
-    const { settings, familyStatus, setFamilyStatus } = useSettings(careCircle?.id);
+    const { settings } = useSettings(careCircle?.id);
+    // Per-member status tracking (each member has their own status)
+    const {
+        myStatus,
+        setMyStatus,
+        relativeStatuses,
+        seniorStatus
+    } = useMemberStatus(careCircle?.id, user?.uid, userProfile?.displayName, userProfile?.role);
     const { answers: weeklyAnswers, addAnswer: addWeeklyAnswer } = useWeeklyQuestions(careCircle?.id);
     const { latestPing, sendPing, dismissPing } = usePings(careCircle?.id, user?.uid);
     const {
@@ -326,6 +334,7 @@ export default function TrygAppCore({
                             onRemoveOffer={removeOffer}
                             onRemoveRequest={removeRequest}
                             members={members}
+                            relativeStatuses={relativeStatuses}
                             userName={seniorName}
                             relativeName={relativeName}
                         />
@@ -336,8 +345,8 @@ export default function TrygAppCore({
                             lastCheckIn={lastCheckIn}
                             symptomLogs={symptoms}
                             onAddTask={handleAddTaskFromRelative}
-                            familyStatus={familyStatus}
-                            onFamilyStatusChange={setFamilyStatus}
+                            myStatus={myStatus}
+                            onMyStatusChange={setMyStatus}
                             onSendPing={() => handleSendPing(relativeName, 'senior')}
                             weeklyAnswers={weeklyAnswers}
                             onWeeklyAnswer={handleWeeklyAnswer}

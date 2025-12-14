@@ -28,10 +28,10 @@ import { useHelpExchangeMatch } from '../hooks/useHelpExchangeMatch';
 import { MatchCelebration } from './MatchCelebration';
 
 export const SeniorView = ({
-    tasks, toggleTask, updateStatus, addSymptom, familyStatus, statusLastUpdated, onSendPing,
+    tasks, toggleTask, updateStatus, addSymptom, statusLastUpdated, onSendPing,
     weeklyAnswers, onWeeklyAnswer, helpOffers, helpRequests, relativeOffers = [], relativeRequests = [],
     onHelpOffer, onHelpRequest,
-    onRemoveOffer, onRemoveRequest, members = [],
+    onRemoveOffer, onRemoveRequest, members = [], relativeStatuses = [],
     userName = 'Senior', relativeName = 'Familie'
 }) => {
     const [showCallModal, setShowCallModal] = useState(false);
@@ -281,7 +281,7 @@ export const SeniorView = ({
                         {FEATURES.familyStatusCard && (
                             <FamilyStatusList
                                 members={members}
-                                familyStatus={familyStatus}
+                                relativeStatuses={relativeStatuses}
                                 lastUpdated={statusLastUpdated}
                             />
                         )}

@@ -85,17 +85,17 @@ export const StatusSelector = ({ currentStatus, onStatusChange }) => {
 };
 
 // List of family members with their status - for SeniorView with multiple relatives
-// Caps at 3 displayed, shows "+N more" for additional members
+// Now uses relativeStatuses array for per-member status tracking
 export const FamilyStatusList = ({
     members = [],
-    familyStatus,
+    relativeStatuses = [],
     lastUpdated,
     maxDisplay = 3
 }) => {
     // Filter to only relatives (not the senior themselves)
     const relatives = members.filter(m => m.role === 'relative');
 
-    if (relatives.length === 0) {
+    if (relatives.length === 0 && relativeStatuses.length === 0) {
         return (
             <div className="bg-white rounded-2xl p-4 shadow-sm border-2 border-stone-100 mb-4">
                 <p className="text-stone-400 text-sm text-center">Ingen pårørende endnu</p>
@@ -103,17 +103,22 @@ export const FamilyStatusList = ({
         );
     }
 
-    const displayedMembers = relatives.slice(0, maxDisplay);
-    const hiddenCount = Math.max(0, relatives.length - maxDisplay);
+    // Prefer relativeStatuses if available (per-member), fall back to members list
+    const statusData = relativeStatuses.length > 0
+        ? relativeStatuses
+        : relatives.map(m => ({ displayName: m.displayName, status: 'home', updatedAt: null }));
+
+    const displayedMembers = statusData.slice(0, maxDisplay);
+    const hiddenCount = Math.max(0, statusData.length - maxDisplay);
 
     return (
         <div className="space-y-2 mb-4">
-            {displayedMembers.map((member) => (
+            {displayedMembers.map((member, index) => (
                 <FamilyStatusCard
-                    key={member.userId || member.id}
-                    familyName={member.displayName}
-                    familyStatus={familyStatus}
-                    lastUpdated={lastUpdated}
+                    key={member.odId || member.userId || index}
+                    familyName={member.displayName || 'Pårørende'}
+                    familyStatus={member.status}
+                    lastUpdated={member.updatedAt || lastUpdated}
                 />
             ))}
             {hiddenCount > 0 && (

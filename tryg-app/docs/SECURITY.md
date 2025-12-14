@@ -51,6 +51,12 @@ match /users/{userId} {
 match /careCircles/{circleId}/tasks/{taskId} {
   allow read, write: if isMemberOfCircle(circleId);
 }
+
+// Member statuses: anyone in circle can read, only self can write
+match /careCircles/{circleId}/memberStatuses/{userId} {
+  allow read: if isMemberOfCircle(circleId);
+  allow write: if request.auth.uid == userId && isMemberOfCircle(circleId);
+}
 ```
 
 ### Deploying Rules
