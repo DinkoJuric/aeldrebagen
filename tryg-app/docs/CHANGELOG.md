@@ -2,6 +2,37 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.7.0] - 2025-12-14
+
+### 💕 Connection-Focused Design
+
+**Per-Member Status Tracking**
+- Each family member now has their own status (replaces shared `familyStatus`)
+- New `useMemberStatus` hook with Firestore subcollection `memberStatuses/{userId}`
+- Stores: status, displayName, role, updatedAt per member
+
+**FamilyPresence Component** ("Familien Nu")
+- New modular component showing all family members' current statuses
+- Added to both RelativeView (Familie tab) and SeniorView (Familie tab)
+- Bidirectional: Seniors see relatives' statuses, relatives see each other
+- Displays role-appropriate labels (Senior: "Har det godt", Relative: "Hjemme")
+- Shows update timestamps ("for 2 timer siden")
+- Marks current user with "(dig)"
+
+**HelpExchange Attribution Fix**
+- Added `createdByName` field to offers/requests
+- Match popup and feed now show actual creator names
+
+**Behavioral Science Framework**
+- Documented 7 principles in Background.md: Variable Reward, Social Proof, 
+  Reciprocity, Progressive Disclosure, Chunking, Ambient Awareness, 
+  Commitment & Consistency
+
+**Debug Logging**
+- Added `[useMemberStatus]` and `[SeniorView]` debug logs for status tracking
+
+---
+
 ## [1.6.0] - 2025-12-13
 
 ### 👨‍👩‍👧 Family Features Enhancement

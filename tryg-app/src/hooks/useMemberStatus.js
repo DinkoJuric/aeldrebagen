@@ -44,6 +44,10 @@ export function useMemberStatus(circleId, userId, displayName, role) {
                     docId: docSnap.id, // This is the userId
                     ...docSnap.data()
                 }));
+
+                // Debug: Log status changes
+                console.log('[useMemberStatus] Received statuses:', statuses.length, statuses.map(s => `${s.displayName}: ${s.status}`));
+
                 setMemberStatuses(statuses);
 
                 // Update my own status from the fetched data

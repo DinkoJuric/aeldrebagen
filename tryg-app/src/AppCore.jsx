@@ -321,7 +321,6 @@ export default function TrygAppCore({
                             toggleTask={handleToggleTask}
                             updateStatus={handleCheckIn}
                             addSymptom={handleAddSymptom}
-                            familyStatus={familyStatus}
                             statusLastUpdated={settings?.lastUpdated}
                             onSendPing={() => handleSendPing(seniorName, 'relative')}
                             weeklyAnswers={weeklyAnswers}
@@ -335,6 +334,8 @@ export default function TrygAppCore({
                             onRemoveOffer={removeOffer}
                             onRemoveRequest={removeRequest}
                             members={members}
+                            memberStatuses={memberStatuses}
+                            currentUserId={user?.uid}
                             relativeStatuses={relativeStatuses}
                             userName={seniorName}
                             relativeName={relativeName}

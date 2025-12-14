@@ -54,6 +54,7 @@ tryg-app/
 │   │   ├── usePings.js      # "Thinking of you" notifications
 │   │   ├── useWeeklyQuestions.js
 │   │   ├── useHelpExchange.js
+│   │   ├── useMemberStatus.js  # Per-member status tracking (NEW)
 │   │   └── useCheckIn.js    # Senior check-in tracking
 │   │
 │   ├── config/

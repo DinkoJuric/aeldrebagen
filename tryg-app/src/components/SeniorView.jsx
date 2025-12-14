@@ -16,6 +16,7 @@ import {
 import { Button } from './ui/Button';
 import { Modal } from './ui/Modal';
 import { FamilyStatusCard, FamilyStatusList } from './FamilyStatusCard';
+import { FamilyPresence } from './FamilyPresence';
 import { ThinkingOfYouButton } from './ThinkingOfYou';
 import { BodyPainSelector } from './BodyPainSelector';
 import { MemoryTrigger } from './WeeklyQuestion';
@@ -31,7 +32,7 @@ export const SeniorView = ({
     tasks, toggleTask, updateStatus, addSymptom, statusLastUpdated, onSendPing,
     weeklyAnswers, onWeeklyAnswer, helpOffers, helpRequests, relativeOffers = [], relativeRequests = [],
     onHelpOffer, onHelpRequest,
-    onRemoveOffer, onRemoveRequest, members = [], relativeStatuses = [],
+    onRemoveOffer, onRemoveRequest, members = [], memberStatuses = [], currentUserId = null, relativeStatuses = [],
     userName = 'Senior', relativeName = 'Familie'
 }) => {
     const [showCallModal, setShowCallModal] = useState(false);
@@ -277,8 +278,21 @@ export const SeniorView = ({
                 {/* ===== FAMILY TAB ===== */}
                 {(!FEATURES.tabbedLayout || activeTab === 'family') && (
                     <>
-                        {/* Family Status - toggle with FEATURES.familyStatusCard */}
-                        {FEATURES.familyStatusCard && (
+                        {/* Family Presence - "Familien Nu" for bidirectional visibility */}
+                        {memberStatuses.length > 0 && (
+                            <>
+                                {/* Debug: Log memberStatuses on render */}
+                                {console.log('[SeniorView] memberStatuses:', memberStatuses)}
+                                <FamilyPresence
+                                    memberStatuses={memberStatuses}
+                                    currentUserId={currentUserId}
+                                    seniorName={userName}
+                                />
+                            </>
+                        )}
+
+                        {/* Legacy Family Status List - fallback if no memberStatuses */}
+                        {FEATURES.familyStatusCard && memberStatuses.length === 0 && (
                             <FamilyStatusList
                                 members={members}
                                 relativeStatuses={relativeStatuses}
