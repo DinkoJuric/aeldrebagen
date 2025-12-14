@@ -109,18 +109,18 @@ export const CoordinationTab = ({
                     Familie-udveksling
                 </h3>
 
-                {/* Senior's offers/requests */}
+                {/* Senior's offers/requests - show with creator name */}
                 {(helpOffers.length > 0 || helpRequests.length > 0) && (
                     <div className="space-y-2">
                         <p className="text-xs font-bold text-stone-500 uppercase">Fra {seniorName}:</p>
                         <div className="flex flex-wrap gap-2">
                             {helpOffers.map((offer, i) => (
-                                <span key={`so-${i}`} className="text-sm bg-teal-100 text-teal-700 px-3 py-1.5 rounded-full">
+                                <span key={`so-${i}`} className="text-sm bg-teal-100 text-teal-700 px-3 py-1.5 rounded-full" title={`Fra: ${offer.createdByName || seniorName}`}>
                                     💚 {offer.label}
                                 </span>
                             ))}
                             {helpRequests.map((req, i) => (
-                                <span key={`sr-${i}`} className="text-sm bg-indigo-100 text-indigo-700 px-3 py-1.5 rounded-full">
+                                <span key={`sr-${i}`} className="text-sm bg-indigo-100 text-indigo-700 px-3 py-1.5 rounded-full" title={`Fra: ${req.createdByName || seniorName}`}>
                                     💜 {req.label}
                                 </span>
                             ))}

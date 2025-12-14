@@ -15,7 +15,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../config/firebase';
 
-export function useHelpExchange(circleId, userId = null, userRole = null) {
+export function useHelpExchange(circleId, userId = null, userRole = null, displayName = null) {
     const [helpOffers, setHelpOffers] = useState([]);
     const [helpRequests, setHelpRequests] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -100,6 +100,7 @@ export function useHelpExchange(circleId, userId = null, userRole = null) {
                 ...sanitizeHelpData(offer),
                 createdByUid: userId,
                 createdByRole: userRole,
+                createdByName: displayName || 'Ukendt',
                 createdAt: serverTimestamp(),
             });
             return offerId;
@@ -108,7 +109,7 @@ export function useHelpExchange(circleId, userId = null, userRole = null) {
             setError(err.message);
             throw err;
         }
-    }, [circleId, userId, userRole]);
+    }, [circleId, userId, userRole, displayName]);
 
     // Add a help request
     const addRequest = useCallback(async (request) => {
@@ -122,6 +123,7 @@ export function useHelpExchange(circleId, userId = null, userRole = null) {
                 ...sanitizeHelpData(request),
                 createdByUid: userId,
                 createdByRole: userRole,
+                createdByName: displayName || 'Ukendt',
                 createdAt: serverTimestamp(),
             });
             return requestId;
@@ -130,7 +132,7 @@ export function useHelpExchange(circleId, userId = null, userRole = null) {
             setError(err.message);
             throw err;
         }
-    }, [circleId, userId, userRole]);
+    }, [circleId, userId, userRole, displayName]);
 
     // Remove an offer
     const removeOffer = useCallback(async (offerId) => {

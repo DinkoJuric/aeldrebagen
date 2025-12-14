@@ -75,7 +75,7 @@ export const MatchCelebration = ({
                         <div className="flex items-center gap-2 text-sm">
                             <span className="text-teal-600">✨</span>
                             <span className="text-stone-600">
-                                {offer.createdByRole === 'relative' ? 'Du' : seniorName}:
+                                {offer.createdByName || seniorName}:
                             </span>
                             <span className="font-medium text-stone-800">{offer.label}</span>
                         </div>
@@ -84,7 +84,7 @@ export const MatchCelebration = ({
                         <div className="flex items-center gap-2 text-sm">
                             <span className="text-indigo-600">💜</span>
                             <span className="text-stone-600">
-                                {request.createdByRole === 'relative' ? 'Du' : seniorName}:
+                                {request.createdByName || seniorName}:
                             </span>
                             <span className="font-medium text-stone-800">{request.label}</span>
                         </div>

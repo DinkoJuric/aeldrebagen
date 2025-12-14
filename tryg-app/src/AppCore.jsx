@@ -60,7 +60,7 @@ export default function TrygAppCore({
         addRequest,
         removeOffer,
         removeRequest
-    } = useHelpExchange(careCircle?.id, user?.uid, userProfile?.role);
+    } = useHelpExchange(careCircle?.id, user?.uid, userProfile?.role, userProfile?.displayName);
     const { lastCheckIn, recordCheckIn } = useCheckIn(careCircle?.id);
     const { latestPhoto, uploading, uploadPhoto, deletePhoto } = usePhotos(careCircle?.id, user?.uid);
 

@@ -53,9 +53,9 @@ Last updated: 2025-12-13
 
 For automated testing and development:
 
-| Role | Email | Password | Circle |
-|------|-------|----------|--------|
-| Relative | `louise.relative@test.com` | `Test1234!` | 6C9Y3M |
+| Role | Name | Email | Password | Circle |
+|------|------|-------|----------|--------|
+| Relative | Fatima | `louise.relative@test.com` | `Test1234!` | 6C9Y3M |
 
 > **Note**: These credentials work on localhost and production. Use for testing RelativeView and cross-role sync scenarios.
 
