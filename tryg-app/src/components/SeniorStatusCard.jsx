@@ -1,12 +1,16 @@
 import React from 'react';
 import { User, Clock, Pill } from 'lucide-react';
+import { InlineGatesIndicator } from './ProgressRing';
 
 // Senior status card - displayed in RelativeView to show senior's status
 // Mirrors the structure of FamilyStatusCard for consistency
+// Enhanced with InlineGatesIndicator for Morning/Afternoon/Evening status
 export const SeniorStatusCard = ({
     seniorName = 'Senior',
     lastCheckIn,
     completionRate = 0,
+    tasks = [],
+    symptomCount = 0,
     className = ''
 }) => {
     // Determine status based on check-in recency and completion rate
@@ -42,8 +46,15 @@ export const SeniorStatusCard = ({
                 </div>
             </div>
 
+            {/* Inline Gates Indicator - showing Morgen/Eftermiddag/Aften status */}
+            {tasks.length > 0 && (
+                <div className="mt-3 py-2 bg-stone-50 rounded-lg">
+                    <InlineGatesIndicator tasks={tasks} />
+                </div>
+            )}
+
             {/* Stats row */}
-            <div className="grid grid-cols-2 gap-3 mt-4">
+            <div className="grid grid-cols-2 gap-3 mt-3">
                 <div className="bg-stone-50 p-3 rounded-xl">
                     <p className="text-[10px] text-stone-400 uppercase font-bold tracking-wider mb-0.5">Tjekket ind</p>
                     <div className="flex items-center gap-1.5 text-stone-700">
@@ -59,6 +70,15 @@ export const SeniorStatusCard = ({
                     </div>
                 </div>
             </div>
+
+            {/* Symptom indicator (if symptoms logged today) */}
+            {symptomCount > 0 && (
+                <div className="mt-3 p-2 bg-amber-50 rounded-lg border border-amber-200 text-center">
+                    <span className="text-xs text-amber-700">
+                        📋 {symptomCount} symptom{symptomCount > 1 ? 'er' : ''} i dag
+                    </span>
+                </div>
+            )}
         </div>
     );
 };

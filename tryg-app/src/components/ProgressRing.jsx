@@ -191,4 +191,55 @@ export const ProgressRingCompact = ({ tasks = [], size = 48 }) => {
     );
 };
 
+/**
+ * Inline Gates Indicator - compact horizontal view of all 3 periods
+ * Design: ⬤ Morgen ✓  ⬤ Eftermiddag  ⬤ Aften
+ */
+export const InlineGatesIndicator = ({ tasks = [], className = '' }) => {
+    const currentHour = new Date().getHours();
+
+    const periods = ['morgen', 'eftermiddag', 'aften'].map(period => {
+        const status = getSegmentStatus(tasks, period, currentHour);
+        const colors = STATUS_COLORS[status];
+        const config = SEGMENT_CONFIG[period];
+
+        // Determine checkmark or status indicator
+        const isComplete = status === 'onTime' || status === 'complete';
+        const isPending = status === 'pending';
+        const isOverdue = status === 'overdue';
+        const isLate = status === 'late';
+
+        return {
+            period,
+            label: config.label,
+            isComplete,
+            isPending,
+            isOverdue,
+            isLate,
+            color: colors.stroke
+        };
+    });
+
+    return (
+        <div className={`flex items-center justify-center gap-2 text-xs ${className}`}>
+            {periods.map(p => (
+                <div
+                    key={p.period}
+                    className="flex items-center gap-1"
+                    title={`${p.label}: ${p.isComplete ? 'Færdig' : p.isPending ? 'Afventer' : p.isOverdue ? 'Mangler' : 'For sent'}`}
+                >
+                    <span
+                        className="w-2.5 h-2.5 rounded-full"
+                        style={{ backgroundColor: p.color }}
+                    />
+                    <span className={`font-medium ${p.isComplete ? 'text-green-700' : p.isOverdue ? 'text-red-600' : 'text-stone-500'}`}>
+                        {p.label.slice(0, 3)}
+                        {p.isComplete && ' ✓'}
+                    </span>
+                </div>
+            ))}
+        </div>
+    );
+};
+
 export default ProgressRing;

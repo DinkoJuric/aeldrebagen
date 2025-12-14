@@ -25,6 +25,7 @@ export const RelativeView = ({
     const [showReport, setShowReport] = useState(false);
     const [showWeeklyModal, setShowWeeklyModal] = useState(false);
     const [newTaskTitle, setNewTaskTitle] = useState('');
+    const [newTaskPeriod, setNewTaskPeriod] = useState('morgen'); // Period selector for new tasks
     const [activeTab, setActiveTab] = useState('daily'); // 'daily' = Peace of Mind, 'family' = Coordination
     const [activeMatch, setActiveMatch] = useState(null);
 
@@ -41,16 +42,25 @@ export const RelativeView = ({
         return date.toDateString() === new Date().toDateString();
     }).length;
 
+    // Period to time mapping
+    const PERIOD_TIMES = {
+        morgen: '08:00',
+        frokost: '12:00',
+        eftermiddag: '14:00',
+        aften: '19:00'
+    };
+
     const handleAddTask = () => {
         if (!newTaskTitle.trim()) return;
         onAddTask({
             title: newTaskTitle.trim(),
-            time: '14:00',
+            time: PERIOD_TIMES[newTaskPeriod],
             type: 'appointment',
             description: `Tilføjet af ${userName}`,
-            period: 'eftermiddag'
+            period: newTaskPeriod
         });
         setNewTaskTitle('');
+        setNewTaskPeriod('morgen');
         setShowAddModal(false);
     };
 
@@ -143,6 +153,33 @@ export const RelativeView = ({
                             onChange={(e) => setNewTaskTitle(e.target.value)}
                         />
                     </div>
+
+                    {/* Period Selector */}
+                    <div>
+                        <label className="block text-sm font-medium text-slate-700 mb-1">Hvornår?</label>
+                        <div className="grid grid-cols-2 gap-2">
+                            {[
+                                { id: 'morgen', label: 'Morgen', time: '8-11', emoji: '☀️' },
+                                { id: 'frokost', label: 'Frokost', time: '12-13', emoji: '🍽️' },
+                                { id: 'eftermiddag', label: 'Eftermiddag', time: '14-17', emoji: '🌤️' },
+                                { id: 'aften', label: 'Aften', time: '18-21', emoji: '🌙' }
+                            ].map(period => (
+                                <button
+                                    key={period.id}
+                                    onClick={() => setNewTaskPeriod(period.id)}
+                                    className={`p-3 rounded-xl border-2 text-left transition-all ${newTaskPeriod === period.id
+                                            ? 'border-indigo-500 bg-indigo-50'
+                                            : 'border-slate-200 hover:border-indigo-300'
+                                        }`}
+                                >
+                                    <span className="text-lg mr-1">{period.emoji}</span>
+                                    <span className="font-medium">{period.label}</span>
+                                    <span className="text-xs text-slate-500 block">{period.time}</span>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
                     <div className="p-3 bg-blue-50 text-blue-800 text-sm rounded-xl">
                         Denne påmindelse vil straks dukke op på {seniorName}s skærm.
                     </div>
