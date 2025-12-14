@@ -43,12 +43,13 @@ export const SeniorView = ({
     const [activeTab, setActiveTab] = useState('daily'); // 'daily' or 'family'
 
     // Detect matches between Senior and Relative
+    // Note: Senior doesn't use status matching, so we pass null for familyStatus
     const { match, dismissMatch } = useHelpExchangeMatch(
         helpOffers,
         helpRequests,
         relativeOffers,
         relativeRequests,
-        familyStatus // Senior doesn't see status matches (Relative status matching Senior request), but logic handles it
+        null // Senior view doesn't track their own status for matching purposes
     );
 
     // Two-step symptom flow: symptom type → body location (for pain)

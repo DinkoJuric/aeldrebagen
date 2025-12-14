@@ -48,6 +48,15 @@ Actionable learnings for avoiding roadblocks. Format: **Problem** → **Action T
 - **Action**: Changed `base: '/absolute/'` to `base: './'` for relative paths
 - **Future**: Use `base: './'` for Capacitor/mobile builds. Absolute paths break in WebView.
 
+### Undefined Variable from Prop Removal (PWA Crash)
+- **Problem**: Senior login crashed on PWA. Root cause: SeniorView used `familyStatus` variable that was removed from props but still referenced in `useHelpExchangeMatch()` call
+- **Action**: Found via `grep` search for `familyStatus`, replaced with `null`
+- **Future Prevention**:
+  1. **After removing a prop**: Search entire codebase with `grep` for the prop name
+  2. **Add PropTypes or TypeScript**: Would catch undefined prop access at build time
+  3. **Add smoke test**: Ensure components render without crashing
+  4. **Debug logging pattern**: Add `console.log('[ComponentName] props:', props)` during development
+
 ### State Persistence Without Backend
 - **Problem**: Needed data persistence but no time for backend setup
 - **Action**: Created `useLocalStorage` hook for MVP
