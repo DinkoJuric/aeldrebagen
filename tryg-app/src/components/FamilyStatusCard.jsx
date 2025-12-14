@@ -115,7 +115,7 @@ export const FamilyStatusList = ({
         <div className="space-y-2 mb-4">
             {displayedMembers.map((member, index) => (
                 <FamilyStatusCard
-                    key={member.odId || member.userId || index}
+                    key={member.docId || member.userId || index}
                     familyName={member.displayName || 'Pårørende'}
                     familyStatus={member.status}
                     lastUpdated={member.updatedAt || lastUpdated}

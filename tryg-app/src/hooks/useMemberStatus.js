@@ -41,13 +41,13 @@ export function useMemberStatus(circleId, userId, displayName, role) {
         const unsubscribe = onSnapshot(statusesQuery,
             (snapshot) => {
                 const statuses = snapshot.docs.map(docSnap => ({
-                    odId: docSnap.id, // This is the userId
+                    docId: docSnap.id, // This is the userId
                     ...docSnap.data()
                 }));
                 setMemberStatuses(statuses);
 
                 // Update my own status from the fetched data
-                const myStatusDoc = statuses.find(s => s.odId === userId);
+                const myStatusDoc = statuses.find(s => s.docId === userId);
                 if (myStatusDoc) {
                     setMyStatusState(myStatusDoc.status);
                 }
