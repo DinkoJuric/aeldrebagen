@@ -20,15 +20,15 @@ export const useHelpExchangeMatch = ({
             const matchingRequest = requests.find(r => r.id === pair.requestId);
 
             if (matchingOffer && matchingRequest) {
-                // Check if from different people (true match!)
-                const fromDifferent = matchingOffer.createdBy !== matchingRequest.createdBy;
+                // Check if from different roles (true cross-family match!)
+                const fromDifferentRoles = matchingOffer.createdByRole !== matchingRequest.createdByRole;
 
                 activeMatches.push({
                     type: 'offer-request',
                     offer: matchingOffer,
                     request: matchingRequest,
                     celebration: pair.celebration,
-                    isCrossFamily: fromDifferent
+                    isCrossFamily: fromDifferentRoles
                 });
             }
         });

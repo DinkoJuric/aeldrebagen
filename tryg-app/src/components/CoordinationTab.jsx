@@ -139,7 +139,7 @@ export const CoordinationTab = ({
                             >
                                 {offer.emoji || '✨'} {offer.label}
                                 <button
-                                    onClick={() => onRemoveRelativeOffer?.(offer.id)}
+                                    onClick={() => onRemoveRelativeOffer?.(offer.docId)}
                                     className="ml-1 hover:bg-teal-600 rounded-full p-0.5"
                                 >
                                     <X className="w-3 h-3" />
@@ -187,7 +187,7 @@ export const CoordinationTab = ({
                             >
                                 {req.emoji || '💜'} {req.label}
                                 <button
-                                    onClick={() => onRemoveRelativeRequest?.(req.id)}
+                                    onClick={() => onRemoveRelativeRequest?.(req.docId)}
                                     className="ml-1 hover:bg-indigo-600 rounded-full p-0.5"
                                 >
                                     <X className="w-3 h-3" />

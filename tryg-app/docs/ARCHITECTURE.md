@@ -102,7 +102,19 @@ careCircles/
       ├── pings/
       │   └── {pingId}: fromName, toRole, sentAt
       │
-      └── weeklyAnswers/, helpOffers/, helpRequests/
+      ├── helpOffers/
+      │   └── {offerId}
+      │       ├── id, label, emoji
+      │       ├── createdByUid, createdByRole
+      │       └── createdAt
+      │
+      ├── helpRequests/
+      │   └── {requestId}
+      │       ├── id, label, emoji
+      │       ├── createdByUid, createdByRole
+      │       └── createdAt
+      │
+      └── weeklyAnswers/
 
 careCircleMemberships/
   └── {circleId}_{userId}
