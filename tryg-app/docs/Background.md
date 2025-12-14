@@ -66,12 +66,12 @@ A dual-interface daily tracker designed for the Danish market that connects elde
 
 ## Tab Differentiation Strategy (RelativeView)
 
-The two tabs should serve distinct emotional needs:
+The two tabs serve distinct emotional needs:
 
 | Tab | Focus | Content |
 |-----|-------|---------|
-| **Min Dag** | 😌 Peace of Mind | "Alt er vel" hero card, quick glance (meds %, symptoms), connection history ("Du sendte knus") |
-| **Familie** | 🤝 Coordination | Family status, HelpExchange, detailed task list, health report button |
+| **Min Dag** | 💕 Connection | Senior status w/ gates (incl. meds %, symptoms), family presence, connection history ("Du sendte knus") |
+| **Familie** | 🤝 Koordinering | Your status, HelpExchange, task list, health report |
 
 ### Rationale from Strategy Docs
 
@@ -79,4 +79,27 @@ The two tabs should serve distinct emotional needs:
 - *"Sell peace of mind, not task management"*
 - *"Your real customer is the adult child... build for their anxiety"*
 
-**The differentiation:** Min Dag = emotional reassurance, Familie = practical coordination.
+**The differentiation:** Min Dag = emotional connection, Familie = practical coordination.
+
+---
+
+## Behavioral Science Framework
+
+These principles guide ALL design decisions in Tryg:
+
+| Principle | Application |
+|-----------|-------------|
+| **Variable Reward** | Match celebrations, connection events, surprise delight moments |
+| **Social Proof** | Seeing other family members active normalizes engagement |
+| **Reciprocity** | Connection history shows bidirectional relationship ("Du sendte knus") |
+| **Progressive Disclosure** | Summary first (senior card), details on tap (symptoms) |
+| **Chunking** | Group related info (Senior card = status + gates + symptoms) |
+| **Ambient Awareness** | "Familien Nu" creates presence without surveillance feel |
+| **Commitment & Consistency** | Publicly visible status creates gentle accountability |
+
+### The Porch Light Insight
+
+> *"Tryg is like leaving the porch light on for your parents — a quiet signal that says 'I'm thinking of you' without the intrusion of knocking on their door five times a day."*
+
+The app creates a **sense of presence** without requiring action. Unlike Life360 (GPS surveillance) or medical alert systems (emergency-focused), Tryg establishes a warm **ambient connection** that feels like family, not monitoring.
+
