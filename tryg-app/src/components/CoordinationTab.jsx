@@ -63,7 +63,35 @@ export const CoordinationTab = ({
     });
 
     return (
-        <div className="space-y-4">
+        <div className="space-y-3">
+            {/* Your Status - compact inline for tech-savvy relatives */}
+            <div className="bg-indigo-600 rounded-xl px-3 py-2 text-white shadow-sm">
+                <div className="flex items-center justify-between gap-2">
+                    <span className="text-xs text-indigo-200 font-medium">Din status:</span>
+                    {showStatusPicker ? (
+                        <div className="flex-1">
+                            <StatusSelector
+                                currentStatus={myStatus}
+                                onStatusChange={(newStatus) => {
+                                    onMyStatusChange(newStatus);
+                                    setShowStatusPicker(false);
+                                }}
+                                compact={true}
+                            />
+                        </div>
+                    ) : (
+                        <button
+                            onClick={() => setShowStatusPicker(true)}
+                            className="flex items-center gap-2 bg-indigo-500/50 hover:bg-indigo-500 rounded-lg px-2 py-1 transition-colors"
+                        >
+                            <StatusIcon className="w-4 h-4" />
+                            <span className="font-medium text-sm">{currentStatusInfo.label}</span>
+                            <span className="text-indigo-300 text-xs">▼</span>
+                        </button>
+                    )}
+                </div>
+            </div>
+
             {/* Match Celebration Banner */}
             {hasMatches && topMatch && (
                 <MatchBanner
@@ -80,39 +108,6 @@ export const CoordinationTab = ({
                     seniorName={seniorName}
                 />
             )}
-
-            {/* Your Status - visible to senior */}
-            <div className="bg-indigo-600 rounded-xl p-4 text-white shadow-lg">
-                <div className="flex justify-between items-center mb-3">
-                    <h3 className="font-bold text-indigo-100 text-sm uppercase tracking-wider">Din status hos {seniorName}</h3>
-                    <span className="bg-indigo-500 px-2 py-0.5 rounded text-xs">Synlig</span>
-                </div>
-
-                {showStatusPicker ? (
-                    <div className="bg-white/10 rounded-xl p-3">
-                        <StatusSelector
-                            currentStatus={myStatus}
-                            onStatusChange={(newStatus) => {
-                                onMyStatusChange(newStatus);
-                                setShowStatusPicker(false);
-                            }}
-                        />
-                    </div>
-                ) : (
-                    <button
-                        onClick={() => setShowStatusPicker(true)}
-                        className="w-full flex items-center gap-3 hover:bg-indigo-500/30 rounded-lg p-2 -m-2 transition-colors"
-                    >
-                        <div className="p-2 bg-indigo-500 rounded-lg">
-                            <StatusIcon className="w-6 h-6 text-white" />
-                        </div>
-                        <div className="flex-1 text-left">
-                            <p className="font-bold">{currentStatusInfo.label}</p>
-                            <p className="text-indigo-200 text-xs">Tryk for at ændre</p>
-                        </div>
-                    </button>
-                )}
-            </div>
 
             {/* Bidirectional Help Exchange */}
             <div className="bg-stone-50 border-2 border-stone-100 rounded-xl p-4 space-y-4">
