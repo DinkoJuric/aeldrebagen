@@ -105,6 +105,11 @@ Actionable learnings for avoiding roadblocks. Format: **Problem** → **Action T
 - **Action**: Restarted dev server, but port changed (5173 → 5174)
 - **Future**: Check dev server is running AND note the current port before browser tests.
 
+### Browser Input Fields With Existing Values
+- **Problem**: Browser agent typed email but it appended to existing value (e.g. "ise.relative@test.comlouise.relative@test.com")
+- **Action**: Need to clear input field before typing new value
+- **Future**: For browser form inputs, always clear the field first (select all + delete) OR verify the field is empty before typing. Never assume input is empty.
+
 ---
 
 ## Documentation & Workflow
