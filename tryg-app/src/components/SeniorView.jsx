@@ -27,6 +27,7 @@ import { SYMPTOMS_LIST } from '../data/constants';
 import { FEATURES } from '../config/features';
 import { useHelpExchangeMatch } from '../hooks/useHelpExchangeMatch';
 import { MatchCelebration } from './MatchCelebration';
+import { InlineGatesIndicator } from './ProgressRing';
 
 export const SeniorView = ({
     tasks, toggleTask, updateStatus, addSymptom, statusLastUpdated, onSendPing,
@@ -160,7 +161,7 @@ export const SeniorView = ({
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                     <span className="text-stone-500 capitalize">{dateString}</span>
-                    <span className="text-teal-600 font-medium">· Alt er vel ✨</span>
+                    <InlineGatesIndicator tasks={tasks} className="ml-2 scale-90 origin-left" />
                 </div>
             </header>
 

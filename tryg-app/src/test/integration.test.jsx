@@ -58,7 +58,7 @@ describe('CoordinationTab Integration', () => {
 
         expect(container).toBeTruthy()
         // FamilyPresence should render with header
-        expect(screen.getByText('Familien Nu')).toBeTruthy()
+        expect(screen.getByText(/Familien nu/i)).toBeTruthy()
     })
 
     it('shows status selector for user', async () => {
@@ -74,7 +74,7 @@ describe('CoordinationTab Integration', () => {
         )
 
         // Should show status section header
-        expect(screen.getByText('Din Status')).toBeTruthy()
+        expect(screen.getByText(/Din status/i)).toBeTruthy()
     })
 })
 
