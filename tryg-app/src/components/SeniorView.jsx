@@ -44,14 +44,22 @@ export const SeniorView = ({
     const [activeTab, setActiveTab] = useState('daily'); // 'daily' or 'family'
 
     // Detect matches between Senior and Relative
-    // Note: Senior doesn't use status matching, so we pass null for familyStatus
-    const { match, dismissMatch } = useHelpExchangeMatch(
-        helpOffers,
-        helpRequests,
-        relativeOffers,
-        relativeRequests,
-        null // Senior view doesn't track their own status for matching purposes
-    );
+    // Combine all offers/requests for match detection
+    const allOffers = [
+        ...helpOffers.map(o => ({ ...o, createdByRole: 'senior' })),
+        ...relativeOffers.map(o => ({ ...o, createdByRole: 'relative' }))
+    ];
+    const allRequests = [
+        ...helpRequests.map(r => ({ ...r, createdByRole: 'senior' })),
+        ...relativeRequests.map(r => ({ ...r, createdByRole: 'relative' }))
+    ];
+
+    const { match, dismissMatch, hasMatches, topMatch } = useHelpExchangeMatch({
+        offers: allOffers,
+        requests: allRequests,
+        familyStatus: null, // Senior view doesn't track their own status
+        memberStatuses
+    });
 
     // Two-step symptom flow: symptom type → body location (for pain)
     const [selectedSymptom, setSelectedSymptom] = useState(null);
@@ -323,6 +331,9 @@ export const SeniorView = ({
                                 onRemoveRequest={onRemoveRequest}
                                 activeOffers={helpOffers}
                                 activeRequests={helpRequests}
+                                relativeOffers={relativeOffers}
+                                relativeRequests={relativeRequests}
+                                seniorName={userName}
                             />
                         )}
                     </>

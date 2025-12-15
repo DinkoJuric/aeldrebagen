@@ -45,6 +45,12 @@ export const CoordinationTab = ({
     const currentStatusInfo = STATUS_OPTIONS.find(s => s.id === myStatus) || STATUS_OPTIONS[0];
     const StatusIcon = currentStatusInfo.icon;
 
+    // Split relative entries into "mine" vs "other relatives"
+    const myRelativeOffers = relativeOffers.filter(o => o.createdByUid === currentUserId);
+    const myRelativeRequests = relativeRequests.filter(r => r.createdByUid === currentUserId);
+    const otherRelativeOffers = relativeOffers.filter(o => o.createdByUid !== currentUserId);
+    const otherRelativeRequests = relativeRequests.filter(r => r.createdByUid !== currentUserId);
+
     // Combine all offers and requests for match detection
     const allOffers = [
         ...helpOffers.map(o => ({ ...o, createdByRole: 'senior' })),
@@ -116,6 +122,25 @@ export const CoordinationTab = ({
                     Familie-udveksling
                 </h3>
 
+                {/* OTHER RELATIVES' offers/requests - show what other family members have added */}
+                {(otherRelativeOffers.length > 0 || otherRelativeRequests.length > 0) && (
+                    <div className="bg-indigo-50 rounded-xl p-3 border border-indigo-100">
+                        <p className="text-xs font-bold text-indigo-600 uppercase tracking-wide mb-2">Fra andre pårørende:</p>
+                        <div className="flex flex-wrap gap-2">
+                            {otherRelativeOffers.map((offer, i) => (
+                                <span key={`oro-${i}`} className="text-sm bg-indigo-100 text-indigo-700 px-3 py-1.5 rounded-full" title={`Fra: ${offer.createdByName}`}>
+                                    💚 {offer.label} <span className="text-indigo-400 text-xs">({offer.createdByName})</span>
+                                </span>
+                            ))}
+                            {otherRelativeRequests.map((req, i) => (
+                                <span key={`orr-${i}`} className="text-sm bg-purple-100 text-purple-700 px-3 py-1.5 rounded-full" title={`Fra: ${req.createdByName}`}>
+                                    💜 {req.label} <span className="text-purple-400 text-xs">({req.createdByName})</span>
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
                 {/* Senior's offers/requests - show with creator name */}
                 {(helpOffers.length > 0 || helpRequests.length > 0) && (
                     <div className="space-y-2">
@@ -135,11 +160,11 @@ export const CoordinationTab = ({
                     </div>
                 )}
 
-                {/* Relative's offers */}
+                {/* Your offers */}
                 <div className="space-y-2">
                     <p className="text-xs font-bold text-stone-500 uppercase">Du tilbyder:</p>
                     <div className="flex flex-wrap gap-2">
-                        {relativeOffers.map((offer, i) => (
+                        {myRelativeOffers.map((offer, i) => (
                             <span
                                 key={`ro-${i}`}
                                 className="text-sm bg-teal-500 text-white px-3 py-1.5 rounded-full flex items-center gap-1"
@@ -183,11 +208,11 @@ export const CoordinationTab = ({
                     )}
                 </div>
 
-                {/* Relative's requests */}
+                {/* Your requests */}
                 <div className="space-y-2">
                     <p className="text-xs font-bold text-stone-500 uppercase">Du ønsker:</p>
                     <div className="flex flex-wrap gap-2">
-                        {relativeRequests.map((req, i) => (
+                        {myRelativeRequests.map((req, i) => (
                             <span
                                 key={`rr-${i}`}
                                 className="text-sm bg-indigo-500 text-white px-3 py-1.5 rounded-full flex items-center gap-1"

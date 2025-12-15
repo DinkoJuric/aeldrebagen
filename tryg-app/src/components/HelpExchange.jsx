@@ -9,7 +9,10 @@ export const HelpExchange = ({
     onRemoveOffer,
     onRemoveRequest,
     activeOffers = [],
-    activeRequests = []
+    activeRequests = [],
+    relativeOffers = [],
+    relativeRequests = [],
+    seniorName = 'Senior'
 }) => {
     const [showOfferPicker, setShowOfferPicker] = useState(false);
     const [showRequestPicker, setShowRequestPicker] = useState(false);
@@ -24,6 +27,25 @@ export const HelpExchange = ({
                 <HandHeart className="w-5 h-5 text-teal-600" />
                 Familie-udveksling
             </h3>
+
+            {/* RELATIVES' ENTRIES - Show what family members have added */}
+            {(relativeOffers.length > 0 || relativeRequests.length > 0) && (
+                <div className="bg-indigo-50 rounded-xl p-3 border border-indigo-100">
+                    <p className="text-xs font-bold text-indigo-600 uppercase tracking-wide mb-2">Fra familien:</p>
+                    <div className="flex flex-wrap gap-2">
+                        {relativeOffers.map((offer, i) => (
+                            <span key={`ro-${i}`} className="text-sm bg-indigo-100 text-indigo-700 px-3 py-1.5 rounded-full" title={`Fra: ${offer.createdByName}`}>
+                                💚 {offer.label} <span className="text-indigo-400 text-xs">({offer.createdByName})</span>
+                            </span>
+                        ))}
+                        {relativeRequests.map((req, i) => (
+                            <span key={`rr-${i}`} className="text-sm bg-purple-100 text-purple-700 px-3 py-1.5 rounded-full" title={`Fra: ${req.createdByName}`}>
+                                💜 {req.label} <span className="text-purple-400 text-xs">({req.createdByName})</span>
+                            </span>
+                        ))}
+                    </div>
+                </div>
+            )}
 
             {/* OFFERS SECTION */}
             <div className="space-y-3">
