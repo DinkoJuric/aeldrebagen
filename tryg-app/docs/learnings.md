@@ -42,6 +42,7 @@ Actionable learnings for avoiding roadblocks. Format: **Problem** → **Action T
 - **Problem**: App crashed on login with `ReferenceError: useMemo is not defined`
 - **Action**: Added `import { useMemo } from 'react'` to the component
 - **Future**: When using hooks like `useMemo`, `useEffect`, `useCallback`, ALWAYS verify they are imported from 'react'. `grep` for the hook name if unsure.
+- **Prevention**: Pre-commit hook with `husky` + `lint-staged` now blocks commits if ESLint fails. This catches missing imports automatically.
 
 ### Tailwind v4 Setup Confusion
 - **Problem**: PostCSS config approach from docs didn't work
