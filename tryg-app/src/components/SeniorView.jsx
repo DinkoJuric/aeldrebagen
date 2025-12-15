@@ -28,13 +28,14 @@ import { FEATURES } from '../config/features';
 import { useHelpExchangeMatch } from '../hooks/useHelpExchangeMatch';
 import { MatchCelebration } from './MatchCelebration';
 import { InlineGatesIndicator } from './ProgressRing';
+import { Spillehjoernet } from './Spillehjoernet';
 
 export const SeniorView = ({
     tasks, toggleTask, updateStatus, addSymptom, statusLastUpdated, onSendPing,
     weeklyAnswers, onWeeklyAnswer, helpOffers, helpRequests, relativeOffers = [], relativeRequests = [],
     onHelpOffer, onHelpRequest,
     onRemoveOffer, onRemoveRequest, members = [], memberStatuses = [], currentUserId = null, relativeStatuses = [],
-    userName = 'Senior', relativeName = 'Familie'
+    userName = 'Senior', relativeName = 'Familie', careCircleId = null
 }) => {
     const [showCallModal, setShowCallModal] = useState(false);
     const [showSymptomModal, setShowSymptomModal] = useState(false);
@@ -334,6 +335,15 @@ export const SeniorView = ({
                                 relativeOffers={relativeOffers}
                                 relativeRequests={relativeRequests}
                                 seniorName={userName}
+                            />
+                        )}
+
+                        {/* Spillehjørnet - Gaming Corner */}
+                        {FEATURES.spillehjoernet && (
+                            <Spillehjoernet
+                                circleId={careCircleId}
+                                userId={currentUserId}
+                                displayName={userName}
                             />
                         )}
                     </>

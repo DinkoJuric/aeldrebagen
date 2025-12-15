@@ -10,6 +10,8 @@ import { MatchBanner } from './MatchCelebration';
 import { FamilyPresence } from './FamilyPresence';
 import { RELATIVE_OFFERS, RELATIVE_REQUESTS } from '../config/helpExchangeConfig';
 import { useHelpExchangeMatch } from '../hooks/useHelpExchangeMatch';
+import { FEATURES } from '../config/features';
+import { Spillehjoernet } from './Spillehjoernet';
 
 // Coordination Tab - practical management focused
 // Shows: Family presence, Your status, HelpExchange (bidirectional), tasks, symptom details
@@ -33,7 +35,8 @@ export const CoordinationTab = ({
     symptomLogs = [],
     onAddTask,
     onViewReport,
-    onMatchAction
+    onMatchAction,
+    careCircleId = null
 }) => {
     const [showStatusPicker, setShowStatusPicker] = useState(false);
     const [showOpenTasks, setShowOpenTasks] = useState(true);
@@ -345,6 +348,15 @@ export const CoordinationTab = ({
                         </div>
                     )}
                 </div>
+            )}
+
+            {/* Spillehjørnet - Gaming Corner */}
+            {FEATURES.spillehjoernet && (
+                <Spillehjoernet
+                    circleId={careCircleId}
+                    userId={currentUserId}
+                    displayName={userName}
+                />
             )}
 
             {/* Add Task Button */}

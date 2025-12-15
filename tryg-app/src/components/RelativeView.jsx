@@ -19,7 +19,7 @@ export const RelativeView = ({
     helpOffers, helpRequests,
     relativeOffers = [], relativeRequests = [],
     onAddRelativeOffer, onRemoveRelativeOffer, onAddRelativeRequest, onRemoveRelativeRequest,
-    onOpenSettings, userName = 'Pårørende', seniorName = 'Mor'
+    onOpenSettings, userName = 'Pårørende', seniorName = 'Mor', careCircleId = null
 }) => {
     const [showAddModal, setShowAddModal] = useState(false);
     const [showReport, setShowReport] = useState(false);
@@ -164,6 +164,7 @@ export const RelativeView = ({
                         onAddTask={() => setShowAddModal(true)}
                         onViewReport={() => setShowReport(true)}
                         onMatchAction={(match) => setActiveMatch(match)}
+                        careCircleId={careCircleId}
                     />
                 )}
             </main>

@@ -9,6 +9,7 @@ export const FEATURES = {
     weeklyQuestion: true,      // Weekly Question of the Week card
     memoryTriggers: false,      // "Husker du da...?" memories
     helpExchange: true,        // Dignity-preserving help offers/requests
+    spillehjoernet: true,      // Gaming corner with Word of the Day
 
     // Phase 4: Polish
     morningAnimation: true,    // Sun pulse animation in header

@@ -339,6 +339,7 @@ export default function TrygAppCore({
                             relativeStatuses={relativeStatuses}
                             userName={seniorName}
                             relativeName={relativeName}
+                            careCircleId={careCircle?.id}
                         />
                     ) : (
                         <RelativeView
@@ -365,6 +366,7 @@ export default function TrygAppCore({
                             onOpenSettings={() => setShowPrivacySettings(true)}
                             userName={relativeName}
                             seniorName={seniorName}
+                            careCircleId={careCircle?.id}
                         />
                     )}
 
