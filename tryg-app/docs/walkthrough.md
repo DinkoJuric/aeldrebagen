@@ -1,6 +1,20 @@
 # Tryg App Development Walkthrough
 
-> Last updated: 2025-12-11
+> Last updated: 2025-12-16
+
+> **Note to Agents:** Always update the Table of Contents below when adding new sections.
+
+## 📖 Table of Contents
+1. [What Was Built](#what-was-built)
+2. [Project Structure](#project-structure)
+3. [Version History](#version-history)
+4. [Key Design Decisions](#key-design-decisions)
+5. [Feature Flags](#feature-flags)
+6. [Tested Features](#tested-features)
+7. [Deployment](#deployment)
+8. [How to Reorder UI Sections](#how-to-reorder-ui-sections)
+9. [Next Steps](#next-steps)
+
 
 ## What Was Built
 

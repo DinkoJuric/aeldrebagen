@@ -4,6 +4,20 @@
 
 This analysis examines the elder care app market to identify how Tryg can move from prototype to profitable product.
 
+> **Note to Agents:** Always update the Table of Contents below when adding new sections.
+
+## 📖 Table of Contents
+1. [Executive Summary](#executive-summary)
+2. [Part 1: The Market Landscape](#part-1-the-market-landscape)
+3. [Part 2: Revenue Models Ranked](#part-2-revenue-models-ranked)
+4. [Part 3: What to Copy from Winners](#part-3-what-to-copy-from-winners)
+5. [Part 4: Go-to-Market Strategy](#part-4-go-to-market-strategy)
+6. [Part 5: Technical Requirements for Scale](#part-5-technical-requirements-for-scale)
+7. [Part 6: Strategic Recommendations](#part-6-strategic-recommendations)
+8. [Appendix: Competitor Comparison Table](#appendix-competitor-comparison-table)
+9. [TL;DR — The Brutal Truth](#tl-dr--the-brutal-truth)
+
+
 ---
 
 ## Executive Summary

@@ -2,6 +2,19 @@
 
 > How to deploy and maintain Tryg App
 
+> **Note to Agents:** Always update the Table of Contents below when adding new sections.
+
+## 📖 Table of Contents
+1. [Hosting Architecture](#hosting-architecture)
+2. [Environment Variables](#environment-variables)
+3. [Deploy Commands](#deploy-commands)
+4. [Firebase Setup](#firebase-setup)
+5. [Authorized Domains](#authorized-domains)
+6. [Troubleshooting](#troubleshooting)
+7. [iOS / Capacitor Deployment](#ios--capacitor-deployment)
+8. [Related](#related)
+
+
 ## Hosting Architecture
 
 ```

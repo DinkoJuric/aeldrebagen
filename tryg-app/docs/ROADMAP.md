@@ -2,6 +2,18 @@
 
 A prioritized plan to make Tryg robust, accessible, and emotionally resonant.
 
+> **Note to Agents:** Always update the Table of Contents below when adding new sections.
+
+## 📖 Table of Contents
+1. [Phase 1: Stability Foundation](#phase-1-stability-foundation-week-1-2)
+2. [Phase 2: Accessibility Excellence](#phase-2-accessibility-excellence-week-2-3)
+3. [Phase 3: Behavioral Design Enhancements](#phase-3-behavioral-design-enhancements-week-3-4)
+4. [Phase 4: From Functional to Loveable](#phase-4-from-functional-to-loveable-week-4-5)
+5. [Success Metrics](#success-metrics)
+6. [Backlog](#backlog)
+7. [Idea Backlog (from Ideation)](#-idea-backlog-from-ideation)
+
+
 ---
 
 ## Phase 1: Stability Foundation (Week 1-2)

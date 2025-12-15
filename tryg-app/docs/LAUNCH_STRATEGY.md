@@ -2,6 +2,17 @@
 
 A strategic guide for shipping Tryg professionally.
 
+> **Note to Agents:** Always update the Table of Contents below when adding new sections.
+
+## 📖 Table of Contents
+1. [The Machiavellian Principles](#the-machiavellian-principles)
+2. [Launch Phases](#launch-phases)
+3. [Professional Habits to Adopt](#professional-habits-to-adopt)
+4. [Messaging & Pitching](#messaging--pitching)
+5. [Your Immediate Next Steps](#your-immediate-next-steps)
+6. [Metrics That Matter](#metrics-that-matter)
+
+
 ---
 
 ## The Machiavellian Principles

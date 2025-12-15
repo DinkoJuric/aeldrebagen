@@ -4,7 +4,7 @@ A React-based care coordination app for elderly users and their families.
 
 **Live Demo:** https://dinkojuric.github.io/aeldrebagen/
 
-📖 **Developer Guide:** See [docs/walkthrough.md](./docs/walkthrough.md) for architecture and history.
+📖 **Developer Guide:** See [docs/walkthrough.md](./docs/walkthrough.md) and [docs/architecture.md](./docs/architecture.md) for architecture and history.
 
 
 ---

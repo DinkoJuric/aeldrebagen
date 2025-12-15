@@ -2,6 +2,19 @@
 
 > Security model, authentication, and known limitations
 
+> **Note to Agents:** Always update the Table of Contents below when adding new sections.
+
+## 📖 Table of Contents
+1. [Authentication](#authentication)
+2. [Authorization Model](#authorization-model)
+3. [Firestore Security Rules](#firestore-security-rules)
+4. [Environment Variables](#environment-variables)
+5. [Known Limitations](#known-limitations)
+6. [Vulnerability Checklist](#vulnerability-checklist)
+7. [Incident Response](#incident-response)
+8. [Related](#related)
+
+
 ## Authentication
 
 ### Providers

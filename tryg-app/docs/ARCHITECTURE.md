@@ -2,6 +2,19 @@
 
 > Technical overview for developers and AI agents
 
+> **Note to Agents:** Always update the Table of Contents below when adding new sections.
+
+## 📖 Table of Contents
+1. [System Overview](#system-overview)
+2. [Directory Structure](#directory-structure)
+3. [Data Model (Firestore)](#data-model-firestore)
+4. [HelpExchange Match System](#helpexchange-match-system)
+5. [RelativeView Tab Architecture](#relativeview-tab-architecture)
+6. [Key Patterns](#key-patterns)
+7. [Authentication Flow](#authentication-flow)
+8. [Related Documentation](#related-documentation)
+
+
 ## System Overview
 
 ```

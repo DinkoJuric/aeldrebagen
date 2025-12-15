@@ -2,6 +2,18 @@
 
 Last updated: 2025-12-16 (v1.8.0)
 
+> **Note to Agents:** Always update the Table of Contents below when adding new sections.
+
+## 📖 Table of Contents
+1. [Key Patterns](#key-patterns)
+2. [Match Logic Reference (HelpExchange)](#match-logic-reference-helpexchange)
+3. [Key Files](#key-files)
+4. [Active Issues](#active-issues)
+5. [Recent Decisions](#recent-decisions)
+6. [Test Credentials](#test-credentials)
+7. [Color System](#color-system)
+
+
 ## Key Patterns
 
 - **State Management**: Firebase hooks with `onSnapshot` for real-time sync
