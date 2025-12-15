@@ -1,6 +1,6 @@
 # Project Context
 
-Last updated: 2025-12-13
+Last updated: 2025-12-16 (v1.8.0)
 
 ## Key Patterns
 
@@ -16,6 +16,26 @@ Last updated: 2025-12-13
 - **Feature Flags**: Toggle in `src/config/features.js`
 - **Error Handling**: Whitelist sanitization for Firestore data (prevents Symbol property serialization errors)
 - **Responsive Strategy**: Mobile-first full width (`100dvh`) with `viewport-fit=cover` for iOS safely handling safe areas
+
+## Match Logic Reference (HelpExchange)
+
+We use a "Celebration Match" system when Senior requests align with Relative offers.
+
+**Offer ↔ Request Matches:**
+| Offer ID | Request ID | Celebration |
+|----------|------------|-------------|
+| `cook` | `shop` | 🍽️ "Lav et måltid sammen!" |
+| `visit` | `company` | ☕ "Tid til en hyggelig visit!" |
+| `drive` | `transport` | 🚗 "Koordinér turen!" |
+| `garden` | `outdoor` | 🌿 "Tid i haven sammen!" |
+| `tech` | `help-tech` | 💻 "Tech-hjælp!" |
+
+**Status ↔ Request Matches:**
+| Status ID | Request ID | Celebration |
+|-----------|------------|-------------|
+| `available` | `talk` | 📞 "Ring nu - der er tid!" |
+| `home` | `visit` | 🏠 "Kom forbi!" |
+
 
 ## Key Files
 

@@ -165,3 +165,24 @@ A prioritized plan to make Tryg robust, accessible, and emotionally resonant.
 | Symptom Modal Scroll | ✅ Done | Expanded modal height, moved outside main |
 | Bottom Navigation | ✅ Done | Added persistent bottom bar "Min dag / Familie / Ring" |
 | Consent Modal | 🟡 Medium | Verify on small screens |
+
+---
+
+## 💡 Idea Backlog (from Ideation)
+
+**Unscheduled concepts to be reviewed for future phases.**
+
+### Connection Features
+- **Voice Notes**: 30s audio clips (better for motor issues).
+- **Photo Reactions**: Emoji reactions (❤️ 😊 👍) on shared photos.
+- **Shared Album**: Senior can upload photos (implied by "Photo Exchange").
+- **Sunday Coffee Chat**: Scheduled video drop-in time.
+
+### Health Enhancements
+- **Pain Severity Scale**: 3-level pictogram (🙂 😐 😣) after location selection.
+- **Symptom Patterns**: "You often have headaches on Mondays".
+
+### "Dancing at the Wedding" (Milestones)
+- **Milestone Celebrations**: "You walked 100 times!"
+- **Anticipation Calendar**: "42 days until Emma's wedding".
+

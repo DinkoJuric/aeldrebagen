@@ -31,7 +31,9 @@ A dual-interface daily tracker designed for the Danish market that connects elde
 ## Technical Context
 *   Built in **React** using **Tailwind CSS**.
 *   Uses **Lucide React** for iconography.
-*   Currently a single-file prototype simulating a mobile experience.
+*   Uses **Lucide React** for iconography.
+*   **Architecture:** Multi-user PWA with Firebase Backend (Auth, Firestore, Storage).
+
 
 ---
 

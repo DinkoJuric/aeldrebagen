@@ -126,3 +126,40 @@ Add deployment domains to Firebase Auth:
 
 - [ARCHITECTURE.md](./ARCHITECTURE.md) - System overview
 - [SECURITY.md](./SECURITY.md) - Security configuration
+
+---
+
+## iOS / Capacitor Deployment
+
+### Prerequisites
+- macOS with Xcode 15+
+- Apple Developer Account ($99/year)
+
+### Quick Start
+1. **Build Web App**:
+   ```bash
+   npm run build
+   npx cap sync ios
+   ```
+2. **Open Xcode**:
+   ```bash
+   npx cap open ios
+   ```
+3. **Configure Signing**: 
+   - Select 'App' → 'Signing & Capabilities' → Select Team.
+   - Bundle Identifier: `dk.tryg.app` (must match App Store Connect).
+
+### TestFlight Upload
+1. Set Version/Build in Xcode (General tab).
+2. Select "Any iOS Device" as target.
+3. **Product** → **Archive**.
+4. Click **Distribute App** → **App Store Connect** → **Upload**.
+5. Manage testers in [App Store Connect](https://appstoreconnect.apple.com).
+
+### Troubleshooting iOS
+| Issue | Solution |
+|-------|----------|
+| Signing error | Add Apple Developer account in Xcode preferences |
+| Old content shown | Run `npx cap sync ios` after web build |
+| White screen | Check `viewport-fit` meta tag or console logs via Safari Develop menu |
+
