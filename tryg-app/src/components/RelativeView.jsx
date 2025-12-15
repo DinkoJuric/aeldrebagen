@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Settings } from 'lucide-react';
 import { Modal } from './ui/Modal';
 import { Button } from './ui/Button';
