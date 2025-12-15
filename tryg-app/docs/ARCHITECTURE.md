@@ -43,6 +43,8 @@ tryg-app/
 │   │   ├── RelativeView.jsx # Family dashboard (monitoring)
 │   │   ├── AuthScreen.jsx   # Login/signup
 │   │   ├── CircleSetup.jsx  # Create/join care circle
+│   │   ├── Spillehjoernet.jsx # Gaming container
+│   │   ├── HealthReport.jsx   # Reusable medical report
 │   │   └── ui/              # Reusable components
 │   │
 │   ├── hooks/               # Firebase Data Hooks
@@ -54,7 +56,9 @@ tryg-app/
 │   │   ├── usePings.js      # "Thinking of you" notifications
 │   │   ├── useWeeklyQuestions.js
 │   │   ├── useHelpExchange.js
+│   │   ├── useHelpExchange.js
 │   │   ├── useMemberStatus.js  # Per-member status tracking (NEW)
+│   │   ├── useWordGame.js      # Daily word game logic + scoring
 │   │   └── useCheckIn.js    # Senior check-in tracking
 │   │
 │   ├── config/
@@ -98,7 +102,13 @@ careCircles/
       │   └── {symptomId}: type, location, timestamp
       │
       ├── settings/
-      │   └── familyStatus, checkIn/
+      │   └── familyStatus: {userId}: status, updatedAt
+      │
+      ├── wordGame/
+      │   ├── scores/
+      │   │   └── {userId}: score, lastPlayedDate
+      │   └── daily/
+      │       └── {userId}_{date}: completed
       │
       ├── pings/
       │   └── {pingId}: fromName, toRole, sentAt

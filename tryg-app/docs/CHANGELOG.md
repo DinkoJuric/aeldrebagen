@@ -2,6 +2,46 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.8.0] - 2025-12-15
+
+### 🎮 Spillehjørnet (Gaming Corner)
+
+**Word of the Day Game**
+- New dedicated "Spil" tab in both SeniorView and RelativeView
+- Daily word challenge with 5 words (seeded by date)
+- Competition between senior and relatives
+- **Leaderboard**: Real-time family scoring tracking
+- **Data**: 40+ Danish word definitions added (`wordGameData.js`)
+
+### 📊 Health & Data Transparency
+
+**Health Report (Rapport)**
+- New `HealthReport` reusable component
+- **Filters**: Clickable chart bars filert symptom log by date
+- **Accordion**: Symptom log grouped by date (today open by default)
+- **Stats**: Summary of total symptoms and most common symptom
+- **Medicine**: Compliance chart with percentage labels
+
+### 📱 Senior View Enhancements
+
+**Task Management**
+- **Add Own Task**: Seniors can now create their own tasks (`onAddTask`)
+- **Period Selector**: Simple 4-button interface (Morgen, Frokost, Eftermiddag, Aften)
+- **Medicine Section**: Decoupled from activity tasks, distinct UI with tick marks
+- **Rewards**: "Dagens Billede" reward is now minimizable to restore screen space
+
+**UI Refinements**
+- **Navigation**: Replaced "Call" with "Rapport" in bottom nav
+- **Layout**: Moved "Tænker på dig" (Connection) above "Familien Nu" (Presence)
+- **Feedback**: Minimized reward card shows "Fra familien med kærlighed ❤️"
+
+### 🛠️ Bug Fixes
+- **Data Visibility**: Fixed bug where Senior-created tasks weren't visible (missing `time` field in Firestore query)
+- **Game Logic**: Fixed "next word reveal" bug in WordGame
+- **Tab Bleeding**: Fixed Conditional rendering in RelativeView (content overlapping tabs)
+
+---
+
 ## [1.7.0] - 2025-12-14
 
 ### 💕 Connection-Focused Design

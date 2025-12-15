@@ -34,6 +34,11 @@ Actionable learnings for avoiding roadblocks. Format: **Problem** → **Action T
 - **Action**: Had to `git rm --cached <file>` first
 - **Future**: Add files to `.gitignore` BEFORE first commit. If already tracked, must explicitly untrack.
 
+### Firestore Query Ordering
+- **Problem**: Queries with `orderBy('field')` excluded documents where `field` was undefined.
+- **Action**: Ensured all documents have default values for sorted fields (e.g., added default `time` to tasks).
+- **Future**: When using `orderBy` in Firestore, remember it implicitly filters out docs missing that field. Always set defaults.
+
 ---
 
 ## React & Vite
