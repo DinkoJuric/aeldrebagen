@@ -244,10 +244,35 @@ export const RelativeView = ({
             {/* Doctor Report Modal */}
             <Modal isOpen={showReport} onClose={() => setShowReport(false)} title="Rapport til Lægen">
                 <div className="space-y-6">
-                    {/* 14-day symptom overview chart */}
+                    {/* Summary Stats */}
+                    {(() => {
+                        const totalSymptoms = symptomLogs.length;
+                        const symptomCounts = {};
+                        symptomLogs.forEach(log => {
+                            symptomCounts[log.label] = (symptomCounts[log.label] || 0) + 1;
+                        });
+                        const mostCommon = Object.entries(symptomCounts).sort((a, b) => b[1] - a[1])[0];
+
+                        return totalSymptoms > 0 && (
+                            <div className="grid grid-cols-2 gap-3">
+                                <div className="bg-orange-50 rounded-xl p-3 border border-orange-100">
+                                    <p className="text-2xl font-bold text-orange-600">{totalSymptoms}</p>
+                                    <p className="text-xs text-orange-500">Symptomer (14 dage)</p>
+                                </div>
+                                {mostCommon && (
+                                    <div className="bg-purple-50 rounded-xl p-3 border border-purple-100">
+                                        <p className="text-lg font-bold text-purple-600 truncate">{mostCommon[0]}</p>
+                                        <p className="text-xs text-purple-500">Mest hyppige ({mostCommon[1]}x)</p>
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })()}
+
+                    {/* 14-day symptom overview chart with counts */}
                     <div className="p-4 bg-orange-50 rounded-xl border border-orange-200">
                         <h4 className="font-bold text-slate-800 mb-2">Symptom-oversigt (14 dage)</h4>
-                        <div className="flex items-end gap-1 h-20 pb-2">
+                        <div className="flex items-end gap-1 h-24 pb-2">
                             {(() => {
                                 const days = Array(14).fill(0);
                                 symptomLogs.forEach(log => {
@@ -259,12 +284,16 @@ export const RelativeView = ({
                                 });
                                 const max = Math.max(...days, 1);
                                 return days.map((count, i) => (
-                                    <div
-                                        key={i}
-                                        className={`flex-1 rounded-t-sm transition-opacity ${count > 0 ? 'bg-orange-400 hover:bg-orange-500' : 'bg-slate-200'}`}
-                                        style={{ height: `${Math.max((count / max) * 100, 5)}%` }}
-                                        title={`${count} symptomer`}
-                                    />
+                                    <div key={i} className="flex-1 flex flex-col items-center gap-1">
+                                        {count > 0 && (
+                                            <span className="text-[10px] font-bold text-orange-600">{count}</span>
+                                        )}
+                                        <div
+                                            className={`w-full rounded-t-sm transition-opacity ${count > 0 ? 'bg-orange-400 hover:bg-orange-500' : 'bg-slate-200'}`}
+                                            style={{ height: `${Math.max((count / max) * 60, 4)}px` }}
+                                            title={`${count} symptomer`}
+                                        />
+                                    </div>
                                 ));
                             })()}
                         </div>
@@ -273,11 +302,18 @@ export const RelativeView = ({
                         </div>
                     </div>
 
+                    {/* Medicine compliance with percentage labels */}
                     <div className="p-4 bg-slate-50 rounded-xl border border-slate-200">
                         <h4 className="font-bold text-slate-800 mb-2">Overholdelse af medicin (7 dage)</h4>
-                        <div className="flex items-end gap-2 h-20 pb-2">
+                        <div className="flex items-end gap-2 h-28 pb-2">
                             {[80, 90, 100, 85, 95, 100, completionRate].map((h, i) => (
-                                <div key={i} className="flex-1 bg-indigo-500 rounded-t-sm opacity-80 hover:opacity-100 transition-opacity" style={{ height: `${h}%` }}></div>
+                                <div key={i} className="flex-1 flex flex-col items-center gap-1">
+                                    <span className="text-[10px] font-bold text-indigo-600">{h}%</span>
+                                    <div
+                                        className="w-full bg-indigo-500 rounded-t-sm opacity-80 hover:opacity-100 transition-opacity"
+                                        style={{ height: `${h * 0.6}px` }}
+                                    />
+                                </div>
                             ))}
                         </div>
                         <div className="flex justify-between text-xs text-slate-400">
@@ -285,35 +321,61 @@ export const RelativeView = ({
                         </div>
                     </div>
 
+                    {/* Symptom Log - Grouped by Date */}
                     <div>
-                        <h4 className="font-bold text-slate-800 mb-2">Symptom Log</h4>
+                        <h4 className="font-bold text-slate-800 mb-3">Symptom Log (sidste 14 dage)</h4>
                         {symptomLogs.length === 0 ? (
-                            <p className="text-slate-500 text-sm italic">Ingen symptomer registreret denne uge.</p>
+                            <p className="text-slate-500 text-sm italic">Ingen symptomer registreret.</p>
                         ) : (
-                            <ul className="space-y-2">
-                                {symptomLogs.map((log, i) => {
-                                    const symptomDef = SYMPTOMS_LIST.find(s => s.id === log.id) || {};
-                                    const SymptomIcon = symptomDef.icon || AlertCircle;
+                            (() => {
+                                // Group symptoms by date
+                                const grouped = {};
+                                symptomLogs.forEach(log => {
+                                    const date = log.loggedAt?.toDate ? log.loggedAt.toDate() : new Date(log.loggedAt);
+                                    const dateKey = date.toLocaleDateString('da-DK', { weekday: 'short', day: 'numeric', month: 'short' });
+                                    if (!grouped[dateKey]) grouped[dateKey] = [];
+                                    grouped[dateKey].push({ ...log, dateObj: date });
+                                });
 
-                                    return (
-                                        <li key={i} className="flex flex-col gap-1 text-sm p-3 bg-white border rounded-lg">
-                                            <div className="flex items-center gap-3">
-                                                <SymptomIcon className="w-5 h-5 text-slate-400" />
-                                                <span className="font-medium text-slate-700">{log.label}</span>
-                                                <span className="text-slate-400 ml-auto">{log.time}</span>
-                                            </div>
-                                            {log.bodyLocation && (
-                                                <div className="ml-8 text-xs text-slate-500 space-y-1">
-                                                    <div>📍 Lokation: <span className="font-medium">{log.bodyLocation.emoji} {log.bodyLocation.label}</span></div>
-                                                    {log.bodyLocation.severity && (
-                                                        <div>📊 Intensitet: <span className="font-medium">{log.bodyLocation.severity.emoji} {log.bodyLocation.severity.label}</span></div>
-                                                    )}
+                                return (
+                                    <div className="space-y-4">
+                                        {Object.entries(grouped).map(([dateStr, logs]) => (
+                                            <div key={dateStr}>
+                                                <div className="flex items-center gap-2 mb-2">
+                                                    <div className="h-px flex-1 bg-slate-200" />
+                                                    <span className="text-xs font-bold text-slate-500 uppercase">{dateStr}</span>
+                                                    <div className="h-px flex-1 bg-slate-200" />
                                                 </div>
-                                            )}
-                                        </li>
-                                    );
-                                })}
-                            </ul>
+                                                <ul className="space-y-2">
+                                                    {logs.map((log, i) => {
+                                                        const symptomDef = SYMPTOMS_LIST.find(s => s.id === log.id) || {};
+                                                        const SymptomIcon = symptomDef.icon || AlertCircle;
+                                                        const timeStr = log.dateObj.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' });
+
+                                                        return (
+                                                            <li key={i} className="flex flex-col gap-1 text-sm p-3 bg-white border rounded-lg">
+                                                                <div className="flex items-center gap-3">
+                                                                    <SymptomIcon className="w-5 h-5 text-slate-400" />
+                                                                    <span className="font-medium text-slate-700">{log.label}</span>
+                                                                    <span className="text-slate-400 ml-auto">{timeStr}</span>
+                                                                </div>
+                                                                {log.bodyLocation && (
+                                                                    <div className="ml-8 text-xs text-slate-500 space-y-1">
+                                                                        <div>📍 Lokation: <span className="font-medium">{log.bodyLocation.emoji} {log.bodyLocation.label}</span></div>
+                                                                        {log.bodyLocation.severity && (
+                                                                            <div>📊 Intensitet: <span className="font-medium">{log.bodyLocation.severity.emoji} {log.bodyLocation.severity.label}</span></div>
+                                                                        )}
+                                                                    </div>
+                                                                )}
+                                                            </li>
+                                                        );
+                                                    })}
+                                                </ul>
+                                            </div>
+                                        ))}
+                                    </div>
+                                );
+                            })()
                         )}
                     </div>
                 </div>
