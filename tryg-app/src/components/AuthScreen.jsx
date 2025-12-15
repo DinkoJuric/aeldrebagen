@@ -4,13 +4,15 @@
 import React, { useState } from 'react';
 import { Heart, User, Users, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 
-export const AuthScreen = ({ onAuth, error, loading }) => {
+export const AuthScreen = ({ onAuth, onResetPassword, error, loading }) => {
     const [mode, setMode] = useState('login'); // 'login', 'signup', 'role'
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [displayName, setDisplayName] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [selectedRole, setSelectedRole] = useState(null);
+    const [resetSent, setResetSent] = useState(false);
+    const [resetLoading, setResetLoading] = useState(false);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -33,6 +35,19 @@ export const AuthScreen = ({ onAuth, error, loading }) => {
     const handleRoleSelect = (role) => {
         setSelectedRole(role);
         setMode('signup');
+    };
+
+    const handleForgotPassword = async () => {
+        if (!email) return;
+        setResetLoading(true);
+        try {
+            await onResetPassword(email);
+            setResetSent(true);
+        } catch (err) {
+            // Error is handled by the hook and passed as error prop
+        } finally {
+            setResetLoading(false);
+        }
     };
 
     return (
@@ -97,8 +112,8 @@ export const AuthScreen = ({ onAuth, error, loading }) => {
                         {/* Role indicator for signup */}
                         {mode === 'signup' && selectedRole && (
                             <div className={`text-center py-2 px-4 rounded-full text-sm font-medium mb-4 ${selectedRole === 'senior'
-                                    ? 'bg-teal-100 text-teal-700'
-                                    : 'bg-indigo-100 text-indigo-700'
+                                ? 'bg-teal-100 text-teal-700'
+                                : 'bg-indigo-100 text-indigo-700'
                                 }`}>
                                 {selectedRole === 'senior' ? '👤 Senior konto' : '👥 Pårørende konto'}
                             </div>
@@ -167,6 +182,25 @@ export const AuthScreen = ({ onAuth, error, loading }) => {
                             <div className="bg-red-50 text-red-600 p-3 rounded-xl text-sm">
                                 {error}
                             </div>
+                        )}
+
+                        {/* Reset password success message */}
+                        {resetSent && (
+                            <div className="bg-green-50 text-green-700 p-3 rounded-xl text-sm">
+                                📧 Vi har sendt en email til {email}. Tjek din indbakke (og spam) for at nulstille din adgangskode.
+                            </div>
+                        )}
+
+                        {/* Forgot password link (login mode only) */}
+                        {mode === 'login' && (
+                            <button
+                                type="button"
+                                onClick={handleForgotPassword}
+                                disabled={!email || resetLoading}
+                                className="text-sm text-teal-600 hover:underline disabled:text-stone-400 disabled:no-underline"
+                            >
+                                {resetLoading ? 'Sender...' : 'Glemt adgangskode?'}
+                            </button>
                         )}
 
                         {/* Submit button */}

@@ -41,7 +41,8 @@ function FirebaseApp() {
         signUp,
         signInWithGoogle,
         signOut,
-        recordConsent
+        recordConsent,
+        resetPassword
     } = useAuth();
 
     const {
@@ -73,6 +74,12 @@ function FirebaseApp() {
             // Clean up Firebase error messages
             if (message.includes('auth/popup-closed-by-user')) {
                 message = 'Login-vinduet blev lukket. Prøv igen.';
+            } else if (message.includes('auth/invalid-credential')) {
+                message = 'Forkert email eller adgangskode. Prøv igen, eller kontakt din familie for hjælp.';
+            } else if (message.includes('auth/user-not-found')) {
+                message = 'Ingen konto fundet med denne email. Opret en konto først.';
+            } else if (message.includes('auth/wrong-password')) {
+                message = 'Forkert adgangskode. Prøv igen.';
             } else if (message.includes('auth/unauthorized-domain')) {
                 message = 'Denne side er ikke godkendt til login. Kontakt support.';
             } else if (message.includes('auth/network-request-failed')) {
@@ -105,6 +112,7 @@ function FirebaseApp() {
         return (
             <AuthScreen
                 onAuth={handleAuth}
+                onResetPassword={resetPassword}
                 error={authFormError || authError}
                 loading={authLoading}
             />

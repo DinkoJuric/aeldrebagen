@@ -9,7 +9,8 @@ import {
     signInWithPopup,
     GoogleAuthProvider,
     signOut as firebaseSignOut,
-    updateProfile
+    updateProfile,
+    sendPasswordResetEmail
 } from 'firebase/auth';
 import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
 import { auth, db } from '../config/firebase';
@@ -182,6 +183,17 @@ export function useAuth() {
         }
     }, [user]);
 
+    // Reset password
+    const resetPassword = useCallback(async (email) => {
+        setError(null);
+        try {
+            await sendPasswordResetEmail(auth, email);
+        } catch (err) {
+            setError(err.message);
+            throw err;
+        }
+    }, []);
+
     return {
         user,
         userProfile,
@@ -193,6 +205,7 @@ export function useAuth() {
         signOut,
         updateRole,
         recordConsent,
+        resetPassword,
         isAuthenticated: !!user,
     };
 }
