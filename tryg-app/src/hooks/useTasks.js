@@ -91,17 +91,26 @@ export function useTasks(circleId) {
         }
     }, [circleId, tasks]);
 
-    // Add a new task (from relative)
+    // Add a new task (from relative or senior)
     const addTask = useCallback(async (newTask) => {
         if (!circleId) return;
 
         const taskId = `task_${Date.now()}`;
         const taskRef = doc(db, 'careCircles', circleId, 'tasks', taskId);
 
+        // Default time based on period if not provided
+        const defaultTimes = {
+            morgen: '09:00',
+            frokost: '12:00',
+            eftermiddag: '15:00',
+            aften: '19:00'
+        };
+
         try {
             await setDoc(taskRef, {
                 id: taskId,
                 ...newTask,
+                time: newTask.time || defaultTimes[newTask.period] || '12:00',
                 completed: false,
                 createdAt: serverTimestamp(),
                 completedAt: null,

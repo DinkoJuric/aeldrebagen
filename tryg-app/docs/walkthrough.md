@@ -151,6 +151,43 @@ demoNotification: false,  // Demo water reminder
 
 ---
 
+## How to Reorder UI Sections
+
+When you want to move sections around (like "Tænker på dig" above "Familien Nu"):
+
+### Step 1: Find the sections in the JSX
+Look for comments like:
+```jsx
+{/* Family Presence - "Familien Nu" */}
+{memberStatuses.length > 0 && (
+    <FamilyPresence ... />
+)}
+
+{/* Thinking of You */}
+{FEATURES.thinkingOfYou && (
+    <ThinkingOfYouButton ... />
+)}
+```
+
+### Step 2: Cut and paste the entire block
+Each block is wrapped in `{condition && ( ... )}`. Move the entire block including the comment.
+
+### Step 3: Save and check
+Vite hot-reloads, so you'll see changes instantly.
+
+### Quick Reference
+
+| Task | Pattern |
+|------|---------|
+| **Hide something** | Wrap with `{false && ( ... )}` |
+| **Add feature flag** | `{FEATURES.myFeature && ( ... )}` |
+| **Conditional render** | `{someArray.length > 0 && ( ... )}` |
+| **Reorder** | Cut/paste the `{condition && (...)}` blocks |
+
+> **Tip**: The key is finding the opening `{` and its matching closing `)}` - everything between them is one block!
+
+---
+
 ## Next Steps
 
 See `docs/competitor_analysis.md` for business strategy and `implementation_plan.md` for Firebase multi-user backend.
