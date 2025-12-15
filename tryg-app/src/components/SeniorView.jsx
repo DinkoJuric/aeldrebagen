@@ -224,6 +224,8 @@ export const SeniorView = ({
                         {renderTaskSection('Frokost (Kl. 12-13)', 'frokost', <Sun className="w-6 h-6 text-stone-600" />)}
                         <div className="h-px bg-stone-200 my-4" />
                         {renderTaskSection('Eftermiddag (Kl. 14-17)', 'eftermiddag', <Moon className="w-6 h-6 text-stone-600" />)}
+                        <div className="h-px bg-stone-200 my-4" />
+                        {renderTaskSection('Aften (Kl. 18-21)', 'aften', <Moon className="w-6 h-6 text-stone-600" />)}
 
                         {/* Completed Tasks - Collapsible Section */}
                         {completedTasks > 0 && (
