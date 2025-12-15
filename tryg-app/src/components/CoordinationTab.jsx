@@ -350,15 +350,6 @@ export const CoordinationTab = ({
                 </div>
             )}
 
-            {/* Spillehjørnet - Gaming Corner */}
-            {FEATURES.spillehjoernet && (
-                <Spillehjoernet
-                    circleId={careCircleId}
-                    userId={currentUserId}
-                    displayName={userName}
-                />
-            )}
-
             {/* Add Task Button */}
             <Button
                 variant="outline"

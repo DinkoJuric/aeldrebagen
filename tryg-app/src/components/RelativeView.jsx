@@ -7,6 +7,7 @@ import { RelativeBottomNavigation } from './RelativeBottomNavigation';
 import { PeaceOfMindTab } from './PeaceOfMindTab';
 import { CoordinationTab } from './CoordinationTab';
 import { MatchCelebration } from './MatchCelebration';
+import { Spillehjoernet } from './Spillehjoernet';
 import { FEATURES } from '../config/features';
 import { SYMPTOMS_LIST } from '../data/constants';
 import { AlertCircle } from 'lucide-react';
@@ -26,7 +27,7 @@ export const RelativeView = ({
     const [showWeeklyModal, setShowWeeklyModal] = useState(false);
     const [newTaskTitle, setNewTaskTitle] = useState('');
     const [newTaskPeriod, setNewTaskPeriod] = useState('morgen'); // Period selector for new tasks
-    const [activeTab, setActiveTab] = useState('daily'); // 'daily' = Peace of Mind, 'family' = Coordination
+    const [activeTab, setActiveTab] = useState('daily'); // 'daily' = Peace of Mind, 'family' = Coordination, 'spil' = Gaming
     const [activeMatch, setActiveMatch] = useState(null);
 
     const openTasks = tasks.filter(t => !t.completed);
@@ -166,6 +167,19 @@ export const RelativeView = ({
                         onMatchAction={(match) => setActiveMatch(match)}
                         careCircleId={careCircleId}
                     />
+                )}
+
+                {/* ===== SPIL TAB ===== */}
+                {activeTab === 'spil' && (
+                    <>
+                        {FEATURES.spillehjoernet && (
+                            <Spillehjoernet
+                                circleId={careCircleId}
+                                userId={currentUserId}
+                                displayName={userName}
+                            />
+                        )}
+                    </>
                 )}
             </main>
 

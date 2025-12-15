@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heart, Users, FileText } from 'lucide-react';
+import { Heart, Users, FileText, Gamepad2 } from 'lucide-react';
 
 // Bottom navigation for RelativeView - peace of mind vs coordination
 export const RelativeBottomNavigation = ({ activeTab, onTabChange, onShowReport }) => {
@@ -12,7 +12,7 @@ export const RelativeBottomNavigation = ({ activeTab, onTabChange, onShowReport 
                     className={`flex flex-col items-center gap-1 transition-colors ${activeTab === 'daily' ? 'text-teal-600' : 'text-stone-400 hover:text-stone-600'
                         }`}
                 >
-                    <Heart className={`w-7 h-7 ${activeTab === 'daily' ? 'fill-teal-100' : ''}`} />
+                    <Heart className={`w-6 h-6 ${activeTab === 'daily' ? 'fill-teal-100' : ''}`} />
                     <span className="text-xs font-bold">Min dag</span>
                 </button>
 
@@ -22,18 +22,26 @@ export const RelativeBottomNavigation = ({ activeTab, onTabChange, onShowReport 
                     className={`flex flex-col items-center gap-1 transition-colors ${activeTab === 'family' ? 'text-indigo-600' : 'text-stone-400 hover:text-stone-600'
                         }`}
                 >
-                    <Users className={`w-7 h-7 ${activeTab === 'family' ? 'fill-indigo-100' : ''}`} />
+                    <Users className={`w-6 h-6 ${activeTab === 'family' ? 'fill-indigo-100' : ''}`} />
                     <span className="text-xs font-bold">Familie</span>
                 </button>
 
-                {/* Health Report shortcut */}
+                {/* Spil - Gaming */}
+                <button
+                    onClick={() => onTabChange('spil')}
+                    className={`flex flex-col items-center gap-1 transition-colors ${activeTab === 'spil' ? 'text-purple-600' : 'text-stone-400 hover:text-stone-600'
+                        }`}
+                >
+                    <Gamepad2 className={`w-6 h-6 ${activeTab === 'spil' ? 'fill-purple-100' : ''}`} />
+                    <span className="text-xs font-bold">Spil</span>
+                </button>
+
+                {/* Health Report */}
                 <button
                     onClick={onShowReport}
                     className="flex flex-col items-center gap-1 text-stone-400 hover:text-stone-600 transition-colors"
                 >
-                    <div className="bg-stone-100 p-1.5 rounded-xl">
-                        <FileText className="w-5 h-5" />
-                    </div>
+                    <FileText className="w-6 h-6" />
                     <span className="text-xs font-bold">Rapport</span>
                 </button>
             </div>

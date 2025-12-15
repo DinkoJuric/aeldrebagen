@@ -53,8 +53,8 @@ export const WordGame = ({
     if (feedback) {
         return (
             <div className={`rounded-2xl p-6 text-center shadow-lg ${feedback.isCorrect
-                    ? 'bg-gradient-to-br from-green-400 to-teal-500'
-                    : 'bg-gradient-to-br from-orange-400 to-red-400'
+                ? 'bg-gradient-to-br from-green-400 to-teal-500'
+                : 'bg-gradient-to-br from-orange-400 to-red-400'
                 } text-white`}>
                 <div className="text-4xl mb-3">
                     {feedback.isCorrect ? <CheckCircle className="w-12 h-12 mx-auto" /> : <XCircle className="w-12 h-12 mx-auto" />}
@@ -63,7 +63,7 @@ export const WordGame = ({
                     {feedback.isCorrect ? 'Helt rigtigt! 🎉' : 'Ikke helt...'}
                 </h3>
                 <p className="text-white/80 mb-4 text-sm">
-                    <span className="font-bold">{currentWord?.word}</span> betyder:
+                    <span className="font-bold">{feedback.word}</span> betyder:
                     <br />
                     "{feedback.correctAnswer}"
                 </p>
@@ -83,13 +83,18 @@ export const WordGame = ({
     // Main game UI
     const handleAnswer = async (option, index) => {
         setSelectedIndex(index);
-        const result = await onAnswer(currentWord.id, option.isCorrect);
 
-        // Show feedback
-        setFeedback({
+        // Store the current word in feedback BEFORE calling onAnswer (which advances)
+        const feedbackData = {
             isCorrect: option.isCorrect,
-            correctAnswer: currentWord.correctAnswer
-        });
+            correctAnswer: currentWord.correctAnswer,
+            word: currentWord.word  // Capture the word before it advances
+        };
+
+        await onAnswer(currentWord.id, option.isCorrect);
+
+        // Show feedback with the captured word
+        setFeedback(feedbackData);
     };
 
     return (

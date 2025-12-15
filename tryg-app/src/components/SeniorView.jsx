@@ -41,8 +41,9 @@ export const SeniorView = ({
     const [showSymptomModal, setShowSymptomModal] = useState(false);
     const [showWeeklyModal, setShowWeeklyModal] = useState(false);
     const [showCompletedTasks, setShowCompletedTasks] = useState(false);
+    const [showHealthReport, setShowHealthReport] = useState(false);
     const [activePeriod, setActivePeriod] = useState('morgen');
-    const [activeTab, setActiveTab] = useState('daily'); // 'daily' or 'family'
+    const [activeTab, setActiveTab] = useState('daily'); // 'daily', 'family', or 'spil'
 
     // Detect matches between Senior and Relative
     // Combine all offers/requests for match detection
@@ -338,6 +339,12 @@ export const SeniorView = ({
                             />
                         )}
 
+                    </>
+                )}
+
+                {/* ===== SPIL TAB ===== */}
+                {activeTab === 'spil' && (
+                    <>
                         {/* Spillehjørnet - Gaming Corner */}
                         {FEATURES.spillehjoernet && (
                             <Spillehjoernet
@@ -416,7 +423,7 @@ export const SeniorView = ({
             <BottomNavigation
                 activeTab={activeTab}
                 onTabChange={setActiveTab}
-                onCall={() => setShowCallModal(true)}
+                onViewReport={() => setShowHealthReport(true)}
             />
 
             {/* Call Modal */}
