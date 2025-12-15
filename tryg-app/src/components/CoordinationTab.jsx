@@ -315,8 +315,8 @@ export const CoordinationTab = ({
                 </div>
             )}
 
-            {/* Completed Tasks - Collapsible */}
-            {completedTasks.length > 0 && (
+            {/* Completed Tasks - DISABLED for now (uncomment to re-enable) */}
+            {false && completedTasks.length > 0 && (
                 <div>
                     <button
                         onClick={() => setShowCompleted(!showCompleted)}

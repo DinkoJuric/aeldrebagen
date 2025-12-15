@@ -133,7 +133,8 @@ export const RelativeView = ({
 
             {/* Main Content - Tab based */}
             <main className="flex-1 p-4 overflow-y-auto pb-28">
-                {activeTab === 'daily' ? (
+                {/* ===== DAILY TAB ===== */}
+                {activeTab === 'daily' && (
                     <PeaceOfMindTab
                         seniorName={seniorName}
                         lastCheckIn={lastCheckIn}
@@ -143,7 +144,10 @@ export const RelativeView = ({
                         onViewSymptoms={() => setActiveTab('family')}
                         recentActivity={recentActivity}
                     />
-                ) : (
+                )}
+
+                {/* ===== FAMILY TAB ===== */}
+                {activeTab === 'family' && (
                     <CoordinationTab
                         seniorName={seniorName}
                         userName={userName}
