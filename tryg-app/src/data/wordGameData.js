@@ -1,285 +1,355 @@
-// Word Game Data - Danish words with definitions for "Word of the Day" game
+// Word Game Data - CHALLENGING Danish words with definitions for "Word of the Day" game
 // Each word has a correct meaning and a plausible wrong answer
 
 export const WORD_LIST = [
     {
-        id: 'hygge',
-        word: 'Hygge',
-        correctAnswer: 'En følelse af varme, tryghed og samvær',
-        wrongAnswer: 'En type traditionel dansk kage',
-        category: 'kultur'
-    },
-    {
-        id: 'ordsprog',
-        word: 'Ordsprog',
-        correctAnswer: 'En kort, velkendt sætning med livsvisdom',
-        wrongAnswer: 'En grammatisk regel for ord',
-        category: 'sprog'
-    },
-    {
-        id: 'folkeregister',
-        word: 'Folkeregister',
-        correctAnswer: 'Offentlig database med borgeres adresser',
-        wrongAnswer: 'En gammel dansk danseform',
-        category: 'samfund'
-    },
-    {
-        id: 'madpakke',
-        word: 'Madpakke',
-        correctAnswer: 'Hjemmelavet frokost til at tage med',
-        wrongAnswer: 'En pakke med ingredienser til aftensmad',
-        category: 'mad'
-    },
-    {
-        id: 'rundstykke',
-        word: 'Rundstykke',
-        correctAnswer: 'Et lille, rundt brød til morgenmad',
-        wrongAnswer: 'En del af en maskine',
-        category: 'mad'
-    },
-    {
-        id: 'jantelov',
-        word: 'Janteloven',
-        correctAnswer: 'Uofficielle regler om ikke at tro man er bedre end andre',
-        wrongAnswer: 'En lov om jordejendom fra 1700-tallet',
-        category: 'kultur'
-    },
-    {
-        id: 'morgenfrisk',
-        word: 'Morgenfrisk',
-        correctAnswer: 'Udhvilet og klar efter en god nats søvn',
-        wrongAnswer: 'Køligt morgenvejr om foråret',
-        category: 'følelser'
-    },
-    {
-        id: 'kaffe',
-        word: 'Kaffepause',
-        correctAnswer: 'Lille pause fra arbejde for at drikke kaffe',
-        wrongAnswer: 'En maskine der holder kaffen varm',
-        category: 'kultur'
-    },
-    {
-        id: 'smørrebrød',
-        word: 'Smørrebrød',
-        correctAnswer: 'Åben sandwich med pålæg på rugbrød',
-        wrongAnswer: 'Brød bagt med smør i dejen',
-        category: 'mad'
-    },
-    {
-        id: 'frokost',
-        word: 'Frokost',
-        correctAnswer: 'Dagens andet måltid, spises midt på dagen',
-        wrongAnswer: 'Et lille frugtmåltid om morgenen',
-        category: 'mad'
-    },
-    {
-        id: 'vejr',
-        word: 'Hundevejr',
-        correctAnswer: 'Meget dårligt vejr med regn og blæst',
-        wrongAnswer: 'Det bedste vejr for at lufte hunden',
-        category: 'vejr'
-    },
-    {
-        id: 'friluft',
-        word: 'Friluftsliv',
-        correctAnswer: 'Aktiviteter i naturen som vandring og camping',
-        wrongAnswer: 'At have vinduerne åbne derhjemme',
-        category: 'aktiviteter'
-    },
-    {
-        id: 'natteravn',
-        word: 'Natteravn',
-        correctAnswer: 'En person der er oppe sent om natten',
-        wrongAnswer: 'En fugl der synger om natten',
-        category: 'kultur'
-    },
-    {
-        id: 'morgenluft',
-        word: 'At få morgenluft',
-        correctAnswer: 'At begynde at føle sig bedre eller få nyt håb',
-        wrongAnswer: 'At lufte ud i huset om morgenen',
+        id: 'bjornetjeneste',
+        word: 'Bjørnetjeneste',
+        correctAnswer: 'En handling der gør mere skade end gavn',
+        wrongAnswer: 'En utrolig stor og hjælpsom tjeneste',
         category: 'udtryk'
     },
     {
-        id: 'træsko',
-        word: 'Træsko',
-        correctAnswer: 'Traditionelle sko skåret ud af træ',
-        wrongAnswer: 'Sko designet til at gå i skoven',
-        category: 'kultur'
+        id: 'tanketorsk',
+        word: 'Tanketorsk',
+        correctAnswer: 'En dum og utilsigtet fejl',
+        wrongAnswer: 'En traditionel dansk fiskeret',
+        category: 'sprog'
     },
     {
-        id: 'sommerfugl',
-        word: 'Sommerfugl',
-        correctAnswer: 'Insekt med farverige vinger',
-        wrongAnswer: 'En fugl der kun kommer om sommeren',
-        category: 'natur'
+        id: 'ildsjael',
+        word: 'Ildsjæl',
+        correctAnswer: 'En person med stor begejstring for en sag',
+        wrongAnswer: 'En meget stærk chilipeber',
+        category: 'personlighed'
     },
     {
-        id: 'regnbue',
-        word: 'Regnbue',
-        correctAnswer: 'Bue af farver på himlen efter regn',
-        wrongAnswer: 'En type paraply til børn',
-        category: 'natur'
-    },
-    {
-        id: 'flagdag',
-        word: 'Flagdag',
-        correctAnswer: 'Dag hvor det er tradition at hejse Dannebrog',
-        wrongAnswer: 'Dag hvor butikkerne har udsalg',
-        category: 'kultur'
-    },
-    {
-        id: 'stemning',
-        word: 'Stemning',
-        correctAnswer: 'Den følelsesmæssige atmosfære i et rum eller selskab',
-        wrongAnswer: 'Lyden når man taler for højt',
-        category: 'følelser'
-    },
-    {
-        id: 'barndom',
-        word: 'Barndom',
-        correctAnswer: 'Perioden hvor man er barn',
-        wrongAnswer: 'En børnehave eller dagpleje',
-        category: 'liv'
-    },
-    {
-        id: 'livsglæde',
-        word: 'Livsglæde',
-        correctAnswer: 'Glæde ved at leve og opleve verden',
-        wrongAnswer: 'En festdag for ældre',
-        category: 'følelser'
-    },
-    {
-        id: 'hjerterum',
-        word: 'Hjerterum',
-        correctAnswer: 'Evne til at rumme og forstå andre mennesker',
-        wrongAnswer: 'Det kammer i hjertet hvor blodet pumpes',
-        category: 'følelser'
-    },
-    {
-        id: 'familiehygge',
-        word: 'Familiehygge',
-        correctAnswer: 'Hyggelige stunder sammen med familien',
-        wrongAnswer: 'Et spil til familien',
-        category: 'kultur'
-    },
-    {
-        id: 'søndagstur',
-        word: 'Søndagstur',
-        correctAnswer: 'En rolig tur eller udflugt om søndagen',
-        wrongAnswer: 'En særlig busrute der kun kører søndage',
+        id: 'koldbotte',
+        word: 'Koldbøtte',
+        correctAnswer: 'En rullebevægelse forover (gymnastik)',
+        wrongAnswer: 'En beholder til kolde drikkevarer',
         category: 'aktiviteter'
     },
     {
-        id: 'bedsteforældre',
-        word: 'Bedsteforældre',
-        correctAnswer: 'Dine forældres forældre',
-        wrongAnswer: 'De ældste forældre i en by',
-        category: 'familie'
+        id: 'lurendrejer',
+        word: 'Lurendrejer',
+        correctAnswer: 'En upålidelig og snu person',
+        wrongAnswer: 'En gammeldags uldspinder',
+        category: 'personlighed'
     },
     {
-        id: 'tandfe',
-        word: 'Tandfe',
-        correctAnswer: 'Fantasifigur der henter børns mælketænder',
-        wrongAnswer: 'En særlig børstehoved til tandbørstning',
-        category: 'kultur'
+        id: 'soforklaring',
+        word: 'Søforklaring',
+        correctAnswer: 'En dårlig eller utroværdig undskyldning',
+        wrongAnswer: 'Instruktioner til at sejle et skib',
+        category: 'udtryk'
     },
     {
-        id: 'juletradition',
-        word: 'Juletradition',
-        correctAnswer: 'Skikke og ritualer der gentages hver jul',
-        wrongAnswer: 'En lov om hvordan jul skal fejres',
-        category: 'kultur'
+        id: 'agurketid',
+        word: 'Agurketid',
+        correctAnswer: 'Periode med få nyheder (sommerferien)',
+        wrongAnswer: 'Sæsonen hvor man høster grøntsager',
+        category: 'medier'
     },
     {
-        id: 'øjeblik',
-        word: 'Øjeblik',
-        correctAnswer: 'Et kort, flygtigt moment i tiden',
-        wrongAnswer: 'Når man kigger hurtigt på noget',
-        category: 'tid'
-    },
-    {
-        id: 'mindefuld',
-        word: 'Mindfuld',
-        correctAnswer: 'At være fuldt til stede og opmærksom i nuet',
-        wrongAnswer: 'At have en god hukommelse',
-        category: 'sundhed'
-    },
-    {
-        id: 'taknemmelig',
-        word: 'Taknemmelig',
-        correctAnswer: 'Følelse af at sætte pris på noget godt',
-        wrongAnswer: 'Let at tage på / praktisk at have med',
-        category: 'følelser'
-    },
-    {
-        id: 'morgensang',
-        word: 'Morgensang',
-        correctAnswer: 'Fællessang tidligt på dagen, ofte i skolen',
-        wrongAnswer: 'Fuglenes sang tidligt om morgenen',
-        category: 'kultur'
-    },
-    {
-        id: 'efterårsferie',
-        word: 'Efterårsferie',
-        correctAnswer: 'Skoleferie i oktober',
-        wrongAnswer: 'En fest for at fejre efteråret',
-        category: 'tid'
-    },
-    {
-        id: 'gåtur',
-        word: 'Gåtur',
-        correctAnswer: 'At gå en tur for motion eller fornøjelse',
-        wrongAnswer: 'En rejse man tager til fods over lang afstand',
-        category: 'aktiviteter'
-    },
-    {
-        id: 'kærlighed',
-        word: 'Kærlighed',
-        correctAnswer: 'Dyb følelse af hengivenhed til en person',
-        wrongAnswer: 'En type blomst der gives som gave',
-        category: 'følelser'
-    },
-    {
-        id: 'venskab',
-        word: 'Venskab',
-        correctAnswer: 'Gensidigt tillidsfuldt forhold mellem venner',
-        wrongAnswer: 'En form for skib til passagerer',
-        category: 'følelser'
-    },
-    {
-        id: 'tryghed',
-        word: 'Tryghed',
-        correctAnswer: 'Følelse af sikkerhed og ro',
-        wrongAnswer: 'En slags forsikring for hjemmet',
-        category: 'følelser'
-    },
-    {
-        id: 'fællesskab',
-        word: 'Fællesskab',
-        correctAnswer: 'Gruppe af mennesker med noget tilfælles',
-        wrongAnswer: 'En type offentlig transport',
+        id: 'bagstraever',
+        word: 'Bagstræver',
+        correctAnswer: 'En der modarbejder udvikling og nytænkning',
+        wrongAnswer: 'En bager der laver wienerbrød',
         category: 'samfund'
     },
     {
-        id: 'morgenrutine',
-        word: 'Morgenrutine',
-        correctAnswer: 'Faste ting man gør hver morgen',
-        wrongAnswer: 'En øvelse man laver for at vågne op',
-        category: 'liv'
+        id: 'ulvetimen',
+        word: 'Ulvetimen',
+        correctAnswer: 'Den travle time før aftensmad med børn',
+        wrongAnswer: 'Tidspunktet på natten hvor ulve hyler',
+        category: 'familie'
     },
     {
-        id: 'aftensmad',
-        word: 'Aftensmad',
-        correctAnswer: 'Dagens sidste hovedmåltid om aftenen',
-        wrongAnswer: 'Mad der spises som snack før sengetid',
+        id: 'aandsnaervaerelse',
+        word: 'Åndsnærværelse',
+        correctAnswer: 'Evnen til at tænke hurtigt i en presset situation',
+        wrongAnswer: 'Troen på spøgelser og ånder',
+        category: 'sind'
+    },
+    {
+        id: 'dognflue',
+        word: 'Døgnflue',
+        correctAnswer: 'Noget der kun er populært i meget kort tid',
+        wrongAnswer: 'En flue der er vågen i 24 timer',
+        category: 'kultur'
+    },
+    {
+        id: 'klamphugger',
+        word: 'Klamphugger',
+        correctAnswer: 'En håndværker der laver dårligt arbejde',
+        wrongAnswer: 'En skovhugger der fælder træer',
+        category: 'arbejde'
+    },
+    {
+        id: 'blaaojet',
+        word: 'Blåøjet',
+        correctAnswer: 'At være naiv og godtroende',
+        wrongAnswer: 'At have en øjensygdom',
+        category: 'personlighed'
+    },
+    {
+        id: 'vemodig',
+        word: 'Vemodig',
+        correctAnswer: 'En følelse af sorg blandet med længsel',
+        wrongAnswer: 'At være meget vred og aggressiv',
+        category: 'følelser'
+    },
+    {
+        id: 'bjorneloes',
+        word: 'Bjørneløs',
+        correctAnswer: 'At være uden penge (slang)',
+        wrongAnswer: 'En zoologisk have uden bjørne',
+        category: 'slang'
+    },
+    {
+        id: 'honsefodder',
+        word: 'Hønsefødder',
+        correctAnswer: 'Meget gnidret og ulæselig håndskrift',
+        wrongAnswer: 'En ingrediens i dansk suppe',
+        category: 'sprog'
+    },
+    {
+        id: 'skrankepave',
+        word: 'Skrankepave',
+        correctAnswer: 'En arrogant og bureaukratisk medarbejder',
+        wrongAnswer: 'En religiøs leder i kirken',
+        category: 'arbejde'
+    },
+    {
+        id: 'himmelfalden',
+        word: 'Himmelfalden',
+        correctAnswer: 'At være meget overrasket eller paf',
+        wrongAnswer: 'At falde ned fra en stor højde',
+        category: 'følelser'
+    },
+    {
+        id: 'gratist',
+        word: 'Gratist',
+        correctAnswer: 'En der sniger sig ind uden at betale',
+        wrongAnswer: 'En person der deler gaver ud',
+        category: 'samfund'
+    },
+    {
+        id: 'bjorneklo',
+        word: 'Bjørneklo',
+        correctAnswer: 'En giftig plante (invasiv art)',
+        wrongAnswer: 'En kage formet som en pote',
+        category: 'natur'
+    },
+    {
+        id: 'solstraalehistorie',
+        word: 'Solstrålehistorie',
+        correctAnswer: 'En meget positiv og livsbekræftende nyhed',
+        wrongAnswer: 'Den videnskabelige historie om solen',
+        category: 'medier'
+    },
+    {
+        id: 'efternoeler',
+        word: 'Efternøler',
+        correctAnswer: 'Et barn født længe efter sine søskende',
+        wrongAnswer: 'En person der bliver for længe til en fest',
+        category: 'familie'
+    },
+    {
+        id: 'svensknoegle',
+        word: 'Svensknøgle',
+        correctAnswer: 'En justerbar skruenøgle',
+        wrongAnswer: 'Nøglen til et svensk sommerhus',
+        category: 'værktøj'
+    },
+    {
+        id: 'hojtbelagt',
+        word: 'Højtbelagt',
+        correctAnswer: 'Smørrebrød med ekstra meget pålæg',
+        wrongAnswer: 'Noget der er placeret på øverste hylde',
         category: 'mad'
     },
     {
-        id: 'dagdrøm',
-        word: 'Dagdrøm',
-        correctAnswer: 'At fantasere og tænke på ting mens man er vågen',
-        wrongAnswer: 'En drøm man ikke kan huske',
+        id: 'indforstaaet',
+        word: 'Indforstået',
+        correctAnswer: 'Noget der er underforstået uden at blive sagt',
+        wrongAnswer: 'At være lukket inde i et rum',
+        category: 'kommunikation'
+    },
+    {
+        id: 'pyt',
+        word: 'Pyt',
+        correctAnswer: 'Udtryk for at give slip på bekymringer',
+        wrongAnswer: 'En lille vandpyt på gaden',
+        category: 'filosofi'
+    },
+    {
+        id: 'graazone',
+        word: 'Gråzone',
+        correctAnswer: 'Et område hvor reglerne er uklare',
+        wrongAnswer: 'En parkeringsplads for ældre',
+        category: 'jura'
+    },
+    {
+        id: 'flov',
+        word: 'Flov',
+        correctAnswer: 'At skamme sig eller være forlegen',
+        wrongAnswer: 'Når vinden ikke blæser (vindstille)',
+        category: 'følelser'
+    },
+    {
+        id: 'morketal',
+        word: 'Mørketal',
+        correctAnswer: 'Hændelser der aldrig bliver registreret',
+        wrongAnswer: 'Tal der er skrevet med sort blæk',
+        category: 'statistik'
+    },
+    {
+        id: 'mundgodt',
+        word: 'Mundgodt',
+        correctAnswer: 'Lækkerier eller slik',
+        wrongAnswer: 'At være god til at tale for sig',
+        category: 'mad'
+    },
+    {
+        id: 'overbaerende',
+        word: 'Overbærende',
+        correctAnswer: 'Tålmodig og villig til at tilgive fejl',
+        wrongAnswer: 'At bære på alt for tunge ting',
+        category: 'adfærd'
+    },
+    {
+        id: 'vindbojtel',
+        word: 'Vindbøjtel',
+        correctAnswer: 'En person uden faste meninger',
+        wrongAnswer: 'En måler der viser vindretningen',
+        category: 'personlighed'
+    },
+    {
+        id: 'skinhellig',
+        word: 'Skinhellig',
+        correctAnswer: 'En der lader som om de er moralsk bedre end andre',
+        wrongAnswer: 'Et lys der skinner meget kraftigt',
+        category: 'personlighed'
+    },
+    {
+        id: 'stumpvinkel',
+        word: 'Stumpvinkel',
+        correctAnswer: 'En vinkel over 90 grader',
+        wrongAnswer: 'Et hjørne hvor man ofte støder tåen',
+        category: 'videnskab'
+    },
+    {
+        id: 'tumleplads',
+        word: 'Tumleplads',
+        correctAnswer: 'Sted med frihed til at udfolde sig',
+        wrongAnswer: 'Et sted hvor man kaster affald',
+        category: 'udtryk'
+    },
+    {
+        id: 'klaphat',
+        word: 'Klaphat',
+        correctAnswer: 'En dum person / En hat til fodbold',
+        wrongAnswer: 'En hat der klapper når man går',
+        category: 'slang'
+    },
+    {
+        id: 'haengehoved',
+        word: 'Hængehoved',
+        correctAnswer: 'En trist eller pessimistisk person',
+        wrongAnswer: 'En hovedpine der varer hele dagen',
+        category: 'personlighed'
+    },
+    {
+        id: 'gaekkebrev',
+        word: 'Gækkebrev',
+        correctAnswer: 'Anonymt digt man sender til påske',
+        wrongAnswer: 'Et brev fra skattevæsenet',
+        category: 'tradition'
+    },
+    {
+        id: 'vaerthus',
+        word: 'Værtshus',
+        correctAnswer: 'En pub eller en bar',
+        wrongAnswer: 'Et hus hvor værten til en fest bor',
+        category: 'kultur'
+    },
+    {
+        id: 'sovepude',
+        word: 'Sovepude',
+        correctAnswer: 'En undskyldning for ikke at gøre noget (metafor)',
+        wrongAnswer: 'En pude fyldt med sovemedicin',
+        category: 'udtryk'
+    },
+    {
+        id: 'bagklog',
+        word: 'Bagklog',
+        correctAnswer: 'At vide bedst efter noget er sket',
+        wrongAnswer: 'At være klog på at bage kager',
+        category: 'adfærd'
+    },
+    {
+        id: 'kanonkonge',
+        word: 'Kanonkonge',
+        correctAnswer: 'En meget succesfuld person i en branche',
+        wrongAnswer: 'En konge der skyder med kanoner',
+        category: 'slang'
+    },
+    {
+        id: 'polsk',
+        word: 'På polsk',
+        correctAnswer: 'At leve sammen uden at være gift',
+        wrongAnswer: 'At tale et sprog fra Østeuropa',
+        category: 'udtryk'
+    },
+    {
+        id: 'oerefigen',
+        word: 'Ørefigen',
+        correctAnswer: 'Et slag (lussing) på øret',
+        wrongAnswer: 'En eksotisk frugt',
+        category: 'handling'
+    },
+    {
+        id: 'guldregn',
+        word: 'Guldregn',
+        correctAnswer: 'En plante med gule blomster',
+        wrongAnswer: 'Når man vinder mange penge',
+        category: 'natur'
+    },
+    {
+        id: 'hudloes',
+        word: 'Hudløs',
+        correctAnswer: 'Følelsesmæssigt sårbar eller ærlig',
+        wrongAnswer: 'En person der har slået sig',
+        category: 'følelser'
+    },
+    {
+        id: 'appelsinfri',
+        word: 'Appelsinfri',
+        correctAnswer: 'At have ferie / fri fra arbejde',
+        wrongAnswer: 'En juice uden frugtkød',
+        category: 'slang'
+    },
+    {
+        id: 'tudse',
+        word: 'En tudse',
+        correctAnswer: 'En 1000-kroneseddel (slang)',
+        wrongAnswer: 'En frø der bor i vandet',
+        category: 'slang'
+    },
+    {
+        id: 'himmelbla',
+        word: 'En himmelblå',
+        correctAnswer: 'En politibetjent (slang)',
+        wrongAnswer: 'En skyfri sommerdag',
+        category: 'slang'
+    },
+    {
+        id: 'skadefryd',
+        word: 'Skadefryd',
+        correctAnswer: 'Glæde over andres ulykke',
+        wrongAnswer: 'En fugl der er kommet til skade',
         category: 'følelser'
     }
 ];

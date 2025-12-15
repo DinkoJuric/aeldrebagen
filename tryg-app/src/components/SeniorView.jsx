@@ -47,6 +47,7 @@ export const SeniorView = ({
     const [showAddTaskModal, setShowAddTaskModal] = useState(false);
     const [rewardMinimized, setRewardMinimized] = useState(false);
     const [newTaskTitle, setNewTaskTitle] = useState('');
+    const [newTaskPeriod, setNewTaskPeriod] = useState('morgen');
     const [activePeriod, setActivePeriod] = useState('morgen');
     const [activeTab, setActiveTab] = useState('daily'); // 'daily', 'family', or 'spil'
 
@@ -207,9 +208,12 @@ export const SeniorView = ({
                                 >
                                     <div className="flex items-center gap-2">
                                         <ImageIcon className="w-5 h-5 text-indigo-600" />
-                                        <span className="font-bold text-indigo-700">Dagens Billede</span>
+                                        <div>
+                                            <span className="font-bold text-indigo-700">Dagens Billede</span>
+                                            <p className="text-xs text-indigo-500">Fra familien med kærlighed ❤️</p>
+                                        </div>
                                     </div>
-                                    <span className="text-xs text-indigo-500">Tryk for at vise</span>
+                                    <span className="text-xs text-indigo-400">Tryk for at vise</span>
                                 </button>
                             ) : (
                                 <button
@@ -381,17 +385,18 @@ export const SeniorView = ({
                 {/* ===== FAMILY TAB ===== */}
                 {(!FEATURES.tabbedLayout || activeTab === 'family') && (
                     <>
+                        {/* Thinking of You - MOVED TO TOP */}
+                        {FEATURES.thinkingOfYou && (
+                            <ThinkingOfYouButton onSendPing={onSendPing} fromName={userName} />
+                        )}
+
                         {/* Family Presence - "Familien Nu" for bidirectional visibility */}
                         {memberStatuses.length > 0 && (
-                            <>
-                                {/* Debug: Log memberStatuses on render */}
-                                {console.log('[SeniorView] memberStatuses:', memberStatuses)}
-                                <FamilyPresence
-                                    memberStatuses={memberStatuses}
-                                    currentUserId={currentUserId}
-                                    seniorName={userName}
-                                />
-                            </>
+                            <FamilyPresence
+                                memberStatuses={memberStatuses}
+                                currentUserId={currentUserId}
+                                seniorName={userName}
+                            />
                         )}
 
                         {/* Legacy Family Status List - fallback if no memberStatuses */}
@@ -401,11 +406,6 @@ export const SeniorView = ({
                                 relativeStatuses={relativeStatuses}
                                 lastUpdated={statusLastUpdated}
                             />
-                        )}
-
-                        {/* Thinking of You - toggle with FEATURES.thinkingOfYou */}
-                        {FEATURES.thinkingOfYou && (
-                            <ThinkingOfYouButton onSendPing={onSendPing} fromName={userName} />
                         )}
 
                         {/* Weekly Question now in header - removed from here */}
@@ -570,17 +570,51 @@ export const SeniorView = ({
                             autoFocus
                         />
                     </div>
+
+                    {/* Period Selector */}
+                    <div>
+                        <label className="block text-sm font-medium text-slate-700 mb-2">Hvornår?</label>
+                        <div className="grid grid-cols-2 gap-2">
+                            {[
+                                { key: 'morgen', label: 'Morgen', time: 'Kl. 8-11', icon: '☀️' },
+                                { key: 'frokost', label: 'Frokost', time: 'Kl. 12-13', icon: '🍽️' },
+                                { key: 'eftermiddag', label: 'Eftermiddag', time: 'Kl. 14-17', icon: '🌤️' },
+                                { key: 'aften', label: 'Aften', time: 'Kl. 18-21', icon: '🌙' }
+                            ].map(period => (
+                                <button
+                                    key={period.key}
+                                    onClick={() => setNewTaskPeriod(period.key)}
+                                    className={`p-3 rounded-xl border-2 transition-all text-left ${newTaskPeriod === period.key
+                                        ? 'border-teal-500 bg-teal-50'
+                                        : 'border-slate-200 hover:border-slate-300'
+                                        }`}
+                                >
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-lg">{period.icon}</span>
+                                        <div>
+                                            <p className={`font-medium ${newTaskPeriod === period.key ? 'text-teal-700' : 'text-slate-700'}`}>
+                                                {period.label}
+                                            </p>
+                                            <p className="text-xs text-slate-400">{period.time}</p>
+                                        </div>
+                                    </div>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
                     <Button
                         onClick={() => {
                             if (newTaskTitle.trim()) {
                                 if (onAddTask) {
                                     onAddTask({
                                         title: newTaskTitle.trim(),
-                                        period: 'morgen', // Default to morning
+                                        period: newTaskPeriod,
                                         type: 'activity'
                                     });
                                 }
                                 setNewTaskTitle('');
+                                setNewTaskPeriod('morgen');
                                 setShowAddTaskModal(false);
                             }
                         }}
