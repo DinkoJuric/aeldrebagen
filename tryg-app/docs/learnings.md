@@ -38,6 +38,11 @@ Actionable learnings for avoiding roadblocks. Format: **Problem** → **Action T
 
 ## React & Vite
 
+### Missing Named Imports
+- **Problem**: App crashed on login with `ReferenceError: useMemo is not defined`
+- **Action**: Added `import { useMemo } from 'react'` to the component
+- **Future**: When using hooks like `useMemo`, `useEffect`, `useCallback`, ALWAYS verify they are imported from 'react'. `grep` for the hook name if unsure.
+
 ### Tailwind v4 Setup Confusion
 - **Problem**: PostCSS config approach from docs didn't work
 - **Action**: Found Tailwind v4 uses `@tailwindcss/vite` plugin instead
