@@ -12,7 +12,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "prepare": "husky"
   },
   "dependencies": {
     "@capacitor/cli": "^8.0.0",
@@ -36,9 +37,14 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
+    "husky": "^9.1.7",
     "jsdom": "^27.3.0",
+    "lint-staged": "^16.2.7",
     "tailwindcss": "^4.1.17",
     "vite": "^7.2.4",
     "vitest": "^4.0.15"
+  },
+  "lint-staged": {
+    "*.{js,jsx}": "eslint --fix"
   }
 }
