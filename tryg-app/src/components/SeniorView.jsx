@@ -29,19 +29,24 @@ import { useHelpExchangeMatch } from '../hooks/useHelpExchangeMatch';
 import { MatchCelebration } from './MatchCelebration';
 import { InlineGatesIndicator } from './ProgressRing';
 import { Spillehjoernet } from './Spillehjoernet';
+import { HealthReport } from './HealthReport';
+import { AlertCircle, Plus } from 'lucide-react';
 
 export const SeniorView = ({
     tasks, toggleTask, updateStatus, addSymptom, statusLastUpdated, onSendPing,
     weeklyAnswers, onWeeklyAnswer, helpOffers, helpRequests, relativeOffers = [], relativeRequests = [],
     onHelpOffer, onHelpRequest,
     onRemoveOffer, onRemoveRequest, members = [], memberStatuses = [], currentUserId = null, relativeStatuses = [],
-    userName = 'Senior', relativeName = 'Familie', careCircleId = null
+    userName = 'Senior', relativeName = 'Familie', careCircleId = null, symptomLogs = [], onAddTask
 }) => {
     const [showCallModal, setShowCallModal] = useState(false);
     const [showSymptomModal, setShowSymptomModal] = useState(false);
     const [showWeeklyModal, setShowWeeklyModal] = useState(false);
     const [showCompletedTasks, setShowCompletedTasks] = useState(false);
     const [showHealthReport, setShowHealthReport] = useState(false);
+    const [showAddTaskModal, setShowAddTaskModal] = useState(false);
+    const [rewardMinimized, setRewardMinimized] = useState(false);
+    const [newTaskTitle, setNewTaskTitle] = useState('');
     const [activePeriod, setActivePeriod] = useState('morgen');
     const [activeTab, setActiveTab] = useState('daily'); // 'daily', 'family', or 'spil'
 
@@ -193,22 +198,38 @@ export const SeniorView = ({
                 {/* ===== DAILY TAB ===== */}
                 {activeTab === 'daily' && (
                     <>
-                        {/* Reward Card (Behavioral Hook) - Hidden until ALL MEDICINE complete */}
-                        {allMedicineComplete ? (
-                            <div className="rounded-3xl p-6 mb-6 bg-indigo-600 border-2 border-indigo-600 text-white animate-fade-in">
-                                <div className="text-center">
-                                    <div className="flex items-center justify-center gap-2 mb-2">
-                                        <ImageIcon className="w-6 h-6 text-indigo-200" />
-                                        <span className="font-bold text-indigo-100 uppercase tracking-widest text-sm">Dagens Billede</span>
+                        {/* Reward Card (Behavioral Hook) - Clickable to minimize */}
+                        {allMedicineComplete && (
+                            rewardMinimized ? (
+                                <button
+                                    onClick={() => setRewardMinimized(false)}
+                                    className="w-full rounded-xl p-3 mb-4 bg-indigo-100 border-2 border-indigo-200 flex items-center justify-between hover:bg-indigo-200 transition-colors"
+                                >
+                                    <div className="flex items-center gap-2">
+                                        <ImageIcon className="w-5 h-5 text-indigo-600" />
+                                        <span className="font-bold text-indigo-700">Dagens Billede</span>
                                     </div>
-                                    <div className="w-full h-48 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-xl mb-3 overflow-hidden shadow-lg transform rotate-2 hover:rotate-0 transition-transform duration-500 flex items-center justify-center">
-                                        <span className="text-white/80 text-6xl">🌳👨‍👩‍👧‍👦</span>
+                                    <span className="text-xs text-indigo-500">Tryk for at vise</span>
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={() => setRewardMinimized(true)}
+                                    className="w-full rounded-3xl p-6 mb-6 bg-indigo-600 border-2 border-indigo-600 text-white animate-fade-in text-left hover:bg-indigo-700 transition-colors"
+                                >
+                                    <div className="text-center">
+                                        <div className="flex items-center justify-center gap-2 mb-2">
+                                            <ImageIcon className="w-6 h-6 text-indigo-200" />
+                                            <span className="font-bold text-indigo-100 uppercase tracking-widest text-sm">Dagens Billede</span>
+                                        </div>
+                                        <div className="w-full h-48 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-xl mb-3 overflow-hidden shadow-lg transform rotate-2 hover:rotate-0 transition-transform duration-500 flex items-center justify-center">
+                                            <span className="text-white/80 text-6xl">🌳👨‍👩‍👧‍👦</span>
+                                        </div>
+                                        <p className="font-bold text-lg">Medicin taget! ❤️</p>
+                                        <p className="text-indigo-200 text-sm">Tryk for at minimere</p>
                                     </div>
-                                    <p className="font-bold text-lg">Medicin taget! ❤️</p>
-                                    <p className="text-indigo-200 text-sm">Flot klaret - her er et billede fra familien.</p>
-                                </div>
-                            </div>
-                        ) : null}
+                                </button>
+                            )
+                        )}
 
                         {/* MEDICINE SECTION - Separate from tasks, with tick marks */}
                         {medicineTasks.length > 0 && !allMedicineComplete && (
@@ -295,6 +316,15 @@ export const SeniorView = ({
                         {renderTaskSection('Eftermiddag (Kl. 14-17)', 'eftermiddag', <Moon className="w-6 h-6 text-stone-600" />)}
                         <div className="h-px bg-stone-200 my-4" />
                         {renderTaskSection('Aften (Kl. 18-21)', 'aften', <Moon className="w-6 h-6 text-stone-600" />)}
+
+                        {/* Add Own Task Button */}
+                        <button
+                            onClick={() => setShowAddTaskModal(true)}
+                            className="w-full flex items-center justify-center gap-2 p-4 mt-4 bg-white border-2 border-dashed border-teal-300 rounded-2xl text-teal-600 font-medium hover:bg-teal-50 hover:border-teal-400 transition-colors"
+                        >
+                            <Plus className="w-5 h-5" />
+                            <span>Tilføj egen opgave</span>
+                        </button>
 
                         {/* Completed Tasks - DISABLED for now (uncomment to re-enable) */}
                         {false && completedTasks > 0 && (
@@ -517,6 +547,50 @@ export const SeniorView = ({
                     onAction={(action) => console.log('Senior action:', action)}
                 />
             )}
+
+            {/* Health Report Modal */}
+            <HealthReport
+                isOpen={showHealthReport}
+                onClose={() => setShowHealthReport(false)}
+                symptomLogs={symptomLogs}
+                tasks={tasks}
+            />
+
+            {/* Add Task Modal */}
+            <Modal isOpen={showAddTaskModal} onClose={() => setShowAddTaskModal(false)} title="Tilføj egen opgave">
+                <div className="space-y-4">
+                    <div>
+                        <label className="block text-sm font-medium text-slate-700 mb-1">Hvad skal gøres?</label>
+                        <input
+                            type="text"
+                            value={newTaskTitle}
+                            onChange={(e) => setNewTaskTitle(e.target.value)}
+                            placeholder="F.eks. Ring til lægen"
+                            className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-teal-500 focus:outline-none text-lg"
+                            autoFocus
+                        />
+                    </div>
+                    <Button
+                        onClick={() => {
+                            if (newTaskTitle.trim()) {
+                                if (onAddTask) {
+                                    onAddTask({
+                                        title: newTaskTitle.trim(),
+                                        period: 'morgen', // Default to morning
+                                        type: 'activity'
+                                    });
+                                }
+                                setNewTaskTitle('');
+                                setShowAddTaskModal(false);
+                            }
+                        }}
+                        className="w-full"
+                        disabled={!newTaskTitle.trim()}
+                    >
+                        Tilføj opgave
+                    </Button>
+                </div>
+            </Modal>
         </div >
     );
 };

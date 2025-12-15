@@ -340,6 +340,8 @@ export default function TrygAppCore({
                             userName={seniorName}
                             relativeName={relativeName}
                             careCircleId={careCircle?.id}
+                            symptomLogs={symptoms}
+                            onAddTask={handleAddTaskFromRelative}
                         />
                     ) : (
                         <RelativeView
