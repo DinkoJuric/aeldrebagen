@@ -83,7 +83,7 @@ export const RelativeView = ({
             activities.push({
                 type: 'symptom',
                 timestamp: s.loggedAt?.toDate ? s.loggedAt.toDate() : new Date(s.loggedAt),
-                text: `Symptom: ${s.type}`,
+                text: `Symptom: ${s.label || s.type || 'Ukendt'}`,
                 emoji: '🩺'
             });
         });
