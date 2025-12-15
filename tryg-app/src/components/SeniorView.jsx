@@ -67,10 +67,18 @@ export const SeniorView = ({
     const [selectedSymptom, setSelectedSymptom] = useState(null);
     const [showBodySelector, setShowBodySelector] = useState(false);
 
-    // Reward Logic - unlock photo when ALL tasks complete
+    // Reward Logic - unlock photo when ALL MEDICINE is complete (not all tasks)
+    const medicineTasks = tasks.filter(t =>
+        t.title?.toLowerCase().includes('medicin') ||
+        t.title?.toLowerCase().includes('pille') ||
+        t.type === 'medication'
+    );
+    const completedMedicine = medicineTasks.filter(t => t.completed).length;
+    const allMedicineComplete = medicineTasks.length > 0 && medicineTasks.length === completedMedicine;
+
+    // For general stats
     const totalTasks = tasks.length;
     const completedTasks = tasks.filter(t => t.completed).length;
-    const allTasksComplete = totalTasks > 0 && totalTasks === completedTasks;
 
     // Dynamic greeting based on time
     const hour = new Date().getHours();
@@ -80,9 +88,13 @@ export const SeniorView = ({
     const dateOptions = { weekday: 'long', day: 'numeric', month: 'long' };
     const dateString = new Date().toLocaleDateString('da-DK', dateOptions);
 
-    // Render task section by period (only incomplete tasks)
+    // Render task section by period (only incomplete, NON-MEDICINE tasks)
     const renderTaskSection = (periodTitle, periodKey, icon) => {
-        const periodTasks = tasks.filter(t => t.period === periodKey && !t.completed);
+        const periodTasks = tasks.filter(t =>
+            t.period === periodKey &&
+            !t.completed &&
+            !(t.title?.toLowerCase().includes('medicin') || t.title?.toLowerCase().includes('pille') || t.type === 'medication')
+        );
         if (periodTasks.length === 0) return null;
 
         const isActive = activePeriod === periodKey;
@@ -181,8 +193,8 @@ export const SeniorView = ({
                 {/* ===== DAILY TAB ===== */}
                 {activeTab === 'daily' && (
                     <>
-                        {/* Reward Card (Behavioral Hook) - Hidden until ALL tasks complete */}
-                        {allTasksComplete ? (
+                        {/* Reward Card (Behavioral Hook) - Hidden until ALL MEDICINE complete */}
+                        {allMedicineComplete ? (
                             <div className="rounded-3xl p-6 mb-6 bg-indigo-600 border-2 border-indigo-600 text-white animate-fade-in">
                                 <div className="text-center">
                                     <div className="flex items-center justify-center gap-2 mb-2">
@@ -192,11 +204,58 @@ export const SeniorView = ({
                                     <div className="w-full h-48 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-xl mb-3 overflow-hidden shadow-lg transform rotate-2 hover:rotate-0 transition-transform duration-500 flex items-center justify-center">
                                         <span className="text-white/80 text-6xl">🌳👨‍👩‍👧‍👦</span>
                                     </div>
-                                    <p className="font-bold text-lg">Godt klaret, Farmor! ❤️</p>
-                                    <p className="text-indigo-200 text-sm">Her er et billede fra vores tur i skoven.</p>
+                                    <p className="font-bold text-lg">Medicin taget! ❤️</p>
+                                    <p className="text-indigo-200 text-sm">Flot klaret - her er et billede fra familien.</p>
                                 </div>
                             </div>
                         ) : null}
+
+                        {/* MEDICINE SECTION - Separate from tasks, with tick marks */}
+                        {medicineTasks.length > 0 && !allMedicineComplete && (
+                            <div className="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-2xl p-4 mb-6 border-2 border-purple-100">
+                                <div className="flex items-center gap-2 mb-3">
+                                    <Pill className="w-6 h-6 text-purple-600" />
+                                    <h2 className="text-lg font-bold text-purple-800">Medicin</h2>
+                                    <span className="text-sm text-purple-500 ml-auto">
+                                        {completedMedicine}/{medicineTasks.length} taget
+                                    </span>
+                                </div>
+                                <div className="space-y-2">
+                                    {medicineTasks.map(med => (
+                                        <button
+                                            key={med.id}
+                                            onClick={() => toggleTask(med.id)}
+                                            className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all ${med.completed
+                                                ? 'bg-purple-100 border-2 border-purple-200'
+                                                : 'bg-white border-2 border-purple-100 hover:border-purple-300'
+                                                }`}
+                                        >
+                                            <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-colors ${med.completed
+                                                ? 'bg-purple-500 border-purple-500'
+                                                : 'border-purple-300 bg-white'
+                                                }`}>
+                                                {med.completed && <CheckCircle className="w-5 h-5 text-white" />}
+                                            </div>
+                                            <span className={`font-medium ${med.completed ? 'text-purple-500 line-through' : 'text-purple-800'
+                                                }`}>
+                                                {med.title}
+                                            </span>
+                                            <span className="text-purple-400 text-sm ml-auto">{med.time}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Medicine Complete Collapsed State */}
+                        {medicineTasks.length > 0 && allMedicineComplete && (
+                            <div className="bg-gradient-to-r from-green-50 to-teal-50 rounded-xl p-3 mb-4 border border-green-200 flex items-center gap-3">
+                                <div className="bg-green-500 rounded-full p-1.5">
+                                    <CheckCircle className="w-4 h-4 text-white" />
+                                </div>
+                                <span className="text-green-700 font-medium">Medicin taget ✓</span>
+                            </div>
+                        )}
 
                         {/* Check-in Status */}
                         <div className="bg-white rounded-3xl p-6 shadow-sm border-2 border-teal-100 mb-8">
@@ -237,8 +296,8 @@ export const SeniorView = ({
                         <div className="h-px bg-stone-200 my-4" />
                         {renderTaskSection('Aften (Kl. 18-21)', 'aften', <Moon className="w-6 h-6 text-stone-600" />)}
 
-                        {/* Completed Tasks - Collapsible Section */}
-                        {completedTasks > 0 && (
+                        {/* Completed Tasks - DISABLED for now (uncomment to re-enable) */}
+                        {false && completedTasks > 0 && (
                             <div className="mt-6">
                                 <button
                                     onClick={() => setShowCompletedTasks(!showCompletedTasks)}

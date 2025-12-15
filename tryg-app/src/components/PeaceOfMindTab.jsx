@@ -152,8 +152,8 @@ export const PeaceOfMindTab = ({
                 </button>
             </div>
 
-            {/* Connection History */}
-            {recentActivity.length > 0 && (
+            {/* Connection History - DISABLED for now (uncomment to re-enable) */}
+            {false && recentActivity.length > 0 && (
                 <div className="bg-stone-50 rounded-xl p-4">
                     <h3 className="text-xs font-bold text-stone-500 uppercase tracking-wider mb-3">Seneste aktivitet</h3>
                     <div className="space-y-2">

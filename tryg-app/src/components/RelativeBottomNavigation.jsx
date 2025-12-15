@@ -26,16 +26,6 @@ export const RelativeBottomNavigation = ({ activeTab, onTabChange, onShowReport 
                     <span className="text-xs font-bold">Familie</span>
                 </button>
 
-                {/* Spil - Gaming */}
-                <button
-                    onClick={() => onTabChange('spil')}
-                    className={`flex flex-col items-center gap-1 transition-colors ${activeTab === 'spil' ? 'text-purple-600' : 'text-stone-400 hover:text-stone-600'
-                        }`}
-                >
-                    <Gamepad2 className={`w-6 h-6 ${activeTab === 'spil' ? 'fill-purple-100' : ''}`} />
-                    <span className="text-xs font-bold">Spil</span>
-                </button>
-
                 {/* Health Report */}
                 <button
                     onClick={onShowReport}
@@ -43,6 +33,16 @@ export const RelativeBottomNavigation = ({ activeTab, onTabChange, onShowReport 
                 >
                     <FileText className="w-6 h-6" />
                     <span className="text-xs font-bold">Rapport</span>
+                </button>
+
+                {/* Spil - Gaming (Right corner) */}
+                <button
+                    onClick={() => onTabChange('spil')}
+                    className={`flex flex-col items-center gap-1 transition-colors ${activeTab === 'spil' ? 'text-purple-600' : 'text-stone-400 hover:text-stone-600'
+                        }`}
+                >
+                    <Gamepad2 className={`w-6 h-6 ${activeTab === 'spil' ? 'fill-purple-100' : ''}`} />
+                    <span className="text-xs font-bold">Spil</span>
                 </button>
             </div>
         </div>
