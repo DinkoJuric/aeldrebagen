@@ -32,7 +32,7 @@ export function useTasks(circleId) {
     // Subscribe to tasks from Firestore
     useEffect(() => {
         if (!circleId) {
-            setTasks(INITIAL_TASKS); // Fallback to defaults
+            setTasks(/** @type {import('../types').Task[]} */(INITIAL_TASKS)); // Fallback to defaults
             setLoading(false);
             return;
         }
@@ -46,6 +46,7 @@ export function useTasks(circleId) {
                     // Initialize with default tasks if none exist
                     initializeDefaultTasks(circleId);
                 } else {
+                    /** @type {import('../types').Task[]} */
                     const tasksList = snapshot.docs.map(doc => ({
                         id: doc.id,
                         ...doc.data()
@@ -98,7 +99,7 @@ export function useTasks(circleId) {
             }, { merge: true });
         } catch (err) {
             console.error('Error toggling task:', err);
-            setError(/** @type {Error} */ (err).message);
+            setError(/** @type {Error} */(err).message);
         }
     }, [circleId, tasks]);
 
@@ -111,6 +112,7 @@ export function useTasks(circleId) {
         const taskRef = doc(db, 'careCircles', circleId, 'tasks', taskId);
 
         // Default time based on period if not provided
+        /** @type {Record<string, string>} */
         const defaultTimes = {
             morgen: '09:00',
             frokost: '12:00',
@@ -130,7 +132,7 @@ export function useTasks(circleId) {
             return taskId;
         } catch (err) {
             console.error('Error adding task:', err);
-            setError(/** @type {Error} */ (err).message);
+            setError(/** @type {Error} */(err).message);
             throw err;
         }
     }, [circleId]);
@@ -147,7 +149,7 @@ export function useTasks(circleId) {
             await deleteDoc(taskRef);
         } catch (err) {
             console.error('Error removing task:', err);
-            setError(/** @type {Error} */ (err).message);
+            setError(/** @type {Error} */(err).message);
             throw err;
         }
     }, [circleId]);
@@ -166,7 +168,7 @@ export function useTasks(circleId) {
             }
         } catch (err) {
             console.error('Error resetting tasks:', err);
-            setError(/** @type {Error} */ (err).message);
+            setError(/** @type {Error} */(err).message);
         }
     }, [circleId, tasks]);
 
