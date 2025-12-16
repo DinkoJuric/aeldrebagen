@@ -20,7 +20,7 @@
 /**
  * A task in the Senior's daily routine
  * @typedef {Object} Task
- * @property {string} id - Unique ID (e.g. "task_123")
+ * @property {string|number} id - Unique ID (e.g. "task_123" or 1)
  * @property {string} title - Display title (e.g. "Tag medicin")
  * @property {boolean} completed - Is it done?
  * @property {'morgen' | 'frokost' | 'eftermiddag' | 'aften'} period - Time of day
@@ -28,6 +28,7 @@
  * @property {string} [description] - Optional description
  * @property {string} [type] - Task type (e.g. "medication", "appointment")
  * @property {Object} [completedAt] - Firestore timestamp when completed
+ * @property {Object} [createdAt] - Firestore timestamp when created
  */
 
 /**
