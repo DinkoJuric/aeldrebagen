@@ -28,9 +28,9 @@ export const Avatar = ({ id, className = '', size = 'md' }) => {
 
         // Row 2 - Status Icons (Zoomed in)
         'home': '7% 96%',     // Home
-        'work': '29% 94%',    // Briefcase - Moved up slightly
+        'work': '27% 90%',    // Briefcase - Moved UP (Y) and Adjusted X
         'car': '51% 96%',     // Car
-        'coffee': '72% 94%',  // Coffee - Fixed clipping
+        'coffee': '68% 92%',  // Coffee - Shifted X Left to fix left clipping
         'moon': '92% 94%'     // Moon
     };
 
@@ -59,7 +59,7 @@ export const Avatar = ({ id, className = '', size = 'md' }) => {
                 backgroundPosition: MAPPINGS[id],
                 // Reduced zoom slightly to prevent clipping and improve quality
                 backgroundSize: ['home', 'work', 'car', 'coffee', 'moon'].includes(id)
-                    ? '480% 240%'  // Reduced zoom to fix clipping
+                    ? '440% 220%'  // Reduced zoom significantly to fix clipping
                     : '400% 210%'  // Standard zoom for avatars
             }}
             aria-label={id}
