@@ -9,6 +9,7 @@ import { RelativeView } from './components/RelativeView';
 import { PingNotification } from './components/ThinkingOfYou';
 import { PrivacySettings } from './components/PrivacySettings';
 import { InstallPrompt } from './components/InstallPrompt';
+import { UpdateToast } from './components/UpdateToast';
 import { PhotoCaptureButton, PhotoUploadModal, PhotoViewerModal, PhotoNotificationBadge } from './components/PhotoShare';
 import { useTasks } from './hooks/useTasks';
 import { useSymptoms } from './hooks/useSymptoms';
@@ -414,6 +415,9 @@ export default function TrygAppCore({
 
                     {/* iOS PWA Install Prompt */}
                     <InstallPrompt />
+
+                    {/* PWA Update Toast */}
+                    <UpdateToast />
 
                     {/* Home indicator */}
                     <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 w-32 h-1.5 bg-black/20 rounded-full z-50"></div>
