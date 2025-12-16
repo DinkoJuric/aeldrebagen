@@ -225,4 +225,9 @@ description: Master record of all project and cross-project learnings
 - **Action**: Combined icons into a single sprite sheet (`family-presence.png`) and used `backgroundPosition`.
 - **Future**: For fixed sets of UI assets (avatars, status icons), always use sprite sheets.
 
+### PWA Start URL on Subpaths
+- **Problem**: PWA installed from GitHub Pages (subpath) failed to open (403 Error) because `start_url` defaulted to `/` (domain root).
+- **Action**: Dynamically set `start_url` and `scope` in `vite.config.js` to match the `base` path (e.g., `/aeldrebagen/`).
+- **Future**: Ensure `manifest.start_url` matches your deployment base path, especially for GitHub Pages.
+
 ---
