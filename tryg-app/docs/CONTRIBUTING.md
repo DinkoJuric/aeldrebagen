@@ -56,4 +56,38 @@ Avoid duplicating UI logic. If a card or widget appears in both views (even with
 2.  **Grep Audit**: When changing a prop or constant, `grep` for it across the *entire* `src` folder, not just the file you're working on.
 
 ---
+
+## 5. Component Philosophy 🧱
+
+**"Smart vs Dumb" Components** — Strict separation of concerns.
+
+### Dumb Components (Presentational)
+- **Purpose**: Render UI based on props, emit events.
+- **Rules**: ❌ No hooks (except `useState` for local UI state like modals). ❌ No context access. ❌ No data fetching.
+- **Examples**: `Button.jsx`, `Modal.jsx`, `ProgressRing.jsx`, `RelativeViewLayout.jsx`
+
+### Smart Components (Containers)
+- **Purpose**: Connect to context/hooks, orchestrate data, pass to dumb components.
+- **Rules**: ✅ Use `useCareCircleContext()`. ✅ Use Firebase hooks. ✅ Handle business logic.
+- **Examples**: `AppCore.jsx`, `CoordinationTab.jsx`, `PeaceOfMindTab.jsx`
+
+### The Golden Rule
+> A Button should never know where its data comes from.  
+> A Container should never know how to render a button.
+
+```jsx
+// ❌ BAD: Dumb component fetching data
+const TaskCard = ({ taskId }) => {
+    const { tasks } = useTasks(); // VIOLATION!
+    const task = tasks.find(t => t.id === taskId);
+    return <div>{task.title}</div>;
+};
+
+// ✅ GOOD: Dumb component receiving data
+const TaskCard = ({ title, completed, onToggle }) => (
+    <div onClick={onToggle}>{title}</div>
+);
+```
+
+---
 *Follow this guide to prevent "One-Sided Feature" bugs.*
