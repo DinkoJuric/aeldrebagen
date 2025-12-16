@@ -400,8 +400,41 @@ export const RelativeView = ({
                     seniorName={seniorName}
                     onDismiss={() => setActiveMatch(null)}
                     onAction={(action) => {
-                        console.log('Match action:', action);
-                        // TODO: Implement specific actions (call, plan, etc.)
+                        // Create task based on action type
+                        const { celebration, offer, request } = activeMatch;
+                        let taskTitle = '';
+                        let taskType = 'appointment';
+
+                        switch (action) {
+                            case 'call':
+                                taskTitle = `📞 Ring til ${seniorName}`;
+                                break;
+                            case 'plan-visit':
+                                taskTitle = `☕ Besøg hos ${seniorName}`;
+                                break;
+                            case 'plan-meal':
+                                taskTitle = `🍳 Lav mad med ${seniorName}`;
+                                break;
+                            case 'plan-transport':
+                                taskTitle = `🚗 Kør ${seniorName}`;
+                                break;
+                            case 'plan-garden':
+                                taskTitle = `🌿 Havearbejde med ${seniorName}`;
+                                break;
+                            default:
+                                taskTitle = celebration?.title || `Opgave med ${seniorName}`;
+                        }
+
+                        // Create the task
+                        if (onAddTask && taskTitle) {
+                            onAddTask({
+                                title: taskTitle,
+                                time: '10:00',
+                                type: taskType,
+                                createdBy: userName
+                            });
+                            console.log('Task created:', taskTitle);
+                        }
                         setActiveMatch(null);
                     }}
                 />
