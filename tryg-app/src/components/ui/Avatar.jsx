@@ -57,6 +57,3 @@ export const Avatar = ({ id, className = '', size = 'md' }) => {
 };
 
 export default Avatar;
-};
-
-export default Avatar;
