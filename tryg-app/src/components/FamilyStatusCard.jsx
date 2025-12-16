@@ -90,7 +90,7 @@ export const StatusSelector = ({ currentStatus, onStatusChange, compact = false 
                     >
                         <Avatar
                             id={avatarId}
-                            size="md"
+                            size="sm"
                             className={`transition-transform duration-200 ${isActive ? 'scale-110' : 'group-hover:scale-110'}`}
                         />
 
