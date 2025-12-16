@@ -449,15 +449,16 @@ export const RelativeView = ({
                 title="Hvornår?"
                 actionLabel={pendingAction?.title || 'Opret opgave'}
                 seniorName={seniorName}
-                onConfirm={({ time, label }) => {
+                onConfirm={({ time, label, period }) => {
                     if (onAddTask && pendingAction) {
                         onAddTask({
                             title: pendingAction.title,
                             time: time,
+                            period: period || 'morgen', // Include period for proper sorting
                             type: 'appointment',
                             createdBy: userName
                         });
-                        console.log('Task created:', pendingAction.title, 'at', time);
+                        console.log('Task created:', pendingAction.title, 'at', time, 'period:', period);
                     }
                     setShowTimePicker(false);
                     setPendingAction(null);
