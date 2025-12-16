@@ -6,6 +6,7 @@
  */
 
 import { createContext, useContext } from 'react';
+import '../types'; // Import types for JSDoc
 
 // Create the context with default values
 const CareCircleContext = createContext({

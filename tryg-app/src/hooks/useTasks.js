@@ -14,7 +14,13 @@ import {
 } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { INITIAL_TASKS } from '../data/constants';
+import '../types'; // Import types for JSDoc
 
+/**
+ * Hook for real-time task management via Firestore
+ * @param {string} circleId - Care circle ID
+ * @returns {import('../types').UseTasksReturn & { loading: boolean, error: string|null }}
+ */
 export function useTasks(circleId) {
     const [tasks, setTasks] = useState([]);
     const [loading, setLoading] = useState(true);

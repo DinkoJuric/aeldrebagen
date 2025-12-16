@@ -11,6 +11,7 @@ import {
     query
 } from 'firebase/firestore';
 import { db } from '../config/firebase';
+import '../types'; // Import types for JSDoc
 
 /**
  * Hook to manage per-member status in a care circle
@@ -19,7 +20,8 @@ import { db } from '../config/firebase';
  * @param {string} circleId - The care circle ID
  * @param {string} userId - Current user's ID
  * @param {string} displayName - Current user's display name
- * @param {string} role - Current user's role ('senior' | 'relative')
+ * @param {'senior' | 'relative'} role - Current user's role
+ * @returns {import('../types').UseMemberStatusReturn & { loading: boolean, error: string|null }}
  */
 export function useMemberStatus(circleId, userId, displayName, role) {
     const [memberStatuses, setMemberStatuses] = useState([]);
