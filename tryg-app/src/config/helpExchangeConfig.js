@@ -88,42 +88,42 @@ export const STATUS_MATCHES = [
 
 // All available offers for relatives to choose from
 export const RELATIVE_OFFERS = [
-    { id: 'cook', label: 'Lave mad til dig', emoji: '🍳' },
-    { id: 'visit', label: 'Komme på besøg', emoji: '☕' },
-    { id: 'drive', label: 'Køre dig et sted hen', emoji: '🚗' },
-    { id: 'shop', label: 'Handle ind for dig', emoji: '🛒' },
-    { id: 'garden', label: 'Hjælpe i haven', emoji: '🌿' },
-    { id: 'tech', label: 'Hjælpe med teknologi', emoji: '💻' },
-    { id: 'call', label: 'Ringe og snakke', emoji: '📞' },
-    { id: 'company', label: 'Holde dig med selskab', emoji: '🤗' }
+    { id: 'cook', label: 'Lave mad til dig', emoji: '🍳', sprite: { sheet: '1', pos: 'top-left' } },
+    { id: 'visit', label: 'Komme på besøg', emoji: '☕', sprite: { sheet: '1', pos: 'top-right' } },
+    { id: 'drive', label: 'Køre dig et sted hen', emoji: '🚗', sprite: { sheet: '1', pos: 'bottom-left' } },
+    { id: 'shop', label: 'Handle ind for dig', emoji: '🛒', sprite: { sheet: '2', pos: 'top-left' } },
+    { id: 'garden', label: 'Hjælpe i haven', emoji: '🌿', sprite: { sheet: '1', pos: 'bottom-right' } },
+    { id: 'tech', label: 'Hjælpe med teknologi', emoji: '💻', sprite: { sheet: '2', pos: 'top-right' } },
+    { id: 'call', label: 'Ringe og snakke', emoji: '📞', sprite: { sheet: '2', pos: 'top-right' } }, // Reusing tech/talk icon
+    { id: 'company', label: 'Holde dig med selskab', emoji: '🤗', sprite: { sheet: '1', pos: 'top-right' } }
 ];
 
 // All available requests for relatives to make
 export const RELATIVE_REQUESTS = [
-    { id: 'recipe', label: 'Lære en opskrift', emoji: '📖' },
-    { id: 'advice', label: 'Gode råd', emoji: '💡' },
-    { id: 'story', label: 'Høre en historie', emoji: '📚' },
-    { id: 'babysit', label: 'Hjælp med børnene', emoji: '👶' },
-    { id: 'craft', label: 'Lave noget kreativt sammen', emoji: '🎨' }
+    { id: 'recipe', label: 'Lære en opskrift', emoji: '📖', sprite: { sheet: '2', pos: 'bottom-left' } },
+    { id: 'advice', label: 'Gode råd', emoji: '💡', sprite: { sheet: '2', pos: 'top-right' } },
+    { id: 'story', label: 'Høre en historie', emoji: '📚', sprite: { sheet: '2', pos: 'bottom-left' } },
+    { id: 'babysit', label: 'Hjælp med børnene', emoji: '👶', sprite: { sheet: '2', pos: 'bottom-right' } },
+    { id: 'craft', label: 'Lave noget kreativt sammen', emoji: '🎨', sprite: { sheet: '2', pos: 'bottom-right' } }
 ];
 
 // Senior's available offers (what they can contribute)
 export const SENIOR_OFFERS = [
-    { id: 'listen', label: 'Jeg kan hjælpe med at lytte', emoji: '👂' },
-    { id: 'recipe', label: 'Jeg har en god opskrift', emoji: '👩‍🍳' },
-    { id: 'stories', label: 'Vil gerne høre om jeres dag', emoji: '💬' },
-    { id: 'cook', label: 'Kan lave mad til os', emoji: '🍳' }, // Match for shop
-    { id: 'teach', label: 'Vil gerne lære fra mig', emoji: '📚' }
+    { id: 'listen', label: 'Jeg kan hjælpe med at lytte', emoji: '👂', sprite: { sheet: '1', pos: 'top-right' } },
+    { id: 'recipe', label: 'Jeg har en god opskrift', emoji: '👩‍🍳', sprite: { sheet: '1', pos: 'top-left' } },
+    { id: 'stories', label: 'Vil gerne høre om jeres dag', emoji: '💬', sprite: { sheet: '1', pos: 'top-right' } },
+    { id: 'cook', label: 'Kan lave mad til os', emoji: '🍳', sprite: { sheet: '1', pos: 'top-left' } }, // Match for shop
+    { id: 'teach', label: 'Vil gerne lære fra mig', emoji: '📚', sprite: { sheet: '2', pos: 'bottom-left' } }
 ];
 
 // Senior's available requests (what they need)
 export const SENIOR_REQUESTS = [
-    { id: 'call', label: 'Kan nogen ringe mig i dag?', emoji: '📞' },
-    { id: 'shop', label: 'Hjælp til indkøb denne uge', emoji: '🛒' }, // Match for cook
-    { id: 'transport', label: 'Følgeskab til lægen/aftale', emoji: '🚗' }, // Match for drive
-    { id: 'company', label: 'Bare noget selskab', emoji: '☕' }, // Match for visit
-    { id: 'outdoor', label: 'Gå en tur sammen', emoji: '🌿' }, // Match for garden
-    { id: 'help-tech', label: 'Hjælp med telefon/computer', emoji: '📱' } // Match for tech
+    { id: 'call', label: 'Kan nogen ringe mig i dag?', emoji: '📞', sprite: { sheet: '2', pos: 'top-right' } },
+    { id: 'shop', label: 'Hjælp til indkøb denne uge', emoji: '🛒', sprite: { sheet: '2', pos: 'top-left' } }, // Match for cook
+    { id: 'transport', label: 'Følgeskab til lægen/aftale', emoji: '🚗', sprite: { sheet: '1', pos: 'bottom-left' } }, // Match for drive
+    { id: 'company', label: 'Bare noget selskab', emoji: '☕', sprite: { sheet: '1', pos: 'top-right' } }, // Match for visit
+    { id: 'outdoor', label: 'Gå en tur sammen', emoji: '🌿', sprite: { sheet: '1', pos: 'bottom-right' } }, // Match for garden
+    { id: 'help-tech', label: 'Hjælp med telefon/computer', emoji: '📱', sprite: { sheet: '2', pos: 'top-right' } } // Match for tech
 ];
 
 export default { MATCH_PAIRS, STATUS_MATCHES, RELATIVE_OFFERS, RELATIVE_REQUESTS, SENIOR_OFFERS, SENIOR_REQUESTS };

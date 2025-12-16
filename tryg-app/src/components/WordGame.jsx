@@ -31,14 +31,22 @@ export const WordGame = ({
         const celebration = percentage >= 80 ? '🏆' : percentage >= 60 ? '⭐' : '👍';
 
         return (
-            <div className="bg-gradient-to-br from-amber-400 to-orange-500 rounded-2xl p-6 text-white text-center shadow-lg">
-                <div className="text-5xl mb-3">{celebration}</div>
-                <h3 className="text-2xl font-bold mb-2">Dagens ord er klaret!</h3>
-                <div className="bg-white/20 rounded-xl p-4 mb-4">
+            <div className="bg-gradient-to-br from-amber-400 to-orange-500 rounded-2xl p-6 text-white text-center shadow-lg overflow-hidden relative">
+                {/* Success Trophy Image */}
+                <div className="mb-4 -mt-2">
+                    <img
+                        src="/assets/success_trophy.png"
+                        alt="Succes Trophy"
+                        className="w-full max-w-[200px] mx-auto object-contain animate-in zoom-in duration-500 drop-shadow-xl"
+                    />
+                </div>
+
+                <h3 className="text-2xl font-bold mb-2 relative z-10">Dagens ord er klaret!</h3>
+                <div className="bg-white/20 rounded-xl p-4 mb-4 backdrop-blur-sm relative z-10">
                     <p className="text-4xl font-bold">{score}/{totalWords}</p>
                     <p className="text-amber-100">rigtige svar</p>
                 </div>
-                <p className="text-amber-100 text-sm">
+                <p className="text-amber-100 text-sm relative z-10">
                     {percentage >= 80
                         ? 'Fantastisk! Du er en ordmester!'
                         : percentage >= 60

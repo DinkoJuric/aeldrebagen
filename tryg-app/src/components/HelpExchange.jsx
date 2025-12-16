@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Heart, HandHeart, X, Plus } from 'lucide-react';
 import { SENIOR_OFFERS, SENIOR_REQUESTS } from '../config/helpExchangeConfig';
 import { useCareCircleContext } from '../contexts/CareCircleContext';
+import { Pictogram } from './ui/Pictogram';
 
 // Dashboard-style HelpExchange for Senior (aligned with RelativeView)
 export const HelpExchange = ({
@@ -20,6 +21,15 @@ export const HelpExchange = ({
     const seniorName = propSeniorName ?? contextSeniorName ?? 'Senior';
     const [showOfferPicker, setShowOfferPicker] = useState(false);
     const [showRequestPicker, setShowRequestPicker] = useState(false);
+
+    // Helpers to render icon or emoji
+    const renderIcon = (item, size = 'md') => {
+        if (item.sprite) {
+            const dims = size === 'lg' ? 'w-10 h-10' : size === 'xl' ? 'w-16 h-16' : 'w-8 h-8';
+            return <Pictogram sheet={item.sprite.sheet} position={item.sprite.pos} className={`${dims} shrink-0`} />;
+        }
+        return <span className={size === 'lg' ? 'text-2xl' : 'text-lg'}>{item.emoji}</span>;
+    };
 
     // Filter out already active items
     const availableOffers = SENIOR_OFFERS.filter(o => !activeOffers.some(active => active.id === o.id));
@@ -62,9 +72,9 @@ export const HelpExchange = ({
                     {activeOffers.map((item) => (
                         <span
                             key={item.docId}
-                            className="bg-teal-500 text-white px-3 py-2 rounded-xl flex items-center gap-2 shadow-sm animate-in fade-in zoom-in duration-200"
+                            className="bg-teal-500 text-white pl-1.5 pr-3 py-1.5 rounded-xl flex items-center gap-2 shadow-sm animate-in fade-in zoom-in duration-200"
                         >
-                            <span className="text-lg">{item.emoji}</span>
+                            {renderIcon(item, 'md')}
                             <span className="font-medium text-sm">{item.label}</span>
                             <button
                                 onClick={() => onRemoveOffer?.(item.docId)}
@@ -104,7 +114,7 @@ export const HelpExchange = ({
                                     className="bg-white border border-stone-200 hover:border-teal-400 hover:bg-teal-50 px-3 py-2 rounded-lg 
                                         flex items-center gap-2 text-sm transition-colors text-left shadow-sm"
                                 >
-                                    <span className="text-lg">{item.emoji}</span>
+                                    {renderIcon(item, 'lg')}
                                     <span className="text-stone-700">{item.label}</span>
                                 </button>
                             ))}
@@ -127,9 +137,9 @@ export const HelpExchange = ({
                     {activeRequests.map((item) => (
                         <span
                             key={item.docId}
-                            className="bg-indigo-500 text-white px-3 py-2 rounded-xl flex items-center gap-2 shadow-sm animate-in fade-in zoom-in duration-200"
+                            className="bg-indigo-500 text-white pl-1.5 pr-3 py-1.5 rounded-xl flex items-center gap-2 shadow-sm animate-in fade-in zoom-in duration-200"
                         >
-                            <span className="text-lg">{item.emoji}</span>
+                            {renderIcon(item, 'md')}
                             <span className="font-medium text-sm">{item.label}</span>
                             <button
                                 onClick={() => onRemoveRequest?.(item.docId)}
@@ -169,7 +179,7 @@ export const HelpExchange = ({
                                     className="bg-white border border-stone-200 hover:border-indigo-400 hover:bg-indigo-50 px-3 py-2 rounded-lg 
                                         flex items-center gap-2 text-sm transition-colors text-left shadow-sm"
                                 >
-                                    <span className="text-lg">{item.emoji}</span>
+                                    {renderIcon(item, 'lg')}
                                     <span className="text-stone-700">{item.label}</span>
                                 </button>
                             ))}
