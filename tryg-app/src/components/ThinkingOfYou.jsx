@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Heart, Sparkles } from 'lucide-react';
 import { playPingSound } from '../utils/sounds';
+import { Avatar } from './ui/Avatar';
 
 // "Thinking of you" ping button - one-tap warmth without obligation
 export const ThinkingOfYouButton = ({ onSendPing, fromName = 'Louise' }) => {
@@ -111,8 +112,8 @@ export const PingNotification = ({ ping, onDismiss }) => {
                 className="bg-gradient-to-r from-pink-500 to-rose-500 p-4 rounded-2xl shadow-xl text-white cursor-pointer"
             >
                 <div className="flex items-center gap-3">
-                    <div className="p-2 bg-white/20 rounded-full">
-                        <Heart className="w-6 h-6 fill-white" />
+                    <div className="bg-white/20 p-1 rounded-full">
+                        <Avatar id={ping.fromName?.toLowerCase() || 'louise'} size="md" className="border-2 border-white/50" />
                     </div>
                     <div>
                         <p className="font-bold">{ping.fromName} tænker på dig ❤️</p>

@@ -11,6 +11,7 @@ import { Spillehjoernet } from './Spillehjoernet';
 import { FEATURES } from '../config/features';
 import { SYMPTOMS_LIST } from '../data/constants';
 import { AlertCircle } from 'lucide-react';
+import { Avatar } from './ui/Avatar';
 
 export const RelativeView = ({
     tasks, profile, lastCheckIn, symptomLogs, onAddTask,
@@ -105,9 +106,11 @@ export const RelativeView = ({
             <header className="px-4 py-2 bg-white shadow-sm rounded-b-3xl z-10 shrink-0">
                 <div className="flex justify-between items-center">
                     <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-700 font-bold text-sm">
-                            {userName?.charAt(0) || 'P'}
-                        </div>
+                        <Avatar
+                            id={userName === 'Test User' ? 'fatima' : userName === 'Brad' ? 'brad' : 'louise'}
+                            size="md"
+                            className="bg-indigo-50"
+                        />
                         <span className="font-semibold text-stone-700 text-sm">Hej, {userName}</span>
                     </div>
                     <div className="flex items-center gap-1">

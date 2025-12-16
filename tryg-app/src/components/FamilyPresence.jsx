@@ -5,6 +5,7 @@
 import React from 'react';
 import { Users, Home, Briefcase, Car, Coffee, Moon, Heart } from 'lucide-react';
 import { useCareCircleContext } from '../contexts/CareCircleContext';
+import { Avatar } from './ui/Avatar';
 
 // Status display configuration
 const STATUS_CONFIG = {
@@ -25,11 +26,26 @@ const SENIOR_STATUS = {
  * Compact status display row for a family member
  */
 const MemberStatusRow = ({ name, status, role, timestamp, isCurrentUser = false }) => {
+    // Determine avatar ID based on name or role
+    const avatarId = role === 'senior' ? 'senior' :
+        name === 'Test User' ? 'fatima' :
+            name === 'Brad' ? 'brad' : 'louise';
+
+    // Status mapping for sprite IDs
+    const statusIdMapping = {
+        'home': 'home',
+        'work': 'work',
+        'traveling': 'car',
+        'available': 'coffee',
+        'busy': 'moon',
+        'good': 'home', // Fallback for senior
+        'default': 'home'
+    };
+
+    const statusIconId = statusIdMapping[status] || 'home';
     const config = role === 'senior'
         ? (SENIOR_STATUS[status] || SENIOR_STATUS.default)
         : (STATUS_CONFIG[status] || STATUS_CONFIG.home);
-
-    const StatusIcon = config.icon;
 
     // Format timestamp
     let timeString = '';
@@ -42,26 +58,30 @@ const MemberStatusRow = ({ name, status, role, timestamp, isCurrentUser = false 
         const diffMins = Math.floor(diffMs / 60000);
 
         if (diffMins < 60) {
-            timeString = `for ${diffMins} min siden`;
+            timeString = `${diffMins}m`;
         } else if (diffMins < 1440) {
-            timeString = `for ${Math.floor(diffMins / 60)} timer siden`;
+            timeString = `${Math.floor(diffMins / 60)}t`;
         } else {
             timeString = date.toLocaleDateString('da-DK', { day: 'numeric', month: 'short' });
         }
     }
 
     return (
-        <div className={`flex items-center justify-between py-2 ${isCurrentUser ? 'opacity-60' : ''}`}>
-            <div className="flex items-center gap-2">
-                <StatusIcon className={`w-4 h-4 ${config.color}`} />
-                <span className="text-sm font-medium text-stone-700">
-                    {name}{isCurrentUser ? ' (dig)' : ''}
-                </span>
+        <div className={`flex items-center justify-between py-3 ${isCurrentUser ? 'opacity-60' : ''}`}>
+            <div className="flex items-center gap-3">
+                <Avatar id={avatarId} size="md" className="bg-stone-200" />
+                <div>
+                    <span className="text-sm font-bold text-stone-700 block text-left">
+                        {name}{isCurrentUser ? ' (dig)' : ''}
+                    </span>
+                    <span className={`text-xs ${config.color} block text-left`}>{config.label}</span>
+                </div>
             </div>
-            <div className="text-right">
-                <span className={`text-sm ${config.color}`}>{config.label}</span>
+
+            <div className="flex flex-col items-center">
+                <Avatar id={statusIconId} size="sm" className="" />
                 {timeString && (
-                    <span className="text-xs text-stone-400 ml-2">{timeString}</span>
+                    <span className="text-[10px] text-stone-400 mt-0.5">{timeString}</span>
                 )}
             </div>
         </div>
