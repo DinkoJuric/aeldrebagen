@@ -26,12 +26,13 @@ export const Avatar = ({ id, className = '', size = 'md' }) => {
         'bearded': '98% 5%',  // Curly hair man
         'senior': '98% 5%',   // Using Bearded as Senior Placeholder
 
-        // Row 2 - Status Icons
-        'home': '5% 95%',   // Home
-        'work': '28% 95%',    // Briefcase
-        'car': '52% 95%',   // Car
-        'coffee': '75% 95%',   // Coffee
-        'moon': '96% 91%'   // Moon
+        // Row 2 - Status Icons (Zoomed in)
+        // Adjusted positions for larger zoom
+        'home': '7% 96%',     // Home
+        'work': '29% 96%',    // Briefcase
+        'car': '51% 96%',     // Car
+        'coffee': '73% 96%',  // Coffee
+        'moon': '92% 92%'     // Moon
     };
 
     const SIZE_CLASSES = {
@@ -57,7 +58,10 @@ export const Avatar = ({ id, className = '', size = 'md' }) => {
                 backgroundImage: `url(${import.meta.env.BASE_URL}assets/sprites/family-presence.png)`,
                 // @ts-ignore
                 backgroundPosition: MAPPINGS[id],
-                backgroundSize: '400% 210%' // Zoom to fit 4 cols, ~2 rows
+                // Larger zoom for status icons (Row 2 items) to crop out whitespace
+                backgroundSize: ['home', 'work', 'car', 'coffee', 'moon'].includes(id)
+                    ? '550% 270%'  // Zoom in on small icons
+                    : '400% 210%'  // Standard zoom for avatars
             }}
             aria-label={id}
         />

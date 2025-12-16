@@ -28,7 +28,7 @@ const SENIOR_STATUS = {
 const MemberStatusRow = ({ name, status, role, timestamp, isCurrentUser = false }) => {
     // Determine avatar ID based on name or role
     const avatarId = role === 'senior' ? 'senior' :
-        name === 'Test User' ? 'fatima' :
+        (name.includes('Fatima') || name === 'Test User') ? 'fatima' :
             name === 'Brad' ? 'brad' : 'louise';
 
     // Status mapping for sprite IDs
