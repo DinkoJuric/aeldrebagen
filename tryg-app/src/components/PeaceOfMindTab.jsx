@@ -110,6 +110,7 @@ export const PeaceOfMindTab = ({
                 completionRate={completionRate}
                 tasks={tasks}
                 symptomCount={symptomCount}
+                onViewSymptoms={onViewSymptoms}
             />
             {/* Thinking of You - moved outside card if needed or keep inside? SeniorStatusCard doesn't have it built-in. */}
             {/* Adding ThinkingOfYouIconButton below the card or integrate into a separate actions row if preferred. */}
@@ -139,35 +140,6 @@ export const PeaceOfMindTab = ({
                     </div>
                 );
             })()}
-
-            {/* Quick Glance Cards - with color-coded status */}
-            <div className="grid grid-cols-2 gap-3">
-                <div className={`bg-white rounded-xl p-4 border-2 ${medicineStatus.color.includes('red') ? 'border-red-200' :
-                    medicineStatus.color.includes('amber') ? 'border-amber-200' :
-                        medicineStatus.color.includes('green') ? 'border-green-200' : 'border-stone-100'
-                    } shadow-sm`}>
-                    <div className="flex items-center gap-2 mb-1">
-                        <Pill className={`w-4 h-4 ${medicineStatus.color.includes('red') ? 'text-red-500' :
-                            medicineStatus.color.includes('amber') ? 'text-amber-500' :
-                                'text-teal-500'
-                            }`} />
-                        <span className="text-xs text-stone-500 font-medium">Medicin</span>
-                    </div>
-                    <p className={`text-lg font-bold ${medicineStatus.color}`}>{medicineStatus.text}</p>
-                </div>
-                <button
-                    onClick={onViewSymptoms}
-                    className={`bg-white rounded-xl p-4 border-2 ${symptomCount > 0 ? 'border-orange-200' : 'border-stone-100'} shadow-sm text-left hover:bg-orange-50 transition-colors cursor-pointer`}
-                >
-                    <div className="flex items-center gap-2 mb-1">
-                        <Heart className="w-4 h-4 text-orange-500" />
-                        <span className="text-xs text-stone-500 font-medium">Symptomer</span>
-                    </div>
-                    <p className={`text-lg font-bold ${symptomCount > 0 ? 'text-orange-600' : 'text-stone-800'}`}>
-                        {symptomCount > 0 ? `${symptomCount} i dag` : 'Ingen'}
-                    </p>
-                </button>
-            </div>
 
             {/* Connection History - DISABLED for now (uncomment to re-enable) */}
             {false && recentActivity.length > 0 && (

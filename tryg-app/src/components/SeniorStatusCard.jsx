@@ -12,7 +12,10 @@ export const SeniorStatusCard = ({
     completionRate = 0,
     tasks = [],
     symptomCount = 0,
-    className = ''
+    tasks = [],
+    symptomCount = 0,
+    className = '',
+    onViewSymptoms = null
 }) => {
     // Determine status and background theme
     // 0 = Green/Calm (Left), 1 = Blue/Neutral (Center), 2 = Orange/Warn (Right)
@@ -132,13 +135,17 @@ export const SeniorStatusCard = ({
                     </div>
                 </div>
 
-                {/* Symptom indicator (if symptoms logged today) */}
+                {/* Symptom indicator (if symptoms logged today) - Clickable if handler provided */}
                 {symptomCount > 0 && (
-                    <div className="mt-3 p-2 bg-orange-500/20 backdrop-blur-md rounded-lg border border-orange-200/30 text-center animate-pulse">
-                        <span className="text-xs font-bold text-white drop-shadow-md">
+                    <button
+                        onClick={onViewSymptoms ? onViewSymptoms : undefined}
+                        className={`w-full mt-3 p-2 bg-orange-500/20 backdrop-blur-md rounded-lg border border-orange-200/30 text-center animate-pulse ${onViewSymptoms ? 'cursor-pointer hover:bg-orange-500/30 transition-colors' : ''}`}
+                    >
+                        <span className="text-xs font-bold text-white drop-shadow-md flex items-center justify-center gap-2">
                             ⚠️ {symptomCount} symptom{symptomCount > 1 ? 'er' : ''} rapporteret i dag
+                            {onViewSymptoms && <span className="text-[10px] opacity-80 font-normal underline">Se detaljer</span>}
                         </span>
-                    </div>
+                    </button>
                 )}
             </div>
         </div>
