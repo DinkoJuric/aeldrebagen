@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * PWA Update Toast
  * 
@@ -6,6 +7,7 @@
  */
 
 import React from 'react';
+// @ts-ignore - Virtual module from vite-plugin-pwa
 import { useRegisterSW } from 'virtual:pwa-register/react';
 import { RefreshCw, X } from 'lucide-react';
 
@@ -14,12 +16,14 @@ export const UpdateToast = () => {
         needRefresh: [needRefresh, setNeedRefresh],
         updateServiceWorker
     } = useRegisterSW({
+        /** @param {any} r */
         onRegistered(r) {
             // Check for updates every hour
             r && setInterval(() => {
                 r.update();
             }, 60 * 60 * 1000);
         },
+        /** @param {any} error */
         onRegisterError(error) {
             console.error('SW registration error:', error);
         }

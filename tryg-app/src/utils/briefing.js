@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * Daily Briefing Generator
  * 
@@ -8,10 +9,12 @@
 
 /**
  * Helper to check if a timestamp is from today
- * @param {Date|Object} date - Date object or Firestore timestamp
+ * @param {any} date - Date object or Firestore timestamp
+ * @returns {boolean}
  */
 const isToday = (date) => {
     if (!date) return false;
+    // @ts-ignore - Firestore timestamps have toDate()
     const d = date.toDate ? date.toDate() : new Date(date);
     const today = new Date();
     return d.toDateString() === today.toDateString();
@@ -20,10 +23,10 @@ const isToday = (date) => {
 /**
  * Generate a natural language daily briefing
  * @param {Object} params - Briefing parameters
- * @param {Array} params.tasks - All tasks
- * @param {Array} params.symptoms - Symptom logs
+ * @param {any[]} params.tasks - All tasks
+ * @param {any[]} params.symptoms - Symptom logs
  * @param {string} params.seniorName - Senior's display name
- * @param {Object} params.lastCheckIn - Last check-in timestamp
+ * @param {any} [params.lastCheckIn] - Last check-in timestamp
  * @returns {{ message: string, emoji: string, type: 'success'|'warning'|'info' }}
  */
 export function getDailyBriefing({ tasks = [], symptoms = [], seniorName = 'Mor', lastCheckIn = null }) {

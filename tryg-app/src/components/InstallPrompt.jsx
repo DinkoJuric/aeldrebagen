@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * iOS PWA Install Prompt
  * 
@@ -18,9 +19,11 @@ const useIOSInstallPrompt = () => {
 
     useEffect(() => {
         // Check if iOS device
+        // @ts-ignore - MSStream is IE-specific, used for detection
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
         // Check if already in standalone mode (installed as PWA)
+        // @ts-ignore - standalone is Safari-specific
         const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
             window.navigator.standalone === true;
 

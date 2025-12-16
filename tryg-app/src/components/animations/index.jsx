@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * Animation Components
  * 
