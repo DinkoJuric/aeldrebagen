@@ -194,13 +194,50 @@ function FirebaseApp() {
     );
 }
 
-// Loading screen component
+// Loading screen component - uses skeleton for better perceived performance
 function LoadingScreen({ message = 'Indlæser...' }) {
     return (
-        <div className="min-h-screen bg-gradient-to-br from-teal-50 to-indigo-50 flex items-center justify-center">
-            <div className="text-center">
-                <Loader2 className="w-12 h-12 text-teal-600 animate-spin mx-auto mb-4" />
-                <p className="text-stone-500">{message}</p>
+        <div className="min-h-screen bg-gradient-to-br from-teal-50 to-indigo-50 flex flex-col">
+            {/* Skeleton header */}
+            <div className="p-6 animate-pulse">
+                <div className="flex items-center justify-between mb-6">
+                    <div className="space-y-2">
+                        <div className="h-6 bg-stone-200 rounded w-32" />
+                        <div className="h-4 bg-stone-200 rounded w-24" />
+                    </div>
+                    <div className="w-12 h-12 bg-stone-200 rounded-full" />
+                </div>
+
+                {/* Skeleton status card */}
+                <div className="bg-white/60 rounded-2xl p-5 mb-4">
+                    <div className="flex items-start gap-4">
+                        <div className="w-16 h-16 bg-stone-200 rounded-full" />
+                        <div className="flex-1 space-y-3">
+                            <div className="h-5 bg-stone-200 rounded w-2/3" />
+                            <div className="h-4 bg-stone-200 rounded w-1/2" />
+                        </div>
+                    </div>
+                </div>
+
+                {/* Skeleton task cards */}
+                <div className="space-y-3">
+                    {[1, 2, 3].map(i => (
+                        <div key={i} className="bg-white/60 rounded-2xl p-4">
+                            <div className="flex items-center gap-3">
+                                <div className="w-12 h-12 bg-stone-200 rounded-full" />
+                                <div className="flex-1 space-y-2">
+                                    <div className="h-4 bg-stone-200 rounded w-3/4" />
+                                    <div className="h-3 bg-stone-200 rounded w-1/2" />
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* Loading message at bottom */}
+            <div className="mt-auto p-6 text-center">
+                <p className="text-stone-400 text-sm">{message}</p>
             </div>
         </div>
     );
