@@ -53,6 +53,7 @@ We use a "Celebration Match" system when Senior requests align with Relative off
 
 | File | Purpose |
 |------|---------|
+| `src/types.js` | **🤖 START HERE** — JSDoc type definitions for Task, Member, etc. |
 | `src/AppCore.jsx` | Main app logic & state hub (Real-time data hooks) |
 | `src/components/SeniorView.jsx` | Elder-facing interface (Tag-based dashboard) |
 | `src/components/RelativeView.jsx` | Family dashboard (Split: PeaceOfMind / Coordination) |

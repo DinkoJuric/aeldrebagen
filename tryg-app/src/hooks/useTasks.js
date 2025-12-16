@@ -1,3 +1,4 @@
+// @ts-check
 // Tasks hook - real-time task sync via Firestore
 // Replaces localStorage for multi-user task management
 

@@ -1,3 +1,4 @@
+// @ts-check
 // Member Status hook - per-member status tracking via Firestore
 // Allows each family member to have their own status (visible to others in the circle)
 

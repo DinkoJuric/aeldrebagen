@@ -1,5 +1,11 @@
 /**
- * @fileoverview Core type definitions for Tryg App
+ * @fileoverview Core Type Definitions for Tryg App
+ * 
+ * ╔════════════════════════════════════════════════════════════════════╗
+ * ║  🤖 AGENTS: START HERE!                                            ║
+ * ║  This file defines the "shape" of all core data in the app.       ║
+ * ║  Skim this file first to understand Task, Member, Symptom, etc.   ║
+ * ╚════════════════════════════════════════════════════════════════════╝
  * 
  * These JSDoc typedefs provide IDE autocomplete and type checking
  * without requiring TypeScript. Import this file in hooks/components.
