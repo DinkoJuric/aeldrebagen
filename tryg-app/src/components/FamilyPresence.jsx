@@ -1,8 +1,10 @@
 // FamilyPresence - "Familien Nu" section showing all family members' statuses
 // Reusable on both Connection (Min Dag) and Koordinering (Familie) tabs
+// Now uses CareCircleContext for shared data (props are optional overrides)
 
 import React from 'react';
 import { Users, Home, Briefcase, Car, Coffee, Moon, Heart } from 'lucide-react';
+import { useCareCircleContext } from '../contexts/CareCircleContext';
 
 // Status display configuration
 const STATUS_CONFIG = {
@@ -70,17 +72,20 @@ const MemberStatusRow = ({ name, status, role, timestamp, isCurrentUser = false 
  * Family Presence section - "Familien Nu"
  * Shows all family members' current statuses
  * 
- * @param {Array} memberStatuses - Array of {docId, displayName, status, role, updatedAt}
- * @param {string} currentUserId - ID of the current user (to mark as "dig")
- * @param {string} seniorName - Name of the senior (fallback if not in memberStatuses)
+ * Uses CareCircleContext for data, with props as optional overrides.
  * @param {boolean} compact - If true, uses smaller padding (for Min Dag tab)
  */
 export const FamilyPresence = ({
-    memberStatuses = [],
-    currentUserId = null,
-    seniorName = 'Far/Mor',
+    memberStatuses: propsMembers,
+    currentUserId: propsUserId,
+    seniorName: propsSeniorName,
     compact = false
 }) => {
+    // Get from context, use props as override if provided
+    const context = useCareCircleContext();
+    const memberStatuses = propsMembers ?? context.memberStatuses ?? [];
+    const currentUserId = propsUserId ?? context.currentUserId;
+    const seniorName = propsSeniorName ?? context.seniorName ?? 'Far/Mor';
     if (memberStatuses.length === 0) {
         return (
             <div className={`bg-stone-50 rounded-xl ${compact ? 'p-3' : 'p-4'} border border-stone-200`}>

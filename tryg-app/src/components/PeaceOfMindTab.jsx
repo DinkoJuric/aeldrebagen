@@ -3,11 +3,13 @@ import { Heart, Clock, Pill, CheckCircle, AlertCircle } from 'lucide-react';
 import { SeniorStatusCard } from './SeniorStatusCard';
 import { ThinkingOfYouIconButton } from './ThinkingOfYou';
 import { ProgressRing } from './ProgressRing';
+import { useCareCircleContext } from '../contexts/CareCircleContext';
 
 // Peace of Mind Tab - emotional reassurance focused
 // Shows: "Alt er vel" hero with Gates progress, quick glance stats, connection history
+// Uses CareCircleContext for shared data (props as optional overrides)
 export const PeaceOfMindTab = ({
-    seniorName,
+    seniorName: propSeniorName,
     lastCheckIn,
     tasks = [],
     symptomCount = 0,
@@ -15,6 +17,10 @@ export const PeaceOfMindTab = ({
     onViewSymptoms,
     recentActivity = []
 }) => {
+    // Get from context, use props as override
+    const context = useCareCircleContext();
+    const seniorName = propSeniorName ?? context.seniorName ?? 'Senior';
+
     // Calculate completion rate from tasks
     const totalTasks = tasks.length;
     const completedTasks = tasks.filter(t => t.completed).length;

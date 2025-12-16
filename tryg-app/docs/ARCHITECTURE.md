@@ -252,6 +252,29 @@ export function useXxx(circleId) {
 }
 ```
 
+### 2. CareCircleContext (State Sharing)
+To avoid prop drilling, shared data (careCircleId, memberStatuses, currentUserId) is provided via React Context:
+
+```javascript
+// In AppCore.jsx
+<CareCircleProvider
+    careCircleId={careCircle?.id}
+    memberStatuses={memberStatuses}
+    currentUserId={user?.uid}
+    ...
+>
+    {/* Views */}
+</CareCircleProvider>
+
+// In any nested component
+const { memberStatuses, currentUserId } = useCareCircleContext();
+```
+
+**Key files:**
+- `src/contexts/CareCircleContext.jsx` - Provider + hook
+- `src/components/FamilyPresence.jsx` - Uses context for memberStatuses
+```
+
 ### 2. Role-Based Views
 View is determined by `userProfile.role`:
 - `senior` → SeniorView (elder interface)

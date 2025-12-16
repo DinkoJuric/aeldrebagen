@@ -1,2 +1,0 @@
-# Codebase Context: aeldrebagen
-

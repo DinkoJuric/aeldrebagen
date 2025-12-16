@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Heart, HandHeart, X, Plus } from 'lucide-react';
 import { SENIOR_OFFERS, SENIOR_REQUESTS } from '../config/helpExchangeConfig';
+import { useCareCircleContext } from '../contexts/CareCircleContext';
 
 // Dashboard-style HelpExchange for Senior (aligned with RelativeView)
 export const HelpExchange = ({
@@ -12,8 +13,11 @@ export const HelpExchange = ({
     activeRequests = [],
     relativeOffers = [],
     relativeRequests = [],
-    seniorName = 'Senior'
+    seniorName: propSeniorName
 }) => {
+    // Use context for seniorName, with prop as override
+    const { seniorName: contextSeniorName } = useCareCircleContext();
+    const seniorName = propSeniorName ?? contextSeniorName ?? 'Senior';
     const [showOfferPicker, setShowOfferPicker] = useState(false);
     const [showRequestPicker, setShowRequestPicker] = useState(false);
 

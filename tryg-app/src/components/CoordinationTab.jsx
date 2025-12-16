@@ -12,16 +12,18 @@ import { RELATIVE_OFFERS, RELATIVE_REQUESTS } from '../config/helpExchangeConfig
 import { useHelpExchangeMatch } from '../hooks/useHelpExchangeMatch';
 import { FEATURES } from '../config/features';
 import { Spillehjoernet } from './Spillehjoernet';
+import { useCareCircleContext } from '../contexts/CareCircleContext';
 
 // Coordination Tab - practical management focused
 // Shows: Family presence, Your status, HelpExchange (bidirectional), tasks, symptom details
+// Uses CareCircleContext for shared data (props as optional overrides)
 export const CoordinationTab = ({
-    seniorName,
-    userName,
+    seniorName: propSeniorName,
+    userName: propUserName,
     myStatus = 'home',
     onMyStatusChange,
-    memberStatuses = [],
-    currentUserId = null,
+    memberStatuses: propMemberStatuses,
+    currentUserId: propCurrentUserId,
     helpOffers = [],
     helpRequests = [],
     relativeOffers = [],
@@ -36,8 +38,16 @@ export const CoordinationTab = ({
     onAddTask,
     onViewReport,
     onMatchAction,
-    careCircleId = null
+    careCircleId: propCareCircleId
 }) => {
+    // Get from context, use props as override
+    const context = useCareCircleContext();
+    const seniorName = propSeniorName ?? context.seniorName ?? 'Senior';
+    const userName = propUserName ?? context.userName ?? 'Pårørende';
+    const memberStatuses = propMemberStatuses ?? context.memberStatuses ?? [];
+    const currentUserId = propCurrentUserId ?? context.currentUserId;
+    const careCircleId = propCareCircleId ?? context.careCircleId;
+
     const [showStatusPicker, setShowStatusPicker] = useState(false);
     const [showOpenTasks, setShowOpenTasks] = useState(true);
     const [showCompleted, setShowCompleted] = useState(false);
