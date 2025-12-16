@@ -194,6 +194,9 @@ A prioritized plan to make Tryg robust, accessible, and emotionally resonant.
 - **Pain Severity Scale**: 3-level pictogram (🙂 😐 😣) after location selection.
 - **Symptom Patterns**: "You often have headaches on Mondays".
 
+### Contextual Empathy
+- **Night Watch Mode**: Auto-activate between 10 PM - 6 AM. Hide task list, show soothing dark "Det er nat, Birthe. Sov godt 🌙" screen with "Jeg er vågen / Start dagen" override button. Respects user's rest context.
+
 ### "Dancing at the Wedding" (Milestones)
 - **Milestone Celebrations**: "You walked 100 times!"
 - **Anticipation Calendar**: "42 days until Emma's wedding".
