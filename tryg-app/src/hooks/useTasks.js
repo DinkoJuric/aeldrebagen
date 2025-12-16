@@ -54,7 +54,7 @@ export function useTasks(circleId) {
                 }
                 setLoading(false);
             },
-            (err) => {
+            (/** @type {Error} */ err) => {
                 console.error('Error fetching tasks:', err);
                 setError(err.message);
                 setLoading(false);
@@ -65,6 +65,7 @@ export function useTasks(circleId) {
     }, [circleId]);
 
     // Initialize default tasks for new circles
+    /** @param {string} cId */
     const initializeDefaultTasks = async (cId) => {
         try {
             for (const task of INITIAL_TASKS) {
@@ -80,6 +81,7 @@ export function useTasks(circleId) {
     };
 
     // Toggle task completion
+    /** @param {string} taskId */
     const toggleTask = useCallback(async (taskId) => {
         if (!circleId) return;
 
@@ -96,11 +98,12 @@ export function useTasks(circleId) {
             }, { merge: true });
         } catch (err) {
             console.error('Error toggling task:', err);
-            setError(err.message);
+            setError(/** @type {Error} */ (err).message);
         }
     }, [circleId, tasks]);
 
     // Add a new task (from relative or senior)
+    /** @param {Partial<import('../types').Task>} newTask */
     const addTask = useCallback(async (newTask) => {
         if (!circleId) return;
 
@@ -127,12 +130,13 @@ export function useTasks(circleId) {
             return taskId;
         } catch (err) {
             console.error('Error adding task:', err);
-            setError(err.message);
+            setError(/** @type {Error} */ (err).message);
             throw err;
         }
     }, [circleId]);
 
     // Remove a task
+    /** @param {string} taskId */
     const removeTask = useCallback(async (taskId) => {
         if (!circleId) return;
 
@@ -143,7 +147,7 @@ export function useTasks(circleId) {
             await deleteDoc(taskRef);
         } catch (err) {
             console.error('Error removing task:', err);
-            setError(err.message);
+            setError(/** @type {Error} */ (err).message);
             throw err;
         }
     }, [circleId]);
@@ -162,7 +166,7 @@ export function useTasks(circleId) {
             }
         } catch (err) {
             console.error('Error resetting tasks:', err);
-            setError(err.message);
+            setError(/** @type {Error} */ (err).message);
         }
     }, [circleId, tasks]);
 
