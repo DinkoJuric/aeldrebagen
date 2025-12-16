@@ -1,3 +1,4 @@
+// @ts-check
 // Help Exchange hook - real-time sync via Firestore
 // Syncs help offers and requests across family circle members
 
@@ -173,3 +174,4 @@ export function useHelpExchange(circleId, userId = null, userRole = null, displa
 }
 
 export default useHelpExchange;
+

@@ -1,3 +1,4 @@
+// @ts-check
 // Settings hook - real-time settings sync via Firestore
 // Handles family status and other circle-wide settings
 
@@ -85,3 +86,4 @@ export function useSettings(circleId) {
 }
 
 export default useSettings;
+

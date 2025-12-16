@@ -1,3 +1,4 @@
+// @ts-check
 // Check-in hook - real-time sync via Firestore
 // Tracks when senior last checked in, visible to relatives
 
@@ -96,3 +97,4 @@ export function useCheckIn(circleId) {
 }
 
 export default useCheckIn;
+

@@ -23,8 +23,10 @@ import '../types'; // Import types for JSDoc
  * @returns {import('../types').UseTasksReturn & { loading: boolean, error: string|null }}
  */
 export function useTasks(circleId) {
+    /** @type {[import('../types').Task[], function]} */
     const [tasks, setTasks] = useState([]);
     const [loading, setLoading] = useState(true);
+    /** @type {[string|null, function]} */
     const [error, setError] = useState(null);
 
     // Subscribe to tasks from Firestore

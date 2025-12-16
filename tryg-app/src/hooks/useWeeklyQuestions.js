@@ -1,3 +1,4 @@
+// @ts-check
 // Weekly Questions hook - real-time sync via Firestore
 // Syncs weekly question answers across family circle members
 
@@ -78,3 +79,4 @@ export function useWeeklyQuestions(circleId) {
 }
 
 export default useWeeklyQuestions;
+

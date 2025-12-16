@@ -1,3 +1,4 @@
+// @ts-check
 // Word Game Hook - manages game state and Firestore sync
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import {
@@ -160,3 +161,4 @@ export function useWordGame(circleId, userId, displayName) {
 }
 
 export default useWordGame;
+

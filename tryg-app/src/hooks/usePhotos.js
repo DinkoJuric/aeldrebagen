@@ -1,3 +1,4 @@
+// @ts-check
 // Photos hook - ephemeral daily photo sharing via Firestore + Storage
 // Photos are deleted after viewing (client-side delete)
 
@@ -165,3 +166,4 @@ export function usePhotos(circleId, currentUserId) {
 }
 
 export default usePhotos;
+

@@ -1,3 +1,4 @@
+// @ts-check
 // Care Circle hook - manages the shared family space
 // Handles creating circles, joining via code, and real-time membership
 
@@ -242,3 +243,4 @@ export function useCareCircle(userId, userProfile) {
 }
 
 export default useCareCircle;
+

@@ -1,3 +1,4 @@
+// @ts-check
 // Symptoms hook - real-time symptom log sync via Firestore
 // Replaces localStorage for multi-user symptom tracking
 
@@ -140,3 +141,4 @@ export function useSymptoms(circleId) {
 }
 
 export default useSymptoms;
+

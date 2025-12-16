@@ -1,3 +1,4 @@
+// @ts-check
 // Authentication hook for Firebase
 // Provides user state, loading state, and auth methods
 
@@ -211,3 +212,4 @@ export function useAuth() {
 }
 
 export default useAuth;
+

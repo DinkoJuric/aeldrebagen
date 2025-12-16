@@ -1,3 +1,4 @@
+// @ts-check
 // Pings hook - real-time "thinking of you" sync via Firestore
 // Syncs ping notifications across family circle members
 
@@ -115,3 +116,4 @@ export function usePings(circleId, currentUserId) {
 }
 
 export default usePings;
+

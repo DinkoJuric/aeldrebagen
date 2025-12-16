@@ -1,3 +1,4 @@
+// @ts-check
 import { useState, useEffect } from 'react';
 
 // Check if localStorage is available (private browsing, quota exceeded, etc.)
@@ -45,3 +46,4 @@ export function useLocalStorage(key, initialValue) {
 
 export { isLocalStorageAvailable };
 export default useLocalStorage;
+

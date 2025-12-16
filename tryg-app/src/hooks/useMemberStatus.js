@@ -25,9 +25,12 @@ import '../types'; // Import types for JSDoc
  * @returns {import('../types').UseMemberStatusReturn & { loading: boolean, error: string|null }}
  */
 export function useMemberStatus(circleId, userId, displayName, role) {
+    /** @type {[import('../types').Member[], function]} */
     const [memberStatuses, setMemberStatuses] = useState([]);
+    /** @type {[string, function]} */
     const [myStatus, setMyStatusState] = useState('home');
     const [loading, setLoading] = useState(true);
+    /** @type {[string|null, function]} */
     const [error, setError] = useState(null);
 
     // Subscribe to all member statuses in the circle
@@ -72,6 +75,7 @@ export function useMemberStatus(circleId, userId, displayName, role) {
     }, [circleId, userId]);
 
     // Update current user's status
+    /** @param {string} status */
     const setMyStatus = useCallback(async (status) => {
         if (!circleId || !userId) return;
 
@@ -89,7 +93,7 @@ export function useMemberStatus(circleId, userId, displayName, role) {
             setMyStatusState(status);
         } catch (err) {
             console.error('Error updating member status:', err);
-            setError(err.message);
+            setError(/** @type {Error} */(err).message);
             throw err;
         }
     }, [circleId, userId, displayName, role]);

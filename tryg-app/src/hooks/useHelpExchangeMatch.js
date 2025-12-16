@@ -1,3 +1,4 @@
+// @ts-check
 import { useMemo } from 'react';
 import { MATCH_PAIRS, STATUS_MATCHES } from '../config/helpExchangeConfig';
 
@@ -71,3 +72,4 @@ export const useHelpExchangeMatch = ({
 };
 
 export default useHelpExchangeMatch;
+
