@@ -23,16 +23,15 @@ export const Avatar = ({ id, className = '', size = 'md' }) => {
         'louise': '2% 5%',    // Glasses woman
         'fatima': '34% 5%',   // Bun woman
         'brad': '66% 5%',     // Beanie man
-        'bearded': '98% 5%',  // Curly hair man
-        'senior': '98% 5%',   // Using Bearded as Senior Placeholder
+        'bearded': '98% 8%',  // Curly hair man (Senior) - Shifted Y slightly down to center face
+        'senior': '98% 8%',   // Alias for bearded
 
         // Row 2 - Status Icons (Zoomed in)
-        // Adjusted positions for larger zoom
         'home': '7% 96%',     // Home
         'work': '29% 96%',    // Briefcase
         'car': '51% 96%',     // Car
         'coffee': '73% 96%',  // Coffee
-        'moon': '92% 92%'     // Moon
+        'moon': '92% 94%'     // Moon - Shifted Y/X to fix clipping
     };
 
     const SIZE_CLASSES = {
@@ -42,7 +41,7 @@ export const Avatar = ({ id, className = '', size = 'md' }) => {
         'xl': 'w-24 h-24'
     };
 
-    // If ID not found, return fallback (first letter)
+    // If ID not found, return fallback
     if (!MAPPINGS[id]) {
         return (
             <div className={`${SIZE_CLASSES[size]} rounded-full bg-stone-200 flex items-center justify-center font-bold text-stone-500 uppercase ${className}`}>
@@ -58,9 +57,9 @@ export const Avatar = ({ id, className = '', size = 'md' }) => {
                 backgroundImage: `url(${import.meta.env.BASE_URL}assets/sprites/family-presence.png)`,
                 // @ts-ignore
                 backgroundPosition: MAPPINGS[id],
-                // Larger zoom for status icons (Row 2 items) to crop out whitespace
+                // Reduced zoom slightly to prevent clipping and improve quality
                 backgroundSize: ['home', 'work', 'car', 'coffee', 'moon'].includes(id)
-                    ? '550% 270%'  // Zoom in on small icons
+                    ? '510% 250%'  // Slightly reduced from 550% to fix clipping
                     : '400% 210%'  // Standard zoom for avatars
             }}
             aria-label={id}
