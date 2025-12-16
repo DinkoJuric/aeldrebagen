@@ -27,11 +27,12 @@ import { BottomNavigation } from './BottomNavigation';
 import { SYMPTOMS_LIST } from '../data/constants';
 import { FEATURES } from '../config/features';
 import { useHelpExchangeMatch } from '../hooks/useHelpExchangeMatch';
-import { MatchCelebration } from './MatchCelebration';
+import { MatchCelebration, MatchBanner } from './MatchCelebration';
 import { InlineGatesIndicator } from './ProgressRing';
 import { Spillehjoernet } from './Spillehjoernet';
 import { HealthReport } from './HealthReport';
 import { AlertCircle, Plus } from 'lucide-react';
+import { playMatchSound } from '../utils/sounds';
 
 export const SeniorView = ({
     tasks, toggleTask, updateStatus, addSymptom, statusLastUpdated, onSendPing,
@@ -51,6 +52,7 @@ export const SeniorView = ({
     const [newTaskPeriod, setNewTaskPeriod] = useState('morgen');
     const [activePeriod, setActivePeriod] = useState('morgen');
     const [activeTab, setActiveTab] = useState('daily'); // 'daily', 'family', or 'spil'
+    const [activeMatch, setActiveMatch] = useState(null); // For match celebration modal
 
     // Detect matches between Senior and Relative
     // Combine all offers/requests for match detection
@@ -208,6 +210,17 @@ export const SeniorView = ({
 
             {/* Main Content - Scrollable with padding for bottom nav */}
             <main className="flex-1 overflow-y-auto p-4 space-y-4 pb-24">
+
+                {/* Match Celebration Banner - Shows when there's a help exchange match */}
+                {hasMatches && topMatch && (
+                    <MatchBanner
+                        match={topMatch}
+                        onClick={() => {
+                            playMatchSound();
+                            setActiveMatch(topMatch);
+                        }}
+                    />
+                )}
 
                 {/* ===== DAILY TAB ===== */}
                 {activeTab === 'daily' && (
@@ -666,6 +679,53 @@ export const SeniorView = ({
                     </Button>
                 </div>
             </Modal>
+
+            {/* Match Celebration Modal */}
+            {activeMatch && (
+                <MatchCelebration
+                    match={activeMatch}
+                    seniorName={userName}
+                    onDismiss={() => setActiveMatch(null)}
+                    onAction={(action) => {
+                        // Create task based on action type
+                        const { celebration } = activeMatch;
+                        let taskTitle = '';
+
+                        switch (action) {
+                            case 'call':
+                                taskTitle = `📞 Ring med ${relativeName}`;
+                                break;
+                            case 'plan-visit':
+                                taskTitle = `☕ Besøg fra ${relativeName}`;
+                                break;
+                            case 'plan-meal':
+                                taskTitle = `🍳 Lav mad med ${relativeName}`;
+                                break;
+                            case 'plan-transport':
+                                taskTitle = `🚗 Tur med ${relativeName}`;
+                                break;
+                            case 'plan-garden':
+                                taskTitle = `🌿 Havearbejde med ${relativeName}`;
+                                break;
+                            default:
+                                taskTitle = celebration?.title || `Aktivitet med ${relativeName}`;
+                        }
+
+                        // Create the task
+                        if (onAddTask && taskTitle) {
+                            onAddTask({
+                                title: taskTitle,
+                                time: '10:00',
+                                period: 'morgen',
+                                type: 'appointment',
+                                createdBy: userName
+                            });
+                            alert(`✅ Opgave oprettet: ${taskTitle}`);
+                        }
+                        setActiveMatch(null);
+                    }}
+                />
+            )}
         </div >
     );
 };

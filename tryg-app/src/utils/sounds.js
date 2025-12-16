@@ -95,8 +95,40 @@ export function playSuccessSound() {
     });
 }
 
+// Match celebration - exciting ascending notes for help exchange match
+export function playMatchSound() {
+    if (!audioContext) return;
+
+    if (audioContext.state === 'suspended') {
+        audioContext.resume();
+    }
+
+    const now = audioContext.currentTime;
+    // Bright, cheerful ascending notes: G5, B5, D6, G6
+    const frequencies = [783.99, 987.77, 1174.66, 1567.98];
+
+    frequencies.forEach((freq, i) => {
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(freq, now);
+
+        gainNode.gain.setValueAtTime(0, now + (i * 0.1));
+        gainNode.gain.linearRampToValueAtTime(0.15, now + (i * 0.1) + 0.04);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, now + (i * 0.1) + 0.4);
+
+        oscillator.start(now + (i * 0.1));
+        oscillator.stop(now + (i * 0.1) + 0.5);
+    });
+}
+
 export default {
     playCompletionSound,
     playPingSound,
-    playSuccessSound
+    playSuccessSound,
+    playMatchSound
 };
