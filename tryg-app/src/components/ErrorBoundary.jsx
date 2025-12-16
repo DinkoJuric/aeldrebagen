@@ -1,5 +1,6 @@
 import React from 'react';
 import { AlertCircle, RefreshCw } from 'lucide-react';
+import * as Sentry from '@sentry/react';
 
 class ErrorBoundary extends React.Component {
     constructor(props) {
@@ -15,8 +16,8 @@ class ErrorBoundary extends React.Component {
         // Log to console in development
         console.error('App Error:', error, errorInfo);
 
-        // TODO: Send to Sentry in production
-        // Sentry.captureException(error, { extra: errorInfo });
+        // Send to Sentry for production monitoring
+        Sentry.captureException(error, { extra: errorInfo });
     }
 
     handleRetry = () => {
