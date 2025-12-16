@@ -288,6 +288,25 @@ Toggle features in `src/config/features.js`:
 photoSharing: false,  // Requires Firebase Blaze plan
 weeklyQuestion: true,
 thinkingOfYou: true,
+### 4. Natural Language Generator (Smart Summary)
+Logic resides in `src/utils/briefing.js`:
+- Inputs: Tasks (completed/total), Symptoms (count/severity), Streak info
+- Logic: Heuristics based on completeness and time of day
+- Output: "Friendly Danish sentence" (e.g., "Mor har det godt, men husk medicinen.")
+- Used in: `PeaceOfMindTab` for instant status context.
+
+### 5. Crash Loop Protection (Self-Healing)
+Implemented in `src/main.jsx`:
+- **Detection**: Tracks crash timestamps in `localStorage`
+- **Trigger**: >3 crashes in 5 minutes
+- **Action**: Clears `localStorage` (except critical auth tokens) and reloads
+- **Benefit**: Prevents white-screen-of-death loops for non-technical seniors
+
+### 6. Sprite System (Performance)
+Used for `Avatar` and `Pictogram`:
+- **Asset**: Single large png (`family-presence.png`, `help-sheet.png`)
+- **Component**: Calculates `backgroundPosition` percentage based on ID
+- **Benefit**: Reduces HTTP requests, ensures instant load of all related icons
 ```
 
 ---

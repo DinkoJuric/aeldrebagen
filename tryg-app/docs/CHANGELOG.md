@@ -2,7 +2,49 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.8.0] - 2025-12-15
+
+## [1.9.0] - 2025-12-16
+
+### 🎨 Emotional Sensing & Visuals
+
+**Atmospheric Status Backgrounds**
+- Seniors' status now changes the entire card atmosphere, not just a badge color
+- **Dynamic Textures**: 3 high-end abstract backgrounds (Calm/Teal, Neutral/Blue, Urgent/Orange)
+- **Context Aware**: Shifts based on completion rate, symptoms, and check-in timeliness
+- **Readability**: Dark glass overlay ensures white text pops against any texture
+
+**Family Presence Visuals**
+- **Avatars**: Replaced generic icons with specific illustrations (Louise, Fatima, Brad)
+- **Status Icons**: Custom pictograms for Home, Work, Traveling, Coffee, and Busy statuses
+- **Sprites**: Implemented efficient CSS sprites (`family-presence.png`) for optimal performance
+
+**Smart Summary (Natural Language)**
+- "Briefing" card in Peace of Mind tab
+- Generates human-like daily summaries: "Mor har haft en rolig morgen og har klaret medicinen."
+- Contextual aware of streaks, symptoms, and time of day
+
+### 🚀 PWA & Stability
+
+**PWA Native Feel**
+- **Install Prompt**: Custom iOS-styled "Add to Home Screen" sheet with dismissal logic
+- **Update Toast**: "New version available" notification for seamless updates
+- **Icons**: Generated full suite of PWA icons (192, 512, apple-touch)
+- **Manifest**: Updated for standalone display mode
+
+**Self-Healing & Performance**
+- **Crash Recovery**: Auto-detects crash loops (3 crashes < 5 min) and purges corrupt local state while preserving auth
+- **Ghost UI**: Skeleton loading screens replaced spinners for better perceived performance
+- **Assets**: CSS Sprites used for Help Exchange pictograms to reduce network requests
+
+### 🧩 Feature Polish
+
+**Social Attribution**
+- Tasks now show "Fra [Name] ❤️" stamp
+- Help Exchange uses custom pictograms ('cook', 'drive', 'tech') via `Pictogram` component
+- Word Game victory screen now features a "Success Trophy" animation
+- Infinite Reward: Daily nature photo from `picsum.photos` (seeded by date)
+
+---
 
 ### 🎮 Spillehjørnet (Gaming Corner)
 

@@ -16,71 +16,26 @@ Last updated: 2025-12-16 (v1.8.0)
 
 ## Key Patterns
 
+- **Emotional Sensing**: `SeniorStatusCard` shifts atmospheric textures (Calm/Teal, Urgent/Orange) to convey mood instantly
+- **Natural Language**: `SmartSummary` generates human-like daily briefings ("Mor har en god dag") instead of raw stats
+- **Social Attribution**: "Fra [Name] ❤️" stamps on tasks and help offers to increase warmth
 - **State Management**: Firebase hooks with `onSnapshot` for real-time sync
 - **Routing**: Role-based views (`SeniorView` vs `RelativeView`) determined by `userProfile.role`
 - **Data Flow**: Real-time sync via Firestore listeners in custom hooks (`useAuth`, `useSettings`, `useTasks`, etc.)
-- **Match System**: `useHelpExchangeMatch` detects alignment (Offer ↔ Request) and triggers `MatchCelebration`
-- **Connection History**: `PeceOfMindTab` aggregates completed tasks and symptoms into a "Familiens hjerteslag" feed
-- **Bidirectional Presence**: `FamilyPresence` component replciates status tracking for both Seniors (Health) and Relatives (Availability)
-- **Inline Gates**: `InlineGatesIndicator` replaces static status text in Senior View for real-time compliance feedback
-- **Tab Differentiation**: RelativeView splits emotional reassurance ("Min Dag") from logistical work ("Familie" Tab)
-- **UI Consistency**: Senior UI aligns with Relative UI (Tag-based Dashboards) to empower seniors
-- **Feature Flags**: Toggle in `src/config/features.js`
-- **Error Handling**: Whitelist sanitization for Firestore data (prevents Symbol property serialization errors)
-- **Responsive Strategy**: Mobile-first full width (`100dvh`) with `viewport-fit=cover` for iOS safely handling safe areas
-
-## Match Logic Reference (HelpExchange)
-
-We use a "Celebration Match" system when Senior requests align with Relative offers.
-
-**Offer ↔ Request Matches:**
-| Offer ID | Request ID | Celebration |
-|----------|------------|-------------|
-| `cook` | `shop` | 🍽️ "Lav et måltid sammen!" |
-| `visit` | `company` | ☕ "Tid til en hyggelig visit!" |
-| `drive` | `transport` | 🚗 "Koordinér turen!" |
-| `garden` | `outdoor` | 🌿 "Tid i haven sammen!" |
-| `tech` | `help-tech` | 💻 "Tech-hjælp!" |
-
-**Status ↔ Request Matches:**
-| Status ID | Request ID | Celebration |
-|-----------|------------|-------------|
-| `available` | `talk` | 📞 "Ring nu - der er tid!" |
-| `home` | `visit` | 🏠 "Kom forbi!" |
-
-
-## Key Files
-
-| File | Purpose |
-|------|---------|
-| `src/types.js` | **🤖 START HERE** — JSDoc type definitions for Task, Member, etc. |
-| `src/AppCore.jsx` | Main app logic & state hub (Real-time data hooks) |
-| `src/components/SeniorView.jsx` | Elder-facing interface (Tag-based dashboard) |
-| `src/components/RelativeView.jsx` | Family dashboard (Split: PeaceOfMind / Coordination) |
-| `src/components/PeaceOfMindTab.jsx` | Relative's "Min Dag" tab (Emotional reassurance) |
-| `src/components/CoordinationTab.jsx` | Relative's "Familie" tab (Tasks & HelpExchange) |
-| `src/components/HelpExchange.jsx` | Bidirectional help component (Shared design) |
-| `src/components/MatchCelebration.jsx` | "Confetti" modal for help matches |
-| `src/config/helpExchangeConfig.js` | Central config for Match Pairs, Offers, and Requests |
-| `src/hooks/useHelpExchangeMatch.js` | Match detection logic (Senior Request ↔ Relative Offer) |
-| `src/config/firebase.js` | Firebase initialization |
 
 ## Active Issues
 
 - [ ] Production deployment shows stale content until hard refresh
-- [ ] Production deployment shows stale content until hard refresh
+- [ ] TypeScript types need tightening (currently using @ts-ignore in some UI components)
 
 ## Recent Decisions
 
 | Date | Decision | Rationale |
 |------|----------|-----------|
-| 2025-12-12 | Whitelist sanitization in hooks | Symbol properties from Lucide icons broke Firestore serialization |
-| 2025-12-12 | Propagate authError to AppWithAuth | Prevents wrong setup flow when offline |
-| 2025-12-12 | Global workflows in `~/.gemini/antigravity/global_workflows/` | Correct Antigravity path for cross-project workflows |
-| 2025-12-13 | Responsive Phone Simulator | Remove simulator frame on mobile (`sm:` breakpoint) for native feeling |
-| 2025-12-13 | Auth/Profile Loading Guard | Wait for `userProfile` before rendering main app to prevent `RelativeView` flash |
-| 2025-12-13 | RelativeView visual parity | Unified `stone-*` color scheme across both views, consistent `rounded-b-3xl` headers |
-| 2025-12-13 | Test user script | Created `scripts/create-test-user.mjs` for E2E testing without OAuth |
+| 2025-12-16 | **CSS Sprites** for Avatars/Icons | High-res PNG sprites ensure 0 layout shift and instant loading of all family states |
+| 2025-12-16 | Dark Overlay on Status Cards | Essential for white text readability against dynamic "Atmospheric" backgrounds |
+| 2025-12-16 | Natural Language Summaries | "Briefing" card preferred over raw stats to reduce cognitive load for relatives |
+| 2025-12-16 | Self-Healing Crash Loop | Auto-purge localStorage (keeping auth) prevents critical support calls |
 | 2025-12-14 | Per-member status tracking | Each relative has own status in `memberStatuses/{userId}`, replaces shared `familyStatus` |
 
 ---

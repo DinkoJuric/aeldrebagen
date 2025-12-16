@@ -217,3 +217,12 @@ description: Master record of all project and cross-project learnings
 - **Future**: Use form-encoded POST for Apps Script. JSON triggers CORS preflight.
 
 ---
+
+## Performance
+
+### CSS Sprites for Icon Sets
+- **Problem**: Loading many individual icon images caused layout shift (FOUC) and network overhead.
+- **Action**: Combined icons into a single sprite sheet (`family-presence.png`) and used `backgroundPosition`.
+- **Future**: For fixed sets of UI assets (avatars, status icons), always use sprite sheets.
+
+---
