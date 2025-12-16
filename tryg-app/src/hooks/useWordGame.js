@@ -105,6 +105,17 @@ export function useWordGame(circleId, userId, displayName) {
                 date: todayKey,
                 completedAt: serverTimestamp()
             });
+
+            // 🎮 Social Spark: Post game completion to activity feed
+            const pingRef = doc(db, 'careCircles', circleId, 'pings', `game_${userId}_${todayKey}`);
+            await setDoc(pingRef, {
+                type: 'game_complete',
+                fromName: displayName || 'Ukendt',
+                fromUserId: userId,
+                score: newScore,
+                total: todaysWords.length,
+                sentAt: serverTimestamp()
+            });
         }
     }, [circleId, userId, displayName, todaysWords.length]);
 

@@ -225,8 +225,13 @@ export const SeniorView = ({
                                             <ImageIcon className="w-6 h-6 text-indigo-200" />
                                             <span className="font-bold text-indigo-100 uppercase tracking-widest text-sm">Dagens Billede</span>
                                         </div>
-                                        <div className="w-full h-48 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-xl mb-3 overflow-hidden shadow-lg transform rotate-2 hover:rotate-0 transition-transform duration-500 flex items-center justify-center">
-                                            <span className="text-white/80 text-6xl">🌳👨‍👩‍👧‍👦</span>
+                                        <div className="w-full h-48 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-xl mb-3 overflow-hidden shadow-lg transform rotate-2 hover:rotate-0 transition-transform duration-500">
+                                            {/* Daily nature photo - same image all day using date as seed */}
+                                            <img
+                                                src={`https://picsum.photos/seed/${new Date().toISOString().split('T')[0]}/600/400`}
+                                                alt="Dagens billede"
+                                                className="w-full h-full object-cover"
+                                            />
                                         </div>
                                         <p className="font-bold text-lg">Medicin taget! ❤️</p>
                                         <p className="text-indigo-200 text-sm">Tryk for at minimere</p>
