@@ -23,15 +23,15 @@ export const Avatar = ({ id, className = '', size = 'md' }) => {
         'louise': '2% 5%',    // Glasses woman
         'fatima': '34% 5%',   // Bun woman
         'brad': '66% 5%',     // Beanie man
-        'bearded': '98% 8%',  // Curly hair man (Senior) - Shifted Y slightly down to center face
-        'senior': '98% 8%',   // Alias for bearded
+        'bearded': '96% 10%', // Senior (Brad) - Centered face
+        'senior': '96% 10%',  // Alias for bearded
 
         // Row 2 - Status Icons (Zoomed in)
         'home': '7% 96%',     // Home
-        'work': '29% 96%',    // Briefcase
+        'work': '29% 94%',    // Briefcase - Moved up slightly
         'car': '51% 96%',     // Car
-        'coffee': '73% 96%',  // Coffee
-        'moon': '92% 94%'     // Moon - Shifted Y/X to fix clipping
+        'coffee': '72% 94%',  // Coffee - Fixed clipping
+        'moon': '92% 94%'     // Moon
     };
 
     const SIZE_CLASSES = {
@@ -59,7 +59,7 @@ export const Avatar = ({ id, className = '', size = 'md' }) => {
                 backgroundPosition: MAPPINGS[id],
                 // Reduced zoom slightly to prevent clipping and improve quality
                 backgroundSize: ['home', 'work', 'car', 'coffee', 'moon'].includes(id)
-                    ? '510% 250%'  // Slightly reduced from 550% to fix clipping
+                    ? '480% 240%'  // Reduced zoom to fix clipping
                     : '400% 210%'  // Standard zoom for avatars
             }}
             aria-label={id}
