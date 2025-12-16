@@ -31,7 +31,7 @@ export const MatchCelebration = ({
     return (
         <div
             className={`
-                fixed inset-0 z-50 flex items-center justify-center p-4
+                fixed inset-0 z-[100] flex items-center justify-center p-4
                 transition-all duration-300
                 ${isVisible ? 'bg-black/40' : 'bg-transparent pointer-events-none'}
             `}
@@ -51,10 +51,10 @@ export const MatchCelebration = ({
                 <div className="absolute top-0 right-0 w-32 h-32 bg-amber-100 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 opacity-50"></div>
                 <div className="absolute bottom-0 left-0 w-24 h-24 bg-teal-100 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2 opacity-50"></div>
 
-                {/* Sparkle decoration */}
-                <div className="absolute -top-4 -right-4 z-10">
-                    <div className="bg-gradient-to-br from-yellow-300 to-amber-500 rounded-full p-3 shadow-lg animate-bounce">
-                        <Sparkles className="w-6 h-6 text-white" />
+                {/* Sparkle decoration - positioned inside modal bounds */}
+                <div className="absolute top-3 right-3 z-10">
+                    <div className="bg-gradient-to-br from-yellow-300 to-amber-500 rounded-full p-2 shadow-lg animate-bounce">
+                        <Sparkles className="w-5 h-5 text-white" />
                     </div>
                 </div>
 
