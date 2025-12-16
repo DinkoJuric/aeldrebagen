@@ -198,3 +198,20 @@ A prioritized plan to make Tryg robust, accessible, and emotionally resonant.
 - **Milestone Celebrations**: "You walked 100 times!"
 - **Anticipation Calendar**: "42 days until Emma's wedding".
 
+---
+
+## 🏗️ Technical Debt Backlog
+
+### Feature Folder Refactoring
+Reorganize from "by type" (`components/`, `hooks/`) to "by feature" for better cohesion:
+
+```
+src/features/
+  wordGame/
+    index.jsx, logic.js, data.js, Leaderboard.jsx
+  familyPresence/
+    index.jsx, StatusCard.jsx, useStatus.js
+```
+
+**Benefit**: Delete one folder = delete one feature. No hunting across 5 directories.
+
