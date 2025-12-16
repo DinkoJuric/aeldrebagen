@@ -458,7 +458,8 @@ export const RelativeView = ({
                             type: 'appointment',
                             createdBy: userName
                         });
-                        console.log('Task created:', pendingAction.title, 'at', time, 'period:', period);
+                        // Show confirmation to user
+                        alert(`✅ Opgave oprettet: ${pendingAction.title} kl. ${time}`);
                     }
                     setShowTimePicker(false);
                     setPendingAction(null);
