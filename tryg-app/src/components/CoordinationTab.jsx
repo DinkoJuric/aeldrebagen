@@ -38,6 +38,7 @@ export const CoordinationTab = ({
     onAddTask,
     onViewReport,
     onMatchAction,
+    onDismissMatch,
     dismissedMatchIds = new Set(),
     careCircleId: propCareCircleId
 }) => {
@@ -129,6 +130,12 @@ export const CoordinationTab = ({
                 <MatchBanner
                     match={filteredTopMatch}
                     onClick={() => onMatchAction?.(filteredTopMatch)}
+                    onDismiss={() => {
+                        const offerId = filteredTopMatch.offer?.docId || filteredTopMatch.offer?.id || 'none';
+                        const requestId = filteredTopMatch.request?.docId || filteredTopMatch.request?.id || 'none';
+                        const matchId = `${offerId}-${requestId}`;
+                        onDismissMatch?.(matchId);
+                    }}
                 />
             )}
 

@@ -39,7 +39,7 @@ export const HelpExchange = ({
         <div className="bg-white border border-stone-200 rounded-2xl p-4 space-y-5">
             <h3 className="text-stone-700 font-bold flex items-center gap-2">
                 <HandHeart className="w-5 h-5 text-teal-600" />
-                Familie-udveksling
+                Familie-børsen
             </h3>
 
             {/* RELATIVES' ENTRIES - Show what family members have added */}

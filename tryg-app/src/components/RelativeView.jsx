@@ -30,7 +30,7 @@ export const RelativeView = ({
     const [newTaskTitle, setNewTaskTitle] = useState('');
     const [newTaskPeriod, setNewTaskPeriod] = useState('morgen'); // Period selector for new tasks
     const [activeTab, setActiveTab] = useState('daily'); // 'daily' = Peace of Mind, 'family' = Coordination, 'spil' = Gaming
-    const [activeMatch, setActiveMatch] = useState(null);
+    const [activeMatch, setActiveMatch] = useState(null); // 
     const [pendingAction, setPendingAction] = useState(null); // Stores action info for time picker
     const [showTimePicker, setShowTimePicker] = useState(false);
     const [dismissedMatchIds, setDismissedMatchIds] = useState(new Set()); // Track dismissed matches
@@ -176,6 +176,9 @@ export const RelativeView = ({
                         onAddTask={() => setShowAddModal(true)}
                         onViewReport={() => setShowReport(true)}
                         onMatchAction={(match) => setActiveMatch(match)}
+                        onDismissMatch={(matchId) => {
+                            setDismissedMatchIds(prev => new Set([...prev, matchId]));
+                        }}
                         dismissedMatchIds={dismissedMatchIds}
                         careCircleId={careCircleId}
                     />

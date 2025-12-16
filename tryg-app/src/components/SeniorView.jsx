@@ -229,6 +229,9 @@ export const SeniorView = ({
                                 playMatchSound();
                                 setActiveMatch(topMatch);
                             }}
+                            onDismiss={() => {
+                                setDismissedMatchIds(prev => new Set([...prev, matchId]));
+                            }}
                         />
                     );
                 })()}
