@@ -7,6 +7,7 @@ import { RelativeBottomNavigation } from './RelativeBottomNavigation';
 import { PeaceOfMindTab } from './PeaceOfMindTab';
 import { CoordinationTab } from './CoordinationTab';
 import { MatchCelebration } from './MatchCelebration';
+import { TimePickerModal } from './TimePickerModal';
 import { Spillehjoernet } from './Spillehjoernet';
 import { FEATURES } from '../config/features';
 import { SYMPTOMS_LIST } from '../data/constants';
@@ -30,6 +31,8 @@ export const RelativeView = ({
     const [newTaskPeriod, setNewTaskPeriod] = useState('morgen'); // Period selector for new tasks
     const [activeTab, setActiveTab] = useState('daily'); // 'daily' = Peace of Mind, 'family' = Coordination, 'spil' = Gaming
     const [activeMatch, setActiveMatch] = useState(null);
+    const [pendingAction, setPendingAction] = useState(null); // Stores action info for time picker
+    const [showTimePicker, setShowTimePicker] = useState(false);
 
     const openTasks = tasks.filter(t => !t.completed);
     const completedTasksList = tasks.filter(t => t.completed);
@@ -400,10 +403,9 @@ export const RelativeView = ({
                     seniorName={seniorName}
                     onDismiss={() => setActiveMatch(null)}
                     onAction={(action) => {
-                        // Create task based on action type
-                        const { celebration, offer, request } = activeMatch;
+                        // Store action info and open time picker
+                        const { celebration } = activeMatch;
                         let taskTitle = '';
-                        let taskType = 'appointment';
 
                         switch (action) {
                             case 'call':
@@ -425,20 +427,42 @@ export const RelativeView = ({
                                 taskTitle = celebration?.title || `Opgave med ${seniorName}`;
                         }
 
-                        // Create the task
-                        if (onAddTask && taskTitle) {
-                            onAddTask({
-                                title: taskTitle,
-                                time: '10:00',
-                                type: taskType,
-                                createdBy: userName
-                            });
-                            console.log('Task created:', taskTitle);
-                        }
+                        // Store pending action and show time picker
+                        setPendingAction({
+                            title: taskTitle,
+                            action: action,
+                            celebration: celebration
+                        });
                         setActiveMatch(null);
+                        setShowTimePicker(true);
                     }}
                 />
             )}
+
+            {/* Time Picker Modal */}
+            <TimePickerModal
+                isOpen={showTimePicker}
+                onClose={() => {
+                    setShowTimePicker(false);
+                    setPendingAction(null);
+                }}
+                title="Hvornår?"
+                actionLabel={pendingAction?.title || 'Opret opgave'}
+                seniorName={seniorName}
+                onConfirm={({ time, label }) => {
+                    if (onAddTask && pendingAction) {
+                        onAddTask({
+                            title: pendingAction.title,
+                            time: time,
+                            type: 'appointment',
+                            createdBy: userName
+                        });
+                        console.log('Task created:', pendingAction.title, 'at', time);
+                    }
+                    setShowTimePicker(false);
+                    setPendingAction(null);
+                }}
+            />
         </div>
     );
 };
