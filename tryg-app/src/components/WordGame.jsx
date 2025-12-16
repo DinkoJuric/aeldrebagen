@@ -35,7 +35,7 @@ export const WordGame = ({
                 {/* Success Trophy Image */}
                 <div className="mb-4 -mt-2">
                     <img
-                        src="/assets/success_trophy.png"
+                        src={`${import.meta.env.BASE_URL}assets/success_trophy.png`}
                         alt="Succes Trophy"
                         className="w-full max-w-[200px] mx-auto object-contain animate-in zoom-in duration-500 drop-shadow-xl"
                     />

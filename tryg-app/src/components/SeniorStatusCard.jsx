@@ -66,7 +66,7 @@ export const SeniorStatusCard = ({
                 ${className}
             `}
             style={{
-                backgroundImage: 'url(/assets/bg-atmospheric.png)',
+                backgroundImage: `url(${import.meta.env.BASE_URL}assets/bg-atmospheric.png)`,
                 backgroundPosition: status.bgPos,
                 backgroundSize: '300% 100%' // Zoom to fit 3 panels horizontally
             }}

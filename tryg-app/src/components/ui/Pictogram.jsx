@@ -26,7 +26,7 @@ export const Pictogram = ({ sheet, position, className = '' }) => {
         <div
             className={`bg-no-repeat bg-cover rounded-xl overflow-hidden ${className}`}
             style={{
-                backgroundImage: `url(/assets/sprites/help-sheet-${sheet}.png)`,
+                backgroundImage: `url(${import.meta.env.BASE_URL}assets/sprites/help-sheet-${sheet}.png)`,
                 // @ts-ignore - Valid keys constrained by props
                 backgroundPosition: bgPos[position],
                 backgroundSize: '200% 200%' // Zoom in to show just one quadrant
