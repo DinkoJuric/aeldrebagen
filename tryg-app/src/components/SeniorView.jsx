@@ -53,6 +53,8 @@ export const SeniorView = ({
     const [activePeriod, setActivePeriod] = useState('morgen');
     const [activeTab, setActiveTab] = useState('daily'); // 'daily', 'family', or 'spil'
     const [activeMatch, setActiveMatch] = useState(null); // For match celebration modal
+    const [dismissedMatchIds, setDismissedMatchIds] = useState(new Set()); // Track dismissed matches
+    const [hideReward, setHideReward] = useState(false); // Hide medicine reward for session
 
     // Detect matches between Senior and Relative
     // Combine all offers/requests for match detection
@@ -212,41 +214,66 @@ export const SeniorView = ({
             <main className="flex-1 overflow-y-auto p-4 space-y-4 pb-24">
 
                 {/* Match Celebration Banner - Shows when there's a help exchange match */}
-                {hasMatches && topMatch && (
-                    <MatchBanner
-                        match={topMatch}
-                        onClick={() => {
-                            playMatchSound();
-                            setActiveMatch(topMatch);
-                        }}
-                    />
-                )}
+                {hasMatches && topMatch && (() => {
+                    // Generate match ID for filtering
+                    const offerId = topMatch.offer?.docId || topMatch.offer?.id || 'none';
+                    const requestId = topMatch.request?.docId || topMatch.request?.id || 'none';
+                    const matchId = `${offerId}-${requestId}`;
+
+                    if (dismissedMatchIds.has(matchId)) return null;
+
+                    return (
+                        <MatchBanner
+                            match={topMatch}
+                            onClick={() => {
+                                playMatchSound();
+                                setActiveMatch(topMatch);
+                            }}
+                        />
+                    );
+                })()}
 
                 {/* ===== DAILY TAB ===== */}
                 {activeTab === 'daily' && (
                     <>
-                        {/* Reward Card (Behavioral Hook) - Clickable to minimize */}
-                        {allMedicineComplete && (
+                        {/* Reward Card (Behavioral Hook) - Clickable to minimize, can be hidden */}
+                        {allMedicineComplete && !hideReward && (
                             rewardMinimized ? (
-                                <button
-                                    onClick={() => setRewardMinimized(false)}
-                                    className="w-full rounded-xl p-3 mb-4 bg-indigo-100 border-2 border-indigo-200 flex items-center justify-between hover:bg-indigo-200 transition-colors"
-                                >
-                                    <div className="flex items-center gap-2">
+                                <div className="relative w-full rounded-xl p-3 mb-4 bg-indigo-100 border-2 border-indigo-200 flex items-center justify-between">
+                                    <button
+                                        onClick={() => setRewardMinimized(false)}
+                                        className="flex-1 flex items-center gap-2 hover:opacity-80 transition-opacity"
+                                    >
                                         <ImageIcon className="w-5 h-5 text-indigo-600" />
                                         <div>
                                             <span className="font-bold text-indigo-700">Dagens Billede</span>
                                             <p className="text-xs text-indigo-500">Fra familien med kærlighed ❤️</p>
                                         </div>
+                                    </button>
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-xs text-indigo-400">Tryk for at vise</span>
+                                        <button
+                                            onClick={() => setHideReward(true)}
+                                            className="p-1 rounded-full hover:bg-indigo-200 text-indigo-400 hover:text-indigo-600"
+                                            title="Skjul"
+                                        >
+                                            ✕
+                                        </button>
                                     </div>
-                                    <span className="text-xs text-indigo-400">Tryk for at vise</span>
-                                </button>
+                                </div>
                             ) : (
-                                <button
-                                    onClick={() => setRewardMinimized(true)}
-                                    className="w-full rounded-3xl p-6 mb-6 bg-indigo-600 border-2 border-indigo-600 text-white animate-fade-in text-left hover:bg-indigo-700 transition-colors"
-                                >
-                                    <div className="text-center">
+                                <div className="relative w-full rounded-3xl p-6 mb-6 bg-indigo-600 border-2 border-indigo-600 text-white animate-fade-in">
+                                    <button
+                                        onClick={() => setHideReward(true)}
+                                        className="absolute top-2 right-2 p-1 rounded-full bg-indigo-500 hover:bg-indigo-400 text-indigo-200 hover:text-white text-sm"
+                                        title="Skjul"
+                                    >
+                                        ✕
+                                    </button>
+                                    <button
+                                        onClick={() => setRewardMinimized(true)}
+                                        className="w-full text-center"
+                                    >
                                         <div className="flex items-center justify-center gap-2 mb-2">
                                             <ImageIcon className="w-6 h-6 text-indigo-200" />
                                             <span className="font-bold text-indigo-100 uppercase tracking-widest text-sm">Dagens Billede</span>
@@ -261,8 +288,8 @@ export const SeniorView = ({
                                         </div>
                                         <p className="font-bold text-lg">Medicin taget! ❤️</p>
                                         <p className="text-indigo-200 text-sm">Tryk for at minimere</p>
-                                    </div>
-                                </button>
+                                    </button>
+                                </div>
                             )
                         )}
 
@@ -720,6 +747,13 @@ export const SeniorView = ({
                                 type: 'appointment',
                                 createdBy: userName
                             });
+
+                            // Dismiss the match so it doesn't reappear
+                            const offerId = activeMatch.offer?.docId || activeMatch.offer?.id || 'none';
+                            const requestId = activeMatch.request?.docId || activeMatch.request?.id || 'none';
+                            const matchId = `${offerId}-${requestId}`;
+                            setDismissedMatchIds(prev => new Set([...prev, matchId]));
+
                             alert(`✅ Opgave oprettet: ${taskTitle}`);
                         }
                         setActiveMatch(null);

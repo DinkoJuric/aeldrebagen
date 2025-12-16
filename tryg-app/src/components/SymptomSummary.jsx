@@ -169,13 +169,25 @@ export const SymptomSummary = ({ symptomLogs = [], onViewReport, hideTitle = fal
                     {/* Expanded view */}
                     {showOlder && (
                         <div className="space-y-2 mt-3">
-                            {weekSymptoms.map((log, i) => (
+                            {/* When in warning mode, only show severe symptoms */}
+                            {(trend.trend === 'warning'
+                                ? weekSymptoms.filter(s => s.bodyLocation?.severity?.id === 'severe')
+                                : weekSymptoms
+                            ).map((log, i) => (
                                 <div key={i} className="flex items-center justify-between text-sm text-orange-800 bg-white/50 p-2 rounded-lg">
                                     <div className="flex items-center gap-2">
                                         <span>{log.label}</span>
                                         {log.bodyLocation && (
                                             <span className="text-xs text-orange-500">
                                                 {log.bodyLocation.emoji}
+                                            </span>
+                                        )}
+                                        {log.bodyLocation?.severity && (
+                                            <span className={`text-xs px-1.5 py-0.5 rounded-full ${log.bodyLocation.severity.id === 'severe'
+                                                    ? 'bg-red-100 text-red-700'
+                                                    : 'bg-orange-100 text-orange-600'
+                                                }`}>
+                                                {log.bodyLocation.severity.label}
                                             </span>
                                         )}
                                     </div>
