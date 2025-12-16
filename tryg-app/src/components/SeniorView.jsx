@@ -144,9 +144,18 @@ export const SeniorView = ({
                                         </div>
 
                                         <div>
-                                            <h3 className={`text-xl font-bold ${task.completed ? 'text-stone-500 line-through' : 'text-stone-800'}`}>
-                                                {task.title}
-                                            </h3>
+                                            <div className="flex items-center gap-2 flex-wrap">
+                                                <h3 className={`text-xl font-bold ${task.completed ? 'text-stone-500 line-through' : 'text-stone-800'}`}>
+                                                    {task.title}
+                                                </h3>
+                                                {/* Social Attribution Stamp */}
+                                                {task.createdByRole === 'relative' && task.createdByName && (
+                                                    <span className="inline-flex items-center gap-1 bg-indigo-50 px-2 py-0.5 rounded-lg">
+                                                        <Heart className="w-3 h-3 text-indigo-500 fill-indigo-200" />
+                                                        <span className="text-[10px] text-indigo-700 font-medium">Fra {task.createdByName}</span>
+                                                    </span>
+                                                )}
+                                            </div>
                                             <p className="text-stone-500 font-medium">{task.time}</p>
                                         </div>
                                     </div>

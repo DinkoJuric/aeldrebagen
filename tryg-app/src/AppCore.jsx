@@ -117,7 +117,13 @@ export default function TrygAppCore({
     };
 
     const handleAddTaskFromRelative = async (newTask) => {
-        await addTask(newTask);
+        // Include social attribution for tasks created by relatives
+        await addTask({
+            ...newTask,
+            createdByRole: 'relative',
+            createdByName: relativeName || userProfile?.displayName || 'Familie',
+            createdByUserId: user?.uid
+        });
     };
 
     const handleSendPing = async (fromName, toRole) => {
