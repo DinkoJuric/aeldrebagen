@@ -45,7 +45,7 @@ export const SeniorView = ({
     const [showCompletedTasks, setShowCompletedTasks] = useState(false);
     const [showHealthReport, setShowHealthReport] = useState(false);
     const [showAddTaskModal, setShowAddTaskModal] = useState(false);
-    const [rewardMinimized, setRewardMinimized] = useState(false);
+    const [rewardMinimized, setRewardMinimized] = useState(true);
     const [newTaskTitle, setNewTaskTitle] = useState('');
     const [newTaskPeriod, setNewTaskPeriod] = useState('morgen');
     const [activePeriod, setActivePeriod] = useState('morgen');
@@ -554,11 +554,34 @@ export const SeniorView = ({
                 userName={userName}
             />
             {/* Match Celebration Modal - full screen confetti! */}
+            {/* Match Celebration Modal - full screen confetti! */}
             {match && (
                 <MatchCelebration
                     match={match}
                     onDismiss={dismissMatch}
-                    onAction={(action) => console.log('Senior action:', action)}
+                    onAction={(action) => {
+                        console.log('Senior action:', action);
+                        if (action === 'plan-visit' || action === 'contact') {
+                            // Create an appointment task automatically
+                            const matchName = match.relativeName || 'Pårørende'; // Fallback
+                            const taskTitle = action === 'plan-visit'
+                                ? `Besøg af ${matchName}`
+                                : `Ring til ${matchName}`;
+
+                            if (onAddTask) {
+                                onAddTask({
+                                    title: taskTitle,
+                                    period: 'eftermiddag', // Default to afternoon
+                                    type: 'appointment',
+                                    createdByRole: 'senior', // Self-created via match
+                                    createdByName: userName
+                                });
+                            }
+
+                            // Close match modal
+                            dismissMatch();
+                        }
+                    }}
                 />
             )}
 

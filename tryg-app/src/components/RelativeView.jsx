@@ -107,7 +107,7 @@ export const RelativeView = ({
                 <div className="flex justify-between items-center">
                     <div className="flex items-center gap-2">
                         <Avatar
-                            id={userName === 'Test User' ? 'fatima' : userName === 'Brad' ? 'brad' : 'louise'}
+                            id={(userName.includes('Fatima') || userName === 'Test User') ? 'fatima' : userName === 'Brad' ? 'brad' : 'louise'}
                             size="md"
                             className="bg-indigo-50"
                         />

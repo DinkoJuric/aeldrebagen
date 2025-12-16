@@ -103,32 +103,18 @@ export const PeaceOfMindTab = ({
 
     return (
         <div className="space-y-4">
-            {/* HERO: Peace of Mind Card with Gates Progress */}
-            <div className={`bg-gradient-to-br ${status.color} rounded-2xl p-6 text-white shadow-lg`}>
-                <div className="flex justify-between items-start mb-4">
-                    <div className="flex items-center gap-3">
-                        <StatusIcon className={`w-8 h-8 ${status.urgent ? 'animate-pulse' : ''}`} />
-                        <div>
-                            <h2 className="text-2xl font-bold mb-0.5">{status.label}</h2>
-                            <p className="text-white/80 text-sm">{status.sublabel}</p>
-                        </div>
-                    </div>
-                    <ThinkingOfYouIconButton onSendPing={onSendPing} />
-                </div>
-
-                {/* Gates Progress Ring */}
-                <div className="flex items-center justify-center py-2">
-                    <ProgressRing
-                        tasks={tasks}
-                        size={140}
-                        strokeWidth={14}
-                        showLabels={true}
-                    />
-                </div>
-
-                <div className="text-center mt-2">
-                    <p className="text-sm text-white/70">Sidst set {lastCheckIn || '-'}</p>
-                </div>
+            {/* HERO: Peace of Mind Card with Atmospheric Background details */}
+            <SeniorStatusCard
+                seniorName={seniorName}
+                lastCheckIn={lastCheckIn}
+                completionRate={completionRate}
+                tasks={tasks}
+                symptomCount={symptomCount}
+            />
+            {/* Thinking of You - moved outside card if needed or keep inside? SeniorStatusCard doesn't have it built-in. */}
+            {/* Adding ThinkingOfYouIconButton below the card or integrate into a separate actions row if preferred. */}
+            <div className="flex justify-end -mt-2 mb-2">
+                <ThinkingOfYouIconButton onSendPing={onSendPing} />
             </div>
 
             {/* SMART SUMMARY - Natural Language Briefing */}
@@ -136,15 +122,15 @@ export const PeaceOfMindTab = ({
                 const briefing = getDailyBriefing({ tasks, symptoms, seniorName, lastCheckIn });
                 return (
                     <div className={`p-4 rounded-xl border-2 ${briefing.type === 'success' ? 'bg-green-50 border-green-200' :
-                            briefing.type === 'warning' ? 'bg-amber-50 border-amber-200' :
-                                'bg-stone-50 border-stone-200'
+                        briefing.type === 'warning' ? 'bg-amber-50 border-amber-200' :
+                            'bg-stone-50 border-stone-200'
                         }`}>
                         <div className="flex items-start gap-3">
                             <span className="text-2xl">{briefing.emoji}</span>
                             <div className="flex-1">
                                 <p className={`font-medium ${briefing.type === 'success' ? 'text-green-800' :
-                                        briefing.type === 'warning' ? 'text-amber-800' :
-                                            'text-stone-700'
+                                    briefing.type === 'warning' ? 'text-amber-800' :
+                                        'text-stone-700'
                                     }`}>
                                     {briefing.message}
                                 </p>

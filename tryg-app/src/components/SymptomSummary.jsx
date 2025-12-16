@@ -65,7 +65,7 @@ const analyzeTrend = (symptoms) => {
 };
 
 // Symptom Summary Card - shows today's symptoms with 7-day overview
-export const SymptomSummary = ({ symptomLogs = [], onViewReport }) => {
+export const SymptomSummary = ({ symptomLogs = [], onViewReport, hideTitle = false }) => {
     const [showOlder, setShowOlder] = useState(false);
 
     // Split symptoms
@@ -103,10 +103,12 @@ export const SymptomSummary = ({ symptomLogs = [], onViewReport }) => {
             {/* Today's Symptoms */}
             {todaySymptoms.length > 0 && (
                 <div>
-                    <h4 className="text-orange-800 font-bold flex items-center gap-2 mb-2">
-                        <AlertCircle className="w-5 h-5" />
-                        Symptomer i dag ({todaySymptoms.length})
-                    </h4>
+                    {!hideTitle && (
+                        <h4 className="text-orange-800 font-bold flex items-center gap-2 mb-2">
+                            <AlertCircle className="w-5 h-5" />
+                            Symptomer i dag ({todaySymptoms.length})
+                        </h4>
+                    )}
                     <div className="space-y-2">
                         {todaySymptoms.map((log, i) => (
                             <div key={i} className="flex items-center justify-between text-sm text-orange-900 bg-white/70 p-3 rounded-xl">

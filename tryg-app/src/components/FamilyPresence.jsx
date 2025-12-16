@@ -67,21 +67,43 @@ const MemberStatusRow = ({ name, status, role, timestamp, isCurrentUser = false 
     }
 
     return (
-        <div className={`flex items-center justify-between py-3 ${isCurrentUser ? 'opacity-60' : ''}`}>
+        <div className={`
+            flex items-center justify-between p-3 rounded-xl transition-all
+            ${isCurrentUser ? 'bg-indigo-50/50 border border-indigo-100/50' : 'hover:bg-stone-50 border border-transparent hover:border-stone-100'}
+        `}>
+            {/* Left: Avatar + Info */}
             <div className="flex items-center gap-3">
-                <Avatar id={avatarId} size="md" className="bg-stone-200" />
+                <div className="relative">
+                    <Avatar id={avatarId} size="md" className="shadow-sm border-2 border-white" />
+                    {/* Tiny status indicator dot */}
+                    <div className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full border-2 border-white ${status === 'available' ? 'bg-teal-500' :
+                            status === 'home' ? 'bg-green-500' :
+                                status === 'work' ? 'bg-indigo-500' :
+                                    status === 'traveling' ? 'bg-amber-500' : 'bg-stone-400'
+                        }`} />
+                </div>
+
                 <div>
-                    <span className="text-sm font-bold text-stone-700 block text-left">
-                        {name}{isCurrentUser ? ' (dig)' : ''}
+                    <span className={`text-sm font-bold block text-left ${isCurrentUser ? 'text-indigo-900' : 'text-stone-700'}`}>
+                        {name} {isCurrentUser && <span className="opacity-50 text-xs font-normal">(dig)</span>}
                     </span>
-                    <span className={`text-xs ${config.color} block text-left`}>{config.label}</span>
+                    <span className={`text-xs font-medium block text-left ${config.color || 'text-stone-500'}`}>
+                        {config.label}
+                    </span>
                 </div>
             </div>
 
-            <div className="flex flex-col items-center">
-                <Avatar id={statusIconId} size="sm" className="" />
+            {/* Right: Pictogram + Time */}
+            <div className="flex flex-col items-end gap-1">
+                {/* Status Pictogram - Subtle glass feel */}
+                <div className="bg-stone-100/80 p-1.5 rounded-lg backdrop-blur-sm">
+                    <Avatar id={statusIconId} size="sm" />
+                </div>
+
                 {timeString && (
-                    <span className="text-[10px] text-stone-400 mt-0.5">{timeString}</span>
+                    <span className="text-[10px] font-medium text-stone-400 tabular-nums">
+                        {timeString}
+                    </span>
                 )}
             </div>
         </div>
@@ -115,14 +137,17 @@ export const FamilyPresence = ({
     }
 
     return (
-        <div className={`bg-stone-50 rounded-xl ${compact ? 'p-3' : 'p-4'} border border-stone-200`}>
+        <div className={`bg-white rounded-2xl ${compact ? 'p-3' : 'p-4'} border border-stone-100 shadow-sm`}>
             <div className="flex items-center gap-2 mb-3">
-                <Users className="w-4 h-4 text-indigo-600" />
+                <div className="p-1.5 bg-indigo-50 rounded-lg">
+                    <Users className="w-4 h-4 text-indigo-600" />
+                </div>
                 <h4 className="text-xs font-bold text-stone-500 uppercase tracking-wide">
                     Familien nu
                 </h4>
             </div>
-            <div className="divide-y divide-stone-200">
+
+            <div className="space-y-1">
                 {memberStatuses.map((member, index) => (
                     <MemberStatusRow
                         key={member.docId || index}

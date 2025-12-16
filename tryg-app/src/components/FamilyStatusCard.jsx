@@ -1,5 +1,6 @@
 import React from 'react';
 import { Briefcase, Home, Car, Coffee, Moon } from 'lucide-react';
+import { Avatar } from './ui/Avatar';
 
 // Family member status options
 const STATUS_OPTIONS = [
@@ -13,7 +14,15 @@ const STATUS_OPTIONS = [
 // What the SENIOR sees about their family member
 export const FamilyStatusCard = ({ familyStatus, familyName = 'Louise', lastUpdated }) => {
     const status = STATUS_OPTIONS.find(s => s.id === familyStatus) || STATUS_OPTIONS[0];
-    const StatusIcon = status.icon;
+
+    // Map status ID to Avatar ID
+    const avatarId = {
+        'work': 'work',
+        'home': 'home',
+        'traveling': 'car',
+        'available': 'coffee',
+        'busy': 'moon'
+    }[familyStatus] || 'home';
 
     // Format timestamp
     let timeString = '';
@@ -25,58 +34,74 @@ export const FamilyStatusCard = ({ familyStatus, familyName = 'Louise', lastUpda
     }
 
     return (
-        <div className="bg-white rounded-2xl p-4 shadow-sm border-2 border-indigo-100 mb-4">
+        <div className="bg-white rounded-2xl p-4 shadow-sm border border-stone-100 mb-3 flex items-center justify-between">
             <div className="flex items-center gap-3">
                 {/* Avatar */}
-                <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-700 font-bold text-lg">
-                    {familyName.charAt(0)}
-                </div>
+                <Avatar id={familyName === 'Brad' ? 'brad' : familyName.includes('Fatima') ? 'fatima' : 'louise'} size="md" />
 
                 {/* Status info */}
-                <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                        <span className="font-semibold text-stone-800">{familyName}</span>
-                        <div className={`p-1 rounded-lg ${status.color}`}>
-                            <StatusIcon className="w-4 h-4" />
-                        </div>
+                <div>
+                    <h4 className="font-bold text-stone-800 text-sm">{familyName}</h4>
+                    <div className="flex items-center gap-1.5 mt-0.5">
+                        <span className="text-xs font-medium text-stone-500 bg-stone-100 px-2 py-0.5 rounded-full">
+                            {status.label}
+                        </span>
+                        <span className="text-[10px] text-stone-400">• {timeString}</span>
                     </div>
-                    <p className="text-stone-500 text-sm">{status.label}</p>
                 </div>
+            </div>
 
-                {/* Time indicator */}
-                <div className="text-right">
-                    <p className="text-xs text-stone-400">Opdateret</p>
-                    <p className="text-sm font-medium text-stone-600">{timeString}</p>
-                </div>
+            {/* Status Icon */}
+            <div className="bg-stone-50 p-1.5 rounded-xl border border-stone-100">
+                <Avatar id={avatarId} size="sm" />
             </div>
         </div>
     );
 };
 
 // Status selector for RELATIVE to set their status
-export const StatusSelector = ({ currentStatus, onStatusChange }) => {
+export const StatusSelector = ({ currentStatus, onStatusChange, compact = false }) => {
     return (
-        <div className="grid grid-cols-5 gap-2">
+        <div className="flex gap-2 justify-between">
             {STATUS_OPTIONS.map(status => {
-                const StatusIcon = status.icon;
                 const isActive = currentStatus === status.id;
+
+                // Map status ID to Avatar ID
+                const avatarId = {
+                    'work': 'work',
+                    'home': 'home',
+                    'traveling': 'car',
+                    'available': 'coffee',
+                    'busy': 'moon'
+                }[status.id] || 'home';
 
                 return (
                     <button
                         key={status.id}
                         onClick={() => onStatusChange(status.id)}
                         className={`
-                            flex flex-col items-center gap-1 p-2 rounded-xl transition-all
+                            group relative flex items-center justify-center p-2 rounded-xl transition-all duration-200
                             ${isActive
-                                ? `${status.color} ring-2 ring-offset-1 ring-indigo-400`
-                                : 'bg-white hover:bg-stone-50 border border-stone-200'
+                                ? 'bg-white shadow-md ring-2 ring-indigo-500 scale-110 z-10'
+                                : 'bg-white/50 hover:bg-white hover:shadow-sm border border-transparent hover:border-stone-200'
                             }
                         `}
+                        title={status.label}
                     >
-                        <StatusIcon className={`w-5 h-5 ${isActive ? '' : 'text-stone-400'}`} />
-                        <span className={`text-[10px] font-medium ${isActive ? '' : 'text-stone-500'}`}>
-                            {status.label.split(' ')[0]}
-                        </span>
+                        <Avatar
+                            id={avatarId}
+                            size="md"
+                            className={`transition-transform duration-200 ${isActive ? 'scale-110' : 'group-hover:scale-110'}`}
+                        />
+
+                        {/* Status Label Tooltip (visible on hover or active) */}
+                        <div className={`
+                            absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap px-2 py-1 rounded-md text-[10px] font-bold bg-stone-800 text-white
+                            pointer-events-none transition-all duration-200 z-20
+                            ${isActive ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0'}
+                        `}>
+                            {status.label}
+                        </div>
                     </button>
                 );
             })}

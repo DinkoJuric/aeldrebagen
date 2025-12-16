@@ -289,7 +289,7 @@ export const CoordinationTab = ({
                             {showSymptoms ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                         </button>
                         {showSymptoms && (
-                            <SymptomSummary symptomLogs={symptomLogs} onViewReport={onViewReport} />
+                            <SymptomSummary symptomLogs={symptomLogs} onViewReport={onViewReport} hideTitle={true} />
                         )}
                     </div>
                 );
