@@ -24,6 +24,7 @@ export const Avatar = ({ id, className = '', size = 'md' }) => {
         'fatima': '34% 5%',   // Bun woman
         'brad': '66% 5%',     // Beanie man
         'bearded': '98% 5%',  // Curly hair man
+        'senior': '98% 5%',   // Using Bearded as Senior Placeholder
 
         // Row 2 - Status Icons
         'home': '5% 95%',

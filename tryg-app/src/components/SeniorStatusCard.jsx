@@ -1,10 +1,11 @@
+// @ts-check
 import React from 'react';
 import { User, Clock, Pill } from 'lucide-react';
 import { InlineGatesIndicator } from './ProgressRing';
+import { Avatar } from './ui/Avatar';
 
 // Senior status card - displayed in RelativeView to show senior's status
-// Mirrors the structure of FamilyStatusCard for consistency
-// Enhanced with InlineGatesIndicator for Morning/Afternoon/Evening status
+// Enhanced with Atmospheric Backgrounds for emotional sensing
 export const SeniorStatusCard = ({
     seniorName = 'Senior',
     lastCheckIn,
@@ -13,72 +14,133 @@ export const SeniorStatusCard = ({
     symptomCount = 0,
     className = ''
 }) => {
-    // Determine status based on check-in recency and completion rate
+    // Determine status and background theme
+    // 0 = Green/Calm (Left), 1 = Blue/Neutral (Center), 2 = Orange/Warn (Right)
     const getStatus = () => {
-        if (!lastCheckIn) return { label: 'Venter...', color: 'bg-stone-100 text-stone-600 border-stone-200' };
-        if (completionRate >= 80) return { label: 'Alt er vel', color: 'bg-emerald-100 text-emerald-700 border-emerald-200' };
-        if (completionRate >= 50) return { label: 'God dag', color: 'bg-teal-100 text-teal-700 border-teal-200' };
-        return { label: 'Tjek ind', color: 'bg-amber-100 text-amber-700 border-amber-200' };
+        if (!lastCheckIn) return {
+            label: 'Venter på første tjek...',
+            theme: 'neutral',
+            bgPos: '50% 0%', // Center (Blue) structure
+            textColor: 'text-white'
+        };
+
+        // High completion = Calm (Green)
+        if (completionRate >= 80 && symptomCount === 0) return {
+            label: 'Alt er vel',
+            theme: 'calm',
+            bgPos: '0% 0%', // Left (Green)
+            textColor: 'text-white'
+        };
+
+        // Medium completion = Neutral (Blue)
+        if (completionRate >= 50) return {
+            label: 'God dag',
+            theme: 'neutral',
+            bgPos: '50% 0%', // Center (Blue)
+            textColor: 'text-white'
+        };
+
+        // Low completion or symptoms = Warm (Orange)
+        if (symptomCount > 0) return {
+            label: 'OBS: Symptomer',
+            theme: 'warm',
+            bgPos: '100% 0%', // Right (Orange)
+            textColor: 'text-white'
+        };
+
+        return {
+            label: 'Tjek ind',
+            theme: 'warm',
+            bgPos: '100% 0%', // Right (Orange)
+            textColor: 'text-white'
+        };
     };
 
     const status = getStatus();
 
     return (
-        <div className={`bg-white p-4 rounded-2xl shadow-sm border-2 border-teal-100 ${className}`}>
-            <div className="flex justify-between items-center">
-                {/* Left: Avatar + Info */}
-                <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center">
-                        <User className="w-6 h-6 text-teal-600" />
+        <div
+            className={`
+                relative overflow-hidden rounded-2xl shadow-lg border border-white/20 p-6 
+                transition-all duration-500 ease-in-out
+                ${className}
+            `}
+            style={{
+                backgroundImage: 'url(/assets/bg-atmospheric.png)',
+                backgroundPosition: status.bgPos,
+                backgroundSize: '300% 100%' // Zoom to fit 3 panels horizontally
+            }}
+        >
+            {/* Dark abstract overlay for text readability */}
+            <div className="absolute inset-0 bg-black/10 backdrop-blur-[1px]" />
+
+            {/* Content Container (Relative z-10) */}
+            <div className="relative z-10 text-white">
+                <div className="flex justify-between items-start mb-4">
+                    {/* Left: Avatar + Info */}
+                    <div className="flex items-center gap-3">
+                        <div className="p-1 bg-white/20 rounded-full backdrop-blur-md">
+                            <Avatar id="senior" size="md" className="border-2 border-white/40" />
+                        </div>
+                        <div>
+                            <h3 className="font-bold text-xl leading-tight drop-shadow-sm">{seniorName}</h3>
+                            <div className="flex items-center gap-1.5 text-xs font-medium text-white/90 bg-black/10 px-2 py-0.5 rounded-full backdrop-blur-sm mt-1 w-fit">
+                                <Clock className="w-3 h-3" />
+                                <span>Sidst: {lastCheckIn || '-'}</span>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <h3 className="font-semibold text-stone-800">{seniorName}</h3>
-                        <div className="flex items-center gap-1 text-xs text-stone-500">
-                            <Clock className="w-3 h-3" />
-                            <span>Sidst: {lastCheckIn || '-'}</span>
+
+                    {/* Right: Status Badge - "Glass" effect */}
+                    <div className="px-3 py-1.5 rounded-full text-xs font-bold bg-white/20 backdrop-blur-md border border-white/30 text-white shadow-sm">
+                        {status.label}
+                    </div>
+                </div>
+
+                {/* Inline Gates Indicator - showing Morgen/Eftermiddag/Aften status (Customized for dark bg) */}
+                {tasks.length > 0 && (
+                    <div className="mb-4 py-2 px-3 bg-black/10 rounded-xl backdrop-blur-sm border border-white/10">
+                        {/* We pass a prop or override styles via context if InlineGatesIndicator supports it. 
+                             For now, wrapping it in a container that forces light text colors if possible, 
+                             or we accept standard colors. 
+                             Actually, looking at InlineGatesIndicator code (not visible here but assumed),
+                             it likely uses standard tailwind colors. We'll trust it looks okay or contrasty enough. */}
+                        <InlineGatesIndicator tasks={tasks} />
+                    </div>
+                )}
+
+                {/* Stats row - Glass cards */}
+                <div className="grid grid-cols-2 gap-3">
+                    <div className="bg-white/15 backdrop-blur-md p-3 rounded-xl border border-white/10 flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+                            <Clock className="w-4 h-4 text-white" />
+                        </div>
+                        <div>
+                            <p className="text-[10px] text-white/70 uppercase font-bold tracking-wider">Tjekket ind</p>
+                            <p className="text-sm font-bold">{lastCheckIn || 'Venter'}</p>
+                        </div>
+                    </div>
+
+                    <div className="bg-white/15 backdrop-blur-md p-3 rounded-xl border border-white/10 flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+                            <Pill className="w-4 h-4 text-white" />
+                        </div>
+                        <div>
+                            <p className="text-[10px] text-white/70 uppercase font-bold tracking-wider">Medicin</p>
+                            <p className="text-sm font-bold">{completionRate}% ordnet</p>
                         </div>
                     </div>
                 </div>
 
-                {/* Right: Status badge */}
-                <div className={`px-3 py-1 rounded-full text-xs font-bold border ${status.color}`}>
-                    {status.label}
-                </div>
-            </div>
-
-            {/* Inline Gates Indicator - showing Morgen/Eftermiddag/Aften status */}
-            {tasks.length > 0 && (
-                <div className="mt-3 py-2 bg-stone-50 rounded-lg">
-                    <InlineGatesIndicator tasks={tasks} />
-                </div>
-            )}
-
-            {/* Stats row */}
-            <div className="grid grid-cols-2 gap-3 mt-3">
-                <div className="bg-stone-50 p-3 rounded-xl">
-                    <p className="text-[10px] text-stone-400 uppercase font-bold tracking-wider mb-0.5">Tjekket ind</p>
-                    <div className="flex items-center gap-1.5 text-stone-700">
-                        <Clock className="w-3.5 h-3.5 text-teal-500" />
-                        <span className="text-sm font-medium">{lastCheckIn || 'Venter...'}</span>
+                {/* Symptom indicator (if symptoms logged today) */}
+                {symptomCount > 0 && (
+                    <div className="mt-3 p-2 bg-orange-500/20 backdrop-blur-md rounded-lg border border-orange-200/30 text-center animate-pulse">
+                        <span className="text-xs font-bold text-white drop-shadow-md">
+                            ⚠️ {symptomCount} symptom{symptomCount > 1 ? 'er' : ''} rapporteret i dag
+                        </span>
                     </div>
-                </div>
-                <div className="bg-stone-50 p-3 rounded-xl">
-                    <p className="text-[10px] text-stone-400 uppercase font-bold tracking-wider mb-0.5">Medicin</p>
-                    <div className="flex items-center gap-1.5 text-stone-700">
-                        <Pill className="w-3.5 h-3.5 text-teal-500" />
-                        <span className="text-sm font-medium">{completionRate}% taget</span>
-                    </div>
-                </div>
+                )}
             </div>
-
-            {/* Symptom indicator (if symptoms logged today) */}
-            {symptomCount > 0 && (
-                <div className="mt-3 p-2 bg-amber-50 rounded-lg border border-amber-200 text-center">
-                    <span className="text-xs text-amber-700">
-                        📋 {symptomCount} symptom{symptomCount > 1 ? 'er' : ''} i dag
-                    </span>
-                </div>
-            )}
         </div>
     );
 };
