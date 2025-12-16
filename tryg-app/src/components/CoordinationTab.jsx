@@ -38,6 +38,7 @@ export const CoordinationTab = ({
     onAddTask,
     onViewReport,
     onMatchAction,
+    dismissedMatchIds = new Set(),
     careCircleId: propCareCircleId
 }) => {
     // Get from context, use props as override
@@ -75,11 +76,23 @@ export const CoordinationTab = ({
     ];
 
     // Detect matches
-    const { topMatch, hasMatches } = useHelpExchangeMatch({
+    const { topMatch, hasMatches, matches } = useHelpExchangeMatch({
         offers: allOffers,
         requests: allRequests,
         familyStatus: myStatus
     });
+
+    // Generate a unique ID for a match (based on offer and request IDs)
+    const getMatchId = (match) => {
+        if (!match) return null;
+        const offerId = match.offer?.docId || match.offer?.id || 'none';
+        const requestId = match.request?.docId || match.request?.id || 'none';
+        return `${offerId}-${requestId}`;
+    };
+
+    // Filter out dismissed matches
+    const filteredTopMatch = topMatch && !dismissedMatchIds.has(getMatchId(topMatch)) ? topMatch : null;
+    const hasActiveMatches = filteredTopMatch !== null;
 
     return (
         <div className="space-y-3">
@@ -112,10 +125,10 @@ export const CoordinationTab = ({
             </div>
 
             {/* Match Celebration Banner */}
-            {hasMatches && topMatch && (
+            {hasActiveMatches && filteredTopMatch && (
                 <MatchBanner
-                    match={topMatch}
-                    onClick={() => onMatchAction?.(topMatch)}
+                    match={filteredTopMatch}
+                    onClick={() => onMatchAction?.(filteredTopMatch)}
                 />
             )}
 

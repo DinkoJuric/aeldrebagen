@@ -33,6 +33,7 @@ export const RelativeView = ({
     const [activeMatch, setActiveMatch] = useState(null);
     const [pendingAction, setPendingAction] = useState(null); // Stores action info for time picker
     const [showTimePicker, setShowTimePicker] = useState(false);
+    const [dismissedMatchIds, setDismissedMatchIds] = useState(new Set()); // Track dismissed matches
 
     const openTasks = tasks.filter(t => !t.completed);
     const completedTasksList = tasks.filter(t => t.completed);
@@ -175,6 +176,7 @@ export const RelativeView = ({
                         onAddTask={() => setShowAddModal(true)}
                         onViewReport={() => setShowReport(true)}
                         onMatchAction={(match) => setActiveMatch(match)}
+                        dismissedMatchIds={dismissedMatchIds}
                         careCircleId={careCircleId}
                     />
                 )}
@@ -431,7 +433,8 @@ export const RelativeView = ({
                         setPendingAction({
                             title: taskTitle,
                             action: action,
-                            celebration: celebration
+                            celebration: celebration,
+                            matchToDissmiss: activeMatch // Store match for dismissal
                         });
                         setActiveMatch(null);
                         setShowTimePicker(true);
@@ -458,6 +461,16 @@ export const RelativeView = ({
                             type: 'appointment',
                             createdBy: userName
                         });
+
+                        // Dismiss the match so it doesn't reappear
+                        if (pendingAction.matchToDissmiss) {
+                            const match = pendingAction.matchToDissmiss;
+                            const offerId = match.offer?.docId || match.offer?.id || 'none';
+                            const requestId = match.request?.docId || match.request?.id || 'none';
+                            const matchId = `${offerId}-${requestId}`;
+                            setDismissedMatchIds(prev => new Set([...prev, matchId]));
+                        }
+
                         // Show confirmation to user
                         alert(`✅ Opgave oprettet: ${pendingAction.title} kl. ${time}`);
                     }
