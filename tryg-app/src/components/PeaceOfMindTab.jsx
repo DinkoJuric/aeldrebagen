@@ -1,9 +1,10 @@
 import React from 'react';
-import { Heart, Clock, Pill, CheckCircle, AlertCircle } from 'lucide-react';
+import { Heart, Clock, Pill, CheckCircle, AlertCircle, MessageCircle } from 'lucide-react';
 import { SeniorStatusCard } from './SeniorStatusCard';
 import { ThinkingOfYouIconButton } from './ThinkingOfYou';
 import { ProgressRing } from './ProgressRing';
 import { useCareCircleContext } from '../contexts/CareCircleContext';
+import { getDailyBriefing } from '../utils/briefing';
 
 // Peace of Mind Tab - emotional reassurance focused
 // Shows: "Alt er vel" hero with Gates progress, quick glance stats, connection history
@@ -13,6 +14,7 @@ export const PeaceOfMindTab = ({
     lastCheckIn,
     tasks = [],
     symptomCount = 0,
+    symptoms = [],
     onSendPing,
     onViewSymptoms,
     recentActivity = []
@@ -128,6 +130,29 @@ export const PeaceOfMindTab = ({
                     <p className="text-sm text-white/70">Sidst set {lastCheckIn || '-'}</p>
                 </div>
             </div>
+
+            {/* SMART SUMMARY - Natural Language Briefing */}
+            {(() => {
+                const briefing = getDailyBriefing({ tasks, symptoms, seniorName, lastCheckIn });
+                return (
+                    <div className={`p-4 rounded-xl border-2 ${briefing.type === 'success' ? 'bg-green-50 border-green-200' :
+                            briefing.type === 'warning' ? 'bg-amber-50 border-amber-200' :
+                                'bg-stone-50 border-stone-200'
+                        }`}>
+                        <div className="flex items-start gap-3">
+                            <span className="text-2xl">{briefing.emoji}</span>
+                            <div className="flex-1">
+                                <p className={`font-medium ${briefing.type === 'success' ? 'text-green-800' :
+                                        briefing.type === 'warning' ? 'text-amber-800' :
+                                            'text-stone-700'
+                                    }`}>
+                                    {briefing.message}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                );
+            })()}
 
             {/* Quick Glance Cards - with color-coded status */}
             <div className="grid grid-cols-2 gap-3">
