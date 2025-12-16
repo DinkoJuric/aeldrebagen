@@ -35,12 +35,13 @@ export const WeeklyQuestionWidget = ({ answers = [], userName, hasUnread = false
     return (
         <button
             onClick={onClick}
-            className="relative bg-indigo-100 p-2 rounded-full hover:bg-indigo-200 transition-colors"
+            className="relative bg-indigo-100 p-1.5 rounded-full hover:bg-indigo-200 transition-colors flex items-center justify-center shrink-0"
             aria-label="Åbn ugens spørgsmål"
+            style={{ width: '36px', height: '36px' }}
         >
-            <MessageCircle className="w-8 h-8 text-indigo-600" />
+            <MessageCircle className="w-5 h-5 text-indigo-600" />
             {unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border border-white">
                     {unreadCount}
                 </span>
             )}

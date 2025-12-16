@@ -13,6 +13,7 @@ import {
     ChevronDown,
     ChevronUp
 } from 'lucide-react';
+import { Avatar } from './ui/Avatar';
 import { Button } from './ui/Button';
 import { Modal } from './ui/Modal';
 import { FamilyStatusCard, FamilyStatusList } from './FamilyStatusCard';
@@ -181,7 +182,10 @@ export const SeniorView = ({
             {/* Header - COMPACT */}
             <header className="px-4 py-2 bg-white shadow-sm rounded-b-3xl z-10 shrink-0">
                 <div className="flex justify-between items-center">
-                    <h1 className="text-xl font-bold text-stone-800">{greeting}, {userName}</h1>
+                    <div className="flex items-center gap-3">
+                        <Avatar id="senior" size="md" />
+                        <h1 className="text-xl font-bold text-stone-800">{greeting}, {userName}</h1>
+                    </div>
                     {/* Swap sun for Weekly Question widget on Family tab */}
                     {FEATURES.weeklyQuestion && activeTab === 'family' ? (
                         <WeeklyQuestionWidget
