@@ -1,13 +1,65 @@
-
 import React from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
 import { Heart, Users, FileText, Gamepad2 } from 'lucide-react';
+import { cn } from '../lib/utils';
+
+/**
+ * Navigation tab variants using CVA
+ */
+const tabVariants = cva(
+    "flex flex-col items-center gap-1 transition-colors",
+    {
+        variants: {
+            state: {
+                active: "",
+                inactive: "text-stone-400 hover:text-stone-600",
+            },
+            color: {
+                teal: "text-teal-600",
+                indigo: "text-indigo-600",
+                purple: "text-purple-600",
+                stone: "text-stone-400",
+            },
+        },
+        defaultVariants: {
+            state: "inactive",
+            color: "stone",
+        },
+    }
+);
 
 export interface BottomNavigationProps {
     activeTab: 'daily' | 'family' | 'spil';
     onTabChange: (tab: 'daily' | 'family' | 'spil') => void;
     onViewReport?: () => void;
-    onShowReport?: () => void; // Alias for backwards compatibility
+    onShowReport?: () => void;
 }
+
+interface NavTabProps extends VariantProps<typeof tabVariants> {
+    icon: React.ReactNode;
+    label: string;
+    onClick: () => void;
+    isActive: boolean;
+    activeColor: 'teal' | 'indigo' | 'purple';
+    fillClass?: string;
+}
+
+const NavTab: React.FC<NavTabProps> = ({ icon, label, onClick, isActive, activeColor, fillClass }) => (
+    <button
+        onClick={onClick}
+        className={cn(
+            tabVariants({
+                state: isActive ? 'active' : 'inactive',
+                color: isActive ? activeColor : 'stone'
+            })
+        )}
+    >
+        <div className={cn("w-6 h-6", isActive && fillClass)}>
+            {icon}
+        </div>
+        <span className="text-xs font-bold">{label}</span>
+    </button>
+);
 
 /**
  * Unified Bottom Navigation for Senior and Relative Views
@@ -16,58 +68,49 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
     activeTab,
     onTabChange,
     onViewReport,
-    onShowReport // Alias for backwards compatibility
+    onShowReport
 }) => {
-    // Support both prop names for backwards compatibility
     const handleReport = onViewReport || onShowReport;
 
     return (
         <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-stone-200 px-6 py-3 pb-6 safe-area-bottom z-40 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
             <div className="flex justify-between items-center max-w-sm mx-auto">
-                {/* Min dag */}
-                <button
+                <NavTab
+                    icon={<Heart className={cn("w-6 h-6", activeTab === 'daily' && "fill-teal-100")} />}
+                    label="Min dag"
                     onClick={() => onTabChange('daily')}
-                    className={`flex flex-col items-center gap-1 transition-colors ${activeTab === 'daily' ? 'text-teal-600' : 'text-stone-400 hover:text-stone-600'
-                        }`}
-                >
-                    <Heart className={`w-6 h-6 ${activeTab === 'daily' ? 'fill-teal-100' : ''}`} />
-                    <span className="text-xs font-bold">Min dag</span>
-                </button>
+                    isActive={activeTab === 'daily'}
+                    activeColor="teal"
+                />
 
-                {/* Familie */}
-                <button
+                <NavTab
+                    icon={<Users className={cn("w-6 h-6", activeTab === 'family' && "fill-indigo-100")} />}
+                    label="Familie"
                     onClick={() => onTabChange('family')}
-                    className={`flex flex-col items-center gap-1 transition-colors ${activeTab === 'family' ? 'text-indigo-600' : 'text-stone-400 hover:text-stone-600'
-                        }`}
-                >
-                    <Users className={`w-6 h-6 ${activeTab === 'family' ? 'fill-indigo-100' : ''}`} />
-                    <span className="text-xs font-bold">Familie</span>
-                </button>
+                    isActive={activeTab === 'family'}
+                    activeColor="indigo"
+                />
 
-                {/* Rapport */}
                 <button
                     onClick={handleReport}
-                    className="flex flex-col items-center gap-1 text-stone-400 hover:text-stone-600 transition-colors"
+                    className={cn(tabVariants({ state: 'inactive' }))}
                 >
                     <FileText className="w-6 h-6" />
                     <span className="text-xs font-bold">Rapport</span>
                 </button>
 
-                {/* Spil */}
-                <button
+                <NavTab
+                    icon={<Gamepad2 className={cn("w-6 h-6", activeTab === 'spil' && "fill-purple-100")} />}
+                    label="Spil"
                     onClick={() => onTabChange('spil')}
-                    className={`flex flex-col items-center gap-1 transition-colors ${activeTab === 'spil' ? 'text-purple-600' : 'text-stone-400 hover:text-stone-600'
-                        }`}
-                >
-                    <Gamepad2 className={`w-6 h-6 ${activeTab === 'spil' ? 'fill-purple-100' : ''}`} />
-                    <span className="text-xs font-bold">Spil</span>
-                </button>
+                    isActive={activeTab === 'spil'}
+                    activeColor="purple"
+                />
             </div>
         </div>
     );
 };
 
-// Backwards compatibility alias
 export const RelativeBottomNavigation = BottomNavigation;
 
 export default BottomNavigation;

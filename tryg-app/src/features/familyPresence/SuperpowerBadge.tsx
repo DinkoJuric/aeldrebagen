@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
 import { Wifi, Ear, Wrench, Car, Star, Phone, MessageCircle, X } from 'lucide-react';
+import { cn } from '../../lib/utils';
 
 export type Archetype = 'tech_wizard' | 'listener' | 'fixer' | 'driver' | 'cheerleader';
 
@@ -8,7 +10,7 @@ interface ArchetypeConfig {
     icon: React.ElementType;
     label: string;
     description: string;
-    action: string; // What happens when tapped
+    action: string;
     color: string;
 }
 
@@ -55,11 +57,43 @@ export const ARCHETYPE_CONFIG: Record<Archetype, ArchetypeConfig> = {
     }
 };
 
-interface SuperpowerBadgeProps {
+/**
+ * Badge size variants using CVA
+ */
+const badgeVariants = cva(
+    "rounded-full flex items-center justify-center border-2 border-white shadow-md transition-transform hover:scale-110 active:scale-95",
+    {
+        variants: {
+            size: {
+                sm: "w-5 h-5",
+                md: "w-8 h-8",
+            },
+        },
+        defaultVariants: {
+            size: "sm",
+        },
+    }
+);
+
+const iconVariants = cva(
+    "text-white",
+    {
+        variants: {
+            size: {
+                sm: "w-3 h-3",
+                md: "w-5 h-5",
+            },
+        },
+        defaultVariants: {
+            size: "sm",
+        },
+    }
+);
+
+interface SuperpowerBadgeProps extends VariantProps<typeof badgeVariants> {
     archetype: Archetype;
     memberName: string;
     onAction?: (action: 'call' | 'message', memberName: string) => void;
-    size?: 'sm' | 'md';
     interactive?: boolean;
 }
 
@@ -77,8 +111,6 @@ export const SuperpowerBadge: React.FC<SuperpowerBadgeProps> = ({
     if (!config) return null;
 
     const Icon = config.icon;
-    const sizeClasses = size === 'sm' ? 'w-5 h-5' : 'w-8 h-8';
-    const iconSize = size === 'sm' ? 'w-3 h-3' : 'w-5 h-5';
 
     const handleTap = () => {
         if (!interactive) return;
@@ -107,15 +139,23 @@ export const SuperpowerBadge: React.FC<SuperpowerBadgeProps> = ({
                     const cleanup = () => clearTimeout(timer);
                     document.addEventListener('touchend', cleanup, { once: true });
                 }}
-                className={`${sizeClasses} ${config.color} rounded-full flex items-center justify-center border-2 border-white shadow-md transition-transform hover:scale-110 active:scale-95 ${interactive ? 'cursor-pointer' : ''}`}
+                className={cn(
+                    badgeVariants({ size }),
+                    config.color,
+                    interactive && "cursor-pointer"
+                )}
                 aria-label={`${memberName} - ${config.label}`}
             >
-                <Icon className={`${iconSize} text-white`} />
+                <Icon className={cn(iconVariants({ size }))} />
             </button>
 
             {/* Long-Press Tooltip */}
             {showTooltip && (
-                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-slate-800 text-white text-xs px-3 py-2 rounded-lg shadow-lg whitespace-nowrap z-50 animate-fade-in">
+                <div className={cn(
+                    "absolute bottom-full left-1/2 -translate-x-1/2 mb-2",
+                    "bg-slate-800 text-white text-xs px-3 py-2 rounded-lg shadow-lg",
+                    "whitespace-nowrap z-50 animate-fade-in"
+                )}>
                     <p className="font-bold">{config.label}</p>
                     <p className="text-slate-300">{config.description}</p>
                     <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-2 h-2 bg-slate-800 rotate-45" />
@@ -124,11 +164,17 @@ export const SuperpowerBadge: React.FC<SuperpowerBadgeProps> = ({
 
             {/* Action Sheet Modal */}
             {showActionSheet && (
-                <div className="fixed inset-0 bg-black/50 z-50 flex items-end justify-center animate-fade-in" onClick={() => setShowActionSheet(false)}>
-                    <div className="bg-white w-full max-w-md rounded-t-3xl p-6 animate-slide-up" onClick={e => e.stopPropagation()}>
+                <div
+                    className="fixed inset-0 bg-black/50 z-50 flex items-end justify-center animate-fade-in"
+                    onClick={() => setShowActionSheet(false)}
+                >
+                    <div
+                        className="bg-white w-full max-w-md rounded-t-3xl p-6 animate-slide-up"
+                        onClick={e => e.stopPropagation()}
+                    >
                         <div className="flex items-center justify-between mb-4">
                             <div className="flex items-center gap-3">
-                                <div className={`w-12 h-12 ${config.color} rounded-full flex items-center justify-center`}>
+                                <div className={cn("w-12 h-12 rounded-full flex items-center justify-center", config.color)}>
                                     <Icon className="w-6 h-6 text-white" />
                                 </div>
                                 <div>
@@ -136,7 +182,10 @@ export const SuperpowerBadge: React.FC<SuperpowerBadgeProps> = ({
                                     <p className="text-sm text-slate-500">{config.label}</p>
                                 </div>
                             </div>
-                            <button onClick={() => setShowActionSheet(false)} className="p-2 hover:bg-slate-100 rounded-full">
+                            <button
+                                onClick={() => setShowActionSheet(false)}
+                                className="p-2 hover:bg-slate-100 rounded-full"
+                            >
                                 <X className="w-5 h-5 text-slate-400" />
                             </button>
                         </div>
@@ -146,14 +195,22 @@ export const SuperpowerBadge: React.FC<SuperpowerBadgeProps> = ({
                         <div className="grid grid-cols-2 gap-3">
                             <button
                                 onClick={() => handleAction('call')}
-                                className="flex items-center justify-center gap-2 p-4 bg-green-500 text-white font-bold rounded-2xl hover:bg-green-600 transition-colors"
+                                className={cn(
+                                    "flex items-center justify-center gap-2 p-4",
+                                    "bg-green-500 text-white font-bold rounded-2xl",
+                                    "hover:bg-green-600 transition-colors"
+                                )}
                             >
                                 <Phone className="w-5 h-5" />
                                 Ring op
                             </button>
                             <button
                                 onClick={() => handleAction('message')}
-                                className="flex items-center justify-center gap-2 p-4 bg-indigo-500 text-white font-bold rounded-2xl hover:bg-indigo-600 transition-colors"
+                                className={cn(
+                                    "flex items-center justify-center gap-2 p-4",
+                                    "bg-indigo-500 text-white font-bold rounded-2xl",
+                                    "hover:bg-indigo-600 transition-colors"
+                                )}
                             >
                                 <MessageCircle className="w-5 h-5" />
                                 Send besked
@@ -190,16 +247,18 @@ export const ArchetypeSelector: React.FC<ArchetypeSelectorProps> = ({
                         <button
                             key={config.id}
                             onClick={() => onSelect(config.id)}
-                            className={`flex items-center gap-3 p-4 rounded-xl border-2 transition-all text-left ${isSelected
-                                    ? 'border-indigo-500 bg-indigo-50'
-                                    : 'border-slate-200 hover:border-slate-300 bg-white'
-                                }`}
+                            className={cn(
+                                "flex items-center gap-3 p-4 rounded-xl border-2 transition-all text-left",
+                                isSelected
+                                    ? "border-indigo-500 bg-indigo-50"
+                                    : "border-slate-200 hover:border-slate-300 bg-white"
+                            )}
                         >
-                            <div className={`w-10 h-10 ${config.color} rounded-full flex items-center justify-center shrink-0`}>
+                            <div className={cn("w-10 h-10 rounded-full flex items-center justify-center shrink-0", config.color)}>
                                 <Icon className="w-5 h-5 text-white" />
                             </div>
                             <div className="flex-1 min-w-0">
-                                <p className={`font-bold ${isSelected ? 'text-indigo-700' : 'text-slate-700'}`}>
+                                <p className={cn("font-bold", isSelected ? "text-indigo-700" : "text-slate-700")}>
                                     {config.label}
                                 </p>
                                 <p className="text-xs text-slate-500 truncate">{config.description}</p>
@@ -217,4 +276,5 @@ export const ArchetypeSelector: React.FC<ArchetypeSelectorProps> = ({
     );
 };
 
+export { badgeVariants };
 export default SuperpowerBadge;

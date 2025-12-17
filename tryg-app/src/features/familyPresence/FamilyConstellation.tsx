@@ -3,10 +3,11 @@ import { Member } from '../../types';
 import { Avatar } from '../../components/ui/Avatar';
 import { SuperpowerBadge, Archetype } from './SuperpowerBadge';
 import { Heart } from 'lucide-react';
+import { cn } from '../../lib/utils';
 
 interface FamilyConstellationProps {
     members: Member[];
-    centerMemberName: string; // The Senior
+    centerMemberName: string;
     currentUserId?: string;
     onMemberClick?: (member: Member) => void;
     onBadgeAction?: (action: 'call' | 'message', memberName: string) => void;
@@ -14,24 +15,21 @@ interface FamilyConstellationProps {
 
 // Determine which ring based on accessLevel from Firestore
 const getOrbitLayer = (member: Member): 'inner' | 'outer' => {
-    // Admin/Caregiver -> Inner Ring (Care/Duty)
     if (member.accessLevel === 'admin' || member.accessLevel === 'caregiver') {
         return 'inner';
     }
 
-    // Fallback based on relationship if accessLevel not yet set in Firestore
     const rel = member.relationship?.toLowerCase();
     if (['son', 'daughter', 'husband', 'wife', 'spouse', 'sister', 'brother'].includes(rel || '')) {
         return 'inner';
     }
 
-    // Joy/Guest or unknown -> Outer Ring (Joy/Delight)
     return 'outer';
 };
 
 const INNER_RADIUS = 110;
 const OUTER_RADIUS = 160;
-const CENTER_XY = 200; // SVG viewBox center (400x400)
+const CENTER_XY = 200;
 
 export const FamilyConstellation: React.FC<FamilyConstellationProps> = ({
     members,
@@ -39,10 +37,8 @@ export const FamilyConstellation: React.FC<FamilyConstellationProps> = ({
     onMemberClick,
     onBadgeAction
 }) => {
-    // Filter out senior (center) - no mock data, use Firestore values directly
     const relatives = useMemo(() => members.filter(m => m.role !== 'senior'), [members]);
 
-    // Calculate positions for each ring
     const positionedMembers = useMemo(() => {
         const innerRingMembers = relatives.filter(m => getOrbitLayer(m) === 'inner');
         const outerRingMembers = relatives.filter(m => getOrbitLayer(m) === 'outer');
@@ -65,7 +61,6 @@ export const FamilyConstellation: React.FC<FamilyConstellationProps> = ({
         ];
     }, [relatives]);
 
-    // Get avatar ID based on name (for demo sprites)
     const getAvatarId = (name: string) => {
         const lower = name?.toLowerCase() || '';
         if (lower.includes('fatima') || lower === 'test user') return 'fatima';
@@ -110,7 +105,11 @@ export const FamilyConstellation: React.FC<FamilyConstellationProps> = ({
                 <button
                     key={member.docId || member.id}
                     onClick={() => onMemberClick?.(member)}
-                    className="absolute w-12 h-12 -ml-6 -mt-6 rounded-full transition-transform hover:scale-110 active:scale-95 pointer-events-auto group"
+                    className={cn(
+                        "absolute w-12 h-12 -ml-6 -mt-6 rounded-full",
+                        "transition-transform hover:scale-110 active:scale-95",
+                        "pointer-events-auto group"
+                    )}
                     style={{ left: member.x, top: member.y }}
                     aria-label={`View ${member.displayName}`}
                 >
@@ -118,10 +117,13 @@ export const FamilyConstellation: React.FC<FamilyConstellationProps> = ({
                     <Avatar
                         id={getAvatarId(member.displayName)}
                         size="md"
-                        className={`border-2 shadow-md ${getOrbitLayer(member) === 'inner' ? 'border-indigo-200' : 'border-amber-200'}`}
+                        className={cn(
+                            "border-2 shadow-md",
+                            getOrbitLayer(member) === 'inner' ? "border-indigo-200" : "border-amber-200"
+                        )}
                     />
 
-                    {/* Superpower Badge - Interactive (only if archetype is set in Firestore) */}
+                    {/* Superpower Badge */}
                     {member.archetype && (
                         <div className="absolute -bottom-1 -right-1 z-20">
                             <SuperpowerBadge
@@ -134,7 +136,13 @@ export const FamilyConstellation: React.FC<FamilyConstellationProps> = ({
                     )}
 
                     {/* Name Label (Hover Tooltip) */}
-                    <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 px-2 py-0.5 rounded-md shadow-sm text-xs font-bold text-slate-700 whitespace-nowrap pointer-events-none z-30">
+                    <div className={cn(
+                        "absolute top-full left-1/2 -translate-x-1/2 mt-1",
+                        "opacity-0 group-hover:opacity-100 transition-opacity",
+                        "bg-white/90 px-2 py-0.5 rounded-md shadow-sm",
+                        "text-xs font-bold text-slate-700 whitespace-nowrap",
+                        "pointer-events-none z-30"
+                    )}>
                         {member.displayName}
                     </div>
                 </button>
