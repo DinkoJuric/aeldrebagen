@@ -26,7 +26,7 @@
 │  └──────┬──────┘  └──────┬──────┘  └──────────┬──────────┘  │
 │         │                │                     │             │
 │  ┌──────┴────────────────┴─────────────────────┴──────────┐  │
-│  │                    AppCore.jsx                          │  │
+│  │                    AppCore.tsx                          │  │
 │  │              (State Management + Routing)               │  │
 │  └─────────────────────────┬───────────────────────────────┘  │
 │                            │                                 │
@@ -54,12 +54,12 @@ tryg-app/
 │   ├── features/            # Feature Bundles (Components + Hooks)
 │   │   ├── familyPresence/
 │   │   │   ├── index.js      # Public API
-│   │   │   ├── FamilyPresence.jsx
-│   │   │   ├── StatusCard.jsx
+│   │   │   ├── FamilyPresence.tsx
+│   │   │   ├── StatusCard.tsx
 │   │   │   └── useMemberStatus.ts
 │   │   ├── helpExchange/
 │   │   │   ├── index.js
-│   │   │   ├── HelpExchange.jsx
+│   │   │   ├── HelpExchange.tsx
 │   │   │   └── useHelpExchange.ts
 │   │   ├── tasks/
 │   │   │   ├── index.js
@@ -72,15 +72,15 @@ tryg-app/
 │   │   └── ... (thinkingOfYou, weeklyQuestion)
 │   │
 │   ├── components/          # Shared/Orchestration Components
-│   │   ├── SeniorView.jsx   # Elder interface
-│   │   ├── RelativeView.jsx # Family dashboard
-│   │   ├── AppCore.jsx      # Main app logic
+│   │   ├── SeniorView.tsx   # Elder interface
+│   │   ├── RelativeView.tsx # Family dashboard
+│   │   ├── AppCore.tsx      # Main app logic
 │   │   ├── ui/              # Generic UI (Button, Modal, Avatar)
 │   │   └── ...
 │   │
 │   ├── hooks/               # Global/Auth Hooks
-│   │   ├── useAuth.js
-│   │   └── useCareCircle.js
+│   │   ├── useAuth.ts
+│   │   ├── useCareCircle.ts
 │   │
 │   ├── config/              # Configuration
 │   ├── data/                # Static Data
@@ -243,7 +243,7 @@ RelativeView
     └── 📄 Rapport (shortcut)
 ```
 
-**ProgressRing Component** (`src/components/ProgressRing.jsx`):
+**ProgressRing Component** (`src/features/tasks/ProgressRing.tsx`):
 - Visual: 3-segment SVG ring representing day periods
 - Logic: Compares task `period` and `completed` status against current time
 - Colors:
@@ -281,7 +281,7 @@ export function useXxx(circleId) {
 To avoid prop drilling, shared data (careCircleId, memberStatuses, currentUserId) is provided via React Context:
 
 ```javascript
-// In AppCore.jsx
+// In AppCore.tsx
 <CareCircleProvider
     careCircleId={careCircle?.id}
     memberStatuses={memberStatuses}
@@ -297,7 +297,7 @@ const { memberStatuses, currentUserId } = useCareCircleContext();
 
 **Key files:**
 - `src/contexts/CareCircleContext.jsx` - Provider + hook
-- `src/components/FamilyPresence.jsx` - Uses context for memberStatuses
+- `src/features/familyPresence/FamilyPresence.tsx` - Uses context for memberStatuses
 ```
 
 ### 2. Role-Based Views
@@ -314,14 +314,14 @@ photoSharing: false,  // Requires Firebase Blaze plan
 weeklyQuestion: true,
 thinkingOfYou: true,
 ### 4. Natural Language Generator (Smart Summary)
-Logic resides in `src/utils/briefing.js`:
+Logic resides in `src/utils/briefing.ts`:
 - Inputs: Tasks (completed/total), Symptoms (count/severity), Streak info
 - Logic: Heuristics based on completeness and time of day
 - Output: "Friendly Danish sentence" (e.g., "Mor har det godt, men husk medicinen.")
 - Used in: `PeaceOfMindTab` for instant status context.
 
 ### 5. Crash Loop Protection (Self-Healing)
-Implemented in `src/main.jsx`:
+Implemented in `src/main.tsx`:
 - **Detection**: Tracks crash timestamps in `localStorage`
 - **Trigger**: >3 crashes in 5 minutes
 - **Action**: Clears `localStorage` (except critical auth tokens) and reloads
