@@ -2,12 +2,13 @@
 // Reusable on both Connection (Min Dag) and Koordinering (Familie) tabs
 // Now uses CareCircleContext for shared data (props are optional overrides)
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Users, Home, Briefcase, Car, Coffee, Moon, Heart } from 'lucide-react';
 // @ts-ignore - Context not yet converted
 import { useCareCircleContext } from '../../contexts/CareCircleContext';
 import { Avatar } from '../../components/ui/Avatar';
 import { MemberStatus } from './useMemberStatus';
+import { FamilyConstellation } from './FamilyConstellation';
 
 // Status display configuration
 interface StatusConfigItem {
@@ -134,10 +135,6 @@ interface FamilyPresenceProps {
     compact?: boolean;
 }
 
-import { FamilyConstellation } from './FamilyConstellation';
-import { useState } from 'react';
-
-// ... (existing imports)
 
 /**
  * Family Presence section - "Familien Nu"
