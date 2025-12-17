@@ -1,7 +1,6 @@
 import React from 'react';
 import { Heart, Clock, Pill, CheckCircle, AlertCircle, MessageCircle } from 'lucide-react';
 import { StatusCard } from '../features/familyPresence';
-import { ThinkingOfYouIconButton } from '../features/thinkingOfYou';
 import { ProgressRing } from '../features/tasks';
 import { useCareCircleContext } from '../contexts/CareCircleContext';
 import { getDailyBriefing } from '../utils/briefing';
@@ -127,11 +126,6 @@ export const PeaceOfMindTab: React.FC<PeaceOfMindTabProps> = ({
                 symptomCount={symptomCount}
                 onViewSymptoms={onViewSymptoms}
             />
-            {/* Thinking of You - moved outside card if needed or keep inside? SeniorStatusCard doesn't have it built-in. */}
-            {/* Adding ThinkingOfYouIconButton below the card or integrate into a separate actions row if preferred. */}
-            <div className="flex justify-end -mt-2 mb-2">
-                <ThinkingOfYouIconButton onSendPing={onSendPing} />
-            </div>
 
             {/* SMART SUMMARY - Natural Language Briefing */}
             {(() => {

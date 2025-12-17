@@ -12,8 +12,7 @@ import {
     where,
     onSnapshot,
     serverTimestamp,
-    deleteDoc,
-    DocumentSnapshot
+    deleteDoc
 } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { CareCircle, Member, UserProfile } from '../types';
@@ -28,7 +27,7 @@ const generateInviteCode = () => {
     return code;
 };
 
-export function useCareCircle(userId: string | undefined, userProfile: UserProfile | null) {
+export function useCareCircle(userId: string | undefined, _userProfile: UserProfile | null) {
     const [careCircle, setCareCircle] = useState<CareCircle | null>(null);
     const [members, setMembers] = useState<Member[]>([]);
     const [loading, setLoading] = useState(true);

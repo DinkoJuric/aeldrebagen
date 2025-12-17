@@ -18,9 +18,10 @@ const getTodayKey = () => new Date().toISOString().split('T')[0];
 
 export interface Word {
     id: string;
-    danish: string;
-    english: string;
-    options?: string[];
+    word: string;
+    correctAnswer: string;
+    wrongAnswer?: string;
+    options?: { text: string; isCorrect: boolean }[];
     [key: string]: any;
 }
 

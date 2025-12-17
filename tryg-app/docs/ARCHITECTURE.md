@@ -53,19 +53,19 @@ tryg-app/
 ├── src/
 │   ├── features/            # Feature Bundles (Components + Hooks)
 │   │   ├── familyPresence/
-│   │   │   ├── index.js      # Public API
+│   │   │   ├── index.ts      # Public API
 │   │   │   ├── FamilyPresence.tsx
 │   │   │   ├── StatusCard.tsx
 │   │   │   └── useMemberStatus.ts
 │   │   ├── helpExchange/
-│   │   │   ├── index.js
+│   │   │   ├── index.ts
 │   │   │   ├── HelpExchange.tsx
 │   │   │   └── useHelpExchange.ts
 │   │   ├── tasks/
-│   │   │   ├── index.js
+│   │   │   ├── index.ts
 │   │   │   └── useTasks.ts
 │   │   ├── symptoms/
-│   │   │   ├── index.js
+│   │   │   ├── index.ts
 │   │   │   └── useSymptoms.ts
 │   │   ├── wordGame/
 │   │   ├── photos/
@@ -91,6 +91,12 @@ tryg-app/
 ├── tsconfig.json            # TypeScript Config
 └── ...
 ```
+---
+
+## Migration Status (Dec 2025)
+
+✅ **Feature Folder Migration**: COMPLETED. All domain logic is now organized under `src/features/`.
+✅ **TypeScript Conversion**: COMPLETED. The entire UI layer and logic hooks have been migrated to `.tsx` and `.ts`.
 
 ---
 
@@ -207,11 +213,11 @@ Bidirectional offer/request system with match celebration when offers align with
 - Not persisted to Firestore (matches reappear on refresh)
 
 **Key Files:**
-- `src/config/helpExchangeConfig.js` - Match pairs, status matches, offer/request options
-- `src/hooks/useHelpExchangeMatch.js` - Match detection logic
-- `src/components/MatchCelebration.jsx` - Celebration UI (modal + banner with `onDismiss` prop)
-- `src/components/TimePickerModal.jsx` - Time selection for task creation
-- `src/utils/sounds.js` - `playMatchSound()` for audio feedback
+- `src/config/helpExchangeConfig.ts` - Match pairs, status matches, offer/request options
+- `src/hooks/useHelpExchangeMatch.ts` - Match detection logic
+- `src/components/MatchCelebration.tsx` - Celebration UI (modal + banner with `onDismiss` prop)
+- `src/components/TimePickerModal.tsx` - Time selection for task creation
+- `src/utils/sounds.ts` - `playMatchSound()` for audio feedback
 
 **See:** [HELPEXCHANGE_MATCHES.md](./HELPEXCHANGE_MATCHES.md) for complete match pairs reference.
 
@@ -296,7 +302,7 @@ const { memberStatuses, currentUserId } = useCareCircleContext();
 ```
 
 **Key files:**
-- `src/contexts/CareCircleContext.jsx` - Provider + hook
+- `src/contexts/CareCircleContext.tsx` - Provider + hook
 - `src/features/familyPresence/FamilyPresence.tsx` - Uses context for memberStatuses
 ```
 
@@ -308,7 +314,7 @@ View is determined by `userProfile.role`:
 No toggle - users only see their own role's view.
 
 ### 3. Feature Flags
-Toggle features in `src/config/features.js`:
+Toggle features in `src/config/features.ts`:
 ```javascript
 photoSharing: false,  // Requires Firebase Blaze plan
 weeklyQuestion: true,
@@ -332,6 +338,17 @@ Used for `Avatar` and `Pictogram`:
 - **Asset**: Single large png (`family-presence.png`, `help-sheet.png`)
 - **Component**: Calculates `backgroundPosition` percentage based on ID
 - **Benefit**: Reduces HTTP requests, ensures instant load of all related icons
+
+### 7. UI Styling Architecture (New)
+Standardized usage of Tailwind CSS:
+- **`cn()` Utility**: Located in `src/lib/utils.ts`. Combines `clsx` (conditionals) and `tailwind-merge` (conflict resolution).
+- **CVA (Class Variance Authority)**: Used for defining component variants.
+  ```typescript
+  const buttonVariants = cva("base-styles", {
+    variants: { variant: { ... }, size: { ... } }
+  });
+  ```
+- **Rule**: Never use string concatenation for classes. Always use `cn()`.
 ```
 
 ---

@@ -68,6 +68,20 @@ export const FamilyConstellation: React.FC<FamilyConstellationProps> = ({
         return 'louise';
     };
 
+    // Default archetype based on name/relationship if not set in Firestore
+    const getArchetype = (member: Member): Archetype | undefined => {
+        if (member.archetype) return member.archetype as Archetype;
+
+        // Fallback defaults when Firestore doesn't have archetype
+        const name = member.displayName?.toLowerCase() || '';
+        if (name.includes('fatima')) return 'organizer';
+        if (name.includes('louise')) return 'fixer';
+        if (name.includes('brad')) return 'connector';
+
+        // Default based on orbit layer
+        return getOrbitLayer(member) === 'inner' ? 'organizer' : 'protector';
+    };
+
     return (
         <div className="w-full aspect-square max-w-md mx-auto relative bg-slate-50/50 rounded-full border border-slate-100 shadow-inner">
             <svg viewBox="0 0 400 400" className="w-full h-full pointer-events-none">
@@ -123,17 +137,15 @@ export const FamilyConstellation: React.FC<FamilyConstellationProps> = ({
                         )}
                     />
 
-                    {/* Superpower Badge */}
-                    {member.archetype && (
-                        <div className="absolute -bottom-1 -right-1 z-20">
-                            <SuperpowerBadge
-                                archetype={member.archetype as Archetype}
-                                memberName={member.displayName}
-                                onAction={onBadgeAction}
-                                size="sm"
-                            />
-                        </div>
-                    )}
+                    {/* Superpower Badge - always show with fallback */}
+                    <div className="absolute -bottom-1 -right-1 z-20">
+                        <SuperpowerBadge
+                            archetype={getArchetype(member)!}
+                            memberName={member.displayName}
+                            onAction={onBadgeAction}
+                            size="sm"
+                        />
+                    </div>
 
                     {/* Name Label (Hover Tooltip) */}
                     <div className={cn(

@@ -11,7 +11,7 @@ interface ThinkingOfYouButtonProps {
 }
 
 // "Thinking of you" ping button - one-tap warmth without obligation
-export const ThinkingOfYouButton: React.FC<ThinkingOfYouButtonProps> = ({ onSendPing, fromName = 'Louise' }) => {
+export const ThinkingOfYouButton: React.FC<ThinkingOfYouButtonProps> = ({ onSendPing, fromName: _fromName = 'Louise' }) => {
     const [isSending, setIsSending] = useState(false);
 
     const handleSend = () => {

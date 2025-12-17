@@ -5,9 +5,17 @@
  * Uses "slot" pattern for composability.
  */
 
-import React from 'react';
+import React, { ReactNode } from 'react';
 
-export const RelativeViewLayout = ({
+interface RelativeViewLayoutProps {
+    header?: ReactNode;
+    content: ReactNode;
+    footer?: ReactNode;
+    modals?: ReactNode;
+    backgroundClass?: string;
+}
+
+export const RelativeViewLayout: React.FC<RelativeViewLayoutProps> = ({
     header,
     content,
     footer,

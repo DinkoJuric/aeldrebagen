@@ -197,7 +197,7 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
     };
 
     return (
-        <div className="flex flex-col h-full bg-transparent relative overflow-hidden">
+        <div className="flex flex-col h-full bg-transparent relative pt-10">
             {/* Header - COMPACT */}
             <header className="px-4 py-2 bg-white shadow-sm rounded-b-3xl z-10 shrink-0">
                 <div className="flex justify-between items-center">

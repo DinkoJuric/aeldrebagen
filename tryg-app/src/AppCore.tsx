@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { CareCircleProvider } from './contexts/CareCircleContext';
 import { LivingBackground } from './components/ui/LivingBackground';
-import { Share2, LogOut } from 'lucide-react';
+import { Share2, LogOut, Settings } from 'lucide-react';
 import { SeniorView } from './components/SeniorView';
 import { RelativeView } from './components/RelativeView';
 import { PingNotification } from './features/thinkingOfYou';
@@ -11,13 +11,13 @@ import { UpdateToast } from './components/UpdateToast';
 import { PhotoCaptureButton, PhotoUploadModal, PhotoViewerModal, PhotoNotificationBadge } from './features/photos';
 import { useTasks } from './features/tasks';
 import { useSymptoms } from './features/symptoms';
-import { useSettings } from './hooks/useSettings';
+// import { useSettings } from './hooks/useSettings';
 import { useWeeklyQuestions } from './features/weeklyQuestion';
 import { usePings } from './features/thinkingOfYou';
 import { useCheckIn } from './hooks/useCheckIn';
 import { usePhotos } from './features/photos';
-import { useMemberStatus } from './features/familyPresence';
-import { SENIOR_PROFILE } from './data/constants';
+import { useMemberStatus, FamilyConstellation } from './features/familyPresence';
+// import { SENIOR_PROFILE } from './data/constants'; // Unused
 import { playCompletionSound, playSuccessSound, playPingSound } from './utils/sounds';
 import { FEATURES } from './config/features';
 import './index.css';
@@ -56,7 +56,7 @@ export default function TrygAppCore({
     // Firebase hooks for real-time data
     const { tasks, toggleTask, addTask } = useTasks(careCircle?.id);
     const { symptoms, addSymptom } = useSymptoms(careCircle?.id);
-    const { settings } = useSettings(careCircle?.id);
+    // const { settings } = useSettings(careCircle?.id); // Unused
     // Per-member status tracking (each member has their own status)
     const {
         memberStatuses,
@@ -147,10 +147,7 @@ export default function TrygAppCore({
         ? userProfile?.displayName || 'Pårørende'
         : members.find(m => m.role === 'relative')?.displayName || 'Pårørende';
 
-    const profile = {
-        ...SENIOR_PROFILE,
-        name: seniorName,
-    };
+    // const profile = { ...SENIOR_PROFILE, name: seniorName }; // Unused
 
     return (
         <CareCircleProvider
@@ -191,37 +188,30 @@ export default function TrygAppCore({
                         )}
                     </div>
 
-                    {/* Header with role indicator - COMPACT */}
-                    <div className="absolute top-0 left-0 right-0 h-10 bg-black/5 z-50 flex justify-center items-center backdrop-blur-sm px-2">
-                        {/* Settings button (left) */}
-                        <div className="absolute left-3 flex items-center gap-1">
-                            <button
-                                onClick={() => setShowSettings(!showSettings)}
-                                className="p-1.5 rounded-full hover:bg-white/50 transition-colors"
-                                aria-label="Indstillinger"
-                            >
-                                <Share2 className="w-4 h-4 text-stone-600" />
-                            </button>
-                            {FEATURES.photoSharing && (
-                                <PhotoCaptureButton
-                                    onCapture={async (file) => {
-                                        await uploadPhoto(file, userProfile?.displayName || 'Familie');
-                                    }}
-                                    disabled={uploading}
-                                />
-                            )}
-                        </div>
+                    {/* Header - COMPACT: Share / Settings / Logout */}
+                    <div className="absolute top-0 left-0 right-0 h-10 bg-black/5 z-50 flex justify-between items-center backdrop-blur-sm px-3">
+                        {/* Left: Share (opens invite panel) */}
+                        <button
+                            onClick={() => setShowSettings(!showSettings)}
+                            className="p-1.5 rounded-full hover:bg-white/50 transition-colors"
+                            aria-label="Del familie-kode"
+                        >
+                            <Share2 className="w-4 h-4 text-stone-600" />
+                        </button>
 
-                        {/* Role indicator (center) - compact */}
-                        <div className={`px-3 py-1 rounded-full text-xs font-bold shadow-md ${isSenior ? 'bg-teal-600 text-white' : 'bg-indigo-600 text-white'
-                            }`}>
-                            {isSenior ? `👤 ${seniorName}` : `👥 ${relativeName}`}
-                        </div>
+                        {/* Center: Settings gear (opens Privacy & Data directly) */}
+                        <button
+                            onClick={() => setShowPrivacySettings(true)}
+                            className="p-2 rounded-full hover:bg-white/50 transition-colors"
+                            aria-label="Indstillinger"
+                        >
+                            <Settings className="w-5 h-5 text-stone-600" />
+                        </button>
 
-                        {/* Sign out button (right) */}
+                        {/* Right: Sign out */}
                         <button
                             onClick={onSignOut}
-                            className="absolute right-3 p-1.5 rounded-full hover:bg-white/50 transition-colors"
+                            className="p-1.5 rounded-full hover:bg-white/50 transition-colors"
                             aria-label="Log ud"
                         >
                             <LogOut className="w-4 h-4 text-stone-600" />
@@ -246,68 +236,23 @@ export default function TrygAppCore({
                                 </button>
                             )}
 
-                            <button
-                                onClick={() => {
-                                    setShowSettings(false);
-                                    setShowPrivacySettings(true);
-                                }}
-                                className="w-full flex items-center justify-center gap-2 py-2 bg-stone-100 text-stone-700 rounded-xl font-medium hover:bg-stone-200 transition-colors"
-                            >
-                                <Share2 className="w-4 h-4" /> {/* Settings icon was imported as Settings but used as Share2? No imported Settings */}
-                                Privatliv & Data
-                            </button>
-
                             <p className="text-xs text-stone-400 mt-3">
                                 Logget ind som: {user?.email}
                             </p>
 
-                            {/* Circle members list - Elder first */}
-                            {members.length > 0 && (() => {
-                                // Sort senior to top
-                                const senior = members.find(m => m.role === 'senior');
-                                const relatives = members.filter(m => m.role !== 'senior');
-
-                                return (
-                                    <div className="mt-4 pt-4 border-t border-stone-200">
-                                        <div className="flex items-center gap-2 mb-3">
-                                            {/* Users icon imported */}
-                                            <span className="text-sm font-medium text-stone-600">Vores Familie</span>
-                                        </div>
-
-                                        {/* The Elder - Distinguished at top */}
-                                        {senior && (
-                                            <div className="bg-gradient-to-r from-amber-50 to-teal-50 rounded-xl p-3 mb-3 border border-amber-200/50">
-                                                <div className="flex items-center gap-3">
-                                                    <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-md">
-                                                        {senior.displayName?.charAt(0) || '👴'}
-                                                    </div>
-                                                    <div className="flex-1">
-                                                        <p className="font-semibold text-stone-800">{senior.displayName || 'Vores Elder'}</p>
-                                                        <p className="text-xs text-amber-600 flex items-center gap-1">
-                                                            <span>👑</span> Familiens hjerte
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )}
-
-                                        {/* Pårørende - Simpler styling */}
-                                        {relatives.length > 0 && (
-                                            <div className="space-y-2 pl-2">
-                                                {relatives.map((member) => (
-                                                    <div key={member.id} className="flex items-center gap-2 text-sm">
-                                                        <div className="w-7 h-7 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-700 font-bold text-xs">
-                                                            {member.displayName?.charAt(0) || '?'}
-                                                        </div>
-                                                        <span className="text-stone-700">{member.displayName || 'Ukendt'}</span>
-                                                        <span className="text-xs text-indigo-500">Pårørende</span>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        )}
+                            {/* Family Constellation - Orbit Visualization */}
+                            {memberStatuses.length > 0 && (
+                                <div className="mt-4 pt-4 border-t border-stone-200">
+                                    <div className="flex items-center gap-2 mb-3">
+                                        <span className="text-sm font-medium text-stone-600">Familiens Hjerte</span>
                                     </div>
-                                );
-                            })()}
+                                    <FamilyConstellation
+                                        members={memberStatuses as any}
+                                        centerMemberName={seniorName}
+                                        currentUserId={user?.uid}
+                                    />
+                                </div>
+                            )}
                         </div>
                     )}
 
@@ -321,7 +266,8 @@ export default function TrygAppCore({
                     )}
 
                     <div className="h-full relative z-10">
-                        <LivingBackground>
+                        {/* LivingBackground temporarily disabled - using fixed gradient */}
+                        <div className="h-full bg-gradient-to-b from-sky-100 via-sky-50 to-stone-100">
                             <div className="h-full overflow-y-auto">
                                 {/* Ping Notification from Firestore */}
                                 {latestPing && (
@@ -386,7 +332,8 @@ export default function TrygAppCore({
                                     </div>
                                 )}
                             </div>
-                        </LivingBackground>
+                        </div>
+                        {/* End of temporary fixed background */}
                     </div>
 
                     {/* Photo upload modal */}

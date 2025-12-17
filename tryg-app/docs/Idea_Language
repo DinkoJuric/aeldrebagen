@@ -1,0 +1,116 @@
+art 1: The Multi - Language Engine(The Access Layer)
+We are building a "Hot-Swappable" language system.The app will detect the user's preference, but we will also add a manual toggle because a senior might have their phone set to Danish (by a relative) but prefer reading Turkish.
+
+Step 1: The Setup Install the standard industry library for this.
+
+    Bash
+
+npm install i18next react - i18next i18next - browser - languagedetector
+Step 2: The Configuration(src / i18n.ts) Create this file in your src folder.It tells the app how to behave.
+
+    TypeScript
+
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import LanguageDetector from 'i18next-browser-languagedetector';
+
+// Import your dictionaries (we'll create these next)
+import da from './locales/da.json';
+import tr from './locales/tr.json';
+import bs from './locales/bs.json';
+
+i18n
+    .use(LanguageDetector)
+    .use(initReactI18next)
+    .init({
+        resources: {
+            da: { translation: da },
+            tr: { translation: tr },
+            bs: { translation: bs },
+        },
+        fallbackLng: 'da', // Default to Danish if confused
+        interpolation: {
+            escapeValue: false, // React handles safety
+        },
+    });
+
+export default i18n;
+Step 3: The Dictionaries(src / locales /) Create three JSON files.This is where the magic happens.
+
+    src / locales / da.json
+
+JSON
+
+{
+    "greeting_morning": "Godmorgen",
+        "medication_title": "Din Medicin",
+            "blood_pressure_title": "Blodtryk",
+                "pain_question": "Har du ondt?",
+                    "coffee_toggle_on": "Kaffen er klar!",
+                        "coffee_toggle_off": "Giv kaffe?"
+}
+src / locales / tr.json(Turkish)
+
+JSON
+
+{
+    "greeting_morning": "Günaydın",
+        "medication_title": "İlaçlarınız",
+            "blood_pressure_title": "Tansiyon",
+                "pain_question": "Ağrınız var mı?",
+                    "coffee_toggle_on": "Kahve hazır!",
+                        "coffee_toggle_off": "Kahve içelim mi?"
+}
+src / locales / bs.json(Bosnian)
+
+JSON
+
+{
+    "greeting_morning": "Dobro jutro",
+        "medication_title": "Vaši lijekovi",
+            "blood_pressure_title": "Krvni pritisak",
+                "pain_question": "Imate li bolove?",
+                    "coffee_toggle_on": "Kafa je spremna!",
+                        "coffee_toggle_off": "Hoćemo li kafu?"
+}
+Step 4: The Switcher UI Add this to the Settings or the Profile Header.
+
+    JavaScript
+
+// src/components/LanguageSwitcher.jsx
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+
+export const LanguageSwitcher = () => {
+    const { i18n } = useTranslation();
+
+    const languages = [
+        { code: 'da', label: '🇩🇰 Dansk' },
+        { code: 'tr', label: '🇹🇷 Türkçe' },
+        { code: 'bs', label: '🇧🇦 Bosanski' }
+    ];
+
+    return (
+        <div className="flex gap-2 p-4 bg-stone-50 rounded-xl">
+            {languages.map((lang) => (
+                <button
+                    key={lang.code}
+                    onClick={() => i18n.changeLanguage(lang.code)}
+                    className={`
+            flex-1 py-2 px-3 rounded-lg text-sm font-bold transition-all
+            ${i18n.language === lang.code
+                            ? 'bg-white shadow-md text-teal-700 border border-teal-100'
+                            : 'text-stone-400 hover:bg-stone-100'}
+          `}
+                >
+                    {lang.label}
+                </button>
+            ))}
+        </div>
+    );
+};
+Step 5: Initialization Import the config in your src / main.jsx(before ReactDOM.createRoot):
+
+JavaScript
+
+import './i18n'; // <--- Add this line

@@ -120,7 +120,7 @@ export function getDailyBriefing({ tasks = [], symptoms = [], seniorName = 'Mor'
 /**
  * Get streak message if applicable
  */
-export function getStreakMessage(streakDays: number, seniorName = 'Mor') {
+export function getStreakMessage(streakDays: number, _seniorName = 'Mor') {
     if (streakDays >= 7) {
         return `🏆 ${streakDays}. dag i træk med alt medicin taget!`;
     }

@@ -2,13 +2,12 @@
 // Reusable on both Connection (Min Dag) and Koordinering (Familie) tabs
 // Now uses CareCircleContext for shared data (props are optional overrides)
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Users, Home, Briefcase, Car, Coffee, Moon, Heart } from 'lucide-react';
 // @ts-ignore - Context not yet converted
 import { useCareCircleContext } from '../../contexts/CareCircleContext';
 import { Avatar } from '../../components/ui/Avatar';
 import { MemberStatus } from './useMemberStatus';
-import { FamilyConstellation } from './FamilyConstellation';
 
 // Status display configuration
 interface StatusConfigItem {
@@ -151,7 +150,6 @@ export const FamilyPresence: React.FC<FamilyPresenceProps> = ({
     const memberStatuses = propsMembers ?? context?.memberStatuses ?? [];
     const currentUserId = propsUserId ?? context?.currentUserId;
     const seniorName = propsSeniorName ?? context?.seniorName ?? 'Far/Mor';
-    const [viewMode, setViewMode] = useState<'list' | 'orbit'>('orbit'); // Default to orbit for impact!
 
     if (memberStatuses.length === 0) {
         return (
@@ -172,38 +170,21 @@ export const FamilyPresence: React.FC<FamilyPresenceProps> = ({
                         Familien nu
                     </h4>
                 </div>
-                {!compact && (
-                    <button
-                        onClick={() => setViewMode(v => v === 'list' ? 'orbit' : 'list')}
-                        className="text-xs font-medium text-indigo-600 hover:text-indigo-800"
-                    >
-                        {viewMode === 'list' ? 'Vis Orbit' : 'Vis Liste'}
-                    </button>
-                )}
             </div>
 
-            {viewMode === 'orbit' && !compact ? (
-                <div className="py-2">
-                    <FamilyConstellation
-                        members={memberStatuses}
-                        centerMemberName={seniorName}
-                        currentUserId={currentUserId || undefined}
+            {/* Always show list view - orbit moved to Settings panel */}
+            <div className="space-y-1">
+                {memberStatuses.map((member: MemberStatus, index: number) => (
+                    <MemberStatusRow
+                        key={member.docId || index}
+                        name={member.displayName || (member.role === 'senior' ? seniorName : 'Pårørende')}
+                        status={member.status}
+                        role={member.role}
+                        timestamp={member.updatedAt}
+                        isCurrentUser={member.docId === currentUserId}
                     />
-                </div>
-            ) : (
-                <div className="space-y-1">
-                    {memberStatuses.map((member: MemberStatus, index: number) => (
-                        <MemberStatusRow
-                            key={member.docId || index}
-                            name={member.displayName || (member.role === 'senior' ? seniorName : 'Pårørende')}
-                            status={member.status}
-                            role={member.role}
-                            timestamp={member.updatedAt}
-                            isCurrentUser={member.docId === currentUserId}
-                        />
-                    ))}
-                </div>
-            )}
+                ))}
+            </div>
         </div>
     );
 };

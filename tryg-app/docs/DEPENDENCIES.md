@@ -23,14 +23,14 @@
 ```mermaid
 graph TD
     subgraph Entry["Entry Points"]
-        main[main.jsx]
-        AppWithAuth[AppWithAuth.jsx]
-        AppCore[AppCore.jsx]
+        main[main.tsx]
+        AppWithAuth[AppWithAuth.tsx]
+        AppCore[AppCore.tsx]
     end
 
     subgraph Views["Main Views"]
-        SeniorView[SeniorView.jsx]
-        RelativeView[RelativeView.jsx]
+        SeniorView[SeniorView.tsx]
+        RelativeView[RelativeView.tsx]
     end
 
     subgraph Features["Feature Components"]
@@ -86,10 +86,10 @@ graph TD
 ### Word Game Feature
 | Component | Uses | Used By |
 |-----------|------|---------|
-| `Spillehjoernet.jsx` | WordGame, Leaderboard, useWordGame | SeniorView, CoordinationTab |
-| `WordGame.jsx` | - | Spillehjoernet |
-| `Leaderboard.jsx` | - | Spillehjoernet |
-| `useWordGame.js` | Firebase (db) | Spillehjoernet |
+| `Spillehjoernet.tsx` | WordGame, Leaderboard, useWordGame | SeniorView, CoordinationTab |
+| `WordGame.tsx` | - | Spillehjoernet |
+| `Leaderboard.tsx` | - | Spillehjoernet |
+| `useWordGame.ts` | Firebase (db) | Spillehjoernet |
 
 **Dependencies**: Firebase Firestore only. **Self-contained**: ✅ Yes
 
@@ -98,11 +98,11 @@ graph TD
 ### Help Exchange Feature
 | Component | Uses | Used By |
 |-----------|------|---------|
-| `HelpExchange.jsx` | ui/Pictogram | SeniorView |
-| `MatchCelebration.jsx` | ui/Button, sounds | SeniorView, RelativeView, CoordinationTab |
-| `useHelpExchange.js` | Firebase, CareCircleContext | SeniorView, CoordinationTab |
-| `useHelpExchangeMatch.js` | - | SeniorView, CoordinationTab |
-| `helpExchangeConfig.js` | - | CoordinationTab, HelpExchange |
+| `HelpExchange.tsx` | ui/Pictogram | SeniorView |
+| `MatchCelebration.tsx` | ui/Button, sounds | SeniorView, RelativeView, CoordinationTab |
+| `useHelpExchange.ts` | Firebase, CareCircleContext | SeniorView, CoordinationTab |
+| `useHelpExchangeMatch.ts` | - | SeniorView, CoordinationTab |
+| `helpExchangeConfig.ts` | - | CoordinationTab, HelpExchange |
 
 **Dependencies**: Firebase, CareCircleContext. **Self-contained**: ⚠️ Needs context
 
@@ -111,9 +111,9 @@ graph TD
 ### Family Presence Feature
 | Component | Uses | Used By |
 |-----------|------|---------|
-| `StatusCard.jsx` | ProgressRing, ui/Avatar | PeaceOfMindTab, SeniorView |
-| `FamilyPresence.jsx` | ui/Avatar, CareCircleContext | SeniorView, CoordinationTab |
-| `useMemberStatus.js` | Firebase | AppCore |
+| `StatusCard.tsx` | ProgressRing, ui/Avatar | PeaceOfMindTab, SeniorView |
+| `FamilyPresence.tsx` | ui/Avatar, CareCircleContext | SeniorView, CoordinationTab |
+| `useMemberStatus.ts` | Firebase | AppCore |
 
 **Dependencies**: Firebase, CareCircleContext, ProgressRing. **Self-contained**: ❌ No
 
@@ -122,9 +122,9 @@ graph TD
 ### Weekly Question Feature
 | Component | Uses | Used By |
 |-----------|------|---------|
-| `WeeklyQuestion.jsx` | - | SeniorView |
-| `WeeklyQuestionWidget.jsx` | - | SeniorView, RelativeView |
-| `useWeeklyQuestions.js` | Firebase | AppCore |
+| `WeeklyQuestion.tsx` | - | SeniorView |
+| `WeeklyQuestionWidget.tsx` | - | SeniorView, RelativeView |
+| `useWeeklyQuestions.ts` | Firebase | AppCore |
 
 **Dependencies**: Firebase only. **Self-contained**: ✅ Yes
 
@@ -133,8 +133,8 @@ graph TD
 ### Thinking of You Feature
 | Component | Uses | Used By |
 |-----------|------|---------|
-| `ThinkingOfYou.jsx` | ui/Avatar, sounds | SeniorView, PeaceOfMindTab, AppCore |
-| `usePings.js` | Firebase | AppCore |
+| `ThinkingOfYou.tsx` | ui/Avatar, sounds | SeniorView, PeaceOfMindTab, AppCore |
+| `usePings.ts` | Firebase | AppCore |
 
 **Dependencies**: Firebase, sounds. **Self-contained**: ✅ Yes
 
@@ -143,8 +143,8 @@ graph TD
 ### Photo Sharing Feature
 | Component | Uses | Used By |
 |-----------|------|---------|
-| `PhotoShare.jsx` | - | AppCore |
-| `usePhotos.js` | Firebase Storage | AppCore |
+| `PhotoShare.tsx` | - | AppCore |
+| `usePhotos.ts` | Firebase Storage | AppCore |
 
 **Dependencies**: Firebase Storage. **Self-contained**: ✅ Yes
 
@@ -153,9 +153,9 @@ graph TD
 ### Symptoms Feature
 | Component | Uses | Used By |
 |-----------|------|---------|
-| `BodyPainSelector.jsx` | - | SeniorView |
-| `SymptomSummary.jsx` | - | CoordinationTab |
-| `useSymptoms.js` | Firebase | AppCore |
+| `BodyPainSelector.tsx` | - | SeniorView |
+| `SymptomSummary.tsx` | - | CoordinationTab |
+| `useSymptoms.ts` | Firebase | AppCore |
 
 **Dependencies**: Firebase only. **Self-contained**: ✅ Yes
 
@@ -164,9 +164,9 @@ graph TD
 ### Tasks Feature
 | Component | Uses | Used By |
 |-----------|------|---------|
-| `ProgressRing.jsx` | - | StatusCard, PeaceOfMindTab |
-| `TimePickerModal.jsx` | ui/Button | RelativeView |
-| `useTasks.js` | Firebase | AppCore |
+| `ProgressRing.tsx` | - | StatusCard, PeaceOfMindTab |
+| `TimePickerModal.tsx` | ui/Button | RelativeView |
+| `useTasks.ts` | Firebase | AppCore |
 
 **Dependencies**: Firebase only. **Self-contained**: ✅ Yes
 
@@ -175,9 +175,9 @@ graph TD
 ### Navigation Feature
 | Component | Uses | Used By |
 |-----------|------|---------|
-| `BottomNavigation.jsx` | lucide-react | SeniorView |
-| `RelativeBottomNavigation.jsx` | lucide-react | RelativeView |
-| `TabNavigation.jsx` | - | - |
+| `BottomNavigation.tsx` | lucide-react | SeniorView |
+| `RelativeBottomNavigation.tsx` | lucide-react | RelativeView |
+| `TabNavigation.tsx` | - | - |
 
 **Note**: BottomNavigation and RelativeBottomNavigation are 90% identical. **Unification candidate**: ✅
 
@@ -186,11 +186,11 @@ graph TD
 ### Auth Feature
 | Component | Uses | Used By |
 |-----------|------|---------|
-| `AuthScreen.jsx` | - | AppWithAuth |
-| `CircleSetup.jsx` | - | AppWithAuth |
-| `ConsentModal.jsx` | - | AppWithAuth |
-| `useAuth.js` | Firebase Auth | AppWithAuth |
-| `useCareCircle.js` | Firebase | AppWithAuth |
+| `AuthScreen.tsx` | - | AppWithAuth |
+| `CircleSetup.tsx` | - | AppWithAuth |
+| `ConsentModal.tsx` | - | AppWithAuth |
+| `useAuth.ts` | Firebase Auth | AppWithAuth |
+| `useCareCircle.ts` | Firebase | AppWithAuth |
 
 **Dependencies**: Firebase Auth. **Self-contained**: ✅ Yes
 
@@ -201,10 +201,10 @@ graph TD
 ### UI Components (`components/ui/`)
 | Component | Used By |
 |-----------|---------|
-| `Avatar.jsx` | StatusCard, FamilyPresence, ThinkingOfYou, SeniorView, RelativeView |
-| `Button.jsx` | Multiple components |
-| `Modal.jsx` | SeniorView, RelativeView, HealthReport |
-| `Pictogram.jsx` | HelpExchange |
+| `Avatar.tsx` | StatusCard, FamilyPresence, ThinkingOfYou, SeniorView, RelativeView |
+| `Button.tsx` | Multiple components |
+| `Modal.tsx` | SeniorView, RelativeView, HealthReport |
+| `Pictogram.tsx` | HelpExchange |
 
 ### Contexts
 | Context | Used By |
@@ -214,15 +214,15 @@ graph TD
 ### Utilities (`utils/`)
 | Utility | Used By |
 |---------|---------|
-| `sounds.js` | ThinkingOfYou, MatchCelebration, AppCore |
-| `briefing.js` | PeaceOfMindTab |
+| `sounds.ts` | ThinkingOfYou, MatchCelebration, AppCore |
+| `briefing.ts` | PeaceOfMindTab |
 
 ### Config (`config/`)
 | Config | Used By |
 |--------|---------|
-| `firebase.js` | All hooks |
-| `features.js` | AppCore, SeniorView, CoordinationTab |
-| `helpExchangeConfig.js` | HelpExchange, CoordinationTab |
+| `firebase.ts` | All hooks |
+| `features.ts` | AppCore, SeniorView, CoordinationTab |
+| `helpExchangeConfig.ts` | HelpExchange, CoordinationTab |
 
 ---
 

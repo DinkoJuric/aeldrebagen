@@ -11,6 +11,56 @@ All notable changes to this project will be documented in this file.
 - **Feature Folders**: Restructured codebase into domain-specific feature folders (`features/tasks`, `features/helpExchange`, etc.) with barrel exports.
 - **Cleanup**: Removed legacy `types.js` and consolidated types in `types.ts` and components interfaces. Updated `ARCHITECTURE.md` to reflect new structure.
 
+## [1.14.0] - 2025-12-17
+
+### 🛠️ Critical Layout & UI Fixes
+
+**LivingBackground Disabled (Temporary)**
+- Replaced animated `LivingBackground` component with simple gradient (`sky-100` → `stone-100`)
+- **Reason**: Background component was causing scroll failures and bottom nav positioning issues
+- **Fix pending**: Need to refactor LivingBackground to use `position: absolute; inset: 0` without affecting children's layout
+
+**Bottom Navigation Fixed**
+- Changed from `position: absolute` to `position: sticky` for proper bottom alignment
+- Now correctly sticks to viewport bottom inside scrollable containers
+- Reduced padding from `py-3 pb-6` to `px-4 py-2` for compact appearance
+
+**Header & Status Bar Cleanup**
+- Unified top status bar: **Share** (left) → **Settings** (center) → **Logout** (right)
+- Removed duplicate gear button from RelativeView header
+- Settings gear now opens Privacy & Data directly
+- Share button opens invite code panel only
+
+**Badge Modal Fix (React Portal)**
+- SuperpowerBadge modal now uses `createPortal` to render at `document.body`
+- Fixes positioning issues caused by CSS transforms in orbit component
+- Modal centered on screen instead of bottom sheet
+
+**Data Flow Fix: Orbit Badges**
+- Changed `FamilyConstellation` to receive `memberStatuses` instead of `members`
+- Archetypes now display correctly (data was in `memberStatuses` subcollection, not `careCircleMemberships`)
+
+### 🧹 Code Cleanup
+- Removed `overflow-hidden` from SeniorView and RelativeView containers (was blocking scroll)
+- Removed unused imports: `Settings` from RelativeView, `LivingBackground` usage (commented)
+- Added fallback archetype logic for when Firestore data missing
+
+
+### 🎨 UI Architecture Overhaul
+
+**Component Standardization (CVA)**
+- Adopted **Class Variance Authority (CVA)** for all core UI components (`Button`, `Avatar`, `Badge`, `TaskCard`).
+- Implemented **`cn()` utility** (`clsx` + `tailwind-merge`) to strictly manage class conflicts and conditional styling.
+- **Removed**: Ad-hoc template literal class logic.
+- **Benefit**: Type-safe variants (`variant="primary"`, `size="lg"`) and zero style conflicts.
+
+### 🧹 Code Health & cleanup
+- **Complete TypeScript Verification**: Production build now runs with strict type checking (exit code 0).
+- **Dead Code Removal**: Cleaned up unused props in `AppCore`, `SeniorView`, and `RelativeView`.
+- **Infrastructure**: Converted `animations` and `Contexts` from `.jsx` to `.tsx`.
+
+---
+
 ## [1.12.0] - 2025-12-17
 
 ### 🏗️ TypeScript Migration

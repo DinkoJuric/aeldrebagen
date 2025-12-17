@@ -97,6 +97,16 @@ description: Master record of all project and cross-project learnings
 - **Action**: Added `server: { allowedHosts: 'all' }` to vite.config.js.
 - **Future**: When using tunneling services, add `allowedHosts: 'all'` to Vite server config.
 
+### Vite + TypeScript Client Types
+- **Problem**: `import.meta.env` threw "Property env does not exist" type errors.
+- **Action**: Added `/// <reference types="vite/client" />` reference or ensured `vite-env.d.ts` inclusion.
+- **Future**: Always verify Vite client types are included in `tsconfig` `include` array.
+
+### PWA Caching Aggressiveness
+- **Problem**: New features (Living Background) invisible to users despite deploy.
+- **Action**: Users had to "Empty Cache & Hard Reload".
+- **Future**: Implement "New Version Available" toast using `virtual:pwa-register` to prompt sw skipWaiting().
+
 ---
 
 ## Firebase & Auth
@@ -241,3 +251,111 @@ description: Master record of all project and cross-project learnings
 - **Future**: Ensure `manifest.start_url` matches your deployment base path, especially for GitHub Pages.
 
 ---
+
+## UI & Layout
+
+### LivingBackground Layout Interference
+- **Problem**: Animated background component caused scroll failures and bottom nav positioning issues.
+- **Root Cause**: The `LivingBackground` component's CSS (overflow/position) interfered with parent container layout.
+- **Symptoms**: Content wouldn't scroll, bottom nav floated in wrong position, UI felt broken.
+- **Action**: Temporarily replaced with a simple gradient div to isolate and confirm the issue.
+- **Future**: When implementing animated backgrounds:
+  1. Use `position: absolute` with `inset-0` so background doesn't affect children's layout flow
+  2. Test scroll behavior immediately after adding such components
+  3. Avoid `overflow: hidden` on wrapper elements if children need to scroll
+
+### Bottom Navigation Positioning
+- **Problem**: `position: absolute; bottom: 0` didn't work properly inside scrollable containers.
+- **Root Cause**: `absolute` positioning places element at the bottom of the **scroll content**, not the viewport.
+- **Solution**: Changed to `position: sticky; bottom: 0` which sticks to viewport within scroll container.
+- **Future**: For fixed-bottom elements inside scrollable areas, always use `sticky` not `absolute`.
+
+### CSS `fixed` Inside Transformed Containers
+- **Problem**: Modal with `position: fixed` rendered in wrong position, overlaying other content incorrectly.
+- **Root Cause**: Any parent with `transform`, `perspective`, or `filter` creates a new stacking context that breaks `fixed` positioning. The orbit component had CSS transforms.
+- **Solution**: Use **React Portal** (`createPortal(modal, document.body)`) to render modal at document root level.
+- **Future**: Any modal/overlay component in a complex UI should use Portal to escape CSS context issues.
+
+### Data Flow: Members vs MemberStatuses
+- **Problem**: Archetype badges not showing in orbit despite archetype data existing in Firestore.
+- **Root Cause**: Two different data sources:
+  - `members` from `useCareCircle` (careCircleMemberships collection) - **no archetype**
+  - `memberStatuses` from `useMemberStatus` (memberStatuses subcollection) - **has archetype**
+- **Action**: Changed `FamilyConstellation` to receive `memberStatuses` instead of `members`.
+- **Future**: Always trace data flow when a field appears missing. Check which hook/collection the data comes from.
+
+---
+
+## Debugging Methodology
+
+### Hypothesis Testing for Layout Issues
+- **Learned**: When multiple CSS issues compound (scroll, positioning, z-index), isolating variables is critical.
+- **Approach**:
+  1. Comment out complex components one at a time
+  2. Replace with simple alternatives (e.g., gradient div instead of animated background)
+  3. Verify fix before re-enabling complexity
+- **Example**: Disabling `LivingBackground` immediately fixed 3+ issues (scroll, nav position, layout overflow).
+
+### TypeScript Pre-existing Errors
+- **Problem**: IDE shows many TypeScript errors unrelated to current changes, causing confusion.
+- **Action**: Focus on errors introduced by your changes. Pre-existing errors should be tracked separately.
+- **Future**: Run `tsc --noEmit` before starting work to establish baseline error count.
+
+---
+
+## Refactor Timeline & Error Source
+
+### ⚠️ CRITICAL: Last Known Good Build
+
+The codebase went through a major refactor that introduced TypeScript errors. Here is the timeline:
+
+| Date | Commit | State |
+|------|--------|-------|
+| Pre-Dec 17 | Feature folders created | ✅ **LAST SAFE BUILD** - `.jsx` files, working code |
+| Dec 17 | TypeScript migration | ⚠️ Errors introduced - type mismatches, unused vars |
+| Dec 17 | CVA + cn() adoption | ⚠️ More refactoring, potential class issues |
+| Dec 17 | Layout/CSS fixes | Today's session - fixing symptoms |
+
+### What Went Wrong
+
+1. **Mass Conversion**: Renaming `.jsx` → `.tsx` across entire codebase at once
+2. **No Incremental Testing**: Build not verified after each batch of changes
+3. **Type Mismatches**: Props interfaces don't match actual usage (e.g., `onSendPing` takes `type: string` but callers pass no args)
+4. **Cascading Errors**: One type fix reveals dependent errors elsewhere
+
+### How to Recover (If Needed)
+
+If TypeScript errors become unmanageable:
+
+```bash
+# Find last working commit before TypeScript migration
+git log --oneline --all | grep -i "feature"
+# Or look for commit before "TypeScript migration"
+git log --oneline -20
+
+# Option 1: Check out specific files from that commit
+git checkout <commit-hash> -- src/components/RelativeView.jsx
+
+# Option 2: Create a "fix-types" branch to address systematically
+git checkout -b fix-typescript-errors
+```
+
+### Error Categories to Watch
+
+| Category | Example | Priority |
+|----------|---------|----------|
+| **Prop Type Mismatches** | `onSendPing: (type: string) => void` called as `onSendPing()` | High - fix signatures or callers |
+| **Unused Variables** | `'profile' is declared but never read` | Low - prefix with `_` or remove |
+| **Null vs Undefined** | `string \| null` not assignable to `string \| undefined` | Medium - standardize on one |
+| **Generic Types** | `Set<unknown>` not assignable to `Set<string>` | Medium - add explicit type |
+
+### Lesson Learned
+
+> **Never do a mass file extension rename without incremental `tsc --noEmit` checks.**
+> 
+> The correct approach:
+> 1. Convert ONE file at a time
+> 2. Fix ALL its type errors
+> 3. Run `tsc --noEmit` - must pass
+> 4. Commit
+> 5. Repeat for next file

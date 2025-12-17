@@ -3,6 +3,7 @@ import { Settings } from 'lucide-react';
 import { Modal } from './ui/Modal';
 import { Button } from './ui/Button';
 import { WeeklyQuestionWidget, WeeklyQuestionModal } from '../features/weeklyQuestion';
+import { ThinkingOfYouIconButton } from '../features/thinkingOfYou';
 import { RelativeBottomNavigation } from './BottomNavigation';
 import { PeaceOfMindTab } from './PeaceOfMindTab';
 import { CoordinationTab } from './CoordinationTab';
@@ -41,8 +42,7 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
     tasks, profile, lastCheckIn, symptomLogs, onAddTask,
     myStatus = 'home', onMyStatusChange,
     memberStatuses = [], currentUserId = null,
-    onSendPing, weeklyAnswers, onWeeklyAnswer,
-    // HelpExchange props removed
+    onSendPing, weeklyAnswers, onWeeklyAnswer, onToggleLike, onReply,
     onOpenSettings, userName = 'Pårørende', seniorName = 'Mor', careCircleId = null
 }) => {
     const [showAddModal, setShowAddModal] = useState(false);
@@ -126,7 +126,7 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
     }, [tasks, symptomLogs]);
 
     return (
-        <div className="flex flex-col h-full bg-transparent relative overflow-hidden">
+        <div className="flex flex-col h-full bg-transparent relative pt-10">
             {/* Header - COMPACT */}
             <header className="px-4 py-2 bg-white shadow-sm rounded-b-3xl z-10 shrink-0">
                 <div className="flex justify-between items-center">
@@ -139,7 +139,7 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
                         <span className="font-semibold text-stone-700 text-sm">Hej, {userName}</span>
                     </div>
                     <div className="flex items-center gap-1">
-                        {/* Weekly Question widget */}
+                        {/* Weekly Question widget + Thinking of You */}
                         {FEATURES.weeklyQuestion && (
                             <WeeklyQuestionWidget
                                 answers={weeklyAnswers}
@@ -148,13 +148,7 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
                                 onClick={() => setShowWeeklyModal(true)}
                             />
                         )}
-                        <button
-                            onClick={onOpenSettings}
-                            className="p-2 rounded-full hover:bg-stone-100 transition-colors"
-                            aria-label="Indstillinger"
-                        >
-                            <Settings className="w-5 h-5 text-stone-500" />
-                        </button>
+                        <ThinkingOfYouIconButton onSendPing={onSendPing} />
                     </div>
                 </div>
             </header>
@@ -413,9 +407,8 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
                 answers={weeklyAnswers}
                 onAnswer={onWeeklyAnswer}
                 userName={userName}
-                // Pass social props
-                onToggleLike={props.onToggleLike}
-                onReply={props.onReply}
+                onToggleLike={onToggleLike}
+                onReply={onReply}
                 currentUserId={currentUserId || undefined}
             />
 

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { Wifi, Ear, Wrench, Car, Star, Phone, MessageCircle, X } from 'lucide-react';
 import { cn } from '../../lib/utils';
@@ -104,7 +105,6 @@ export const SuperpowerBadge: React.FC<SuperpowerBadgeProps> = ({
     size = 'sm',
     interactive = true
 }) => {
-    const [showTooltip, setShowTooltip] = useState(false);
     const [showActionSheet, setShowActionSheet] = useState(false);
     const config = ARCHETYPE_CONFIG[archetype];
 
@@ -117,12 +117,6 @@ export const SuperpowerBadge: React.FC<SuperpowerBadgeProps> = ({
         setShowActionSheet(true);
     };
 
-    const handleLongPress = () => {
-        if (!interactive) return;
-        setShowTooltip(true);
-        setTimeout(() => setShowTooltip(false), 3000);
-    };
-
     const handleAction = (actionType: 'call' | 'message') => {
         onAction?.(actionType, memberName);
         setShowActionSheet(false);
@@ -133,12 +127,6 @@ export const SuperpowerBadge: React.FC<SuperpowerBadgeProps> = ({
             {/* Badge Button */}
             <button
                 onClick={handleTap}
-                onContextMenu={(e) => { e.preventDefault(); handleLongPress(); }}
-                onTouchStart={() => {
-                    const timer = setTimeout(handleLongPress, 500);
-                    const cleanup = () => clearTimeout(timer);
-                    document.addEventListener('touchend', cleanup, { once: true });
-                }}
                 className={cn(
                     badgeVariants({ size }),
                     config.color,
@@ -149,27 +137,14 @@ export const SuperpowerBadge: React.FC<SuperpowerBadgeProps> = ({
                 <Icon className={cn(iconVariants({ size }))} />
             </button>
 
-            {/* Long-Press Tooltip */}
-            {showTooltip && (
-                <div className={cn(
-                    "absolute bottom-full left-1/2 -translate-x-1/2 mb-2",
-                    "bg-slate-800 text-white text-xs px-3 py-2 rounded-lg shadow-lg",
-                    "whitespace-nowrap z-50 animate-fade-in"
-                )}>
-                    <p className="font-bold">{config.label}</p>
-                    <p className="text-slate-300">{config.description}</p>
-                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-2 h-2 bg-slate-800 rotate-45" />
-                </div>
-            )}
-
-            {/* Action Sheet Modal */}
-            {showActionSheet && (
+            {/* Action Sheet Modal - Portal to escape CSS transform context */}
+            {showActionSheet && createPortal(
                 <div
-                    className="fixed inset-0 bg-black/50 z-50 flex items-end justify-center animate-fade-in"
+                    className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center animate-fade-in"
                     onClick={() => setShowActionSheet(false)}
                 >
                     <div
-                        className="bg-white w-full max-w-md rounded-t-3xl p-6 animate-slide-up"
+                        className="bg-white w-11/12 max-w-sm rounded-2xl p-6 shadow-2xl"
                         onClick={e => e.stopPropagation()}
                     >
                         <div className="flex items-center justify-between mb-4">
@@ -217,7 +192,8 @@ export const SuperpowerBadge: React.FC<SuperpowerBadgeProps> = ({
                             </button>
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
         </>
     );
