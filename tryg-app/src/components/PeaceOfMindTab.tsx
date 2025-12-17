@@ -1,10 +1,10 @@
 import React from 'react';
-import { Heart, Clock, Pill, CheckCircle, AlertCircle, MessageCircle } from 'lucide-react';
+import { Clock, CheckCircle, AlertCircle } from 'lucide-react';
 import { StatusCard } from '../features/familyPresence';
-import { ProgressRing } from '../features/tasks';
+import { CoffeeInviteCard } from '../features/coffee';
 import { useCareCircleContext } from '../contexts/CareCircleContext';
 import { getDailyBriefing } from '../utils/briefing';
-import { Member, CareCircleContextValue } from '../types';
+import { useTranslation } from 'react-i18next';
 import { Task } from '../features/tasks/useTasks';
 import { SymptomLog } from '../features/symptoms/useSymptoms';
 
@@ -28,13 +28,12 @@ export const PeaceOfMindTab: React.FC<PeaceOfMindTabProps> = ({
     tasks = [],
     symptomCount = 0,
     symptoms = [],
-    onSendPing,
     onViewSymptoms,
     recentActivity = []
 }) => {
-    // Get from context, use props as override
-    const context = useCareCircleContext() as CareCircleContextValue;
-    const seniorName = propSeniorName ?? context.seniorName ?? 'Senior';
+    const { t } = useTranslation();
+    const context = useCareCircleContext();
+    const seniorName = propSeniorName ?? context.seniorName;
 
     // Calculate completion rate from tasks
     const totalTasks = tasks.length;
@@ -53,8 +52,8 @@ export const PeaceOfMindTab: React.FC<PeaceOfMindTabProps> = ({
         // If morning is past and tasks incomplete, show warning
         if (currentHour >= 12 && morningTasks.length > 0 && !morningComplete) {
             return {
-                label: 'Morgen mangler',
-                sublabel: 'Ikke alle morgenopgaver er udført',
+                label: t('peace_morning_missing'),
+                sublabel: t('peace_sub_morning_missing'),
                 color: 'from-orange-500 to-orange-600',
                 icon: AlertCircle,
                 urgent: true
@@ -64,8 +63,8 @@ export const PeaceOfMindTab: React.FC<PeaceOfMindTabProps> = ({
         // If afternoon is past and tasks incomplete
         if (currentHour >= 18 && afternoonTasks.length > 0 && !afternoonComplete) {
             return {
-                label: 'Eftermiddag mangler',
-                sublabel: 'Ikke alle eftermiddagsopgaver er udført',
+                label: t('peace_afternoon_missing'),
+                sublabel: t('peace_sub_afternoon_missing'),
                 color: 'from-amber-500 to-amber-600',
                 icon: AlertCircle,
                 urgent: true
@@ -74,8 +73,8 @@ export const PeaceOfMindTab: React.FC<PeaceOfMindTabProps> = ({
 
         if (completionRate >= 80) {
             return {
-                label: 'Alt er vel ✨',
-                sublabel: `${seniorName} har det godt`,
+                label: t('peace_all_well'),
+                sublabel: t('peace_sub_all_well', { name: seniorName }),
                 color: 'from-teal-500 to-teal-600',
                 icon: CheckCircle,
                 urgent: false
@@ -83,8 +82,8 @@ export const PeaceOfMindTab: React.FC<PeaceOfMindTabProps> = ({
         }
         if (completionRate >= 50) {
             return {
-                label: 'God dag',
-                sublabel: 'Dagen skrider fremad',
+                label: t('peace_good_day'),
+                sublabel: t('peace_sub_good_day'),
                 color: 'from-teal-500 to-teal-600',
                 icon: CheckCircle,
                 urgent: false
@@ -99,23 +98,14 @@ export const PeaceOfMindTab: React.FC<PeaceOfMindTabProps> = ({
         };
     };
 
-    const status = getPeaceOfMindStatus();
-    const StatusIcon = status.icon;
+    getPeaceOfMindStatus();
 
-    // Get period-specific stats for quick glance
-    const getMedicineStatus = () => {
-        const medTasks = tasks.filter(t => t.title?.toLowerCase().includes('medicin') || t.title?.toLowerCase().includes('pille'));
-        if (medTasks.length === 0) return { text: 'Ingen planlagt', color: 'text-stone-500' };
-        const completed = medTasks.filter(t => t.completed).length;
-        const total = medTasks.length;
-        if (completed === total) return { text: 'Alle taget ✓', color: 'text-green-600' };
-        return { text: `${completed}/${total} taget`, color: completed > 0 ? 'text-amber-600' : 'text-red-600' };
-    };
-
-    const medicineStatus = getMedicineStatus();
 
     return (
         <div className="space-y-4">
+            {/* Spontan Kaffe Signal */}
+            <CoffeeInviteCard />
+
             {/* HERO: Peace of Mind Card with Atmospheric Background details */}
             <StatusCard
                 mode="senior"
@@ -129,7 +119,7 @@ export const PeaceOfMindTab: React.FC<PeaceOfMindTabProps> = ({
 
             {/* SMART SUMMARY - Natural Language Briefing */}
             {(() => {
-                const briefing = getDailyBriefing({ tasks, symptoms, seniorName, lastCheckIn });
+                const briefing = getDailyBriefing({ tasks, symptoms, seniorName, lastCheckIn, t });
                 return (
                     <div className={`p-4 rounded-xl border-2 ${briefing.type === 'success' ? 'bg-green-50 border-green-200' :
                         briefing.type === 'warning' ? 'bg-amber-50 border-amber-200' :

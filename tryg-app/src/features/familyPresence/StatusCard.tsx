@@ -4,6 +4,7 @@ import { InlineGatesIndicator } from '../tasks/ProgressRing';
 import { Avatar } from '../../components/ui/Avatar';
 import { Task } from '../tasks/useTasks';
 import { MemberStatus } from './useMemberStatus';
+import { useTranslation } from 'react-i18next';
 
 // ============================================================================
 // CONFIGURATION & CONSTANTS
@@ -12,7 +13,7 @@ import { MemberStatus } from './useMemberStatus';
 interface StatusOption {
     id: string;
     label: string;
-    icon: React.ElementType; // Icon component type
+    icon: React.ElementType;
     color: string;
 }
 
@@ -40,12 +41,12 @@ interface StatusSelectorProps {
 /**
  * Status selector for RELATIVE to set their status
  */
-export const StatusSelector: React.FC<StatusSelectorProps> = ({ currentStatus, onStatusChange, compact = false }) => {
+export const StatusSelector: React.FC<StatusSelectorProps> = ({ currentStatus, onStatusChange }) => {
+    const { t } = useTranslation();
     return (
         <div className="flex gap-2 justify-between">
             {STATUS_OPTIONS.map(status => {
                 const isActive = currentStatus === status.id;
-                // Map status ID to Avatar ID
                 const avatarId = ({
                     'work': 'work',
                     'home': 'home',
@@ -65,7 +66,7 @@ export const StatusSelector: React.FC<StatusSelectorProps> = ({ currentStatus, o
                                 : 'bg-white/50 hover:bg-white hover:shadow-sm border border-transparent hover:border-stone-200'
                             }
                         `}
-                        title={status.label}
+                        title={t(`status_${status.id}`)}
                     >
                         <Avatar
                             id={avatarId}
@@ -78,7 +79,7 @@ export const StatusSelector: React.FC<StatusSelectorProps> = ({ currentStatus, o
                             pointer-events-none transition-all duration-200 z-20
                             ${isActive ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0'}
                         `}>
-                            {status.label}
+                            {t(`status_${status.id}`)}
                         </div>
                     </button>
                 );
@@ -88,14 +89,14 @@ export const StatusSelector: React.FC<StatusSelectorProps> = ({ currentStatus, o
 };
 
 // ============================================================================
-// MAIN COMPONENT VARIABLES
+// MAIN COMPONENT
 // ============================================================================
 
 interface StatusCardProps {
     mode?: 'senior' | 'relative';
     name?: string;
     status?: string;
-    timestamp?: any; // Start as any to handle Firestore timestamp loosely, refine later
+    timestamp?: any;
     className?: string;
 
     // Senior specifics
@@ -110,7 +111,6 @@ interface StatusCardProps {
 
 /**
  * Unified Status Card Component
- * Renders appropriate card based on `mode`.
  */
 export const StatusCard: React.FC<StatusCardProps> = ({
     mode = 'relative',
@@ -118,33 +118,29 @@ export const StatusCard: React.FC<StatusCardProps> = ({
     status: statusId,
     timestamp,
     className = '',
-    // Senior specifics
     completionRate = 0,
     tasks = [],
     symptomCount = 0,
-    onViewSymptoms = null,
-    // Relative specifics
-    onStatusChange
+    onViewSymptoms = null
 }) => {
-    // -------------------------------------------------------------------------
-    // RENDER: SENIOR MODE (Dashboard Style)
-    // -------------------------------------------------------------------------
+    const { t } = useTranslation();
+
     if (mode === 'senior') {
         const getSeniorStatus = () => {
             if (!timestamp) return {
-                label: 'Venter på første tjek...',
+                label: t('waiting_first_check'),
                 theme: 'neutral',
                 bgPos: '50% 0%',
                 textColor: 'text-white'
             };
             if (completionRate >= 80 && symptomCount === 0) return {
-                label: 'Alt er vel',
+                label: t('peace_all_well'),
                 theme: 'calm',
                 bgPos: '0% 0%',
                 textColor: 'text-white'
             };
             if (completionRate >= 50) return {
-                label: 'God dag',
+                label: t('peace_good_day'),
                 theme: 'neutral',
                 bgPos: '50% 0%',
                 textColor: 'text-white'
@@ -156,7 +152,7 @@ export const StatusCard: React.FC<StatusCardProps> = ({
                 textColor: 'text-white'
             };
             return {
-                label: 'Tjek ind',
+                label: t('peace_check_in'),
                 theme: 'warm',
                 bgPos: '100% 0%',
                 textColor: 'text-white'
@@ -191,7 +187,7 @@ export const StatusCard: React.FC<StatusCardProps> = ({
                                 <h3 className="font-bold text-xl leading-tight drop-shadow-sm">{name}</h3>
                                 <div className="flex items-center gap-1.5 text-xs font-medium text-white/90 bg-black/10 px-2 py-0.5 rounded-full backdrop-blur-sm mt-1 w-fit">
                                     <Clock className="w-3 h-3" />
-                                    <span>Sidst: {typeof timestamp === 'string' ? timestamp : '-'}</span>
+                                    <span>{t('last_checked_in')}: {typeof timestamp === 'string' ? timestamp : '-'}</span>
                                 </div>
                             </div>
                         </div>
@@ -212,8 +208,8 @@ export const StatusCard: React.FC<StatusCardProps> = ({
                                 <Clock className="w-4 h-4 text-white" />
                             </div>
                             <div>
-                                <p className="text-[10px] text-white/70 uppercase font-bold tracking-wider">Tjekket ind</p>
-                                <p className="text-sm font-bold">{typeof timestamp === 'string' ? timestamp : 'Venter'}</p>
+                                <p className="text-[10px] text-white/70 uppercase font-bold tracking-wider">{t('peace_check_in')}</p>
+                                <p className="text-sm font-bold">{typeof timestamp === 'string' ? timestamp : t('peace_check_in')}</p>
                             </div>
                         </div>
 
@@ -222,8 +218,8 @@ export const StatusCard: React.FC<StatusCardProps> = ({
                                 <Pill className="w-4 h-4 text-white" />
                             </div>
                             <div>
-                                <p className="text-[10px] text-white/70 uppercase font-bold tracking-wider">Medicin</p>
-                                <p className="text-sm font-bold">{completionRate}% ordnet</p>
+                                <p className="text-[10px] text-white/70 uppercase font-bold tracking-wider">{t('medication_title')}</p>
+                                <p className="text-sm font-bold">{completionRate}% {t('taken')}</p>
                             </div>
                         </div>
                     </div>
@@ -244,9 +240,6 @@ export const StatusCard: React.FC<StatusCardProps> = ({
         );
     }
 
-    // -------------------------------------------------------------------------
-    // RENDER: RELATIVE MODE (List Item Style)
-    // -------------------------------------------------------------------------
     const statusObj = STATUS_OPTIONS.find(s => s.id === statusId) || STATUS_OPTIONS[0];
     const avatarId = ({
         'work': 'work',
@@ -256,13 +249,11 @@ export const StatusCard: React.FC<StatusCardProps> = ({
         'busy': 'moon'
     } as Record<string, string>)[statusId || ''] || 'home';
 
-    // Format timestamp if it's a Firestore object or Date
     let timeString = '-';
     if (timestamp) {
         if (typeof timestamp === 'string') {
             timeString = timestamp;
         } else {
-            // Check for Firestore Timestamp structure
             const date = (timestamp && typeof timestamp.toDate === 'function')
                 ? timestamp.toDate()
                 : new Date(timestamp);
@@ -278,7 +269,7 @@ export const StatusCard: React.FC<StatusCardProps> = ({
                     <h4 className="font-bold text-stone-800 text-sm">{name}</h4>
                     <div className="flex items-center gap-1.5 mt-0.5">
                         <span className="text-xs font-medium text-stone-500 bg-stone-100 px-2 py-0.5 rounded-full">
-                            {statusObj.label}
+                            {t(`status_${statusObj.id}`)}
                         </span>
                         <span className="text-[10px] text-stone-400">• {timeString}</span>
                     </div>
@@ -291,13 +282,9 @@ export const StatusCard: React.FC<StatusCardProps> = ({
     );
 };
 
-// ============================================================================
-// LIST LIST COMPONENT
-// ============================================================================
-
 interface StatusListProps {
-    members?: MemberStatus[]; // Using strict MemberStatus
-    relativeStatuses?: any[]; // Keep permissive for now
+    members?: MemberStatus[];
+    relativeStatuses?: any[];
     lastUpdated?: any;
     maxDisplay?: number;
 }
@@ -308,13 +295,13 @@ export const StatusList: React.FC<StatusListProps> = ({
     lastUpdated,
     maxDisplay = 3
 }) => {
-    // Filter to only relatives
+    const { t } = useTranslation();
     const relatives = members.filter(m => m.role === 'relative');
 
     if (relatives.length === 0 && relativeStatuses.length === 0) {
         return (
             <div className="bg-white rounded-2xl p-4 shadow-sm border-2 border-stone-100 mb-4">
-                <p className="text-stone-400 text-sm text-center">Ingen pårørende endnu</p>
+                <p className="text-stone-400 text-sm text-center">{t('no_relatives')}</p>
             </div>
         );
     }
@@ -330,7 +317,6 @@ export const StatusList: React.FC<StatusListProps> = ({
         <div className="space-y-2 mb-4">
             {displayedMembers.map((member, index) => (
                 <StatusCard
-                    mode="relative" // Use relative mode
                     key={member.docId || member.userId || index}
                     name={member.displayName || 'Pårørende'}
                     status={member.status}
@@ -340,7 +326,7 @@ export const StatusList: React.FC<StatusListProps> = ({
             {hiddenCount > 0 && (
                 <div className="text-center py-2">
                     <span className="text-sm text-stone-400">
-                        +{hiddenCount} {hiddenCount === 1 ? 'mere' : 'andre'}
+                        +{hiddenCount} {hiddenCount === 1 ? t('more') : t('others')}
                     </span>
                 </div>
             )}

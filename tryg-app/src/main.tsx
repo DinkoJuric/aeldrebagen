@@ -4,6 +4,7 @@ import * as Sentry from '@sentry/react'
 import AppWithAuth from './AppWithAuth'
 import ErrorBoundary from './components/ErrorBoundary'
 import './index.css'
+import './i18n'
 
 // ============================================================================
 // CRASH LOOP DETECTION - Self-healing mechanism

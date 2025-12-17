@@ -13,6 +13,7 @@ interface BriefingParams {
     symptoms?: any[]; // Keep flexible if Symptom type not strictly defined globally yet
     seniorName?: string;
     lastCheckIn?: any;
+    t: any;
 }
 
 /**
@@ -29,7 +30,7 @@ const isToday = (date: any): boolean => {
 /**
  * Generate a natural language daily briefing
  */
-export function getDailyBriefing({ tasks = [], symptoms = [], seniorName = 'Mor', lastCheckIn = null }: BriefingParams) {
+export function getDailyBriefing({ tasks = [], symptoms = [], seniorName = 'Mor', lastCheckIn = null, t }: BriefingParams) {
     const firstName = seniorName.split(' ')[0]; // Use first name for warmth
 
     // Calculate task stats
@@ -56,13 +57,13 @@ export function getDailyBriefing({ tasks = [], symptoms = [], seniorName = 'Mor'
     if (allMedicineComplete && !hasSymptoms) {
         if (allTasksComplete) {
             return {
-                message: `Alt ser fint ud. ${firstName} har haft en rolig dag.`,
+                message: t('daily_briefing_all_fine', { name: firstName }),
                 emoji: '✨',
                 type: 'success' as const
             };
         }
         return {
-            message: `${firstName} har taget al medicin. Alt er godt.`,
+            message: t('daily_briefing_meds_fine', { name: firstName }),
             emoji: '💚',
             type: 'success' as const
         };
@@ -75,7 +76,7 @@ export function getDailyBriefing({ tasks = [], symptoms = [], seniorName = 'Mor'
         const time = todaySymptoms[0]?.loggedAt?.toDate?.()?.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' }) || '';
 
         return {
-            message: `${firstName} har noteret ${symptomName}${time ? ` kl. ${time}` : ''}, men har taget sin medicin.`,
+            message: t('daily_briefing_symptom_noted', { name: firstName, symptom: symptomName, time }),
             emoji: '📋',
             type: 'info' as const
         };
@@ -84,7 +85,7 @@ export function getDailyBriefing({ tasks = [], symptoms = [], seniorName = 'Mor'
     // Medicine not complete but symptoms logged
     if (!allMedicineComplete && hasSymptoms) {
         return {
-            message: `${firstName} har logget symptomer. Medicin: ${completedMedicine}/${medicineTasks.length} taget.`,
+            message: t('daily_briefing_symptom_warning', { name: firstName, completed: completedMedicine, total: medicineTasks.length }),
             emoji: '⚠️',
             type: 'warning' as const
         };
@@ -94,7 +95,7 @@ export function getDailyBriefing({ tasks = [], symptoms = [], seniorName = 'Mor'
     if (!allMedicineComplete && medicineTasks.length > 0) {
         const remaining = medicineTasks.length - completedMedicine;
         return {
-            message: `${firstName} mangler ${remaining} medicin${remaining > 1 ? 'er' : ''} i dag.`,
+            message: t('daily_briefing_meds_missing', { name: firstName, count: remaining }),
             emoji: '💊',
             type: 'info' as const
         };
@@ -103,7 +104,7 @@ export function getDailyBriefing({ tasks = [], symptoms = [], seniorName = 'Mor'
     // No tasks at all - show neutral status
     if (lastCheckIn && isToday(lastCheckIn)) {
         return {
-            message: `${firstName} har tjekket ind i dag. Alt ser fint ud.`,
+            message: t('daily_briefing_checked_in', { name: firstName }),
             emoji: '👍',
             type: 'success' as const
         };
@@ -111,7 +112,7 @@ export function getDailyBriefing({ tasks = [], symptoms = [], seniorName = 'Mor'
 
     // No activity yet today
     return {
-        message: `Ingen aktivitet fra ${firstName} endnu i dag.`,
+        message: t('daily_briefing_no_activity', { name: firstName }),
         emoji: '💤',
         type: 'info' as const
     };
@@ -120,12 +121,12 @@ export function getDailyBriefing({ tasks = [], symptoms = [], seniorName = 'Mor'
 /**
  * Get streak message if applicable
  */
-export function getStreakMessage(streakDays: number, _seniorName = 'Mor') {
+export function getStreakMessage(streakDays: number, _seniorName = 'Mor', t: any) {
     if (streakDays >= 7) {
-        return `🏆 ${streakDays}. dag i træk med alt medicin taget!`;
+        return t('streak_msg_7', { count: streakDays });
     }
     if (streakDays >= 3) {
-        return `🎉 ${streakDays}. dag i træk!`;
+        return t('streak_msg_3', { count: streakDays });
     }
     return null;
 }

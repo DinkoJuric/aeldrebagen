@@ -1,0 +1,109 @@
+# Livshistorier(The Audio Time Capsule)
+
+The Insight: You are already building "Voice" and "Interleaved Feeds." 
+You are also targeting families with rich migration histories(Bosnia / Turkey to Denmark).
+Those stories are at risk of being lost.
+
+## The Unicorn Feature: Turn the "Weekly Question" into an Audio Biography.
+
+How it works:
+
+The Prompt: Instead of "How are you?", ask "Hvordan mødte du Far?"(How did you meet Dad ?) or "Fortæl om din ankomst til Danmark"(Tell us about arriving in Denmark).
+
+The Output: The senior records a voice answer.
+This is saved not just to the feed, but to a permanent "Livsbog"(Life Book) in the app.
+
+Why it's a Unicorn: It transforms the app from a "burden manager" (meds/pain) into a "Family Heirloom." It gives the senior a role as the Storyteller, preserving dignity and legacy.
+
+## Feature 2: Livshistorier(The Heirloom)
+You mentioned cost is a concern for Voice.
+Good news: Raw Audio is cheap.The expensive part is AI Transcription.
+We will skip transcription for now and just capture the voice itself.
+
+1. The "Recorder Widget" We replace the text input in WeeklyQuestion with this simple recorder.
+
+Create src / features / memories / AudioRecorder.jsx:
+
+JavaScript
+
+import React, { useState, useRef } from 'react';
+import { Mic, Square, Play } from 'lucide-react';
+
+export const AudioRecorder = ({ onRecordingComplete }) => {
+    const [isRecording, setIsRecording] = useState(false);
+    const [audioUrl, setAudioUrl] = useState(null);
+    const mediaRecorderRef = useRef(null);
+    const chunksRef = useRef([]);
+
+    const startRecording = async () => {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorderRef.current = new MediaRecorder(stream);
+
+        mediaRecorderRef.current.ondataavailable = (e) => {
+            if (e.data.size > 0) chunksRef.current.push(e.data);
+        };
+
+        mediaRecorderRef.current.onstop = () => {
+            const blob = new Blob(chunksRef.current, { type: 'audio/webm' });
+            const url = URL.createObjectURL(blob);
+            setAudioUrl(url);
+            onRecordingComplete(blob); // Send blob up to parent to upload to Firebase Storage
+            chunksRef.current = [];
+        };
+
+        mediaRecorderRef.current.start();
+        setIsRecording(true);
+    };
+
+    const stopRecording = () => {
+        mediaRecorderRef.current.stop();
+        setIsRecording(false);
+    };
+
+    return (
+        <div className= "flex flex-col items-center gap-4 p-6 bg-stone-50 rounded-3xl border-2 border-dashed border-stone-200" >
+        {!audioUrl ? (
+            <button
+                    onClick= { isRecording? stopRecording: startRecording }
+                    className = {`
+                        w-20 h-20 rounded-full flex items-center justify-center transition-all duration-300
+                        ${isRecording ? 'bg-red-500 scale-110 shadow-red-200 shadow-xl' : 'bg-teal-500 shadow-teal-200 shadow-lg'}
+                    `}
+                >
+    { isRecording?<Square className = "text-white w-8 h-8" /> : <Mic className="text-white w-8 h-8" />}
+</button>
+            ) : (
+    <div className= "w-full flex items-center gap-2 bg-white p-3 rounded-xl shadow-sm" >
+    <button onClick={ () => new Audio(audioUrl).play() } className = "bg-teal-100 p-2 rounded-full" >
+        <Play className="w-5 h-5 text-teal-700" />
+            </button>
+            < div className = "h-1 bg-stone-200 flex-1 rounded-full overflow-hidden" >
+                <div className="h-full w-full bg-teal-500/50" /> {/* Fake progress for MVP */ }
+                    </div>
+                    < span className = "text-xs font-mono text-stone-400" >00: 42 </span>
+                        </div>
+            )}
+
+<p className="text-stone-500 font-medium" >
+    { isRecording? 'Optager... (Tryk for at stoppe)': audioUrl ? 'Optagelse gemt!' : 'Tryk for at fortælle' }
+    </p>
+    </div>
+    );
+};
+
+## Storage Strategy(The Zero - Cost Trick)
+
+Firebase Storage: The free tier gives you 5GB.That is roughly 5,000 minutes of compressed audio.
+
+    Implementation: When they hit "Stop", upload the blob to memories / { circleId } / { questionId }.webm.Save the download URL to the Firestore document.
+
+## Your Action Plan
+Drop CoffeeToggle into your SeniorView(maybe right below the greeting).
+
+Add the "Invitation Logic" to PeaceOfMindTab.
+
+Ship it.
+
+This directly addresses the loneliness.
+When the Senior presses that button, they are proactively creating a connection.
+It is empowering.

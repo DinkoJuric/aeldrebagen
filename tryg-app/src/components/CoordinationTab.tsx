@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import {
     Plus, Pill, Clock, Activity, ChevronDown, ChevronUp, CheckCircle,
-    AlertCircle, Heart, HandHeart, X
+    AlertCircle, HandHeart, X
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Button } from './ui/Button';
 import { SymptomSummary } from '../features/symptoms';
 import { StatusSelector, STATUS_OPTIONS } from '../features/familyPresence';
@@ -34,9 +35,6 @@ export interface CoordinationTabProps {
     careCircleId?: string;
 }
 
-// Coordination Tab - practical management focused
-// Shows: Family presence, Your status, HelpExchange (bidirectional), tasks, symptom details
-// Uses CareCircleContext for shared data (props as optional overrides)
 export const CoordinationTab: React.FC<CoordinationTabProps> = ({
     seniorName: propSeniorName,
     userName: propUserName,
@@ -44,7 +42,6 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
     onMyStatusChange,
     memberStatuses: propMemberStatuses,
     currentUserId: propCurrentUserId,
-    // HelpExchange props removed
     openTasks = [],
     completedTasks = [],
     symptomLogs = [],
@@ -55,7 +52,7 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
     dismissedMatchIds = new Set(),
     careCircleId: propCareCircleId
 }) => {
-    // Get from context, use props as override
+    const { t } = useTranslation();
     const context = useCareCircleContext() as CareCircleContextValue;
     const seniorName = propSeniorName ?? context.seniorName ?? 'Senior';
     const userName = propUserName ?? context.userName ?? 'Pårørende';
@@ -70,7 +67,6 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
     const [showOfferPicker, setShowOfferPicker] = useState(false);
     const [showRequestPicker, setShowRequestPicker] = useState(false);
 
-    // Fetch HelpExchange data directly
     const {
         helpOffers: allOffersFetched,
         helpRequests: allRequestsFetched,
@@ -80,37 +76,19 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
         removeRequest
     } = useHelpExchange(careCircleId, currentUserId, 'relative', userName);
 
-    // Filter offers/requests by role
-    // Senior's items
     const helpOffers = allOffersFetched.filter((o: any) => o.createdByRole === 'senior');
     const helpRequests = allRequestsFetched.filter((r: any) => r.createdByRole === 'senior');
-    // Relative's items
     const relativeOffers = allOffersFetched.filter((o: any) => o.createdByRole === 'relative');
     const relativeRequests = allRequestsFetched.filter((r: any) => r.createdByRole === 'relative');
-
-    // Map handlers
-    const onAddRelativeOffer = addOffer;
-    const onRemoveRelativeOffer = removeOffer;
-    const onAddRelativeRequest = addRequest;
-    const onRemoveRelativeRequest = removeRequest;
-
-    console.debug('🤝 [CoordinationTab] Help Data:', {
-        offers: helpOffers.length,
-        requests: helpRequests.length,
-        relOffers: relativeOffers.length,
-        relRequests: relativeRequests.length
-    });
 
     const currentStatusInfo = STATUS_OPTIONS.find(s => s.id === myStatus) || STATUS_OPTIONS[0];
     const StatusIcon = currentStatusInfo.icon;
 
-    // Split relative entries into "mine" vs "other relatives"
-    const myRelativeOffers = relativeOffers.filter((o: any) => o.createdByUid === currentUserId);
-    const myRelativeRequests = relativeRequests.filter((r: any) => r.createdByUid === currentUserId);
     const otherRelativeOffers = relativeOffers.filter((o: any) => o.createdByUid !== currentUserId);
     const otherRelativeRequests = relativeRequests.filter((r: any) => r.createdByUid !== currentUserId);
+    const myRelativeOffers = relativeOffers.filter((o: any) => o.createdByUid === currentUserId);
+    const myRelativeRequests = relativeRequests.filter((r: any) => r.createdByUid === currentUserId);
 
-    // Combine all offers and requests for match detection (using local filtered vars)
     const allOffers = [
         ...helpOffers.map((o: any) => ({ ...o, createdByRole: 'senior' })),
         ...relativeOffers.map((o: any) => ({ ...o, createdByRole: 'relative' }))
@@ -120,14 +98,12 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
         ...relativeRequests.map((r: any) => ({ ...r, createdByRole: 'relative' }))
     ];
 
-    // Detect matches
-    const { topMatch, hasMatches, matches } = useHelpExchangeMatch({
+    const { topMatch } = useHelpExchangeMatch({
         offers: allOffers,
         requests: allRequests,
         familyStatus: myStatus
     });
 
-    // Generate a unique ID for a match (based on offer and request IDs)
     const getMatchId = (match: any) => {
         if (!match) return null;
         const offerId = match.offer?.docId || match.offer?.id || 'none';
@@ -135,16 +111,14 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
         return `${offerId}-${requestId}`;
     };
 
-    // Filter out dismissed matches
     const filteredTopMatch = topMatch && !dismissedMatchIds.has(getMatchId(topMatch)!) ? topMatch : null;
     const hasActiveMatches = filteredTopMatch !== null;
 
     return (
         <div className="space-y-3">
-            {/* Your Status - compact inline for tech-savvy relatives */}
             <div className="bg-indigo-600 rounded-xl px-3 py-2 text-white shadow-sm">
                 <div className="flex items-center justify-between gap-2">
-                    <span className="text-xs text-indigo-200 font-medium">Din status:</span>
+                    <span className="text-xs text-indigo-200 font-medium">{t('din_status')}:</span>
                     {showStatusPicker ? (
                         <div className="flex-1">
                             <StatusSelector
@@ -162,14 +136,13 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
                             className="flex items-center gap-2 bg-indigo-500/50 hover:bg-indigo-500 rounded-lg px-2 py-1 transition-colors"
                         >
                             <StatusIcon className="w-4 h-4" />
-                            <span className="font-medium text-sm">{currentStatusInfo.label}</span>
+                            <span className="font-medium text-sm">{t(`status_${currentStatusInfo.id}`)}</span>
                             <span className="text-indigo-300 text-xs">▼</span>
                         </button>
                     )}
                 </div>
             </div>
 
-            {/* Match Celebration Banner */}
             {hasActiveMatches && filteredTopMatch && (
                 <MatchBanner
                     match={filteredTopMatch}
@@ -183,7 +156,6 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
                 />
             )}
 
-            {/* Family Presence - "Familien Nu" */}
             {memberStatuses.length > 0 && (
                 <FamilyPresence
                     memberStatuses={memberStatuses}
@@ -192,25 +164,23 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
                 />
             )}
 
-            {/* Bidirectional Help Exchange */}
             <div className="bg-stone-50 border-2 border-stone-100 rounded-xl p-4 space-y-4">
                 <h3 className="font-bold text-stone-700 flex items-center gap-2">
                     <HandHeart className="w-5 h-5 text-teal-600" />
-                    Familie-udveksling
+                    {t('coordination_title')}
                 </h3>
 
-                {/* OTHER RELATIVES' offers/requests - show what other family members have added */}
                 {(otherRelativeOffers.length > 0 || otherRelativeRequests.length > 0) && (
                     <div className="bg-indigo-50 rounded-xl p-3 border border-indigo-100">
-                        <p className="text-xs font-bold text-indigo-600 uppercase tracking-wide mb-2">Fra andre pårørende:</p>
+                        <p className="text-xs font-bold text-indigo-600 uppercase tracking-wide mb-2">{t('others_offers')}</p>
                         <div className="flex flex-wrap gap-2">
                             {otherRelativeOffers.map((offer: any, i: number) => (
-                                <span key={`oro-${i}`} className="text-sm bg-indigo-100 text-indigo-700 px-3 py-1.5 rounded-full" title={`Fra: ${offer.createdByName}`}>
+                                <span key={`oro-${i}`} className="text-sm bg-indigo-100 text-indigo-700 px-3 py-1.5 rounded-full">
                                     💚 {offer.label} <span className="text-indigo-400 text-xs">({offer.createdByName})</span>
                                 </span>
                             ))}
                             {otherRelativeRequests.map((req: any, i: number) => (
-                                <span key={`orr-${i}`} className="text-sm bg-purple-100 text-purple-700 px-3 py-1.5 rounded-full" title={`Fra: ${req.createdByName}`}>
+                                <span key={`orr-${i}`} className="text-sm bg-purple-100 text-purple-700 px-3 py-1.5 rounded-full">
                                     💜 {req.label} <span className="text-purple-400 text-xs">({req.createdByName})</span>
                                 </span>
                             ))}
@@ -218,18 +188,17 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
                     </div>
                 )}
 
-                {/* Senior's offers/requests - show with creator name */}
                 {(helpOffers.length > 0 || helpRequests.length > 0) && (
                     <div className="space-y-2">
-                        <p className="text-xs font-bold text-stone-500 uppercase">Fra {seniorName}:</p>
+                        <p className="text-xs font-bold text-stone-500 uppercase">{t('from_senior_name', { name: seniorName })}</p>
                         <div className="flex flex-wrap gap-2">
                             {helpOffers.map((offer: any, i: number) => (
-                                <span key={`so-${i}`} className="text-sm bg-teal-100 text-teal-700 px-3 py-1.5 rounded-full" title={`Fra: ${offer.createdByName || seniorName}`}>
+                                <span key={`so-${i}`} className="text-sm bg-teal-100 text-teal-700 px-3 py-1.5 rounded-full">
                                     💚 {offer.label}
                                 </span>
                             ))}
                             {helpRequests.map((req: any, i: number) => (
-                                <span key={`sr-${i}`} className="text-sm bg-indigo-100 text-indigo-700 px-3 py-1.5 rounded-full" title={`Fra: ${req.createdByName || seniorName}`}>
+                                <span key={`sr-${i}`} className="text-sm bg-indigo-100 text-indigo-700 px-3 py-1.5 rounded-full">
                                     💜 {req.label}
                                 </span>
                             ))}
@@ -237,33 +206,22 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
                     </div>
                 )}
 
-                {/* Your offers */}
                 <div className="space-y-2">
-                    <p className="text-xs font-bold text-stone-500 uppercase">Du tilbyder:</p>
+                    <p className="text-xs font-bold text-stone-500 uppercase">{t('you_offer')}</p>
                     <div className="flex flex-wrap gap-2">
                         {myRelativeOffers.map((offer: any, i: number) => (
-                            <span
-                                key={`ro-${i}`}
-                                className="text-sm bg-teal-500 text-white px-3 py-1.5 rounded-full flex items-center gap-1"
-                            >
+                            <span key={`ro-${i}`} className="text-sm bg-teal-500 text-white px-3 py-1.5 rounded-full flex items-center gap-1">
                                 {offer.emoji || '✨'} {offer.label}
-                                <button
-                                    onClick={() => onRemoveRelativeOffer?.(offer.docId)}
-                                    className="ml-1 hover:bg-teal-600 rounded-full p-0.5"
-                                >
+                                <button onClick={() => removeOffer?.(offer.docId)} className="ml-1 hover:bg-teal-600 rounded-full p-0.5">
                                     <X className="w-3 h-3" />
                                 </button>
                             </span>
                         ))}
-                        <button
-                            onClick={() => setShowOfferPicker(!showOfferPicker)}
-                            className="text-sm bg-teal-50 text-teal-600 px-3 py-1.5 rounded-full border-2 border-dashed border-teal-200 hover:bg-teal-100 transition-colors"
-                        >
-                            + Tilbyd noget
+                        <button onClick={() => setShowOfferPicker(!showOfferPicker)} className="text-sm bg-teal-50 text-teal-600 px-3 py-1.5 rounded-full border-2 border-dashed border-teal-200 hover:bg-teal-100 transition-colors">
+                            + {t('add_offer')}
                         </button>
                     </div>
 
-                    {/* Offer picker */}
                     {showOfferPicker && (
                         <div className="bg-white rounded-xl p-3 border border-stone-200 space-y-2">
                             <p className="text-xs text-stone-500">Vælg hvad du kan tilbyde:</p>
@@ -272,7 +230,7 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
                                     <button
                                         key={offer.id}
                                         onClick={() => {
-                                            onAddRelativeOffer?.(offer);
+                                            addOffer?.(offer);
                                             setShowOfferPicker(false);
                                         }}
                                         className="text-sm bg-stone-100 hover:bg-teal-100 px-3 py-1.5 rounded-full transition-colors"
@@ -285,33 +243,22 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
                     )}
                 </div>
 
-                {/* Your requests */}
                 <div className="space-y-2">
-                    <p className="text-xs font-bold text-stone-500 uppercase">Du ønsker:</p>
+                    <p className="text-xs font-bold text-stone-500 uppercase">{t('you_request')}</p>
                     <div className="flex flex-wrap gap-2">
                         {myRelativeRequests.map((req: any, i: number) => (
-                            <span
-                                key={`rr-${i}`}
-                                className="text-sm bg-indigo-500 text-white px-3 py-1.5 rounded-full flex items-center gap-1"
-                            >
+                            <span key={`rr-${i}`} className="text-sm bg-indigo-500 text-white px-3 py-1.5 rounded-full flex items-center gap-1">
                                 {req.emoji || '💜'} {req.label}
-                                <button
-                                    onClick={() => onRemoveRelativeRequest?.(req.docId)}
-                                    className="ml-1 hover:bg-indigo-600 rounded-full p-0.5"
-                                >
+                                <button onClick={() => removeRequest?.(req.docId)} className="ml-1 hover:bg-indigo-600 rounded-full p-0.5">
                                     <X className="w-3 h-3" />
                                 </button>
                             </span>
                         ))}
-                        <button
-                            onClick={() => setShowRequestPicker(!showRequestPicker)}
-                            className="text-sm bg-indigo-50 text-indigo-600 px-3 py-1.5 rounded-full border-2 border-dashed border-indigo-200 hover:bg-indigo-100 transition-colors"
-                        >
-                            + Bed om noget
+                        <button onClick={() => setShowRequestPicker(!showRequestPicker)} className="text-sm bg-indigo-50 text-indigo-600 px-3 py-1.5 rounded-full border-2 border-dashed border-indigo-200 hover:bg-indigo-100 transition-colors">
+                            + {t('add_request')}
                         </button>
                     </div>
 
-                    {/* Request picker */}
                     {showRequestPicker && (
                         <div className="bg-white rounded-xl p-3 border border-stone-200 space-y-2">
                             <p className="text-xs text-stone-500">Hvad kunne du bruge hjælp til?</p>
@@ -320,7 +267,7 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
                                     <button
                                         key={request.id}
                                         onClick={() => {
-                                            onAddRelativeRequest?.(request);
+                                            addRequest?.(request);
                                             setShowRequestPicker(false);
                                         }}
                                         className="text-sm bg-stone-100 hover:bg-indigo-100 px-3 py-1.5 rounded-full transition-colors"
@@ -334,7 +281,6 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
                 </div>
             </div>
 
-            {/* Symptoms - Collapsible (today's symptoms only in header) */}
             {(() => {
                 const todaySymptoms = symptomLogs.filter(s => {
                     const date = s.loggedAt?.toDate ? s.loggedAt.toDate() : new Date(s.loggedAt);
@@ -348,7 +294,7 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
                         >
                             <span className="flex items-center gap-2">
                                 <AlertCircle className="w-4 h-4 text-orange-500" />
-                                Symptomer i dag ({todaySymptoms.length})
+                                {t('symptoms_today')} ({todaySymptoms.length})
                             </span>
                             {showSymptoms ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                         </button>
@@ -359,14 +305,13 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
                 );
             })()}
 
-            {/* Open Tasks - Collapsible */}
             {openTasks.length > 0 && (
                 <div>
                     <button
                         onClick={() => setShowOpenTasks(!showOpenTasks)}
                         className="w-full flex items-center justify-between text-sm font-bold text-stone-500 uppercase tracking-wider mb-3 pl-1"
                     >
-                        <span>Åbne opgaver ({openTasks.length})</span>
+                        <span>{t('open_tasks_count', { count: openTasks.length })}</span>
                         {showOpenTasks ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                     </button>
                     {showOpenTasks && (
@@ -389,50 +334,10 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
                 </div>
             )}
 
-            {/* Completed Tasks - DISABLED for now (uncomment to re-enable) */}
-            {false && completedTasks.length > 0 && (
-                <div>
-                    <button
-                        onClick={() => setShowCompleted(!showCompleted)}
-                        className="w-full flex items-center justify-between p-4 bg-teal-50 rounded-2xl border-2 border-teal-100 hover:bg-teal-100 transition-colors mb-3"
-                    >
-                        <div className="flex items-center gap-3">
-                            <CheckCircle className="w-6 h-6 text-teal-600" />
-                            <span className="font-bold text-teal-800">Udførte opgaver ({completedTasks.length})</span>
-                        </div>
-                        {showCompleted ? <ChevronUp className="w-5 h-5 text-teal-600" /> : <ChevronDown className="w-5 h-5 text-teal-600" />}
-                    </button>
-
-                    {showCompleted && (
-                        <div className="bg-white rounded-2xl shadow-sm border-2 border-stone-100 overflow-hidden">
-                            {completedTasks.map((task, idx) => (
-                                <div key={task.id} className={`p-4 flex items-center gap-4 ${idx !== completedTasks.length - 1 ? 'border-b border-stone-100' : ''}`}>
-                                    <div className="p-2.5 rounded-xl bg-teal-100 text-teal-600">
-                                        {task.type === 'medication' ? <Pill className="w-5 h-5" /> :
-                                            task.type === 'appointment' ? <Clock className="w-5 h-5" /> :
-                                                <Activity className="w-5 h-5" />}
-                                    </div>
-                                    <div className="flex-1">
-                                        <p className="text-sm font-semibold text-stone-500 line-through">{task.title}</p>
-                                        <p className="text-xs text-stone-400">{task.description}</p>
-                                    </div>
-                                    <span className="text-[10px] text-teal-600 font-bold bg-teal-50 px-2 py-0.5 rounded-full border border-teal-200">UDFØRT</span>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                </div>
-            )}
-
-            {/* Add Task Button */}
-            <Button
-                variant="outline"
-                className="w-full h-auto py-4 bg-white"
-                onClick={onAddTask}
-            >
+            <Button variant="outline" className="w-full h-auto py-4 bg-white" onClick={onAddTask}>
                 <div className="flex items-center gap-2">
                     <Plus className="w-5 h-5" />
-                    <span>Tilføj påmindelse til {seniorName}</span>
+                    <span>{t('add_reminder_name', { name: seniorName })}</span>
                 </div>
             </Button>
         </div>

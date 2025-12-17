@@ -1,6 +1,7 @@
 import React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { Heart, Users, FileText, Gamepad2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { cn } from '../lib/utils';
 
 /**
@@ -70,6 +71,7 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
     onViewReport,
     onShowReport
 }) => {
+    const { t } = useTranslation();
     const handleReport = onViewReport || onShowReport;
 
     return (
@@ -77,7 +79,7 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
             <div className="flex justify-between items-center max-w-sm mx-auto">
                 <NavTab
                     icon={<Heart className={cn("w-6 h-6", activeTab === 'daily' && "fill-teal-100")} />}
-                    label="Min dag"
+                    label={t('bottom_nav_daily')}
                     onClick={() => onTabChange('daily')}
                     isActive={activeTab === 'daily'}
                     activeColor="teal"
@@ -85,7 +87,7 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
 
                 <NavTab
                     icon={<Users className={cn("w-6 h-6", activeTab === 'family' && "fill-indigo-100")} />}
-                    label="Familie"
+                    label={t('bottom_nav_family')}
                     onClick={() => onTabChange('family')}
                     isActive={activeTab === 'family'}
                     activeColor="indigo"
@@ -96,12 +98,12 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
                     className={cn(tabVariants({ state: 'inactive' }))}
                 >
                     <FileText className="w-6 h-6" />
-                    <span className="text-xs font-bold">Rapport</span>
+                    <span className="text-xs font-bold">{t('bottom_nav_report')}</span>
                 </button>
 
                 <NavTab
                     icon={<Gamepad2 className={cn("w-6 h-6", activeTab === 'spil' && "fill-purple-100")} />}
-                    label="Spil"
+                    label={t('bottom_nav_spil')}
                     onClick={() => onTabChange('spil')}
                     isActive={activeTab === 'spil'}
                     activeColor="purple"

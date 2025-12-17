@@ -26,6 +26,7 @@ import { BodyPainSelector } from '../features/symptoms';
 import { MemoryTrigger } from '../features/weeklyQuestion';
 import { WeeklyQuestionWidget, WeeklyQuestionModal } from '../features/weeklyQuestion';
 import { HelpExchange } from '../features/helpExchange';
+import { CoffeeToggle } from '../features/coffee';
 import { BottomNavigation } from './BottomNavigation';
 import { SYMPTOMS_LIST } from '../data/constants';
 import { FEATURES } from '../config/features';
@@ -39,6 +40,8 @@ import { playMatchSound } from '../utils/sounds';
 import { Task } from '../features/tasks/useTasks';
 import { SymptomLog } from '../features/symptoms/useSymptoms';
 import { Member } from '../types';
+import { useTranslation } from 'react-i18next';
+import { LanguageSwitcher } from './LanguageSwitcher';
 
 export interface SeniorViewProps {
     tasks: Task[];
@@ -68,6 +71,7 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
     members = [], memberStatuses = [], currentUserId = null, relativeStatuses = [],
     userName = 'Senior', relativeName = 'Familie', careCircleId = null, symptomLogs = [], onAddTask
 }) => {
+    const { t } = useTranslation();
     const [showCallModal, setShowCallModal] = useState(false);
     const [showSymptomModal, setShowSymptomModal] = useState(false);
     const [showWeeklyModal, setShowWeeklyModal] = useState(false);
@@ -126,7 +130,7 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
         ...relativeRequests.map((r: any) => ({ ...r, createdByRole: 'relative' }))
     ];
 
-    const { match, dismissMatch, hasMatches, topMatch } = useHelpExchangeMatch({
+    const { hasMatches, topMatch } = useHelpExchangeMatch({
         offers: allOffers,
         requests: allRequests,
         familyStatus: null, // Senior view doesn't track their own status
@@ -141,6 +145,7 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
     const medicineTasks = tasks.filter(t =>
         t.title?.toLowerCase().includes('medicin') ||
         t.title?.toLowerCase().includes('pille') ||
+        t.title?.toLowerCase().includes('lac') ||
         t.type === 'medication'
     );
     const completedMedicine = medicineTasks.filter(t => t.completed).length;
@@ -152,7 +157,8 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
 
     // Dynamic greeting based on time
     const hour = new Date().getHours();
-    const greeting = hour < 12 ? 'Godmorgen' : hour < 18 ? 'Goddag' : 'Godaften';
+    const greetingKey = hour < 12 ? 'greeting_morning' : hour < 18 ? 'Goddag' : 'Godaften';
+    const greeting = t(greetingKey);
 
     // Get current date in Danish format
     const dateOptions: Intl.DateTimeFormatOptions = { weekday: 'long', day: 'numeric', month: 'long' };
@@ -163,7 +169,7 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
         const periodTasks = tasks.filter(t =>
             t.period === periodKey &&
             !t.completed &&
-            !(t.title?.toLowerCase().includes('medicin') || t.title?.toLowerCase().includes('pille') || t.type === 'medication')
+            !(t.title?.toLowerCase().includes('medicin') || t.title?.toLowerCase().includes('pille') || t.title?.toLowerCase().includes('lac') || t.type === 'medication')
         );
         if (periodTasks.length === 0) return null;
 
@@ -316,7 +322,7 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                             <div className="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-2xl p-4 mb-6 border-2 border-purple-100">
                                 <div className="flex items-center gap-2 mb-3">
                                     <Pill className="w-6 h-6 text-purple-600" />
-                                    <h2 className="text-lg font-bold text-purple-800">Medicin</h2>
+                                    <h2 className="text-lg font-bold text-purple-800">{t('medication_title')}</h2>
                                     <span className="text-sm text-purple-500 ml-auto">
                                         {completedMedicine}/{medicineTasks.length} taget
                                     </span>
@@ -360,7 +366,7 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
 
                         {/* Check-in Status */}
                         <div className="bg-white rounded-3xl p-6 shadow-sm border-2 border-teal-100 mb-8">
-                            <h2 className="text-xl font-semibold text-stone-800 mb-4">Hvordan har du det?</h2>
+                            <h2 className="text-xl font-semibold text-stone-800 mb-4">{t('pain_question')}</h2>
                             <div className="grid grid-cols-2 gap-4">
                                 <Button
                                     variant="primary"
@@ -461,16 +467,19 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                 {/* ===== FAMILY TAB ===== */}
                 {(!FEATURES.tabbedLayout || activeTab === 'family') && (
                     <>
+                        {/* Spontan Kaffe Signal */}
+                        <CoffeeToggle />
+
                         {/* Thinking of You - MOVED TO TOP */}
                         {FEATURES.thinkingOfYou && (
-                            <ThinkingOfYouButton onSendPing={onSendPing} fromName={userName} />
+                            <ThinkingOfYouButton onSendPing={() => onSendPing('heart')} fromName={userName} />
                         )}
 
                         {/* Family Presence - "Familien Nu" for bidirectional visibility */}
                         {memberStatuses.length > 0 && (
                             <FamilyPresence
-                                memberStatuses={memberStatuses}
-                                currentUserId={currentUserId}
+                                memberStatuses={memberStatuses as any}
+                                currentUserId={currentUserId || ''}
                                 seniorName={userName}
                             />
                         )}
@@ -488,6 +497,11 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
 
                         {/* Memory Trigger - toggle with FEATURES.memoryTriggers */}
                         {FEATURES.memoryTriggers && <MemoryTrigger />}
+
+                        {/* Language Selection - Senior View (Family Tab) */}
+                        <div className="mt-8 mb-4">
+                            <LanguageSwitcher />
+                        </div>
 
                         {/* Dignity-Preserving Help Exchange - toggle with FEATURES.helpExchange */}
                         {FEATURES.helpExchange && (
@@ -513,9 +527,9 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                         {/* Spillehjørnet - Gaming Corner */}
                         {FEATURES.spillehjoernet && (
                             <Spillehjoernet
-                                circleId={careCircleId || undefined}
-                                userId={currentUserId || undefined}
-                                displayName={userName}
+                                circleId={careCircleId || ''}
+                                userId={currentUserId || ''}
+                                displayName={userName || 'Senior'}
                             />
                         )}
                     </>
@@ -612,7 +626,7 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                 isOpen={showWeeklyModal}
                 onClose={() => setShowWeeklyModal(false)}
                 answers={weeklyAnswers}
-                onAnswer={onWeeklyAnswer}
+                onAnswer={(answerObj: any) => onWeeklyAnswer(answerObj.answer)}
                 userName={userName}
                 currentUserId={currentUserId || undefined}
                 onToggleLike={onToggleLike}
@@ -620,15 +634,18 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
             />
             {/* Match Celebration Modal - full screen confetti! */}
             {/* Match Celebration Modal - full screen confetti! */}
-            {match && (
+            {topMatch && !dismissedMatchIds.has(`${topMatch.offer?.id || 'o'}-${topMatch.request?.id || 'r'}`) && (
                 <MatchCelebration
-                    match={match}
-                    onDismiss={dismissMatch}
+                    match={topMatch}
+                    onDismiss={() => {
+                        const mId = `${topMatch.offer?.id || 'o'}-${topMatch.request?.id || 'r'}`;
+                        setDismissedMatchIds(prev => new Set([...prev, mId]));
+                    }}
                     onAction={(action) => {
                         console.log('Senior action:', action);
                         if (action === 'plan-visit' || action === 'contact') {
                             // Create an appointment task automatically
-                            const matchName = match.relativeName || 'Pårørende'; // Fallback
+                            const matchName = topMatch.celebration.title || 'Pårørende'; // Fallback
                             const taskTitle = action === 'plan-visit'
                                 ? `Besøg af ${matchName}`
                                 : `Ring til ${matchName}`;
@@ -644,7 +661,8 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                             }
 
                             // Close match modal
-                            dismissMatch();
+                            const mId = `${topMatch.offer?.id || 'o'}-${topMatch.request?.id || 'r'}`;
+                            setDismissedMatchIds(prev => new Set([...prev, mId]));
                         }
                     }}
                 />
@@ -732,7 +750,7 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
             {activeMatch && (
                 <MatchCelebration
                     match={activeMatch}
-                    seniorName={userName}
+                    seniorName={userName || 'Senior'}
                     onDismiss={() => setActiveMatch(null)}
                     onAction={(action) => {
                         // Create task based on action type

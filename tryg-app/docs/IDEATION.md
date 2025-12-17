@@ -6,146 +6,89 @@ A living document for brainstorming features that could make Tryg more valuable.
 
 ---
 
-## 🌟 Connection-First Features (Priority)
+## 🦄 High-Priority: The "SOSU Bridge"
+The biggest friction in Danish care is the lack of sync between the Senior, the Family, and the Municipality (Hjemmeplejen).
 
-### Bidirectional Visibility ("Mirror Features") ✅ IMPLEMENTED
-The key to avoiding surveillance: **reciprocity by default**.
+### Guest View for SOSU Workers
+A QR Code on the fridge allows SOSU workers to access a read-only web view (no app install) to see and contribute to the daily flow.
+- **Family Status**: "Daughter picked up meds at 10:00."
+- **Communication**: "Please remind Mor to drink water."
+- **Value**: Turns Tryg into the central communication hub for the entire care ecosystem.
 
-| Senior Sees | Family Sees |
-|-------------|-------------|
-| "Louise er på arbejde" | "Mor har det godt" |
-| "Børnene er kommet hjem fra skole" | "Farmor tog sin morgen medicin" |
-| "Emma løb 5km i morges" | "Farmor har gået en tur i haven" |
+### The Insight 
+In Denmark, care is a triangle: The Senior, The Family, and the Municipality (Hjemmeplejen/SOSU). The biggest friction is the lack of sync. 
+The daughter calls: "Did the home nurse give the meds?" 
+The nurse wonders: "Did the daughter make lunch?" 
+This Feature: A "Guest View" specifically for SOSU workers.
 
-**Implementation**: ✅ `FamilyStatusCard.jsx` shows relative's status (work, home, traveling, available, busy). Picker in RelativeView, display in SeniorView.
-
----
-
-### Shared Moments (Not Data)
-Replace "health dashboard" with **shared experiences**.
-
-**Photo Exchange**
-- **Daily Photo Ritual**: Family sends one photo → Senior sees it as "Dagens Billede" (already built!)
-- **Two-Way**: Senior can share photos back (simplified camera UI)
-- **Reactions**: Simple emoji reactions (❤️ 😊 👍) on shared content
-
-
-**"Jeg tænker på dig" Button** ✅ IMPLEMENTED
-- ✅ One-tap "thinking of you" ping (`ThinkingOfYou.jsx`)
-- ✅ Visual: Heart animation on recipient's screen
-- ✅ Pink toast notification with auto-dismiss
-- ✅ Web Audio ping sound for emotional feedback
+### Why it's works 
+It turns Tryg into the central communication hub for the entire care ecosystem, not just the family. It solves a massive pain point in the Danish welfare model
 
 ---
 
-### Weekly Rituals ✅ IMPLEMENTED
+## 🌟 Connection & Shared Experiences
 
-**Family Question of the Week**
-> "Hvad var det bedste øjeblik denne uge?"
+### Photo Exchange & Reactions
+Move beyond simple viewing to active engagement.
+- **Two-Way Sharing**: Simplified camera UI for seniors to share photos back to the family.
+- **Reactions**: Simple emoji reactions (❤️ 😊 👍) on shared content to acknowledge receipt and emotion.
+- **Photo Memories**: Integrate photos from the family shared album into the `MemoryTrigger` component.
 
-- ✅ Everyone answers (family + senior) via `WeeklyQuestionCard.jsx`
-- ✅ Creates shared stories and memories
-- ✅ Displayed as a carousel of answers
-- ✅ 8 rotating questions based on week number
-
-**Sunday Coffee Chat**
-- Scheduled video drop-in time
-- "Kafferum" indicator shows who's available
-- Low-pressure, can leave anytime
+### Sunday Coffee Chat
+- **Kafferum**: A scheduled video drop-in indicator showing who is currently available for a chat.
+- **Low Pressure**: Designed for casual presence rather than a formal "call."
 
 ---
 
-### Dignity-Preserving Help Requests ✅ IMPLEMENTED
+## 🏥 Health & Well-being (Dignity-First)
 
-Instead of: "Alert: Mom needs help"
-Reframe as: **Mutual exchange**
-
-| Senior Can Offer | Senior Can Request |
-|-----------------|-------------------|
-| "Jeg kan hjælpe med at lytte" | "Kan nogen ringe mig i dag?" |
-| "Jeg har en god opskrift" | "Hjælp til indkøb denne uge" |
-| "Vil gerne høre om jeres dag" | "Følgeskab til lægen" |
-
-**The senior contributes value, not just receives care.**
-
-✅ `HelpExchange.jsx` - Two-way offers/requests with success feedback
+### Pain & Symptom Tracking
+Building on the existing pain mapping to provide clinical value without alarmism.
+- **Pain Severity Scale**: A 3-level pictogram (🙂 Lidt → 😐 Noget → 😣 Meget) following the location selection.
+- **Visual History**: A summary of pain patterns (e.g., "You've had head pain 3 times this week") to assist in doctor consultations.
+- **Symptom Patterns**: Automated insights like "Du har ofte hovedpine om morgenen."
 
 ---
 
-## 💡 "Dancing at the Wedding" Features
-
-Features that connect health goals to **meaningful life moments**:
+## 💡 Motivation & Meaningful Moments
 
 ### Milestone Celebrations
-- "Du har gået 100 ture denne måned! 🎉"
-- "Klar til at danse til Emmas bryllup"
-- Connect streaks to personal goals, not abstract metrics
-
-### Memory Triggers ✅ IMPLEMENTED
-- ✅ "Husker du da...?" via `MemoryTrigger` component
-- ✅ Rotating memories every 10 seconds
-- ⏳ Photo memories from family shared album (TODO)
+Connect health data to life events to provide purpose.
+- **Personal Goals**: "Du har gået 100 ture denne måned! 🎉"
+- **Event Readiness**: "Klar til at danse til Emmas bryllup."
 
 ### Anticipation Calendar
-- Countdown to family events
-- "42 dage til Emmas bryllup"
-- Daily motivation tied to real moments
+- **Countdowns**: Visual countdowns to family events (e.g., "42 dage til Emmas bryllup").
+- **Daily Motivation**: Tying daily activity to these upcoming real-world moments.
+
+---
+
+## 🎯 Development Roadmap (MVP+)
+
+| Feature | Connection Value | Effort | Priority |
+|---------|-----------------|--------|----------|
+| SOSU Bridge (QR Web View) | ★★★★★ | High | High |
+| Voice Note Sharing | ★★★★☆ | Med | High |
+| Two-way Photo Sharing | ★★★★☆ | Med | Med |
+| Emoji Reactions | ★★★★☆ | Low | Med |
+| Pain Severity/History | ★★★☆☆ | Med | Low |
 
 ---
 
 ## 🔒 Anti-Surveillance Design Principles
 
-1. **Notification when viewed**: "Louise så din opdatering" - interaction, not silent watching
-2. **Share controls**: "Del kun med nær familie / alle / kun mig"
-3. **Temporary sharing**: "Del min placering de næste 2 timer"
-4. **Pause mode**: "Gå på pause" - take a break from sharing
-5. **Senior initiates**: Most data sharing should be senior-triggered, not automatic
-
----
-
-## 🏥 Health Tracking Enhancements
-
-### Body Pain Mapping ✅ IMPLEMENTED
-When senior clicks "Jeg har ondt" → "Smerter", they can tap WHERE on their body:
-- ✅ `BodyPainSelector.jsx` with large touch-friendly grid
-- ✅ Regions: Head, Neck, Chest, Arms (L/R), Stomach, Back, Legs (L/R)
-- ✅ Stored with timestamp and shown in doctor report
-- ⏳ TODO: Visual history ("You've had head pain 3 times this week")
-
-### Pain Severity Scale
-- After location, ask "Hvor ondt?" (How much?)
-- 3-level pictogram: 🙂 Lidt → 😐 Noget → 😣 Meget
-- Avoid clinical 1-10 scales - too complex for seniors
-
-### Symptom Patterns
-- Weekly summary: "Du har ofte hovedpine om morgenen"
-- Helpful for doctor consultations
-- Non-alarming presentation
-
----
-
-## 🎯 High-Value / Low-Effort (MVP+1)
-
-| Feature | Connection Value | Effort | Status |
-|---------|-----------------|--------|--------|
-| Two-way status ("Louise er...") | ★★★★★ | 2h | ✅ Done |
-| "Tænker på dig" one-tap ping | ★★★★★ | 1h | ✅ Done |
-| Voice note sharing | ★★★★☆ | 4h | ⏳ TODO |
-| Simple photo sharing from senior | ★★★★☆ | 3h | ⏳ TODO |
-| Emoji reactions on photos | ★★★★☆ | 2h | ⏳ TODO |
+1. **Notification when viewed**: "Louise så din opdatering" - interaction, not silent watching.
+2. **Share controls**: Granular privacy (Family / Everyone / Only Me).
+3. **Temporary sharing**: Time-boxed location sharing (e.g., "Next 2 hours").
+4. **Pause mode**: Ability for the senior to "Go off the grid" easily.
+5. **Senior initiates**: Default to senior-triggered data sharing.
 
 ---
 
 ## 📚 Research References
-
-- **Reciprocity in eldercare apps**: Bidirectional features reduce surveillance perception
-- **Shared activities > monitoring**: Connection comes from doing things together
-- **Agency and control**: Strong privacy controls build trust
-- **Voice-first**: Better for motor/vision issues and feels more personal
-- **Participatory design**: Co-design with actual seniors
-
-Sources: JMIR Formative Research, ACM CHI, PMC studies on technology for reducing elderly loneliness
-
----
+- **Reciprocity in eldercare apps**: Bidirectional features reduce surveillance perception.
+- **Shared activities > monitoring**: Connection comes from doing things together.
+- **Agency and control**: Strong privacy controls build trust.
+- **Voice-first**: Better for motor/vision issues and feels more personal.
 
 *Last updated: 2025-12-11*

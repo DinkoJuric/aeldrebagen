@@ -16,6 +16,8 @@ import { AlertCircle } from 'lucide-react';
 import { Avatar } from './ui/Avatar';
 import { Task } from '../features/tasks/useTasks';
 import { SymptomLog } from '../features/symptoms/useSymptoms';
+import { useTranslation } from 'react-i18next';
+import { LanguageSwitcher } from './LanguageSwitcher';
 
 export interface RelativeViewProps {
     tasks: Task[];
@@ -45,6 +47,7 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
     onSendPing, weeklyAnswers, onWeeklyAnswer, onToggleLike, onReply,
     onOpenSettings, userName = 'Pårørende', seniorName = 'Mor', careCircleId = null
 }) => {
+    const { t } = useTranslation();
     const [showAddModal, setShowAddModal] = useState(false);
     const [showReport, setShowReport] = useState(false);
     const [showWeeklyModal, setShowWeeklyModal] = useState(false);
@@ -139,6 +142,10 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
                         <span className="font-semibold text-stone-700 text-sm">Hej, {userName}</span>
                     </div>
                     <div className="flex items-center gap-1">
+                        {/* Language Switcher in Header (Relative) */}
+                        <div className="scale-75 origin-right">
+                            <LanguageSwitcher />
+                        </div>
                         {/* Weekly Question widget + Thinking of You */}
                         {FEATURES.weeklyQuestion && (
                             <WeeklyQuestionWidget

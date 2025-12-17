@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, Sparkles } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { ActiveMatch } from './useHelpExchangeMatch';
+import { useTranslation } from 'react-i18next';
 
 interface MatchCelebrationProps {
     match: ActiveMatch | null;
@@ -20,6 +21,7 @@ export const MatchCelebration: React.FC<MatchCelebrationProps> = ({
     onAction,
     seniorName = 'Mor'
 }) => {
+    const { t } = useTranslation();
     const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
@@ -109,7 +111,7 @@ export const MatchCelebration: React.FC<MatchCelebrationProps> = ({
                     {isStatusMatch && (
                         <div className="flex items-center gap-2 text-teal-600 text-sm">
                             <span>🟢</span>
-                            <span>Status: Har tid nu</span>
+                            <span>{t('status_avail_now')}</span>
                         </div>
                     )}
                 </div>
@@ -129,7 +131,7 @@ export const MatchCelebration: React.FC<MatchCelebrationProps> = ({
                         onClick={handleDismiss}
                         className="w-full text-sm text-stone-500 hover:text-stone-700 py-2"
                     >
-                        Måske senere
+                        {t('maybe_later')}
                     </button>
                 </div>
             </div>

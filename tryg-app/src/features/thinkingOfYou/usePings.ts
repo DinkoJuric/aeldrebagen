@@ -11,8 +11,7 @@ import {
     serverTimestamp,
     query,
     orderBy,
-    limit,
-    Timestamp
+    limit
 } from 'firebase/firestore';
 import { db } from '../../config/firebase';
 
@@ -23,6 +22,8 @@ export interface Ping {
     toRole: 'senior' | 'relative';
     sentAt: Date;
     toUserId?: string;
+    type?: string;
+    message?: string;
 }
 
 export function usePings(circleId: string | null, currentUserId: string | null) {
@@ -60,7 +61,9 @@ export function usePings(circleId: string | null, currentUserId: string | null) 
                         fromUserId: data.fromUserId,
                         toRole: data.toRole as 'senior' | 'relative',
                         sentAt,
-                        toUserId: data.toUserId
+                        toUserId: data.toUserId,
+                        type: data.type,
+                        message: data.message
                     };
                 });
 
@@ -93,7 +96,7 @@ export function usePings(circleId: string | null, currentUserId: string | null) 
     }, [circleId, currentUserId]);
 
     // Send a ping
-    const sendPing = useCallback(async (fromName: string, fromUserId: string, toRole: 'senior' | 'relative') => {
+    const sendPing = useCallback(async (fromName: string, fromUserId: string, toRole: 'senior' | 'relative', type?: string, message?: string) => {
         if (!circleId) return;
 
         const pingId = `ping_${Date.now()}`;
@@ -105,6 +108,8 @@ export function usePings(circleId: string | null, currentUserId: string | null) 
                 fromUserId,
                 toRole,
                 sentAt: serverTimestamp(),
+                type,
+                message
             });
             return pingId;
         } catch (err: any) {

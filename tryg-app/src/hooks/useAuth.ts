@@ -185,6 +185,21 @@ export function useAuth() {
         }
     }, [user]);
 
+    // Update language preference
+    const updateLanguagePreference = useCallback(async (lang: string) => {
+        if (!user) return;
+
+        try {
+            await setDoc(doc(db, 'users', user.uid), {
+                languagePreference: lang,
+            }, { merge: true });
+            setUserProfile(prev => prev ? ({ ...prev, languagePreference: lang }) : null);
+        } catch (err: any) {
+            setError(err.message);
+            throw err;
+        }
+    }, [user]);
+
     // Reset password
     const resetPassword = useCallback(async (email: string) => {
         setError(null);
@@ -207,6 +222,7 @@ export function useAuth() {
         signOut,
         updateRole,
         recordConsent,
+        updateLanguagePreference,
         resetPassword,
         isAuthenticated: !!user,
     };

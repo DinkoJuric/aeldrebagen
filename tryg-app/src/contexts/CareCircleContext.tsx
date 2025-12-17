@@ -5,27 +5,9 @@
  * Use `useCareCircleContext()` to access data like careCircleId, memberStatuses, etc.
  */
 
-import React, { createContext, useContext, ReactNode } from 'react';
-import { MemberStatus } from '../features/familyPresence/useMemberStatus';
+import { createContext, useContext, ReactNode } from 'react';
+import { CareCircleContextValue } from '../types';
 
-export interface CareCircleContextValue {
-    // Circle info
-    careCircleId: string | null;
-    seniorId: string | null;
-    seniorName: string;
-
-    // Current user info
-    currentUserId: string | null;
-    userRole: 'senior' | 'relative' | null;
-    userName: string;
-
-    // Member statuses (for FamilyPresence, etc.)
-    memberStatuses: MemberStatus[];
-    relativeStatuses: MemberStatus[];
-    seniorStatus: MemberStatus | null;
-    myStatus: MemberStatus | null;
-    setMyStatus: (status: string) => Promise<void>;
-}
 
 const defaultValue: CareCircleContextValue = {
     careCircleId: null,
