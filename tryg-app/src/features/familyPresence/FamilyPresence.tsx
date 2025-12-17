@@ -147,10 +147,10 @@ export const FamilyPresence: React.FC<FamilyPresenceProps> = ({
     compact = false
 }) => {
     // Get from context, use props as override if provided
-    const context = useCareCircleContext();
-    const memberStatuses = propsMembers ?? context.memberStatuses ?? [];
-    const currentUserId = propsUserId ?? context.currentUserId;
-    const seniorName = propsSeniorName ?? context.seniorName ?? 'Far/Mor';
+    const context = useCareCircleContext() as any;
+    const memberStatuses = propsMembers ?? context?.memberStatuses ?? [];
+    const currentUserId = propsUserId ?? context?.currentUserId;
+    const seniorName = propsSeniorName ?? context?.seniorName ?? 'Far/Mor';
     const [viewMode, setViewMode] = useState<'list' | 'orbit'>('orbit'); // Default to orbit for impact!
 
     if (memberStatuses.length === 0) {

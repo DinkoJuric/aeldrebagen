@@ -64,8 +64,7 @@ export interface SeniorViewProps {
 
 export const SeniorView: React.FC<SeniorViewProps> = ({
     tasks, toggleTask, updateStatus, addSymptom, statusLastUpdated, onSendPing,
-    weeklyAnswers, onWeeklyAnswer,
-    // HelpExchange props removed
+    weeklyAnswers, onWeeklyAnswer, onToggleLike, onReply,
     members = [], memberStatuses = [], currentUserId = null, relativeStatuses = [],
     userName = 'Senior', relativeName = 'Familie', careCircleId = null, symptomLogs = [], onAddTask
 }) => {
@@ -616,8 +615,8 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                 onAnswer={onWeeklyAnswer}
                 userName={userName}
                 currentUserId={currentUserId || undefined}
-                onToggleLike={props.onToggleLike}
-                onReply={props.onReply}
+                onToggleLike={onToggleLike}
+                onReply={onReply}
             />
             {/* Match Celebration Modal - full screen confetti! */}
             {/* Match Celebration Modal - full screen confetti! */}

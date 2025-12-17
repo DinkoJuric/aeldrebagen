@@ -1,4 +1,3 @@
-// @ts-check
 /**
  * Animation Components
  * 
@@ -6,7 +5,8 @@
  * Provides consistent animations across the app.
  */
 
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { ReactNode } from 'react';
+import { motion, AnimatePresence, Variants } from 'framer-motion';
 
 // ============================================================================
 // ANIMATION VARIANTS
@@ -15,7 +15,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 /**
  * Slide out to the right when completed
  */
-export const slideOutRight = {
+export const slideOutRight: Variants = {
     initial: { opacity: 1, x: 0 },
     animate: { opacity: 1, x: 0 },
     exit: { opacity: 0, x: 100, transition: { duration: 0.3 } }
@@ -24,7 +24,7 @@ export const slideOutRight = {
 /**
  * Fade in from bottom (for modals)
  */
-export const slideUpFade = {
+export const slideUpFade: Variants = {
     initial: { opacity: 0, y: 50 },
     animate: { opacity: 1, y: 0, transition: { duration: 0.3, ease: 'easeOut' } },
     exit: { opacity: 0, y: 50, transition: { duration: 0.2 } }
@@ -33,7 +33,7 @@ export const slideUpFade = {
 /**
  * Simple fade
  */
-export const fade = {
+export const fade: Variants = {
     initial: { opacity: 0 },
     animate: { opacity: 1, transition: { duration: 0.2 } },
     exit: { opacity: 0, transition: { duration: 0.15 } }
@@ -42,7 +42,7 @@ export const fade = {
 /**
  * Scale in with spring (for success states)
  */
-export const popIn = {
+export const popIn: Variants = {
     initial: { opacity: 0, scale: 0.8 },
     animate: { opacity: 1, scale: 1, transition: { type: 'spring', stiffness: 300, damping: 20 } },
     exit: { opacity: 0, scale: 0.8, transition: { duration: 0.15 } }
@@ -51,7 +51,7 @@ export const popIn = {
 /**
  * Stagger children (for lists)
  */
-export const staggerContainer = {
+export const staggerContainer: Variants = {
     animate: {
         transition: {
             staggerChildren: 0.05
@@ -59,7 +59,7 @@ export const staggerContainer = {
     }
 };
 
-export const staggerItem = {
+export const staggerItem: Variants = {
     initial: { opacity: 0, y: 10 },
     animate: { opacity: 1, y: 0 }
 };
@@ -68,10 +68,15 @@ export const staggerItem = {
 // WRAPPER COMPONENTS
 // ============================================================================
 
+interface AnimatedListProps {
+    children: ReactNode;
+    className?: string;
+}
+
 /**
  * Animated list container - staggers child animations
  */
-export const AnimatedList = ({ children, className = '' }) => (
+export const AnimatedList: React.FC<AnimatedListProps> = ({ children, className = '' }) => (
     <motion.div
         className={className}
         variants={staggerContainer}
@@ -82,10 +87,16 @@ export const AnimatedList = ({ children, className = '' }) => (
     </motion.div>
 );
 
+interface AnimatedItemProps {
+    children: ReactNode;
+    className?: string;
+    layoutId?: string;
+}
+
 /**
  * Animated list item - for items within AnimatedList
  */
-export const AnimatedItem = ({ children, className = '', layoutId }) => (
+export const AnimatedItem: React.FC<AnimatedItemProps> = ({ children, className = '', layoutId }) => (
     <motion.div
         className={className}
         variants={staggerItem}
@@ -96,11 +107,19 @@ export const AnimatedItem = ({ children, className = '', layoutId }) => (
     </motion.div>
 );
 
+interface AnimatedTaskCardProps {
+    children: ReactNode;
+    taskId: string;
+    isCompleted: boolean;
+    onAnimationComplete?: () => void;
+    className?: string;
+}
+
 /**
  * Task card with completion animation
  * Slides out to the right when completed
  */
-export const AnimatedTaskCard = ({
+export const AnimatedTaskCard: React.FC<AnimatedTaskCardProps> = ({
     children,
     taskId,
     isCompleted,
@@ -131,10 +150,17 @@ export const AnimatedTaskCard = ({
     </motion.div>
 );
 
+interface AnimatedModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    children: ReactNode;
+    className?: string;
+}
+
 /**
  * Modal wrapper with slide-up animation
  */
-export const AnimatedModal = ({ isOpen, onClose, children, className = '' }) => (
+export const AnimatedModal: React.FC<AnimatedModalProps> = ({ isOpen, onClose, children, className = '' }) => (
     <AnimatePresence>
         {isOpen && (
             <>
@@ -161,10 +187,14 @@ export const AnimatedModal = ({ isOpen, onClose, children, className = '' }) => 
     </AnimatePresence>
 );
 
+interface AnimatedCheckmarkProps {
+    show: boolean;
+}
+
 /**
  * Success checkmark animation
  */
-export const AnimatedCheckmark = ({ show }) => (
+export const AnimatedCheckmark: React.FC<AnimatedCheckmarkProps> = ({ show }) => (
     <AnimatePresence>
         {show && (
             <motion.div
