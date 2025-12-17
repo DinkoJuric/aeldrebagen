@@ -17,6 +17,8 @@ import {
 import { Avatar } from './ui/Avatar';
 import { Button } from './ui/Button';
 import { Modal } from './ui/Modal';
+import { LiquidList, LiquidItem } from './ui/LiquidView';
+import { TaskCard } from '../features/tasks/TaskCard';
 import { StatusList } from '../features/familyPresence';
 import { FamilyPresence } from '../features/familyPresence';
 import { ThinkingOfYouButton } from '../features/thinkingOfYou';
@@ -56,6 +58,8 @@ export interface SeniorViewProps {
     careCircleId?: string | null;
     symptomLogs?: SymptomLog[];
     onAddTask?: (task: Partial<Task>) => void;
+    onToggleLike?: (answerId: string, userId: string, isLiked: boolean) => void;
+    onReply?: (answerId: string, reply: any) => void;
 }
 
 export const SeniorView: React.FC<SeniorViewProps> = ({
@@ -178,67 +182,23 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                 </div>
 
                 {isActive && (
-                    <div className="space-y-4 mb-8">
+                    <LiquidList className="space-y-4 mb-8">
                         {periodTasks.map(task => (
-                            <div
-                                key={task.id}
-                                onClick={() => toggleTask(task.id)}
-                                className={`
-                                    relative p-4 rounded-2xl border-2 transition-all duration-300 cursor-pointer
-                                    ${task.completed
-                                        ? 'bg-stone-100 border-stone-200'
-                                        : 'bg-white border-stone-200 shadow-sm hover:border-teal-400'
-                                    }
-                                `}
-                            >
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-4">
-                                        {/* Pictogram Container */}
-                                        <div className={`
-                                            w-16 h-16 rounded-2xl flex items-center justify-center shadow-inner
-                                            ${task.completed ? 'bg-stone-200 text-stone-400' : 'bg-blue-50 text-blue-600'}
-                                        `}>
-                                            {task.type === 'medication' && <Pill className="w-8 h-8" />}
-                                            {task.type === 'hydration' && <Activity className="w-8 h-8" />}
-                                            {task.type === 'activity' && <Sun className="w-8 h-8" />}
-                                            {task.type === 'appointment' && <Clock className="w-8 h-8" />}
-                                        </div>
-
-                                        <div>
-                                            <div className="flex items-center gap-2 flex-wrap">
-                                                <h3 className={`text-xl font-bold ${task.completed ? 'text-stone-500 line-through' : 'text-stone-800'}`}>
-                                                    {task.title}
-                                                </h3>
-                                                {/* Social Attribution Stamp */}
-                                                {task.createdByRole === 'relative' && task.createdByName && (
-                                                    <span className="inline-flex items-center gap-1 bg-indigo-50 px-2 py-0.5 rounded-lg">
-                                                        <Heart className="w-3 h-3 text-indigo-500 fill-indigo-200" />
-                                                        <span className="text-[10px] text-indigo-700 font-medium">Fra {task.createdByName}</span>
-                                                    </span>
-                                                )}
-                                            </div>
-                                            <p className="text-stone-500 font-medium">{task.time}</p>
-                                        </div>
-                                    </div>
-
-                                    {/* Checkbox */}
-                                    <div className={`
-                                        w-12 h-12 rounded-full border-4 flex items-center justify-center transition-colors
-                                        ${task.completed ? 'bg-teal-500 border-teal-500' : 'border-stone-200 bg-white'}
-                                    `}>
-                                        {task.completed && <CheckCircle className="text-white w-8 h-8" />}
-                                    </div>
-                                </div>
-                            </div>
+                            <LiquidItem key={task.id} id={task.id}>
+                                <TaskCard
+                                    task={task}
+                                    onToggle={() => toggleTask(task.id)}
+                                />
+                            </LiquidItem>
                         ))}
-                    </div>
+                    </LiquidList>
                 )}
-            </div>
+            </div >
         );
     };
 
     return (
-        <div className="flex flex-col h-full bg-stone-50 relative overflow-hidden">
+        <div className="flex flex-col h-full bg-transparent relative overflow-hidden">
             {/* Header - COMPACT */}
             <header className="px-4 py-2 bg-white shadow-sm rounded-b-3xl z-10 shrink-0">
                 <div className="flex justify-between items-center">
@@ -655,6 +615,9 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                 answers={weeklyAnswers}
                 onAnswer={onWeeklyAnswer}
                 userName={userName}
+                currentUserId={currentUserId || undefined}
+                onToggleLike={props.onToggleLike}
+                onReply={props.onReply}
             />
             {/* Match Celebration Modal - full screen confetti! */}
             {/* Match Celebration Modal - full screen confetti! */}

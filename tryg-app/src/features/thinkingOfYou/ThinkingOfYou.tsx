@@ -133,7 +133,9 @@ export const PingNotification: React.FC<PingNotificationProps> = ({ ping, onDism
                     </div>
                     <div>
                         <p className="font-bold">{ping.fromName} tænker på dig ❤️</p>
-                        <p className="text-pink-100 text-sm">{ping.time}</p>
+                        <p className="text-pink-100 text-sm">
+                            {ping.sentAt?.toLocaleTimeString?.('da-DK', { hour: '2-digit', minute: '2-digit' })}
+                        </p>
                     </div>
                 </div>
             </div>

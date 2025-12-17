@@ -30,9 +30,11 @@ export interface RelativeViewProps {
     weeklyAnswers: any[];
     onWeeklyAnswer: (answer: string) => void;
     onOpenSettings: () => void;
-    userName?: string;
-    seniorName?: string;
-    careCircleId?: string | null;
+    userName: string;
+    seniorName: string;
+    careCircleId: any;
+    onToggleLike?: (answerId: string, userId: string, isLiked: boolean) => void;
+    onReply?: (answerId: string, reply: any) => void;
 }
 
 export const RelativeView: React.FC<RelativeViewProps> = ({
@@ -124,7 +126,7 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
     }, [tasks, symptomLogs]);
 
     return (
-        <div className="flex flex-col h-full bg-stone-50 relative overflow-hidden">
+        <div className="flex flex-col h-full bg-transparent relative overflow-hidden">
             {/* Header - COMPACT */}
             <header className="px-4 py-2 bg-white shadow-sm rounded-b-3xl z-10 shrink-0">
                 <div className="flex justify-between items-center">
@@ -411,6 +413,10 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
                 answers={weeklyAnswers}
                 onAnswer={onWeeklyAnswer}
                 userName={userName}
+                // Pass social props
+                onToggleLike={props.onToggleLike}
+                onReply={props.onReply}
+                currentUserId={currentUserId || undefined}
             />
 
             {/* Match Celebration Modal */}

@@ -29,10 +29,6 @@ Replace "health dashboard" with **shared experiences**.
 - **Two-Way**: Senior can share photos back (simplified camera UI)
 - **Reactions**: Simple emoji reactions (❤️ 😊 👍) on shared content
 
-**Voice Notes** 
-- 30-second voice clips instead of text (better for motor issues)
-- Grandchildren recording "Godmorgen Farmor!" as morning greeting
-- Senior can respond with voice, not typing
 
 **"Jeg tænker på dig" Button** ✅ IMPLEMENTED
 - ✅ One-tap "thinking of you" ping (`ThinkingOfYou.jsx`)

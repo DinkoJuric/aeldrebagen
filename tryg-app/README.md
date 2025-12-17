@@ -4,7 +4,7 @@ A React-based care coordination app for elderly users and their families.
 
 **Live Demo:** https://dinkojuric.github.io/aeldrebagen/
 
-📖 **Developer Guide:** See [docs/walkthrough.md](./docs/walkthrough.md) and [docs/architecture.md](./docs/architecture.md) for architecture and history.
+📖 **Developer Guide:** See [docs/DEVELOPER_GUIDE.md](./docs/DEVELOPER_GUIDE.md) and [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) for architecture and history.
 
 
 ---
@@ -130,3 +130,26 @@ git commit -m "Revert to pre-tabs version"
 | Tag | Description |
 |-----|-------------|
 | `v1.3-before-tabs` | Before tabbed layout experiment |
+
+---
+
+## Test Credentials
+
+For automated testing and development:
+
+| Role | Name | Email | Password | Circle |
+|------|------|-------|----------|--------|
+| Relative | Fatima | `louise.relative@test.com` | `Test1234!` | 6C9Y3M |
+
+> **Note**: These credentials work on localhost and production. Use for testing RelativeView and cross-role sync scenarios.
+
+---
+
+## Color System
+
+| Element | Senior (teal) | Relative (indigo) | Neutral |
+|---------|---------------|-------------------|---------|
+| Primary accent | `teal-600` | `indigo-600` | - |
+| Light background | `teal-50` | `indigo-50` | `stone-50` |
+| Avatar background | `teal-100` | `indigo-100` | `stone-200` |
+| Text | `teal-700` | `indigo-700` | `stone-700` |

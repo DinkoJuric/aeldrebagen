@@ -2,9 +2,26 @@
 // Shows notification badge when relative answers, opens modal on tap
 
 import React, { useState } from 'react';
-import { MessageCircle, X, ChevronRight, Sparkles } from 'lucide-react';
+import { MessageCircle, X, Check, Heart, MessageSquare, Send, Sparkles } from 'lucide-react';
 import { WEEKLY_QUESTIONS, getWeekNumber } from './WeeklyQuestion';
-import { WeeklyAnswer } from './useWeeklyQuestions';
+import { WeeklyAnswer, WeeklyReply } from './useWeeklyQuestions';
+
+// Simple time ago formatter (no external deps)
+const formatTimeAgo = (isoString?: string) => {
+    if (!isoString) return '';
+    try {
+        const date = new Date(isoString);
+        const now = new Date();
+        const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+        if (diffInSeconds < 60) return 'Lige nu';
+        if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m siden`;
+        if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}t siden`;
+        return `${Math.floor(diffInSeconds / 86400)}d siden`;
+    } catch (e) {
+        return '';
+    }
+};
 
 interface WeeklyQuestionWidgetProps {
     answers?: WeeklyAnswer[];
@@ -43,17 +60,43 @@ interface WeeklyQuestionModalProps {
     answers?: WeeklyAnswer[];
     onAnswer?: (answer: Omit<WeeklyAnswer, 'id'>) => void;
     userName: string;
+    currentUserId?: string;
+    onToggleLike?: (answerId: string, userId: string, isLiked: boolean) => void;
+    onReply?: (answerId: string, reply: Omit<WeeklyReply, 'id'>) => void;
 }
 
 // Full modal for answering and viewing
-export const WeeklyQuestionModal: React.FC<WeeklyQuestionModalProps> = ({ isOpen, onClose, answers = [], onAnswer, userName }) => {
+export const WeeklyQuestionModal: React.FC<WeeklyQuestionModalProps> = ({
+    isOpen,
+    onClose,
+    answers = [],
+    onAnswer,
+    userName,
+    currentUserId,
+    onToggleLike,
+    onReply
+}) => {
     const [myAnswer, setMyAnswer] = useState('');
+    const [replyText, setReplyText] = useState('');
+    const [replyingToId, setReplyingToId] = useState<string | null>(null);
+
     const weekNumber = getWeekNumber();
     const question = WEEKLY_QUESTIONS[weekNumber % WEEKLY_QUESTIONS.length];
 
+    // Filter answers for this week's question
     const answersThisWeek = answers.filter(a => a.question === question);
     const hasAnsweredThisWeek = answersThisWeek.some(a => a.userName === userName);
-    const otherAnswers = answersThisWeek.filter(a => a.userName !== userName);
+
+    // Sorting: Popularity (likes) -> Newest
+    const sortedAnswers = [...answersThisWeek].sort((a, b) => {
+        const likesA = a.likes?.length || 0;
+        const likesB = b.likes?.length || 0;
+        if (likesA !== likesB) return likesB - likesA; // Most likes first
+        // Fallback to time if available (newest first)
+        const timeA = a.answeredAt?.toMillis ? a.answeredAt.toMillis() : 0;
+        const timeB = b.answeredAt?.toMillis ? b.answeredAt.toMillis() : 0;
+        return timeB - timeA;
+    });
 
     const handleSubmit = () => {
         if (myAnswer.trim()) {
@@ -64,6 +107,28 @@ export const WeeklyQuestionModal: React.FC<WeeklyQuestionModalProps> = ({ isOpen
                 userName
             });
             setMyAnswer('');
+        }
+    };
+
+    const handleReplySubmit = (answerId: string) => {
+        if (!replyText.trim() || !currentUserId) return;
+
+        onReply?.(answerId, {
+            userId: currentUserId,
+            userName: userName,
+            text: replyText.trim(),
+            createdAt: new Date().toISOString()
+        });
+        setReplyText('');
+        setReplyingToId(null);
+    };
+
+    const toggleReplyInput = (answerId: string) => {
+        if (replyingToId === answerId) {
+            setReplyingToId(null);
+        } else {
+            setReplyingToId(answerId);
+            setReplyText('');
         }
     };
 
@@ -89,55 +154,136 @@ export const WeeklyQuestionModal: React.FC<WeeklyQuestionModalProps> = ({ isOpen
                 </div>
 
                 {/* Content */}
-                <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                <div className="flex-1 overflow-y-auto p-4 space-y-4 pb-20">
                     {/* Question */}
-                    <div className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl p-4 text-white">
-                        <p className="text-indigo-200 text-sm mb-1">Denne uges spørgsmål</p>
-                        <p className="text-lg font-bold">{question}</p>
+                    <div className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl p-6 text-white shadow-lg">
+                        <p className="text-indigo-200 text-sm mb-2 uppercase tracking-wide font-bold">Denne uges spørgsmål</p>
+                        <p className="text-xl font-bold leading-relaxed">{question}</p>
                     </div>
 
-                    {/* Answer input */}
+                    {/* Answer input (only if not answered) */}
                     {!hasAnsweredThisWeek ? (
-                        <div className="space-y-3">
-                            <textarea
-                                value={myAnswer}
-                                onChange={(e) => setMyAnswer(e.target.value)}
-                                placeholder="Skriv dit svar her..."
-                                className="w-full p-3 rounded-xl border-2 border-stone-200 focus:border-indigo-400 focus:outline-none resize-none h-24"
-                            />
+                        <div className="space-y-3 animate-fade-in">
+                            <div className="relative">
+                                <textarea
+                                    value={myAnswer}
+                                    onChange={(e) => setMyAnswer(e.target.value)}
+                                    placeholder="Skriv dit svar her..."
+                                    className="w-full p-4 rounded-2xl border-2 border-stone-200 focus:border-indigo-400 focus:outline-none resize-none h-32 text-lg shadow-sm"
+                                />
+                            </div>
                             <button
                                 onClick={handleSubmit}
                                 disabled={!myAnswer.trim()}
-                                className="w-full p-3 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+                                className="w-full p-4 bg-indigo-600 text-white font-bold rounded-2xl hover:bg-indigo-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 shadow-md active:scale-95 transform transition-transform"
                             >
-                                <Sparkles className="w-4 h-4" />
+                                <Sparkles className="w-5 h-5" />
                                 Del dit svar
                             </button>
                         </div>
                     ) : (
-                        <div className="bg-green-50 border border-green-200 rounded-xl p-3 text-center">
-                            <p className="text-green-700 font-medium">✓ Du har svaret denne uge</p>
+                        <div className="bg-green-50 border border-green-200 rounded-xl p-3 text-center mb-4 flex items-center justify-center gap-2">
+                            <div className="bg-green-100 p-1 rounded-full">
+                                <Check className="w-4 h-4 text-green-700" />
+                            </div>
+                            <p className="text-green-700 font-medium">Tak for dit svar!</p>
                         </div>
                     )}
 
-                    {/* Other answers */}
-                    {otherAnswers.length > 0 && (
-                        <div className="space-y-3">
-                            <p className="text-stone-500 text-sm font-medium">Svar fra familien</p>
-                            {otherAnswers.map((answer, i) => (
-                                <div key={i} className="bg-stone-50 rounded-xl p-3 border border-stone-200">
-                                    <p className="font-medium text-stone-700">{answer.userName}</p>
-                                    <p className="text-stone-600">{answer.answer}</p>
-                                </div>
-                            ))}
-                        </div>
-                    )}
+                    {/* All Answers Feed */}
+                    <div className="space-y-4">
+                        {sortedAnswers.length > 0 ? (
+                            <>
+                                <p className="text-stone-500 text-sm font-bold ml-1 uppercase tracking-wide">Svar fra familien ({sortedAnswers.length})</p>
+                                {sortedAnswers.map((answer) => {
+                                    const isLiked = currentUserId && answer.likes?.includes(currentUserId);
+                                    const likeCount = answer.likes?.length || 0;
+                                    const isReplying = replyingToId === answer.id;
 
-                    {otherAnswers.length === 0 && hasAnsweredThisWeek && (
-                        <p className="text-stone-400 text-center text-sm">
-                            Ingen andre har svaret endnu denne uge
-                        </p>
-                    )}
+                                    return (
+                                        <div key={answer.id} className="bg-white rounded-2xl p-4 border border-stone-200 shadow-sm transition-all hover:shadow-md">
+                                            {/* Answer Header */}
+                                            <div className="flex justify-between items-start mb-2">
+                                                <div>
+                                                    <p className="font-bold text-stone-800 text-lg">{answer.userName}</p>
+                                                    {answer.answeredAt && (
+                                                        <p className="text-xs text-stone-400">
+                                                            {formatTimeAgo(answer.answeredAt?.toDate?.()?.toISOString() || answer.answeredAt)}
+                                                        </p>
+                                                    )}
+                                                </div>
+                                                {/* Like Button */}
+                                                <button
+                                                    onClick={() => currentUserId && onToggleLike?.(answer.id, currentUserId, !!isLiked)}
+                                                    className={`flex items-center gap-1 px-3 py-1.5 rounded-full transition-colors ${isLiked
+                                                        ? 'bg-rose-50 text-rose-600'
+                                                        : 'bg-stone-50 text-stone-500 hover:bg-stone-100'
+                                                        }`}
+                                                >
+                                                    <Heart className={`w-4 h-4 ${isLiked ? 'fill-rose-500' : ''}`} />
+                                                    <span className="text-sm font-bold">{likeCount > 0 ? likeCount : ''}</span>
+                                                </button>
+                                            </div>
+
+                                            {/* Answer Text */}
+                                            <p className="text-stone-700 text-lg leading-relaxed mb-4">{answer.answer || answer.text}</p>
+
+                                            {/* Action Bar */}
+                                            <div className="flex items-center gap-4 border-t border-stone-100 pt-3">
+                                                <button
+                                                    onClick={() => toggleReplyInput(answer.id)}
+                                                    className="flex items-center gap-2 text-stone-500 hover:text-indigo-600 transition-colors text-sm font-medium"
+                                                >
+                                                    <MessageSquare className="w-4 h-4" />
+                                                    {answer.replies?.length ? `${answer.replies.length} svar` : 'Svar'}
+                                                </button>
+                                            </div>
+
+                                            {/* Replies Section */}
+                                            {(isReplying || (answer.replies && answer.replies.length > 0)) && (
+                                                <div className="mt-3 pl-4 border-l-2 border-stone-100 space-y-3">
+                                                    {/* Existing Replies */}
+                                                    {answer.replies?.map((reply) => (
+                                                        <div key={reply.id} className="bg-stone-50 rounded-lg p-3 text-sm">
+                                                            <div className="flex justify-between items-baseline mb-1">
+                                                                <span className="font-bold text-stone-700">{reply.userName}</span>
+                                                                {/* <span className="text-xs text-stone-400">tid siden</span> */}
+                                                            </div>
+                                                            <p className="text-stone-600">{reply.text}</p>
+                                                        </div>
+                                                    ))}
+
+                                                    {/* Reply Input */}
+                                                    {isReplying && (
+                                                        <div className="flex gap-2 items-end animate-fade-in mt-2">
+                                                            <textarea
+                                                                value={replyText}
+                                                                onChange={(e) => setReplyText(e.target.value)}
+                                                                placeholder="Skriv et svar..."
+                                                                className="flex-1 bg-stone-50 border border-stone-200 rounded-xl p-2 text-sm focus:border-indigo-400 focus:outline-none resize-none h-20"
+                                                                autoFocus
+                                                            />
+                                                            <button
+                                                                onClick={() => handleReplySubmit(answer.id)}
+                                                                disabled={!replyText.trim()}
+                                                                className="p-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 disabled:opacity-50 shadow-sm"
+                                                            >
+                                                                <Send className="w-4 h-4" />
+                                                            </button>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            )}
+                                        </div>
+                                    );
+                                })}
+                            </>
+                        ) : (
+                            <div className="text-center py-8 text-stone-400">
+                                <p>Ingen svar endnu. Vær den første!</p>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>

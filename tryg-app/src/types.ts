@@ -9,6 +9,10 @@ export interface Member {
     status: 'home' | 'work' | 'traveling' | 'available' | 'busy';
     updatedAt?: any; // Firestore timestamp
     id?: string; // Sometimes used interchangeably with docId
+    // Generational Orbits
+    relationship?: string; // e.g. 'son', 'granddaughter'
+    accessLevel?: 'admin' | 'caregiver' | 'joy' | 'guest'; // Permissions
+    archetype?: 'tech_wizard' | 'listener' | 'fixer' | 'driver' | 'cheerleader'; // Superpower badge
 }
 
 export interface UserProfile {

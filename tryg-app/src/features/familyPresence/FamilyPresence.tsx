@@ -134,11 +134,14 @@ interface FamilyPresenceProps {
     compact?: boolean;
 }
 
+import { FamilyConstellation } from './FamilyConstellation';
+import { useState } from 'react';
+
+// ... (existing imports)
+
 /**
  * Family Presence section - "Familien Nu"
  * Shows all family members' current statuses
- * 
- * Uses CareCircleContext for data, with props as optional overrides.
  */
 export const FamilyPresence: React.FC<FamilyPresenceProps> = ({
     memberStatuses: propsMembers,
@@ -151,6 +154,7 @@ export const FamilyPresence: React.FC<FamilyPresenceProps> = ({
     const memberStatuses = propsMembers ?? context.memberStatuses ?? [];
     const currentUserId = propsUserId ?? context.currentUserId;
     const seniorName = propsSeniorName ?? context.seniorName ?? 'Far/Mor';
+    const [viewMode, setViewMode] = useState<'list' | 'orbit'>('orbit'); // Default to orbit for impact!
 
     if (memberStatuses.length === 0) {
         return (
@@ -161,28 +165,48 @@ export const FamilyPresence: React.FC<FamilyPresenceProps> = ({
     }
 
     return (
-        <div className={`bg-white rounded-2xl ${compact ? 'p-3' : 'p-4'} border border-stone-100 shadow-sm`}>
-            <div className="flex items-center gap-2 mb-3">
-                <div className="p-1.5 bg-indigo-50 rounded-lg">
-                    <Users className="w-4 h-4 text-indigo-600" />
+        <div className={`bg-white rounded-2xl ${compact ? 'p-3' : 'p-4'} border border-stone-100 shadow-sm overflow-hidden`}>
+            <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                    <div className="p-1.5 bg-indigo-50 rounded-lg">
+                        <Users className="w-4 h-4 text-indigo-600" />
+                    </div>
+                    <h4 className="text-xs font-bold text-stone-500 uppercase tracking-wide">
+                        Familien nu
+                    </h4>
                 </div>
-                <h4 className="text-xs font-bold text-stone-500 uppercase tracking-wide">
-                    Familien nu
-                </h4>
+                {!compact && (
+                    <button
+                        onClick={() => setViewMode(v => v === 'list' ? 'orbit' : 'list')}
+                        className="text-xs font-medium text-indigo-600 hover:text-indigo-800"
+                    >
+                        {viewMode === 'list' ? 'Vis Orbit' : 'Vis Liste'}
+                    </button>
+                )}
             </div>
 
-            <div className="space-y-1">
-                {memberStatuses.map((member: MemberStatus, index: number) => (
-                    <MemberStatusRow
-                        key={member.docId || index}
-                        name={member.displayName || (member.role === 'senior' ? seniorName : 'Pårørende')}
-                        status={member.status}
-                        role={member.role}
-                        timestamp={member.updatedAt}
-                        isCurrentUser={member.docId === currentUserId}
+            {viewMode === 'orbit' && !compact ? (
+                <div className="py-2">
+                    <FamilyConstellation
+                        members={memberStatuses}
+                        centerMemberName={seniorName}
+                        currentUserId={currentUserId || undefined}
                     />
-                ))}
-            </div>
+                </div>
+            ) : (
+                <div className="space-y-1">
+                    {memberStatuses.map((member: MemberStatus, index: number) => (
+                        <MemberStatusRow
+                            key={member.docId || index}
+                            name={member.displayName || (member.role === 'senior' ? seniorName : 'Pårørende')}
+                            status={member.status}
+                            role={member.role}
+                            timestamp={member.updatedAt}
+                            isCurrentUser={member.docId === currentUserId}
+                        />
+                    ))}
+                </div>
+            )}
         </div>
     );
 };

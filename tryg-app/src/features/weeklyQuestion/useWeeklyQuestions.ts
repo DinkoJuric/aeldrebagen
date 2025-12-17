@@ -11,9 +11,20 @@ import {
     serverTimestamp,
     query,
     orderBy,
-    limit
+    limit,
+    updateDoc,
+    arrayUnion,
+    arrayRemove
 } from 'firebase/firestore';
 import { db } from '../../config/firebase';
+
+export interface WeeklyReply {
+    id: string;
+    userId: string;
+    userName: string;
+    text: string;
+    createdAt: string; // ISO string for simplicity in UI
+}
 
 export interface WeeklyAnswer {
     id: string;
@@ -22,6 +33,8 @@ export interface WeeklyAnswer {
     userId?: string;
     userName?: string;
     answeredAt?: any; // Firestore Timestamp
+    likes?: string[]; // userIds
+    replies?: WeeklyReply[];
     [key: string]: any;
 }
 
@@ -80,11 +93,44 @@ export function useWeeklyQuestions(circleId: string | null) {
         }
     }, [circleId]);
 
+    // Toggle Like
+    const toggleLike = useCallback(async (answerId: string, userId: string, isLiked: boolean) => {
+        if (!circleId) return;
+        const answerRef = doc(db, 'careCircles', circleId, 'weeklyAnswers', answerId);
+        try {
+            await updateDoc(answerRef, {
+                likes: isLiked ? arrayRemove(userId) : arrayUnion(userId)
+            });
+        } catch (err) {
+            console.error('Error toggling like:', err);
+        }
+    }, [circleId]);
+
+    // Add Reply
+    const addReply = useCallback(async (answerId: string, reply: Omit<WeeklyReply, 'id'>) => {
+        if (!circleId) return;
+        const answerRef = doc(db, 'careCircles', circleId, 'weeklyAnswers', answerId);
+        const newReply: WeeklyReply = {
+            id: `reply_${Date.now()}`,
+            ...reply
+        };
+
+        try {
+            await updateDoc(answerRef, {
+                replies: arrayUnion(newReply)
+            });
+        } catch (err) {
+            console.error('Error adding reply:', err);
+        }
+    }, [circleId]);
+
     return {
         answers,
         loading,
         error,
         addAnswer,
+        toggleLike,
+        addReply
     };
 }
 
