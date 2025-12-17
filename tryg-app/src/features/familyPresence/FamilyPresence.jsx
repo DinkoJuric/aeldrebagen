@@ -4,8 +4,8 @@
 
 import React from 'react';
 import { Users, Home, Briefcase, Car, Coffee, Moon, Heart } from 'lucide-react';
-import { useCareCircleContext } from '../contexts/CareCircleContext';
-import { Avatar } from './ui/Avatar';
+import { useCareCircleContext } from '../../contexts/CareCircleContext';
+import { Avatar } from '../../components/ui/Avatar';
 
 // Status display configuration
 const STATUS_CONFIG = {
@@ -77,9 +77,9 @@ const MemberStatusRow = ({ name, status, role, timestamp, isCurrentUser = false 
                     <Avatar id={avatarId} size="md" className="shadow-sm border-2 border-white" />
                     {/* Tiny status indicator dot */}
                     <div className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full border-2 border-white ${status === 'available' ? 'bg-teal-500' :
-                            status === 'home' ? 'bg-green-500' :
-                                status === 'work' ? 'bg-indigo-500' :
-                                    status === 'traveling' ? 'bg-amber-500' : 'bg-stone-400'
+                        status === 'home' ? 'bg-green-500' :
+                            status === 'work' ? 'bg-indigo-500' :
+                                status === 'traveling' ? 'bg-amber-500' : 'bg-stone-400'
                         }`} />
                 </div>
 

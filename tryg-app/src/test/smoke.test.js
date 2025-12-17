@@ -33,7 +33,7 @@ describe('App Entry Points', () => {
         const [useAuth, useCareCircle, useTasks, useSettings] = await Promise.all([
             import('../hooks/useAuth'),
             import('../hooks/useCareCircle'),
-            import('../hooks/useTasks'),
+            import('../features/tasks'),
             import('../hooks/useSettings'),
         ])
 

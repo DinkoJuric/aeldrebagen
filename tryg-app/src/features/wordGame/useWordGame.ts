@@ -1,4 +1,4 @@
-// @ts-check
+
 // Word Game Hook - manages game state and Firestore sync
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import {
@@ -10,19 +10,38 @@ import {
     orderBy,
     serverTimestamp
 } from 'firebase/firestore';
-import { db } from '../config/firebase';
-import { getTodaysWords, shuffleAnswers } from '../data/wordGameData';
+import { db } from '../../config/firebase';
+import { getTodaysWords, shuffleAnswers } from '../../data/wordGameData';
 
 // Get today's date key for localStorage
 const getTodayKey = () => new Date().toISOString().split('T')[0];
 
-export function useWordGame(circleId, userId, displayName) {
-    const [currentWordIndex, setCurrentWordIndex] = useState(0);
-    const [score, setScore] = useState(0);
-    const [answers, setAnswers] = useState({}); // { wordId: isCorrect }
-    const [isComplete, setIsComplete] = useState(false);
-    const [leaderboard, setLeaderboard] = useState([]);
-    const [loading, setLoading] = useState(true);
+export interface Word {
+    id: string;
+    danish: string;
+    english: string;
+    options?: string[];
+    [key: string]: any;
+}
+
+export interface LeaderboardEntry {
+    id: string;
+    userId: string;
+    displayName: string;
+    score: number;
+    total: number;
+    date: string;
+    completedAt?: any;
+    [key: string]: any;
+}
+
+export function useWordGame(circleId: string | null, userId: string | null, displayName: string | null) {
+    const [currentWordIndex, setCurrentWordIndex] = useState<number>(0);
+    const [score, setScore] = useState<number>(0);
+    const [answers, setAnswers] = useState<Record<string, boolean>>({}); // { wordId: isCorrect }
+    const [isComplete, setIsComplete] = useState<boolean>(false);
+    const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
 
     // Get today's words (memoized, same for all family)
     const todaysWords = useMemo(() => getTodaysWords(), []);
@@ -39,6 +58,8 @@ export function useWordGame(circleId, userId, displayName) {
 
     // Load saved progress from localStorage on mount
     useEffect(() => {
+        if (!userId) return;
+
         const savedKey = `wordGame_${getTodayKey()}_${userId}`;
         const saved = localStorage.getItem(savedKey);
 
@@ -73,7 +94,7 @@ export function useWordGame(circleId, userId, displayName) {
                 .map(doc => ({
                     id: doc.id,
                     ...doc.data()
-                }));
+                })) as LeaderboardEntry[];
             setLeaderboard(scores);
         }, (err) => {
             console.error('Error fetching leaderboard:', err);
@@ -83,7 +104,9 @@ export function useWordGame(circleId, userId, displayName) {
     }, [circleId]);
 
     // Save progress to localStorage and Firestore
-    const saveProgress = useCallback(async (newAnswers, newScore, complete) => {
+    const saveProgress = useCallback(async (newAnswers: Record<string, boolean>, newScore: number, complete: boolean) => {
+        if (!userId) return;
+
         const todayKey = getTodayKey();
         const savedKey = `wordGame_${todayKey}_${userId}`;
 
@@ -95,7 +118,7 @@ export function useWordGame(circleId, userId, displayName) {
         }));
 
         // Save to Firestore if game is complete
-        if (complete && circleId && userId) {
+        if (complete && circleId) {
             const scoreRef = doc(db, 'careCircles', circleId, 'wordGameScores', `${userId}_${todayKey}`);
             await setDoc(scoreRef, {
                 userId,
@@ -120,7 +143,7 @@ export function useWordGame(circleId, userId, displayName) {
     }, [circleId, userId, displayName, todaysWords.length]);
 
     // Submit an answer
-    const submitAnswer = useCallback(async (wordId, isCorrect) => {
+    const submitAnswer = useCallback(async (wordId: string, isCorrect: boolean) => {
         // Already answered this word?
         if (answers[wordId] !== undefined) return;
 
@@ -141,6 +164,8 @@ export function useWordGame(circleId, userId, displayName) {
 
     // Reset game (for testing only)
     const resetGame = useCallback(() => {
+        if (!userId) return;
+
         const todayKey = getTodayKey();
         const savedKey = `wordGame_${todayKey}_${userId}`;
         localStorage.removeItem(savedKey);
@@ -172,4 +197,3 @@ export function useWordGame(circleId, userId, displayName) {
 }
 
 export default useWordGame;
-

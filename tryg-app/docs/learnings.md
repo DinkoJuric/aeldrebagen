@@ -72,6 +72,16 @@ description: Master record of all project and cross-project learnings
 - **Action**: Added `import { useMemo } from 'react'` to the component.
 - **Future**: When using hooks, ALWAYS verify they are imported from 'react'. Use `husky` + `lint-staged` to catch this.
 
+### Smart vs Dumb Components
+- **Problem**: Presentational components (`HelpExchange`) were fetching their own data via context, making them hard to test and reuse.
+- **Action**: Refactored to "Dumb" components taking data via props. Moved data fetching up to "Smart" views (`SeniorView`).
+- **Future**: Keep leaf components pure. Fetch data in top-level views/pages.
+
+### Shared Component Architecture
+- **Problem**: Maintained two separate components (`SeniorStatusCard`, `FamilyStatusCard`) for similar purposes, leading to divergence.
+- **Action**: Unified into a single `StatusCard` with `mode` prop.
+- **Future**: Use the "Mirror Protocol": If a component has a dual role, use one file with modes instead of two files.
+
 ### Tailwind v4 Setup Confusion
 - **Problem**: PostCSS config approach from docs didn't work.
 - **Action**: Found Tailwind v4 uses `@tailwindcss/vite` plugin instead.

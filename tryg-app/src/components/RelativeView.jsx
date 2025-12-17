@@ -2,13 +2,13 @@ import React, { useState, useMemo } from 'react';
 import { Settings } from 'lucide-react';
 import { Modal } from './ui/Modal';
 import { Button } from './ui/Button';
-import { WeeklyQuestionWidget, WeeklyQuestionModal } from './WeeklyQuestionWidget';
-import { RelativeBottomNavigation } from './RelativeBottomNavigation';
+import { WeeklyQuestionWidget, WeeklyQuestionModal } from '../features/weeklyQuestion';
+import { RelativeBottomNavigation } from './BottomNavigation';
 import { PeaceOfMindTab } from './PeaceOfMindTab';
 import { CoordinationTab } from './CoordinationTab';
-import { MatchCelebration } from './MatchCelebration';
-import { TimePickerModal } from './TimePickerModal';
-import { Spillehjoernet } from './Spillehjoernet';
+import { MatchCelebration } from '../features/helpExchange';
+import { TimePickerModal } from '../features/tasks';
+import { Spillehjoernet } from '../features/wordGame';
 import { FEATURES } from '../config/features';
 import { SYMPTOMS_LIST } from '../data/constants';
 import { AlertCircle } from 'lucide-react';
@@ -19,9 +19,7 @@ export const RelativeView = ({
     myStatus = 'home', onMyStatusChange,
     memberStatuses = [], currentUserId = null,
     onSendPing, weeklyAnswers, onWeeklyAnswer,
-    helpOffers, helpRequests,
-    relativeOffers = [], relativeRequests = [],
-    onAddRelativeOffer, onRemoveRelativeOffer, onAddRelativeRequest, onRemoveRelativeRequest,
+    // HelpExchange props removed
     onOpenSettings, userName = 'Pårørende', seniorName = 'Mor', careCircleId = null
 }) => {
     const [showAddModal, setShowAddModal] = useState(false);
@@ -162,14 +160,7 @@ export const RelativeView = ({
                         onMyStatusChange={onMyStatusChange}
                         memberStatuses={memberStatuses}
                         currentUserId={currentUserId}
-                        helpOffers={helpOffers}
-                        helpRequests={helpRequests}
-                        relativeOffers={relativeOffers}
-                        relativeRequests={relativeRequests}
-                        onAddRelativeOffer={onAddRelativeOffer}
-                        onRemoveRelativeOffer={onRemoveRelativeOffer}
-                        onAddRelativeRequest={onAddRelativeRequest}
-                        onRemoveRelativeRequest={onRemoveRelativeRequest}
+                        // HelpExchange props removed - now fetched internally
                         openTasks={openTasks}
                         completedTasks={completedTasksList}
                         symptomLogs={symptomLogs}

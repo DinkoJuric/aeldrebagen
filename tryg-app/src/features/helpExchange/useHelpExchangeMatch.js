@@ -1,6 +1,6 @@
 // @ts-check
 import { useMemo } from 'react';
-import { MATCH_PAIRS, STATUS_MATCHES } from '../config/helpExchangeConfig';
+import { MATCH_PAIRS, STATUS_MATCHES } from './config';
 
 /**
  * Hook to detect matches between offers, requests, and status
@@ -50,6 +50,10 @@ export const useHelpExchangeMatch = ({
                 });
             }
         });
+
+        if (activeMatches.length > 0) {
+            console.debug('🧩 [useHelpExchangeMatch] Matches detected:', activeMatches);
+        }
 
         return activeMatches;
     }, [offers, requests, familyStatus, memberStatuses]);

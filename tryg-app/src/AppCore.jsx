@@ -6,20 +6,20 @@ import { CareCircleProvider } from './contexts/CareCircleContext';
 import { Activity, LogOut, Share2, Settings, Users } from 'lucide-react';
 import { SeniorView } from './components/SeniorView';
 import { RelativeView } from './components/RelativeView';
-import { PingNotification } from './components/ThinkingOfYou';
+import { PingNotification } from './features/thinkingOfYou';
 import { PrivacySettings } from './components/PrivacySettings';
 import { InstallPrompt } from './components/InstallPrompt';
 import { UpdateToast } from './components/UpdateToast';
-import { PhotoCaptureButton, PhotoUploadModal, PhotoViewerModal, PhotoNotificationBadge } from './components/PhotoShare';
-import { useTasks } from './hooks/useTasks';
-import { useSymptoms } from './hooks/useSymptoms';
+import { PhotoCaptureButton, PhotoUploadModal, PhotoViewerModal, PhotoNotificationBadge } from './features/photos';
+import { useTasks } from './features/tasks';
+import { useSymptoms } from './features/symptoms';
 import { useSettings } from './hooks/useSettings';
-import { useWeeklyQuestions } from './hooks/useWeeklyQuestions';
-import { usePings } from './hooks/usePings';
-import { useHelpExchange } from './hooks/useHelpExchange';
+import { useWeeklyQuestions } from './features/weeklyQuestion';
+import { usePings } from './features/thinkingOfYou';
+// useHelpExchange removed to fix prop drilling
 import { useCheckIn } from './hooks/useCheckIn';
-import { usePhotos } from './hooks/usePhotos';
-import { useMemberStatus } from './hooks/useMemberStatus';
+import { usePhotos } from './features/photos';
+import { useMemberStatus } from './features/familyPresence';
 import { SENIOR_PROFILE } from './data/constants';
 import { playCompletionSound, playSuccessSound, playPingSound } from './utils/sounds';
 import { FEATURES } from './config/features';
@@ -57,24 +57,11 @@ export default function TrygAppCore({
     } = useMemberStatus(careCircle?.id, user?.uid, userProfile?.displayName, userProfile?.role);
     const { answers: weeklyAnswers, addAnswer: addWeeklyAnswer } = useWeeklyQuestions(careCircle?.id);
     const { latestPing, sendPing, dismissPing } = usePings(careCircle?.id, user?.uid);
-    const {
-        helpOffers: allOffers,
-        helpRequests: allRequests,
-        addOffer,
-        addRequest,
-        removeOffer,
-        removeRequest
-    } = useHelpExchange(careCircle?.id, user?.uid, userProfile?.role, userProfile?.displayName);
+    // HelpExchange removed from here - moved to CoordinationTab and SeniorView
     const { lastCheckIn, recordCheckIn } = useCheckIn(careCircle?.id);
     const { latestPhoto, uploading, uploadPhoto, deletePhoto } = usePhotos(careCircle?.id, user?.uid);
 
-    // Filter offers/requests by role for the Match System
-    // Senior's items: created by senior
-    const helpOffers = allOffers.filter(o => o.createdByRole === 'senior');
-    const helpRequests = allRequests.filter(r => r.createdByRole === 'senior');
-    // Relative's items: created by relatives
-    const relativeOffers = allOffers.filter(o => o.createdByRole === 'relative');
-    const relativeRequests = allRequests.filter(r => r.createdByRole === 'relative');
+    // HelpExchange filtering removed
 
 
     // Handle incoming pings from Firestore
@@ -135,13 +122,7 @@ export default function TrygAppCore({
         await addWeeklyAnswer(answer);
     };
 
-    const handleHelpOffer = async (offer) => {
-        await addOffer(offer);
-    };
-
-    const handleHelpRequest = async (request) => {
-        await addRequest(request);
-    };
+    // HelpExchange handlers removed
 
     // Get display names
     const seniorName = careCircle?.seniorName || (userProfile?.role === 'senior' ? userProfile?.displayName : 'Senior');
@@ -347,14 +328,7 @@ export default function TrygAppCore({
                                 onSendPing={() => handleSendPing(seniorName, 'relative')}
                                 weeklyAnswers={weeklyAnswers}
                                 onWeeklyAnswer={handleWeeklyAnswer}
-                                helpOffers={helpOffers}
-                                helpRequests={helpRequests}
-                                relativeOffers={relativeOffers}
-                                relativeRequests={relativeRequests}
-                                onHelpOffer={handleHelpOffer}
-                                onHelpRequest={handleHelpRequest}
-                                onRemoveOffer={removeOffer}
-                                onRemoveRequest={removeRequest}
+                                onset="helpExchange" // Placeholder to simplify diff
                                 members={members}
                                 memberStatuses={memberStatuses}
                                 currentUserId={user?.uid}
@@ -379,14 +353,7 @@ export default function TrygAppCore({
                                 onSendPing={() => handleSendPing(relativeName, 'senior')}
                                 weeklyAnswers={weeklyAnswers}
                                 onWeeklyAnswer={handleWeeklyAnswer}
-                                helpOffers={helpOffers}
-                                helpRequests={helpRequests}
-                                relativeOffers={relativeOffers}
-                                relativeRequests={relativeRequests}
-                                onAddRelativeOffer={addOffer}
-                                onRemoveRelativeOffer={removeOffer}
-                                onAddRelativeRequest={addRequest}
-                                onRemoveRelativeRequest={removeRequest}
+                                onset="helpExchange" // Placeholder to simplify diff
                                 onOpenSettings={() => setShowPrivacySettings(true)}
                                 userName={relativeName}
                                 seniorName={seniorName}

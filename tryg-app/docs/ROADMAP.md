@@ -5,114 +5,160 @@ A prioritized plan to make Tryg robust, accessible, and emotionally resonant.
 > **Note to Agents:** Always update the Table of Contents below when adding new sections.
 
 ## 📖 Table of Contents
-1. [Phase 1: Stability Foundation](#phase-1-stability-foundation-week-1-2)
-2. [Phase 2: Accessibility Excellence](#phase-2-accessibility-excellence-week-2-3)
-3. [Phase 3: Behavioral Design Enhancements](#phase-3-behavioral-design-enhancements-week-3-4)
-4. [Phase 4: From Functional to Loveable](#phase-4-from-functional-to-loveable-week-4-5)
+1. [Phase 1: Stability Foundation](#phase-1-stability-foundation) ✅ COMPLETE
+2. [Phase 2: Accessibility Excellence](#phase-2-accessibility-excellence)
+3. [Phase 3: Behavioral Design Enhancements](#phase-3-behavioral-design-enhancements)
+4. [Phase 4: From Functional to Loveable](#phase-4-from-functional-to-loveable)
 5. [Success Metrics](#success-metrics)
-6. [Backlog](#backlog)
-7. [Idea Backlog (from Ideation)](#-idea-backlog-from-ideation)
-
+6. [Technical Debt Backlog](#-technical-debt-backlog)
+7. [Idea Backlog](#-idea-backlog-from-ideation)
 
 ---
 
-## Phase 1: Stability Foundation (Week 1-2)
+## Phase 1: Stability Foundation ✅ COMPLETE
 
-### Error Handling & Crash Prevention
+All stability foundation work has been completed:
 
-| Task | Priority | Effort | Status |
-|------|----------|--------|--------|
-| Add React Error Boundary at app root | 🔴 High | 1h | ✅ Done |
-| Install `@sentry/react` + `@sentry/capacitor` | 🔴 High | 2h | ⏳ TODO |
-| Wrap all Capacitor plugin calls in try/catch | 🟡 Medium | 2h | ⏳ TODO |
-| Add global `window.onerror` handler | 🔴 High | 30m | ✅ Done |
+- ✅ React Error Boundary at app root (`ErrorBoundary.jsx`)
+- ✅ Sentry integration (`@sentry/react` in `main.jsx`)
+- ✅ Global error handlers (`window.onerror`, `window.onunhandledrejection`)
+- ✅ Crash loop detection with auto-reset
+- ✅ Vitest for unit tests
+- ✅ Component architecture refactoring (StatusCard, Help Exchange)
 
-**Why**: Seniors can't debug white screens. Every crash = lost trust.
-
-### Offline-First Architecture
-
+**Remaining (Low Priority):**
 | Task | Priority | Effort |
 |------|----------|--------|
-| Verify localStorage graceful degradation | 🔴 High | 1h |
-| Add "offline" visual indicator | 🟡 Medium | 1h |
-| Queue state changes when offline, sync on reconnect | 🟢 Low | 4h |
-
-**Why**: Rural Denmark + elderly = unreliable connectivity.
-
-### Testing Infrastructure
-
-| Task | Priority | Effort |
-|------|----------|--------|
-| Add Vitest for unit tests | 🟡 Medium | 2h |
-| Write tests for `useLocalStorage` hook | 🟡 Medium | 1h |
+| Wrap Capacitor plugin calls in try/catch | 🟡 Medium | 2h |
+| Add "offline" visual indicator | 🟢 Low | 1h |
 | Add Playwright for E2E browser tests | 🟢 Low | 4h |
-| Test on real older iOS device (iPhone 8) | 🔴 High | 2h |
 
 ---
 
-## Phase 2: Accessibility Excellence (Week 2-3)
+## Phase 2: Accessibility Excellence
 
 ### WCAG 2.1 AA Compliance
 
-| Task | Priority | Effort |
-|------|----------|--------|
-| Increase all text to minimum 18px (currently some 14px) | 🔴 High | 2h |
-| Ensure 7:1 contrast ratio for all text | 🔴 High | 2h |
-| Add visible focus indicators for all interactive elements | 🔴 High | 2h |
-| Support iOS Dynamic Type (font scaling) | 🟡 Medium | 3h |
-| Add `aria-label` to all icon-only buttons | 🔴 High | 1h |
+| Task | Priority | Effort | Status |
+|------|----------|--------|--------|
+| Increase all text to minimum 18px | 🔴 High | 2h | ⏳ TODO |
+| Ensure 7:1 contrast ratio for all text | 🔴 High | 2h | ⏳ TODO |
+| Add visible focus indicators for all interactive elements | 🔴 High | 2h | ⏳ TODO |
+| Support iOS Dynamic Type (font scaling) | 🟡 Medium | 3h | ⏳ TODO |
+| Add `aria-label` to all icon-only buttons | 🔴 High | 1h | ⏳ TODO |
 
 ### Motor Accessibility
 
-| Task | Priority | Effort |
-|------|----------|--------|
-| Minimum 48x48px touch targets (verify all) | 🔴 High | 1h |
-| Add 300ms debounce to prevent double-taps | 🟡 Medium | 1h |
-| Increase spacing between interactive elements | 🟡 Medium | 1h |
+| Task | Priority | Effort | Status |
+|------|----------|--------|--------|
+| Minimum 48x48px touch targets (verify all) | 🔴 High | 1h | ⏳ TODO |
+| Add 300ms debounce to prevent double-taps | 🟡 Medium | 1h | ⏳ TODO |
+| Increase spacing between interactive elements | 🟡 Medium | 1h | ⏳ TODO |
 
 ---
 
-## Phase 3: Behavioral Design Enhancements (Week 3-4)
+## Phase 3: Behavioral Design Enhancements
 
 ### Habit Formation (Research-Backed)
 
-| Feature | Behavioral Principle | Effort |
-|---------|---------------------|--------|
-| **5-second check-in**: Single tap "Jeg har det godt" | Reduce friction → Habit stickiness | 1h | ✅ Done |
-| **Implementation intentions**: "After breakfast, I will..." prompts | Fogg Behavior Model | 3h |
-| **Gentle streaks**: "4 days in a row ✓" (no punishment for breaks) | Intrinsic motivation | 2h |
-| **Pre-filled defaults**: Remember last medication dose | Reduce cognitive load | 2h |
+| Feature | Behavioral Principle | Effort | Status |
+|---------|---------------------|--------|--------|
+| **5-second check-in** | Reduce friction | 1h | ✅ Done |
+| **Implementation intentions** prompts | Fogg Behavior Model | 3h | ⏳ TODO |
+| **Gentle streaks**: "4 days in a row ✓" | Intrinsic motivation | 2h | ⏳ TODO |
+| **Pre-filled defaults** | Reduce cognitive load | 2h | ⏳ TODO |
 
 ### Emotional Design
 
 | Feature | Trust/Safety Principle | Effort | Status |
 |---------|----------------------|--------|--------|
-| **Success sounds**: Gentle chime on task completion | Positive reinforcement | 1h | ✅ Done |
-| **Calm color palette audit**: Remove any anxiety-inducing reds | Emotional safety | 2h | ⏳ TODO |
-| **Reassuring micro-copy**: "Alt er godt" instead of clinical language | Dignity preservation | 2h | ✅ Done |
-| **Family photo personalization**: Let relatives upload real photos | Emotional connection | 4h | ⏳ TODO |
+| **Success sounds** | Positive reinforcement | 1h | ✅ Done |
+| **Calm color palette audit** | Emotional safety | 2h | ⏳ TODO |
+| **Reassuring micro-copy** | Dignity preservation | 2h | ✅ Done |
+| **Family photo personalization** | Emotional connection | 4h | ⏳ TODO |
 
 ---
 
-## Phase 4: From Functional to Loveable (Week 4-5)
+## Phase 4: From Functional to Loveable
 
 ### Delight Features
 
-| Feature | Why It Creates Love | Effort |
-|---------|-------------------|--------|
-| **Morning greeting animation**: Gentle sun rise | Warmth, daily ritual | 2h |
-| **Weather integration**: "Godt vejr til en gåtur i dag" | Context-aware care | 3h |
-| **Voice check-in**: "Hey Tryg, jeg har det godt" | Hands-free for tremors | 8h |
-| **Personalized push notifications**: Use senior's name | Personal, not robotic | 2h |
-| **Family voice messages**: Grandchild audio clips as rewards | Emotional payoff | 6h |
+| Feature | Why It Creates Love | Effort | Status |
+|---------|-------------------|--------|--------|
+| **Morning greeting animation** | Warmth, daily ritual | 2h | ⏳ TODO |
+| **Weather integration** | Context-aware care | 3h | ⏳ TODO |
+| **Voice check-in** | Hands-free for tremors | 8h | ⏳ TODO |
+| **Personalized push notifications** | Personal, not robotic | 2h | ⏳ TODO |
+| **Family voice messages** | Emotional payoff | 6h | ⏳ TODO |
 
 ### Trust Builders
 
-| Feature | Why It Builds Trust | Effort |
-|---------|-------------------|--------|
-| **Activity history**: "Her er hvad du har taget i dag" | Transparency, memory aid | 3h |
-| **Privacy dashboard**: Show what family can see | Autonomy respect | 4h |
-| **"Pause" mode**: Hide from family temporarily | Independence | 2h |
+| Feature | Why It Builds Trust | Effort | Status |
+|---------|-------------------|--------|--------|
+| **Activity history** | Transparency, memory aid | 3h | ⏳ TODO |
+| **Privacy dashboard** | Autonomy respect | 4h | ⏳ TODO |
+| **"Pause" mode** | Independence | 2h | ⏳ TODO |
+
+---
+
+## Success Metrics
+
+| Metric | Testable (Now) | Loveable (Target) |
+|--------|---------------|-------------------|
+| Daily active use | 40% | 75%+ |
+| Task completion rate | 60% | 85%+ |
+| 7-day retention | 50% | 80%+ |
+| "Would recommend" (NPS) | 6 | 9+ |
+| Crash-free sessions | 95% | 99.5%+ |
+
+---
+
+## 🏗️ Technical Debt Backlog
+
+### Completed Technical Debt
+- ✅ Feature Folder Refactoring (Organized by feature instead of type)
+- ✅ TypeScript Migration (Core hooks converted to `.ts` with strict typing)
+- ✅ StatusCard unification (SeniorStatusCard + FamilyStatusCard → StatusCard)
+- ✅ Help Exchange prop drilling fix
+- ✅ Test suite updates for Firebase architecture
+- ✅ Symptom Modal scroll fix
+- ✅ Bottom Navigation implementation
+- ✅ Question of the Week UI optimization
+
+---
+
+## 💡 Idea Backlog (from Ideation)
+
+**Unscheduled concepts to be reviewed for future phases.**
+
+### Connection Features
+- **Voice Notes**: 30s audio clips (better for motor issues)
+- **Photo Reactions**: Emoji reactions (❤️ 😊 👍) on shared photos
+- **Shared Album**: Senior can upload photos
+- **Sunday Coffee Chat**: Scheduled video drop-in time
+- **Message reactions**: Add ability to react to each other's messages
+
+### Health Enhancements
+- **Pain Severity Scale**: 3-level pictogram (🙂 😐 😣) after location selection
+- **Symptom Patterns**: "You often have headaches on Mondays"
+
+### Contextual Empathy
+- **Night Watch Mode**: Auto-activate between 10 PM - 6 AM. Soothing dark screen with override button.
+
+### "Dancing at the Wedding" (Milestones)
+- **Milestone Celebrations**: "You walked 100 times!"
+- **Anticipation Calendar**: "42 days until Emma's wedding"
+
+### Translations
+- **Multilingual Support**: Add support for multiple languages (Danish, Bosnian, Turkish)
+- **Language Switcher**: Add language switcher in settings
+
+### UI/UX
+- **Dark Mode**: Add dark mode support
+- **Light Mode**: Add light mode support
+
+### Other Health Data
+- **Blood Pressure**: Add blood pressure monitoring, 3 entries per day. Use switcher to view trends in health report.
 
 ---
 
@@ -135,86 +181,4 @@ A prioritized plan to make Tryg robust, accessible, and emotionally resonant.
 
 ---
 
-## Success Metrics
-
-| Metric | Testable (Now) | Loveable (Target) |
-|--------|---------------|-------------------|
-| Daily active use | 40% | 75%+ |
-| Task completion rate | 60% | 85%+ |
-| 7-day retention | 50% | 80%+ |
-| "Would recommend" (NPS) | 6 | 9+ |
-| Crash-free sessions | 95% | 99.5%+ |
-
----
-
 *This roadmap balances technical robustness with behavioral science insights for elderly-specific engagement.*
-
----
-
-## Backlog
-
-### Technical Debt
-| Task | Priority | Notes |
-|------|----------|-------|
-| Refactoring | 🟡 Medium | General code cleanup | ✅ Done |
-| Test suite update | 🟡 Medium | Ensure tests reflect new Firebase architecture |
-
-### Question of the Week Feature
-| Task | Priority | Notes |
-|------|----------|-------|
-| Investigate storage location | ✅ Done | Stored at `careCircles/{circleId}/weeklyAnswers/` |
-| UI space optimization | ✅ Done | Moved to header widget with modal |
-| Message reactions | 🟢 Feature | Add ability to react to each other's messages |
-
-### Daily Tasks Feature
-| Task | Priority | Notes |
-|------|----------|-------|
-| Completed tasks UX | ✅ Done | Collapsible section at bottom in both views |
-
-### Design Reflection
-| Task | Priority | Notes |
-|------|----------|-------|
-| Symptom Modal Scroll | ✅ Done | Expanded modal height, moved outside main |
-| Bottom Navigation | ✅ Done | Added persistent bottom bar "Min dag / Familie / Ring" |
-| Consent Modal | 🟡 Medium | Verify on small screens |
-
----
-
-## 💡 Idea Backlog (from Ideation)
-
-**Unscheduled concepts to be reviewed for future phases.**
-
-### Connection Features
-- **Voice Notes**: 30s audio clips (better for motor issues).
-- **Photo Reactions**: Emoji reactions (❤️ 😊 👍) on shared photos.
-- **Shared Album**: Senior can upload photos (implied by "Photo Exchange").
-- **Sunday Coffee Chat**: Scheduled video drop-in time.
-
-### Health Enhancements
-- **Pain Severity Scale**: 3-level pictogram (🙂 😐 😣) after location selection.
-- **Symptom Patterns**: "You often have headaches on Mondays".
-
-### Contextual Empathy
-- **Night Watch Mode**: Auto-activate between 10 PM - 6 AM. Hide task list, show soothing dark "Det er nat, Birthe. Sov godt 🌙" screen with "Jeg er vågen / Start dagen" override button. Respects user's rest context.
-
-### "Dancing at the Wedding" (Milestones)
-- **Milestone Celebrations**: "You walked 100 times!"
-- **Anticipation Calendar**: "42 days until Emma's wedding".
-
----
-
-## 🏗️ Technical Debt Backlog
-
-### Feature Folder Refactoring
-Reorganize from "by type" (`components/`, `hooks/`) to "by feature" for better cohesion:
-
-```
-src/features/
-  wordGame/
-    index.jsx, logic.js, data.js, Leaderboard.jsx
-  familyPresence/
-    index.jsx, StatusCard.jsx, useStatus.js
-```
-
-**Benefit**: Delete one folder = delete one feature. No hunting across 5 directories.
-

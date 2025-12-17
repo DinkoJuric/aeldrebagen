@@ -1,11 +1,28 @@
 import React from 'react';
 import { Heart, Users, FileText, Gamepad2 } from 'lucide-react';
 
-export const BottomNavigation = ({ activeTab, onTabChange, onViewReport }) => {
+/**
+ * Unified Bottom Navigation for Senior and Relative Views
+ * 
+ * @param {Object} props
+ * @param {'daily' | 'family' | 'spil'} props.activeTab - Currently active tab
+ * @param {(tab: string) => void} props.onTabChange - Tab change handler
+ * @param {() => void} props.onViewReport - Report button handler (alias: onShowReport)
+ * @param {() => void} [props.onShowReport] - Alias for onViewReport (for backwards compatibility)
+ */
+export const BottomNavigation = ({
+    activeTab,
+    onTabChange,
+    onViewReport,
+    onShowReport // Alias for backwards compatibility
+}) => {
+    // Support both prop names for backwards compatibility
+    const handleReport = onViewReport || onShowReport;
+
     return (
         <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-stone-200 px-6 py-3 pb-6 safe-area-bottom z-40 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
             <div className="flex justify-between items-center max-w-sm mx-auto">
-                {/* Min dag - Heart icon for consistency with Relative */}
+                {/* Min dag */}
                 <button
                     onClick={() => onTabChange('daily')}
                     className={`flex flex-col items-center gap-1 transition-colors ${activeTab === 'daily' ? 'text-teal-600' : 'text-stone-400 hover:text-stone-600'
@@ -27,14 +44,14 @@ export const BottomNavigation = ({ activeTab, onTabChange, onViewReport }) => {
 
                 {/* Rapport */}
                 <button
-                    onClick={onViewReport}
+                    onClick={handleReport}
                     className="flex flex-col items-center gap-1 text-stone-400 hover:text-stone-600 transition-colors"
                 >
                     <FileText className="w-6 h-6" />
                     <span className="text-xs font-bold">Rapport</span>
                 </button>
 
-                {/* Spil - Right corner */}
+                {/* Spil */}
                 <button
                     onClick={() => onTabChange('spil')}
                     className={`flex flex-col items-center gap-1 transition-colors ${activeTab === 'spil' ? 'text-purple-600' : 'text-stone-400 hover:text-stone-600'
@@ -47,3 +64,8 @@ export const BottomNavigation = ({ activeTab, onTabChange, onViewReport }) => {
         </div>
     );
 };
+
+// Backwards compatibility alias
+export const RelativeBottomNavigation = BottomNavigation;
+
+export default BottomNavigation;

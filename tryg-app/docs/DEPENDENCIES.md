@@ -1,0 +1,317 @@
+# Tryg App - Dependency Map
+
+> **Purpose**: Help agents understand component relationships for safe refactoring and feature development.
+> 
+> **Last Updated**: 2025-12-17
+
+## 📖 Table of Contents
+1. [Dependency Graph Overview](#dependency-graph-overview)
+2. [Feature Dependencies](#feature-dependencies)
+3. [Shared Resources](#shared-resources)
+4. [Import Patterns](#import-patterns)
+5. [Safe Refactoring Guide](#safe-refactoring-guide)
+
+---
+
+## 🛠️ Technology Stack Update
+**TypeScript Adoption (Dec 2025)**: Core data hooks have been migrated to TypeScript (`.ts`). New logic should be written in TypeScript to ensure type safety.
+
+---
+
+## Dependency Graph Overview
+
+```mermaid
+graph TD
+    subgraph Entry["Entry Points"]
+        main[main.jsx]
+        AppWithAuth[AppWithAuth.jsx]
+        AppCore[AppCore.jsx]
+    end
+
+    subgraph Views["Main Views"]
+        SeniorView[SeniorView.jsx]
+        RelativeView[RelativeView.jsx]
+    end
+
+    subgraph Features["Feature Components"]
+        WordGame[Spillehjoernet]
+        HelpExchange[HelpExchange]
+        FamilyPresence[FamilyPresence]
+        WeeklyQuestion[WeeklyQuestion]
+        ThinkingOfYou[ThinkingOfYou]
+        Photos[PhotoShare]
+        Symptoms[BodyPainSelector]
+        Tasks[ProgressRing]
+    end
+
+    subgraph Shared["Shared Components"]
+        StatusCard[StatusCard]
+        BottomNav[BottomNavigation]
+        UI[ui/Avatar, Button, Modal]
+    end
+
+    subgraph Context["Context Layer"]
+        CareCircle[CareCircleContext]
+    end
+
+    main --> AppWithAuth
+    AppWithAuth --> AppCore
+    AppCore --> SeniorView
+    AppCore --> RelativeView
+    
+    SeniorView --> WordGame
+    SeniorView --> HelpExchange
+    SeniorView --> FamilyPresence
+    SeniorView --> WeeklyQuestion
+    SeniorView --> ThinkingOfYou
+    SeniorView --> Symptoms
+    SeniorView --> Tasks
+    SeniorView --> StatusCard
+    SeniorView --> BottomNav
+    
+    RelativeView --> WordGame
+    RelativeView --> HelpExchange
+    RelativeView --> FamilyPresence
+    RelativeView --> WeeklyQuestion
+    RelativeView --> BottomNav
+    
+    FamilyPresence --> CareCircle
+    StatusCard --> Tasks
+```
+
+---
+
+## Feature Dependencies
+
+### Word Game Feature
+| Component | Uses | Used By |
+|-----------|------|---------|
+| `Spillehjoernet.jsx` | WordGame, Leaderboard, useWordGame | SeniorView, CoordinationTab |
+| `WordGame.jsx` | - | Spillehjoernet |
+| `Leaderboard.jsx` | - | Spillehjoernet |
+| `useWordGame.js` | Firebase (db) | Spillehjoernet |
+
+**Dependencies**: Firebase Firestore only. **Self-contained**: ✅ Yes
+
+---
+
+### Help Exchange Feature
+| Component | Uses | Used By |
+|-----------|------|---------|
+| `HelpExchange.jsx` | ui/Pictogram | SeniorView |
+| `MatchCelebration.jsx` | ui/Button, sounds | SeniorView, RelativeView, CoordinationTab |
+| `useHelpExchange.js` | Firebase, CareCircleContext | SeniorView, CoordinationTab |
+| `useHelpExchangeMatch.js` | - | SeniorView, CoordinationTab |
+| `helpExchangeConfig.js` | - | CoordinationTab, HelpExchange |
+
+**Dependencies**: Firebase, CareCircleContext. **Self-contained**: ⚠️ Needs context
+
+---
+
+### Family Presence Feature
+| Component | Uses | Used By |
+|-----------|------|---------|
+| `StatusCard.jsx` | ProgressRing, ui/Avatar | PeaceOfMindTab, SeniorView |
+| `FamilyPresence.jsx` | ui/Avatar, CareCircleContext | SeniorView, CoordinationTab |
+| `useMemberStatus.js` | Firebase | AppCore |
+
+**Dependencies**: Firebase, CareCircleContext, ProgressRing. **Self-contained**: ❌ No
+
+---
+
+### Weekly Question Feature
+| Component | Uses | Used By |
+|-----------|------|---------|
+| `WeeklyQuestion.jsx` | - | SeniorView |
+| `WeeklyQuestionWidget.jsx` | - | SeniorView, RelativeView |
+| `useWeeklyQuestions.js` | Firebase | AppCore |
+
+**Dependencies**: Firebase only. **Self-contained**: ✅ Yes
+
+---
+
+### Thinking of You Feature
+| Component | Uses | Used By |
+|-----------|------|---------|
+| `ThinkingOfYou.jsx` | ui/Avatar, sounds | SeniorView, PeaceOfMindTab, AppCore |
+| `usePings.js` | Firebase | AppCore |
+
+**Dependencies**: Firebase, sounds. **Self-contained**: ✅ Yes
+
+---
+
+### Photo Sharing Feature
+| Component | Uses | Used By |
+|-----------|------|---------|
+| `PhotoShare.jsx` | - | AppCore |
+| `usePhotos.js` | Firebase Storage | AppCore |
+
+**Dependencies**: Firebase Storage. **Self-contained**: ✅ Yes
+
+---
+
+### Symptoms Feature
+| Component | Uses | Used By |
+|-----------|------|---------|
+| `BodyPainSelector.jsx` | - | SeniorView |
+| `SymptomSummary.jsx` | - | CoordinationTab |
+| `useSymptoms.js` | Firebase | AppCore |
+
+**Dependencies**: Firebase only. **Self-contained**: ✅ Yes
+
+---
+
+### Tasks Feature
+| Component | Uses | Used By |
+|-----------|------|---------|
+| `ProgressRing.jsx` | - | StatusCard, PeaceOfMindTab |
+| `TimePickerModal.jsx` | ui/Button | RelativeView |
+| `useTasks.js` | Firebase | AppCore |
+
+**Dependencies**: Firebase only. **Self-contained**: ✅ Yes
+
+---
+
+### Navigation Feature
+| Component | Uses | Used By |
+|-----------|------|---------|
+| `BottomNavigation.jsx` | lucide-react | SeniorView |
+| `RelativeBottomNavigation.jsx` | lucide-react | RelativeView |
+| `TabNavigation.jsx` | - | - |
+
+**Note**: BottomNavigation and RelativeBottomNavigation are 90% identical. **Unification candidate**: ✅
+
+---
+
+### Auth Feature
+| Component | Uses | Used By |
+|-----------|------|---------|
+| `AuthScreen.jsx` | - | AppWithAuth |
+| `CircleSetup.jsx` | - | AppWithAuth |
+| `ConsentModal.jsx` | - | AppWithAuth |
+| `useAuth.js` | Firebase Auth | AppWithAuth |
+| `useCareCircle.js` | Firebase | AppWithAuth |
+
+**Dependencies**: Firebase Auth. **Self-contained**: ✅ Yes
+
+---
+
+## Shared Resources
+
+### UI Components (`components/ui/`)
+| Component | Used By |
+|-----------|---------|
+| `Avatar.jsx` | StatusCard, FamilyPresence, ThinkingOfYou, SeniorView, RelativeView |
+| `Button.jsx` | Multiple components |
+| `Modal.jsx` | SeniorView, RelativeView, HealthReport |
+| `Pictogram.jsx` | HelpExchange |
+
+### Contexts
+| Context | Used By |
+|---------|---------|
+| `CareCircleContext` | FamilyPresence, PeaceOfMindTab, CoordinationTab |
+
+### Utilities (`utils/`)
+| Utility | Used By |
+|---------|---------|
+| `sounds.js` | ThinkingOfYou, MatchCelebration, AppCore |
+| `briefing.js` | PeaceOfMindTab |
+
+### Config (`config/`)
+| Config | Used By |
+|--------|---------|
+| `firebase.js` | All hooks |
+| `features.js` | AppCore, SeniorView, CoordinationTab |
+| `helpExchangeConfig.js` | HelpExchange, CoordinationTab |
+
+---
+
+## Import Patterns
+
+### Pattern 1: Feature imports hook directly
+```javascript
+// Component imports its own hook
+import { useHelpExchange } from '../hooks/useHelpExchange';
+```
+**Used by**: SeniorView, CoordinationTab, Spillehjoernet
+
+### Pattern 2: Props passed from AppCore
+```javascript
+// AppCore imports hook, passes data as props
+const { tasks, toggleTask } = useTasks(circleId);
+<SeniorView tasks={tasks} toggleTask={toggleTask} />
+```
+**Used by**: Tasks, Symptoms, Settings, Pings, Photos
+
+### Pattern 3: Context access
+```javascript
+// Component accesses shared context
+const context = useCareCircleContext();
+```
+**Used by**: FamilyPresence, PeaceOfMindTab, CoordinationTab
+
+---
+
+## Safe Refactoring Guide
+
+### Moving a Component
+1. Check "Used By" column in feature table above
+2. Update all import paths in those files
+3. Run `npm test && npm run build`
+
+### Moving a Hook
+1. Check which components import the hook directly (Pattern 1)
+2. Check if AppCore uses it (Pattern 2)
+3. Update all import paths
+4. Run `npm test && npm run build`
+
+### Adding a New Feature
+1. Create feature folder: `src/features/[featureName]/`
+2. Add `index.js` with all public exports
+3. Import from feature folder: `import { X } from '../features/featureName'`
+4. Document dependencies in this file
+
+### Feature Isolation Checklist
+Before moving a feature:
+- [ ] Does it depend on CareCircleContext? (if yes, note in docs)
+- [ ] Does it import from other features? (avoid cross-feature imports)
+- [ ] Does it use shared UI components? (OK, these stay in `components/ui/`)
+- [ ] Does it use utilities? (OK, these stay in `utils/`)
+
+---
+
+## Cross-Feature Dependencies
+
+| From Feature | To Feature | Reason |
+|--------------|------------|--------|
+| StatusCard | Tasks (ProgressRing) | Displays task completion indicator |
+| PeaceOfMindTab | StatusCard | Uses StatusCard component |
+| PeaceOfMindTab | ThinkingOfYou | Uses ThinkingOfYouIconButton |
+| CoordinationTab | StatusCard | Uses StatusSelector |
+| CoordinationTab | HelpExchange | Displays help exchange data |
+| CoordinationTab | Symptoms | Displays SymptomSummary |
+| SeniorView | All features | Main orchestration component |
+| RelativeView | Multiple features | Main orchestration component |
+
+> ⚠️ **Note**: SeniorView and RelativeView are intentionally orchestration components. They import from many features. This is expected.
+
+---
+
+## Migration Priority Based on Dependencies
+
+| Priority | Feature | Reason |
+|----------|---------|--------|
+| 1 | Word Game | Zero cross-feature dependencies |
+| 2 | Weekly Question | Zero cross-feature dependencies |
+| 3 | Thinking of You | Only depends on sounds utility |
+| 4 | Photo Sharing | Zero cross-feature dependencies |
+| 5 | Help Exchange | Self-contained after recent refactor |
+| 6 | Symptoms | Zero cross-feature dependencies |
+| 7 | Tasks | Used by StatusCard (needs coordination) |
+| 8 | Family Presence | Depends on Tasks/ProgressRing |
+| 9 | Navigation | Needs unification first |
+| 10 | Auth | Low risk, already isolated |
+
+---
+
+*This document should be updated whenever features are moved or dependencies change.*

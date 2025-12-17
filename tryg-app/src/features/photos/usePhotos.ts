@@ -1,4 +1,4 @@
-// @ts-check
+
 // Photos hook - ephemeral daily photo sharing via Firestore + Storage
 // Photos are deleted after viewing (client-side delete)
 
@@ -12,7 +12,8 @@ import {
     serverTimestamp,
     query,
     orderBy,
-    limit
+    limit,
+    Timestamp
 } from 'firebase/firestore';
 import {
     ref,
@@ -20,15 +21,26 @@ import {
     getDownloadURL,
     deleteObject
 } from 'firebase/storage';
-import { db, storage } from '../config/firebase';
-import { resizeImage } from '../utils/imageUtils';
+import { db, storage } from '../../config/firebase';
+import { resizeImage } from '../../utils/imageUtils';
 
-export function usePhotos(circleId, currentUserId) {
-    const [photos, setPhotos] = useState([]);
-    const [latestPhoto, setLatestPhoto] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [uploading, setUploading] = useState(false);
-    const [error, setError] = useState(null);
+export interface Photo {
+    id: string;
+    imageUrl: string;
+    storagePath?: string;
+    fromUserId: string;
+    fromName: string;
+    uploadedAt: any; // Firestore Timestamp
+    viewedAt?: any; // Firestore Timestamp
+    [key: string]: any;
+}
+
+export function usePhotos(circleId: string | null, currentUserId: string | null) {
+    const [photos, setPhotos] = useState<Photo[]>([]);
+    const [latestPhoto, setLatestPhoto] = useState<Photo | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [uploading, setUploading] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
 
     // Subscribe to photos from Firestore
     useEffect(() => {
@@ -47,7 +59,7 @@ export function usePhotos(circleId, currentUserId) {
                 const photosList = snapshot.docs.map(doc => ({
                     id: doc.id,
                     ...doc.data()
-                }));
+                })) as Photo[];
                 setPhotos(photosList);
 
                 // Find latest unviewed photo from another user
@@ -58,7 +70,7 @@ export function usePhotos(circleId, currentUserId) {
 
                 setLoading(false);
             },
-            (err) => {
+            (err: any) => {
                 console.error('Error fetching photos:', err);
                 setError(err.message);
                 setLoading(false);
@@ -69,7 +81,7 @@ export function usePhotos(circleId, currentUserId) {
     }, [circleId, currentUserId]);
 
     // Upload a photo
-    const uploadPhoto = useCallback(async (file, fromName) => {
+    const uploadPhoto = useCallback(async (file: File, fromName: string) => {
         if (!circleId || !currentUserId) return;
 
         setUploading(true);
@@ -105,7 +117,7 @@ export function usePhotos(circleId, currentUserId) {
 
             setUploading(false);
             return photoId;
-        } catch (err) {
+        } catch (err: any) {
             console.error('Error uploading photo:', err);
             setError(err.message);
             setUploading(false);
@@ -114,7 +126,7 @@ export function usePhotos(circleId, currentUserId) {
     }, [circleId, currentUserId]);
 
     // Delete a photo (called when viewer closes it)
-    const deletePhoto = useCallback(async (photoId, storagePath) => {
+    const deletePhoto = useCallback(async (photoId: string, storagePath?: string) => {
         if (!circleId) return;
 
         try {
@@ -133,7 +145,7 @@ export function usePhotos(circleId, currentUserId) {
             if (latestPhoto?.id === photoId) {
                 setLatestPhoto(null);
             }
-        } catch (err) {
+        } catch (err: any) {
             console.error('Error deleting photo:', err);
             setError(err.message);
             throw err;
@@ -141,7 +153,7 @@ export function usePhotos(circleId, currentUserId) {
     }, [circleId, latestPhoto]);
 
     // Mark photo as viewed (for tracking, before delete)
-    const markViewed = useCallback(async (photoId) => {
+    const markViewed = useCallback(async (photoId: string) => {
         if (!circleId) return;
 
         try {
@@ -166,4 +178,3 @@ export function usePhotos(circleId, currentUserId) {
 }
 
 export default usePhotos;
-

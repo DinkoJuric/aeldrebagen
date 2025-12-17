@@ -11,7 +11,7 @@ vi.mock('../config/firebase', () => ({
     storage: {}
 }))
 
-vi.mock('../hooks/useHelpExchangeMatch', () => ({
+vi.mock('../features/helpExchange/useHelpExchangeMatch', () => ({
     useHelpExchangeMatch: () => ({
         topMatch: null,
         hasMatches: false,
@@ -80,12 +80,12 @@ describe('CoordinationTab Integration', () => {
 
 describe('HelpExchange Component', () => {
     it('can be imported without error', async () => {
-        const { HelpExchange } = await import('../components/HelpExchange')
+        const { HelpExchange } = await import('../features/helpExchange')
         expect(HelpExchange).toBeDefined()
     })
 
     it('renders with minimal props', async () => {
-        const { HelpExchange } = await import('../components/HelpExchange')
+        const { HelpExchange } = await import('../features/helpExchange')
 
         const { container } = render(
             <HelpExchange
@@ -97,7 +97,7 @@ describe('HelpExchange Component', () => {
     })
 
     it('shows active offers when provided', async () => {
-        const { HelpExchange } = await import('../components/HelpExchange')
+        const { HelpExchange } = await import('../features/helpExchange')
 
         const activeOffers = [
             { id: 'listen', label: 'Jeg kan hjælpe med at lytte', emoji: '👂' }
@@ -119,13 +119,13 @@ describe('HelpExchange Component', () => {
 
 describe('MatchCelebration Component', () => {
     it('can be imported without error', async () => {
-        const { MatchCelebration, MatchBanner } = await import('../components/MatchCelebration')
+        const { MatchCelebration, MatchBanner } = await import('../features/helpExchange')
         expect(MatchCelebration).toBeDefined()
         expect(MatchBanner).toBeDefined()
     })
 
     it('MatchBanner renders with match data', async () => {
-        const { MatchBanner } = await import('../components/MatchCelebration')
+        const { MatchBanner } = await import('../features/helpExchange')
 
         const mockMatch = {
             celebration: {
@@ -144,7 +144,7 @@ describe('MatchCelebration Component', () => {
     })
 
     it('MatchCelebration renders null when no match', async () => {
-        const { MatchCelebration } = await import('../components/MatchCelebration')
+        const { MatchCelebration } = await import('../features/helpExchange')
 
         const { container } = render(
             <MatchCelebration match={null} onDismiss={vi.fn()} />
@@ -157,7 +157,7 @@ describe('MatchCelebration Component', () => {
 
 describe('Match Detection Logic', () => {
     it('detects cook-shop match pair', async () => {
-        const { MATCH_PAIRS } = await import('../config/helpExchangeConfig')
+        const { MATCH_PAIRS } = await import('../features/helpExchange')
 
         const cookShopMatch = MATCH_PAIRS.find(
             p => p.offerId === 'cook' && p.requestId === 'shop'
@@ -168,7 +168,7 @@ describe('Match Detection Logic', () => {
     })
 
     it('detects visit-company match pair', async () => {
-        const { MATCH_PAIRS } = await import('../config/helpExchangeConfig')
+        const { MATCH_PAIRS } = await import('../features/helpExchange')
 
         const visitMatch = MATCH_PAIRS.find(
             p => p.offerId === 'visit' && p.requestId === 'company'
@@ -179,7 +179,7 @@ describe('Match Detection Logic', () => {
     })
 
     it('has status-based matches defined', async () => {
-        const { STATUS_MATCHES } = await import('../config/helpExchangeConfig')
+        const { STATUS_MATCHES } = await import('../features/helpExchange')
 
         expect(STATUS_MATCHES).toBeDefined()
         expect(Array.isArray(STATUS_MATCHES)).toBe(true)

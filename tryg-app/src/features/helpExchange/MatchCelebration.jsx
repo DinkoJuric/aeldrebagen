@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, Sparkles } from 'lucide-react';
-import { Button } from './ui/Button';
+import { Button } from '../../components/ui/Button';
 
 /**
  * Match Celebration Component

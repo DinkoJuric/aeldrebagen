@@ -13,7 +13,7 @@ vi.mock('../config/firebase', () => ({
 }))
 
 // Mock all hooks that use Firebase
-vi.mock('../hooks/useHelpExchangeMatch', () => ({
+vi.mock('../features/helpExchange/useHelpExchangeMatch', () => ({
     useHelpExchangeMatch: () => ({ match: null, dismissMatch: vi.fn() })
 }))
 
@@ -103,12 +103,12 @@ describe('RelativeView Smoke Tests', () => {
 
 describe('FamilyPresence Smoke Tests', () => {
     it('can be imported without error', async () => {
-        const { FamilyPresence } = await import('../components/FamilyPresence')
+        const { FamilyPresence } = await import('../features/familyPresence')
         expect(FamilyPresence).toBeDefined()
     })
 
     it('renders with empty memberStatuses', async () => {
-        const { FamilyPresence } = await import('../components/FamilyPresence')
+        const { FamilyPresence } = await import('../features/familyPresence')
 
         const { container } = render(
             <FamilyPresence memberStatuses={[]} currentUserId="user1" />
@@ -117,7 +117,7 @@ describe('FamilyPresence Smoke Tests', () => {
     })
 
     it('renders with populated memberStatuses', async () => {
-        const { FamilyPresence } = await import('../components/FamilyPresence')
+        const { FamilyPresence } = await import('../features/familyPresence')
 
         const memberStatuses = [
             { docId: 'brad', displayName: 'Brad', status: 'good', role: 'senior' },

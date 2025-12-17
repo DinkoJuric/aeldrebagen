@@ -1,4 +1,4 @@
-// @ts-check
+
 // Weekly Questions hook - real-time sync via Firestore
 // Syncs weekly question answers across family circle members
 
@@ -13,12 +13,22 @@ import {
     orderBy,
     limit
 } from 'firebase/firestore';
-import { db } from '../config/firebase';
+import { db } from '../../config/firebase';
 
-export function useWeeklyQuestions(circleId) {
-    const [answers, setAnswers] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+export interface WeeklyAnswer {
+    id: string;
+    questionId?: string;
+    text?: string;
+    userId?: string;
+    userName?: string;
+    answeredAt?: any; // Firestore Timestamp
+    [key: string]: any;
+}
+
+export function useWeeklyQuestions(circleId: string | null) {
+    const [answers, setAnswers] = useState<WeeklyAnswer[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
 
     // Subscribe to weekly answers from Firestore
     useEffect(() => {
@@ -36,11 +46,11 @@ export function useWeeklyQuestions(circleId) {
                 const answersList = snapshot.docs.map(doc => ({
                     id: doc.id,
                     ...doc.data()
-                }));
+                })) as WeeklyAnswer[];
                 setAnswers(answersList);
                 setLoading(false);
             },
-            (err) => {
+            (err: any) => {
                 console.error('Error fetching weekly answers:', err);
                 setError(err.message);
                 setLoading(false);
@@ -51,7 +61,7 @@ export function useWeeklyQuestions(circleId) {
     }, [circleId]);
 
     // Add new answer
-    const addAnswer = useCallback(async (answerData) => {
+    const addAnswer = useCallback(async (answerData: Partial<WeeklyAnswer>) => {
         if (!circleId) return;
 
         const answerId = `answer_${Date.now()}`;
@@ -63,7 +73,7 @@ export function useWeeklyQuestions(circleId) {
                 answeredAt: serverTimestamp(),
             });
             return answerId;
-        } catch (err) {
+        } catch (err: any) {
             console.error('Error adding weekly answer:', err);
             setError(err.message);
             throw err;
@@ -79,4 +89,3 @@ export function useWeeklyQuestions(circleId) {
 }
 
 export default useWeeklyQuestions;
-

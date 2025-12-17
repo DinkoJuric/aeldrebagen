@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Activity } from 'lucide-react';
 import { SeniorView } from './components/SeniorView';
 import { RelativeView } from './components/RelativeView';
-import { PingNotification } from './components/ThinkingOfYou';
+import { PingNotification } from './features/thinkingOfYou';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { INITIAL_TASKS, SENIOR_PROFILE } from './data/constants';
 import { playCompletionSound, playSuccessSound, playPingSound } from './utils/sounds';

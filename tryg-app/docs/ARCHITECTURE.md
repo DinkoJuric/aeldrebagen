@@ -21,8 +21,8 @@
 ┌─────────────────────────────────────────────────────────────┐
 │                        Tryg PWA                              │
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐  │
-│  │ SeniorView  │  │RelativeView │  │   Shared Components  │  │
-│  │ (Elder UI)  │  │ (Family UI) │  │ (Modals, Buttons)   │  │
+│  │ SeniorView  │  │RelativeView │  │  StatusCard (Shared)│  │
+│  │ (Elder UI)  │  │ (Family UI) │  │ (Senior/Family Modes)│ │
 │  └──────┬──────┘  └──────┬──────┘  └──────────┬──────────┘  │
 │         │                │                     │             │
 │  ┌──────┴────────────────┴─────────────────────┴──────────┐  │
@@ -51,44 +51,45 @@
 ```
 tryg-app/
 ├── src/
-│   ├── components/          # UI Components
-│   │   ├── SeniorView.jsx   # Elder interface (tasks, symptoms)
-│   │   ├── RelativeView.jsx # Family dashboard (monitoring)
-│   │   ├── AuthScreen.jsx   # Login/signup
-│   │   ├── CircleSetup.jsx  # Create/join care circle
-│   │   ├── Spillehjoernet.jsx # Gaming container
-│   │   ├── HealthReport.jsx   # Reusable medical report
-│   │   └── ui/              # Reusable components
+│   ├── features/            # Feature Bundles (Components + Hooks)
+│   │   ├── familyPresence/
+│   │   │   ├── index.js      # Public API
+│   │   │   ├── FamilyPresence.jsx
+│   │   │   ├── StatusCard.jsx
+│   │   │   └── useMemberStatus.ts
+│   │   ├── helpExchange/
+│   │   │   ├── index.js
+│   │   │   ├── HelpExchange.jsx
+│   │   │   └── useHelpExchange.ts
+│   │   ├── tasks/
+│   │   │   ├── index.js
+│   │   │   └── useTasks.ts
+│   │   ├── symptoms/
+│   │   │   ├── index.js
+│   │   │   └── useSymptoms.ts
+│   │   ├── wordGame/
+│   │   ├── photos/
+│   │   └── ... (thinkingOfYou, weeklyQuestion)
 │   │
-│   ├── hooks/               # Firebase Data Hooks
-│   │   ├── useAuth.js       # Authentication state
-│   │   ├── useCareCircle.js # Circle membership
-│   │   ├── useTasks.js      # Task CRUD + sync
-│   │   ├── useSymptoms.js   # Symptom tracking
-│   │   ├── useSettings.js   # Circle settings
-│   │   ├── usePings.js      # "Thinking of you" notifications
-│   │   ├── useWeeklyQuestions.js
-│   │   ├── useHelpExchange.js
-│   │   ├── useHelpExchange.js
-│   │   ├── useMemberStatus.js  # Per-member status tracking (NEW)
-│   │   ├── useWordGame.js      # Daily word game logic + scoring
-│   │   └── useCheckIn.js    # Senior check-in tracking
+│   ├── components/          # Shared/Orchestration Components
+│   │   ├── SeniorView.jsx   # Elder interface
+│   │   ├── RelativeView.jsx # Family dashboard
+│   │   ├── AppCore.jsx      # Main app logic
+│   │   ├── ui/              # Generic UI (Button, Modal, Avatar)
+│   │   └── ...
 │   │
-│   ├── config/
-│   │   ├── firebase.js      # Firebase initialization
-│   │   └── features.js      # Feature flags
+│   ├── hooks/               # Global/Auth Hooks
+│   │   ├── useAuth.js
+│   │   └── useCareCircle.js
 │   │
-│   ├── data/constants.js    # Tasks, symptoms, profile defaults
-│   ├── utils/               # Helpers (sounds, images)
-│   │
-│   ├── AppWithAuth.jsx      # Auth flow wrapper
-│   ├── AppCore.jsx          # Main app with Firebase hooks
-│   └── App.jsx              # localStorage demo version
+│   ├── config/              # Configuration
+│   ├── data/                # Static Data
+│   ├── utils/               # Helpers
+│   └── types/               # TypeScript Definitions
 │
 ├── docs/                    # Documentation
-├── firestore.rules          # Firestore security rules
-├── storage.rules            # Storage security rules
-└── .env.example             # Environment variable template
+├── tsconfig.json            # TypeScript Config
+└── ...
 ```
 
 ---

@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Heart, HandHeart, X, Plus } from 'lucide-react';
-import { SENIOR_OFFERS, SENIOR_REQUESTS } from '../config/helpExchangeConfig';
-import { useCareCircleContext } from '../contexts/CareCircleContext';
-import { Pictogram } from './ui/Pictogram';
+import { SENIOR_OFFERS, SENIOR_REQUESTS } from './config';
+import { Pictogram } from '../../components/ui/Pictogram';
 
 // Dashboard-style HelpExchange for Senior (aligned with RelativeView)
 export const HelpExchange = ({
@@ -14,11 +13,9 @@ export const HelpExchange = ({
     activeRequests = [],
     relativeOffers = [],
     relativeRequests = [],
-    seniorName: propSeniorName
+    seniorName = 'Senior'
 }) => {
-    // Use context for seniorName, with prop as override
-    const { seniorName: contextSeniorName } = useCareCircleContext();
-    const seniorName = propSeniorName ?? contextSeniorName ?? 'Senior';
+    // Pure "Dumb" Component - relies on props
     const [showOfferPicker, setShowOfferPicker] = useState(false);
     const [showRequestPicker, setShowRequestPicker] = useState(false);
 
@@ -39,7 +36,7 @@ export const HelpExchange = ({
         <div className="bg-white border border-stone-200 rounded-2xl p-4 space-y-5">
             <h3 className="text-stone-700 font-bold flex items-center gap-2">
                 <HandHeart className="w-5 h-5 text-teal-600" />
-                Familie-børsen
+                Familie-Børsen
             </h3>
 
             {/* RELATIVES' ENTRIES - Show what family members have added */}

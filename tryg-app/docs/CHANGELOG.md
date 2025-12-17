@@ -3,6 +3,47 @@
 All notable changes to this project will be documented in this file.
 
 
+## [1.12.0] - 2025-12-17
+
+### 🏗️ TypeScript Migration
+
+**Core Hooks Converted**
+- Migrated 8 key data hooks from JavaScript to TypeScript (`.ts`)
+- Added strict interface definitions for: `Task`, `SymptomLog`, `MemberStatus`, `Photo`, `HelpOffer`, `Word`
+- Eliminated hundreds of "implicit any" risks
+- **Benefit**: Better autocomplete, earlier error detection, and safer refactoring
+
+### 📂 Feature Folder Architecture
+
+**Reorganized Codebase**
+- Moved from `src/components/feature` and `src/hooks` to `src/features/[featureName]`
+- Each feature bundle now contains its own:
+  - Components (`.jsx`)
+  - Logic Hooks (`.ts`)
+  - Assets/Config
+- **Features Migrated**: `wordGame`, `helpExchange`, `familyPresence`, `weeklyQuestion`, `thinkingOfYou`, `photos`, `symptoms`, `tasks`
+
+---
+
+## [1.11.0] - 2025-12-17
+
+### 🏗️ Help Exchange Refactor & Architecture
+
+**Refactored Help Exchange Data Flow**
+- Stopped prop-drilling by moving data fetching directly into `CoordinationTab` (Relative) and `SeniorView` (Senior).
+- `useHelpExchange` hook is now "Smart", fetching its own data.
+- `HelpExchange` component is now "Dumb" (pure presentational), relying strictly on props.
+- Removed redundant props from `RelativeView` and `SeniorView`.
+
+**Unified Component Architecture**
+- **StatusCard**: Merged `SeniorStatusCard` and `FamilyStatusCard` into a single `StatusCard` component.
+- Supports `mode="senior" | "relative"` to toggle between dashboard and list styles.
+- Complies with "Mirror Protocol" for shared components.
+
+**Debugging & Reliability**
+- Added `console.debug` logs for match detection and data synchronization.
+- Updated unit tests to support new architecture.
+
 ## [1.10.0] - 2025-12-17
 
 ### 🎉 Help Exchange Match System Completion

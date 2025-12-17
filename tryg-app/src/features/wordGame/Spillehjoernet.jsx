@@ -2,7 +2,7 @@ import React from 'react';
 import { Gamepad2 } from 'lucide-react';
 import { WordGame } from './WordGame';
 import { Leaderboard } from './Leaderboard';
-import { useWordGame } from '../hooks/useWordGame';
+import { useWordGame } from './useWordGame';
 
 // Spillehjørnet - Gaming Corner with Word of the Day
 export const Spillehjoernet = ({ circleId, userId, displayName }) => {

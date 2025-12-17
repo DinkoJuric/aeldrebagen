@@ -4,15 +4,16 @@ import {
     AlertCircle, Heart, HandHeart, X
 } from 'lucide-react';
 import { Button } from './ui/Button';
-import { SymptomSummary } from './SymptomSummary';
-import { StatusSelector, STATUS_OPTIONS } from './FamilyStatusCard';
-import { MatchBanner } from './MatchCelebration';
-import { FamilyPresence } from './FamilyPresence';
-import { RELATIVE_OFFERS, RELATIVE_REQUESTS } from '../config/helpExchangeConfig';
-import { useHelpExchangeMatch } from '../hooks/useHelpExchangeMatch';
+import { SymptomSummary } from '../features/symptoms';
+import { StatusSelector, STATUS_OPTIONS } from '../features/familyPresence';
+import { MatchBanner } from '../features/helpExchange';
+import { FamilyPresence } from '../features/familyPresence';
+import { RELATIVE_OFFERS, RELATIVE_REQUESTS } from '../features/helpExchange';
+import { useHelpExchangeMatch } from '../features/helpExchange';
 import { FEATURES } from '../config/features';
-import { Spillehjoernet } from './Spillehjoernet';
+import { Spillehjoernet } from '../features/wordGame';
 import { useCareCircleContext } from '../contexts/CareCircleContext';
+import { useHelpExchange } from '../features/helpExchange';
 
 // Coordination Tab - practical management focused
 // Shows: Family presence, Your status, HelpExchange (bidirectional), tasks, symptom details
@@ -24,14 +25,7 @@ export const CoordinationTab = ({
     onMyStatusChange,
     memberStatuses: propMemberStatuses,
     currentUserId: propCurrentUserId,
-    helpOffers = [],
-    helpRequests = [],
-    relativeOffers = [],
-    relativeRequests = [],
-    onAddRelativeOffer,
-    onRemoveRelativeOffer,
-    onAddRelativeRequest,
-    onRemoveRelativeRequest,
+    // HelpExchange props removed
     openTasks = [],
     completedTasks = [],
     symptomLogs = [],
@@ -57,6 +51,37 @@ export const CoordinationTab = ({
     const [showOfferPicker, setShowOfferPicker] = useState(false);
     const [showRequestPicker, setShowRequestPicker] = useState(false);
 
+    // Fetch HelpExchange data directly
+    const {
+        helpOffers: allOffersFetched,
+        helpRequests: allRequestsFetched,
+        addOffer,
+        addRequest,
+        removeOffer,
+        removeRequest
+    } = useHelpExchange(careCircleId, currentUserId, 'relative', userName);
+
+    // Filter offers/requests by role
+    // Senior's items
+    const helpOffers = allOffersFetched.filter(o => o.createdByRole === 'senior');
+    const helpRequests = allRequestsFetched.filter(r => r.createdByRole === 'senior');
+    // Relative's items
+    const relativeOffers = allOffersFetched.filter(o => o.createdByRole === 'relative');
+    const relativeRequests = allRequestsFetched.filter(r => r.createdByRole === 'relative');
+
+    // Map handlers
+    const onAddRelativeOffer = addOffer;
+    const onRemoveRelativeOffer = removeOffer;
+    const onAddRelativeRequest = addRequest;
+    const onRemoveRelativeRequest = removeRequest;
+
+    console.debug('🤝 [CoordinationTab] Help Data:', {
+        offers: helpOffers.length,
+        requests: helpRequests.length,
+        relOffers: relativeOffers.length,
+        relRequests: relativeRequests.length
+    });
+
     const currentStatusInfo = STATUS_OPTIONS.find(s => s.id === myStatus) || STATUS_OPTIONS[0];
     const StatusIcon = currentStatusInfo.icon;
 
@@ -66,7 +91,7 @@ export const CoordinationTab = ({
     const otherRelativeOffers = relativeOffers.filter(o => o.createdByUid !== currentUserId);
     const otherRelativeRequests = relativeRequests.filter(r => r.createdByUid !== currentUserId);
 
-    // Combine all offers and requests for match detection
+    // Combine all offers and requests for match detection (using local filtered vars)
     const allOffers = [
         ...helpOffers.map(o => ({ ...o, createdByRole: 'senior' })),
         ...relativeOffers.map(o => ({ ...o, createdByRole: 'relative' }))

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Heart, Sparkles } from 'lucide-react';
-import { playPingSound } from '../utils/sounds';
-import { Avatar } from './ui/Avatar';
+import { playPingSound } from '../../utils/sounds';
+import { Avatar } from '../../components/ui/Avatar';
 
 // "Thinking of you" ping button - one-tap warmth without obligation
 export const ThinkingOfYouButton = ({ onSendPing, fromName = 'Louise' }) => {

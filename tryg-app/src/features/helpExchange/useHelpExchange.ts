@@ -1,4 +1,4 @@
-// @ts-check
+
 // Help Exchange hook - real-time sync via Firestore
 // Syncs help offers and requests across family circle members
 
@@ -14,13 +14,42 @@ import {
     orderBy,
     limit
 } from 'firebase/firestore';
-import { db } from '../config/firebase';
+import { db } from '../../config/firebase';
 
-export function useHelpExchange(circleId, userId = null, userRole = null, displayName = null) {
-    const [helpOffers, setHelpOffers] = useState([]);
-    const [helpRequests, setHelpRequests] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+export interface HelpOffer {
+    docId: string;
+    id: string;
+    label: string;
+    emoji: string;
+    createdByUid?: string;
+    createdByRole?: string;
+    createdByName?: string;
+    createdAt?: any;
+    [key: string]: any;
+}
+
+export interface HelpRequest {
+    docId: string;
+    id: string;
+    label: string;
+    emoji: string;
+    createdByUid?: string;
+    createdByRole?: string;
+    createdByName?: string;
+    createdAt?: any;
+    [key: string]: any;
+}
+
+export function useHelpExchange(
+    circleId: string | null,
+    userId: string | null = null,
+    userRole: string | null = null,
+    displayName: string | null = null
+) {
+    const [helpOffers, setHelpOffers] = useState<HelpOffer[]>([]);
+    const [helpRequests, setHelpRequests] = useState<HelpRequest[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
 
     // Subscribe to help offers from Firestore
     useEffect(() => {
@@ -40,10 +69,10 @@ export function useHelpExchange(circleId, userId = null, userRole = null, displa
                 const offersList = snapshot.docs.map(docSnap => ({
                     docId: docSnap.id,  // Firestore document ID for delete operations
                     ...docSnap.data()
-                }));
+                })) as HelpOffer[];
                 setHelpOffers(offersList);
             },
-            (err) => {
+            (err: any) => {
                 console.error('Error fetching help offers:', err);
                 setError(err.message);
             }
@@ -58,11 +87,11 @@ export function useHelpExchange(circleId, userId = null, userRole = null, displa
                 const requestsList = snapshot.docs.map(docSnap => ({
                     docId: docSnap.id,  // Firestore document ID for delete operations
                     ...docSnap.data()
-                }));
+                })) as HelpRequest[];
                 setHelpRequests(requestsList);
                 setLoading(false);
             },
-            (err) => {
+            (err: any) => {
                 console.error('Error fetching help requests:', err);
                 setError(err.message);
                 setLoading(false);
@@ -79,8 +108,8 @@ export function useHelpExchange(circleId, userId = null, userRole = null, displa
     // React components (icon) and their Symbol properties are NOT safe
     const SAFE_HELP_FIELDS = ['id', 'label', 'emoji'];
 
-    const sanitizeHelpData = (data) => {
-        const clean = {};
+    const sanitizeHelpData = (data: any) => {
+        const clean: any = {};
         SAFE_HELP_FIELDS.forEach(key => {
             if (data[key] !== undefined && typeof data[key] !== 'function' && typeof data[key] !== 'symbol') {
                 clean[key] = data[key];
@@ -90,7 +119,7 @@ export function useHelpExchange(circleId, userId = null, userRole = null, displa
     };
 
     // Add a help offer
-    const addOffer = useCallback(async (offer) => {
+    const addOffer = useCallback(async (offer: Partial<HelpOffer>) => {
         if (!circleId) return;
 
         const offerId = `offer_${Date.now()}`;
@@ -105,7 +134,7 @@ export function useHelpExchange(circleId, userId = null, userRole = null, displa
                 createdAt: serverTimestamp(),
             });
             return offerId;
-        } catch (err) {
+        } catch (err: any) {
             console.error('Error adding help offer:', err);
             setError(err.message);
             throw err;
@@ -113,7 +142,7 @@ export function useHelpExchange(circleId, userId = null, userRole = null, displa
     }, [circleId, userId, userRole, displayName]);
 
     // Add a help request
-    const addRequest = useCallback(async (request) => {
+    const addRequest = useCallback(async (request: Partial<HelpRequest>) => {
         if (!circleId) return;
 
         const requestId = `request_${Date.now()}`;
@@ -128,7 +157,7 @@ export function useHelpExchange(circleId, userId = null, userRole = null, displa
                 createdAt: serverTimestamp(),
             });
             return requestId;
-        } catch (err) {
+        } catch (err: any) {
             console.error('Error adding help request:', err);
             setError(err.message);
             throw err;
@@ -136,12 +165,12 @@ export function useHelpExchange(circleId, userId = null, userRole = null, displa
     }, [circleId, userId, userRole, displayName]);
 
     // Remove an offer
-    const removeOffer = useCallback(async (offerId) => {
+    const removeOffer = useCallback(async (offerId: string) => {
         if (!circleId) return;
 
         try {
             await deleteDoc(doc(db, 'careCircles', circleId, 'helpOffers', offerId));
-        } catch (err) {
+        } catch (err: any) {
             console.error('Error removing help offer:', err);
             setError(err.message);
             throw err;
@@ -149,12 +178,12 @@ export function useHelpExchange(circleId, userId = null, userRole = null, displa
     }, [circleId]);
 
     // Remove a request
-    const removeRequest = useCallback(async (requestId) => {
+    const removeRequest = useCallback(async (requestId: string) => {
         if (!circleId) return;
 
         try {
             await deleteDoc(doc(db, 'careCircles', circleId, 'helpRequests', requestId));
-        } catch (err) {
+        } catch (err: any) {
             console.error('Error removing help request:', err);
             setError(err.message);
             throw err;
@@ -174,4 +203,3 @@ export function useHelpExchange(circleId, userId = null, userRole = null, displa
 }
 
 export default useHelpExchange;
-

@@ -57,6 +57,19 @@ Avoid duplicating UI logic. If a card or widget appears in both views (even with
 
 ---
 
+## 5. TypeScript Standard 📘
+
+**Strict Typing for Logic**
+- writes to `src/features/*/use*.ts` hooks MUST be in TypeScript.
+- Define interfaces for all data models (e.g., `Task`, `SymptomLog`).
+- Avoid `any` types. Use `interface` or `type`.
+
+**Gradual Adoption for UI**
+- `.jsx` is still permitted for UI components.
+- Converting UI to `.tsx` is encouraged but not required for quick fixes.
+
+---
+
 ## 5. Component Philosophy 🧱
 
 **"Smart vs Dumb" Components** — Strict separation of concerns.

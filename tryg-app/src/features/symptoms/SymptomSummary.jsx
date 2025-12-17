@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { AlertCircle, ChevronDown, ChevronUp, TrendingUp, TrendingDown, Phone, Calendar } from 'lucide-react';
-import { SYMPTOMS_LIST } from '../data/constants';
+import { SYMPTOMS_LIST } from '../../data/constants';
 
 // Check if a date is today
 const isToday = (timestamp) => {
@@ -184,8 +184,8 @@ export const SymptomSummary = ({ symptomLogs = [], onViewReport, hideTitle = fal
                                         )}
                                         {log.bodyLocation?.severity && (
                                             <span className={`text-xs px-1.5 py-0.5 rounded-full ${log.bodyLocation.severity.id === 'severe'
-                                                    ? 'bg-red-100 text-red-700'
-                                                    : 'bg-orange-100 text-orange-600'
+                                                ? 'bg-red-100 text-red-700'
+                                                : 'bg-orange-100 text-orange-600'
                                                 }`}>
                                                 {log.bodyLocation.severity.label}
                                             </span>

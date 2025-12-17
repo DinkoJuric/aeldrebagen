@@ -1,4 +1,4 @@
-// @ts-check
+
 // Pings hook - real-time "thinking of you" sync via Firestore
 // Syncs ping notifications across family circle members
 
@@ -12,16 +12,24 @@ import {
     query,
     orderBy,
     limit,
-    where,
     Timestamp
 } from 'firebase/firestore';
-import { db } from '../config/firebase';
+import { db } from '../../config/firebase';
 
-export function usePings(circleId, currentUserId) {
-    const [pings, setPings] = useState([]);
-    const [latestPing, setLatestPing] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+export interface Ping {
+    id: string;
+    fromName: string;
+    fromUserId: string;
+    toRole: 'senior' | 'relative';
+    sentAt: Date;
+    toUserId?: string;
+}
+
+export function usePings(circleId: string | null, currentUserId: string | null) {
+    const [pings, setPings] = useState<Ping[]>([]);
+    const [latestPing, setLatestPing] = useState<Ping | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
 
     // Subscribe to recent pings from Firestore
     useEffect(() => {
@@ -32,9 +40,6 @@ export function usePings(circleId, currentUserId) {
         }
 
         const pingsRef = collection(db, 'careCircles', circleId, 'pings');
-        // Get pings from the last 24 hours
-        const oneDayAgo = new Date();
-        oneDayAgo.setHours(oneDayAgo.getHours() - 24);
 
         const pingsQuery = query(
             pingsRef,
@@ -44,20 +49,29 @@ export function usePings(circleId, currentUserId) {
 
         const unsubscribe = onSnapshot(pingsQuery,
             (snapshot) => {
-                const pingsList = snapshot.docs.map(doc => ({
-                    id: doc.id,
-                    ...doc.data(),
+                const pingsList: Ping[] = snapshot.docs.map(doc => {
+                    const data = doc.data();
                     // Convert Firestore timestamp to Date
-                    sentAt: doc.data().sentAt?.toDate?.() || new Date()
-                }));
+                    const sentAt = data.sentAt?.toDate?.() || new Date();
+
+                    return {
+                        id: doc.id,
+                        fromName: data.fromName,
+                        fromUserId: data.fromUserId,
+                        toRole: data.toRole as 'senior' | 'relative',
+                        sentAt,
+                        toUserId: data.toUserId
+                    };
+                });
+
                 setPings(pingsList);
 
                 // Set latest ping if it's for this user and recent (within last minute)
                 const now = new Date();
                 const recentPing = pingsList.find(p => {
-                    const pingAge = now - p.sentAt;
+                    const pingAge = now.getTime() - p.sentAt.getTime();
                     const isRecent = pingAge < 60000; // Within last minute
-                    const isForMe = p.toUserId !== currentUserId && p.fromUserId !== currentUserId;
+                    // const isForMe = p.toUserId !== currentUserId && p.fromUserId !== currentUserId;
                     const isFromOther = p.fromUserId !== currentUserId;
                     return isRecent && isFromOther;
                 });
@@ -79,7 +93,7 @@ export function usePings(circleId, currentUserId) {
     }, [circleId, currentUserId]);
 
     // Send a ping
-    const sendPing = useCallback(async (fromName, fromUserId, toRole) => {
+    const sendPing = useCallback(async (fromName: string, fromUserId: string, toRole: 'senior' | 'relative') => {
         if (!circleId) return;
 
         const pingId = `ping_${Date.now()}`;
@@ -89,11 +103,11 @@ export function usePings(circleId, currentUserId) {
             await setDoc(pingRef, {
                 fromName,
                 fromUserId,
-                toRole, // 'senior' or 'relative'
+                toRole,
                 sentAt: serverTimestamp(),
             });
             return pingId;
-        } catch (err) {
+        } catch (err: any) {
             console.error('Error sending ping:', err);
             setError(err.message);
             throw err;
@@ -116,4 +130,3 @@ export function usePings(circleId, currentUserId) {
 }
 
 export default usePings;
-

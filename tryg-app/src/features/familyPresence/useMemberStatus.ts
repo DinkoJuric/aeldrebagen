@@ -1,4 +1,4 @@
-// @ts-check
+
 // Member Status hook - per-member status tracking via Firestore
 // Allows each family member to have their own status (visible to others in the circle)
 
@@ -11,27 +11,27 @@ import {
     serverTimestamp,
     query
 } from 'firebase/firestore';
-import { db } from '../config/firebase';
-import '../types'; // Import types for JSDoc
+import { db } from '../../config/firebase';
 
-/**
- * Hook to manage per-member status in a care circle
- * Each member's status is stored separately in memberStatuses/{userId}
- * 
- * @param {string} circleId - The care circle ID
- * @param {string} userId - Current user's ID
- * @param {string} displayName - Current user's display name
- * @param {'senior' | 'relative'} role - Current user's role
- * @returns {import('../types').UseMemberStatusReturn & { loading: boolean, error: string|null }}
- */
-export function useMemberStatus(circleId, userId, displayName, role) {
-    /** @type {[import('../types').Member[], function]} */
-    const [memberStatuses, setMemberStatuses] = useState([]);
-    /** @type {[string, function]} */
-    const [myStatus, setMyStatusState] = useState('home');
-    const [loading, setLoading] = useState(true);
-    /** @type {[string|null, function]} */
-    const [error, setError] = useState(null);
+export interface MemberStatus {
+    docId: string; // This is the userId
+    status: string;
+    displayName: string;
+    role: 'senior' | 'relative';
+    updatedAt?: any;
+    [key: string]: any;
+}
+
+export function useMemberStatus(
+    circleId: string | null,
+    userId: string | null,
+    displayName: string | null,
+    role: 'senior' | 'relative' | null
+) {
+    const [memberStatuses, setMemberStatuses] = useState<MemberStatus[]>([]);
+    const [myStatus, setMyStatusState] = useState<string>('home');
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
 
     // Subscribe to all member statuses in the circle
     useEffect(() => {
@@ -47,24 +47,26 @@ export function useMemberStatus(circleId, userId, displayName, role) {
         const unsubscribe = onSnapshot(statusesQuery,
             (snapshot) => {
                 const statuses = snapshot.docs.map(docSnap => ({
-                    docId: docSnap.id, // This is the userId
+                    docId: docSnap.id,
                     ...docSnap.data()
-                }));
+                })) as MemberStatus[];
 
                 // Debug: Log status changes
-                console.log('[useMemberStatus] Received statuses:', statuses.length, statuses.map(s => `${s.displayName}: ${s.status}`));
+                // console.log('[useMemberStatus] Received statuses:', statuses.length, statuses.map(s => `${s.displayName}: ${s.status}`));
 
                 setMemberStatuses(statuses);
 
                 // Update my own status from the fetched data
-                const myStatusDoc = statuses.find(s => s.docId === userId);
-                if (myStatusDoc) {
-                    setMyStatusState(myStatusDoc.status);
+                if (userId) {
+                    const myStatusDoc = statuses.find(s => s.docId === userId);
+                    if (myStatusDoc) {
+                        setMyStatusState(myStatusDoc.status);
+                    }
                 }
 
                 setLoading(false);
             },
-            (err) => {
+            (err: any) => {
                 console.error('Error fetching member statuses:', err);
                 setError(err.message);
                 setLoading(false);
@@ -75,8 +77,7 @@ export function useMemberStatus(circleId, userId, displayName, role) {
     }, [circleId, userId]);
 
     // Update current user's status
-    /** @param {string} status */
-    const setMyStatus = useCallback(async (status) => {
+    const setMyStatus = useCallback(async (status: string) => {
         if (!circleId || !userId) return;
 
         const statusRef = doc(db, 'careCircles', circleId, 'memberStatuses', userId);
@@ -91,9 +92,9 @@ export function useMemberStatus(circleId, userId, displayName, role) {
 
             // Optimistic update
             setMyStatusState(status);
-        } catch (err) {
+        } catch (err: any) {
             console.error('Error updating member status:', err);
-            setError(/** @type {Error} */(err).message);
+            setError(err.message);
             throw err;
         }
     }, [circleId, userId, displayName, role]);

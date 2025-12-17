@@ -6,19 +6,19 @@ import { render, screen } from '@testing-library/react'
 
 describe('ProgressRing Component', () => {
     it('can be imported without error', async () => {
-        const { ProgressRing } = await import('../components/ProgressRing')
+        const { ProgressRing } = await import('../features/tasks')
         expect(ProgressRing).toBeDefined()
     })
 
     it('renders with empty tasks', async () => {
-        const { ProgressRing } = await import('../components/ProgressRing')
+        const { ProgressRing } = await import('../features/tasks')
 
         const { container } = render(<ProgressRing tasks={[]} />)
         expect(container).toBeTruthy()
     })
 
     it('renders with tasks in different periods', async () => {
-        const { ProgressRing } = await import('../components/ProgressRing')
+        const { ProgressRing } = await import('../features/tasks')
 
         const tasks = [
             { id: 1, title: 'Morning Med', period: 'morgen', completed: true },
@@ -31,7 +31,7 @@ describe('ProgressRing Component', () => {
     })
 
     it('shows correct percentage in center', async () => {
-        const { ProgressRing } = await import('../components/ProgressRing')
+        const { ProgressRing } = await import('../features/tasks')
 
         const tasks = [
             { id: 1, period: 'morgen', completed: true },
@@ -48,19 +48,19 @@ describe('ProgressRing Component', () => {
 
 describe('InlineGatesIndicator Component', () => {
     it('can be imported without error', async () => {
-        const { InlineGatesIndicator } = await import('../components/ProgressRing')
+        const { InlineGatesIndicator } = await import('../features/tasks')
         expect(InlineGatesIndicator).toBeDefined()
     })
 
     it('renders with empty tasks', async () => {
-        const { InlineGatesIndicator } = await import('../components/ProgressRing')
+        const { InlineGatesIndicator } = await import('../features/tasks')
 
         const { container } = render(<InlineGatesIndicator tasks={[]} />)
         expect(container).toBeTruthy()
     })
 
     it('shows all three period labels', async () => {
-        const { InlineGatesIndicator } = await import('../components/ProgressRing')
+        const { InlineGatesIndicator } = await import('../features/tasks')
 
         render(<InlineGatesIndicator tasks={[]} />)
 
@@ -71,29 +71,30 @@ describe('InlineGatesIndicator Component', () => {
     })
 })
 
-describe('SeniorStatusCard Component', () => {
+describe('StatusCard Component', () => {
     it('can be imported without error', async () => {
-        const { SeniorStatusCard } = await import('../components/SeniorStatusCard')
-        expect(SeniorStatusCard).toBeDefined()
+        const { StatusCard } = await import('../features/familyPresence')
+        expect(StatusCard).toBeDefined()
     })
 
-    it('renders with minimal props', async () => {
-        const { SeniorStatusCard } = await import('../components/SeniorStatusCard')
+    it('renders with minimal props in senior mode', async () => {
+        const { StatusCard } = await import('../features/familyPresence')
 
-        const { container } = render(<SeniorStatusCard />)
+        const { container } = render(<StatusCard mode="senior" />)
         expect(container).toBeTruthy()
     })
 
     it('shows inline gates when tasks provided', async () => {
-        const { SeniorStatusCard } = await import('../components/SeniorStatusCard')
+        const { StatusCard } = await import('../features/familyPresence')
 
         const tasks = [
             { id: 1, title: 'Med', period: 'morgen', completed: true }
         ]
 
         const { container } = render(
-            <SeniorStatusCard
-                seniorName="Brad"
+            <StatusCard
+                mode="senior"
+                name="Brad"
                 tasks={tasks}
                 lastCheckIn="kl. 09:00"
                 completionRate={100}
@@ -105,11 +106,12 @@ describe('SeniorStatusCard Component', () => {
     })
 
     it('shows symptom indicator when symptomCount > 0', async () => {
-        const { SeniorStatusCard } = await import('../components/SeniorStatusCard')
+        const { StatusCard } = await import('../features/familyPresence')
 
         render(
-            <SeniorStatusCard
-                seniorName="Brad"
+            <StatusCard
+                mode="senior"
+                name="Brad"
                 symptomCount={3}
             />
         )
@@ -120,12 +122,12 @@ describe('SeniorStatusCard Component', () => {
 
 describe('useHelpExchangeMatch Hook', () => {
     it('can be imported without error', async () => {
-        const { useHelpExchangeMatch } = await import('../hooks/useHelpExchangeMatch')
+        const { useHelpExchangeMatch } = await import('../features/helpExchange')
         expect(useHelpExchangeMatch).toBeDefined()
     })
 
     it('returns expected shape with no matches', async () => {
-        const { useHelpExchangeMatch } = await import('../hooks/useHelpExchangeMatch')
+        const { useHelpExchangeMatch } = await import('../features/helpExchange')
         const { renderHook } = await import('@testing-library/react')
 
         const { result } = renderHook(() =>

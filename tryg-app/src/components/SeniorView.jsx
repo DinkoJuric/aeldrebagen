@@ -16,29 +16,30 @@ import {
 import { Avatar } from './ui/Avatar';
 import { Button } from './ui/Button';
 import { Modal } from './ui/Modal';
-import { FamilyStatusCard, FamilyStatusList } from './FamilyStatusCard';
-import { FamilyPresence } from './FamilyPresence';
-import { ThinkingOfYouButton } from './ThinkingOfYou';
-import { BodyPainSelector } from './BodyPainSelector';
-import { MemoryTrigger } from './WeeklyQuestion';
-import { WeeklyQuestionWidget, WeeklyQuestionModal } from './WeeklyQuestionWidget';
-import { HelpExchange } from './HelpExchange';
+import { StatusList } from '../features/familyPresence';
+import { FamilyPresence } from '../features/familyPresence';
+import { ThinkingOfYouButton } from '../features/thinkingOfYou';
+import { BodyPainSelector } from '../features/symptoms';
+import { MemoryTrigger } from '../features/weeklyQuestion';
+import { WeeklyQuestionWidget, WeeklyQuestionModal } from '../features/weeklyQuestion';
+import { HelpExchange } from '../features/helpExchange';
 import { BottomNavigation } from './BottomNavigation';
 import { SYMPTOMS_LIST } from '../data/constants';
 import { FEATURES } from '../config/features';
-import { useHelpExchangeMatch } from '../hooks/useHelpExchangeMatch';
-import { MatchCelebration, MatchBanner } from './MatchCelebration';
-import { InlineGatesIndicator } from './ProgressRing';
-import { Spillehjoernet } from './Spillehjoernet';
+import { useHelpExchangeMatch } from '../features/helpExchange';
+import { useHelpExchange } from '../features/helpExchange';
+import { MatchCelebration, MatchBanner } from '../features/helpExchange';
+import { InlineGatesIndicator } from '../features/tasks';
+import { Spillehjoernet } from '../features/wordGame';
 import { HealthReport } from './HealthReport';
 import { AlertCircle, Plus } from 'lucide-react';
 import { playMatchSound } from '../utils/sounds';
 
 export const SeniorView = ({
     tasks, toggleTask, updateStatus, addSymptom, statusLastUpdated, onSendPing,
-    weeklyAnswers, onWeeklyAnswer, helpOffers, helpRequests, relativeOffers = [], relativeRequests = [],
-    onHelpOffer, onHelpRequest,
-    onRemoveOffer, onRemoveRequest, members = [], memberStatuses = [], currentUserId = null, relativeStatuses = [],
+    weeklyAnswers, onWeeklyAnswer,
+    // HelpExchange props removed
+    members = [], memberStatuses = [], currentUserId = null, relativeStatuses = [],
     userName = 'Senior', relativeName = 'Familie', careCircleId = null, symptomLogs = [], onAddTask
 }) => {
     const [showCallModal, setShowCallModal] = useState(false);
@@ -56,8 +57,38 @@ export const SeniorView = ({
     const [dismissedMatchIds, setDismissedMatchIds] = useState(new Set()); // Track dismissed matches
     const [hideReward, setHideReward] = useState(false); // Hide medicine reward for session
 
-    // Detect matches between Senior and Relative
-    // Combine all offers/requests for match detection
+    // Fetch HelpExchange data directly
+    const {
+        helpOffers: allOffersFetched,
+        helpRequests: allRequestsFetched,
+        addOffer,
+        addRequest,
+        removeOffer,
+        removeRequest
+    } = useHelpExchange(careCircleId, currentUserId, 'senior', userName);
+
+    // Filter offers/requests by role
+    // Senior's items
+    const helpOffers = allOffersFetched.filter(o => o.createdByRole === 'senior');
+    const helpRequests = allRequestsFetched.filter(r => r.createdByRole === 'senior');
+    // Relative's items
+    const relativeOffers = allOffersFetched.filter(o => o.createdByRole === 'relative');
+    const relativeRequests = allRequestsFetched.filter(r => r.createdByRole === 'relative');
+
+    // Map handlers
+    const onHelpOffer = addOffer;
+    const onHelpRequest = addRequest;
+    const onRemoveOffer = removeOffer;
+    const onRemoveRequest = removeRequest;
+
+    console.debug('👴 [SeniorView] Help Data:', {
+        offers: helpOffers.length,
+        requests: helpRequests.length,
+        relOffers: relativeOffers.length,
+        relRequests: relativeRequests.length
+    });
+
+    // Combine all offers/requests for match detection (using local filtered vars)
     const allOffers = [
         ...helpOffers.map(o => ({ ...o, createdByRole: 'senior' })),
         ...relativeOffers.map(o => ({ ...o, createdByRole: 'relative' }))
@@ -462,7 +493,7 @@ export const SeniorView = ({
 
                         {/* Legacy Family Status List - fallback if no memberStatuses */}
                         {FEATURES.familyStatusCard && memberStatuses.length === 0 && (
-                            <FamilyStatusList
+                            <StatusList
                                 members={members}
                                 relativeStatuses={relativeStatuses}
                                 lastUpdated={statusLastUpdated}

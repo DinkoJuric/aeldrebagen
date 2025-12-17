@@ -31,13 +31,13 @@ vi.mock('firebase/firestore', () => ({
 
 describe('useMemberStatus Hook', () => {
     it('can be imported without error', async () => {
-        const { useMemberStatus } = await import('../hooks/useMemberStatus')
+        const { useMemberStatus } = await import('../features/familyPresence')
         expect(useMemberStatus).toBeDefined()
         expect(typeof useMemberStatus).toBe('function')
     })
 
     it('returns expected shape with empty data', async () => {
-        const { useMemberStatus } = await import('../hooks/useMemberStatus')
+        const { useMemberStatus } = await import('../features/familyPresence')
 
         const { result } = renderHook(() =>
             useMemberStatus('circle123', 'user123', 'TestUser', 'relative')
@@ -52,7 +52,7 @@ describe('useMemberStatus Hook', () => {
     })
 
     it('handles null circleId gracefully', async () => {
-        const { useMemberStatus } = await import('../hooks/useMemberStatus')
+        const { useMemberStatus } = await import('../features/familyPresence')
 
         const { result } = renderHook(() =>
             useMemberStatus(null, 'user123', 'TestUser', 'relative')
@@ -65,12 +65,12 @@ describe('useMemberStatus Hook', () => {
 
 describe('useHelpExchange Hook', () => {
     it('can be imported without error', async () => {
-        const { useHelpExchange } = await import('../hooks/useHelpExchange')
+        const { useHelpExchange } = await import('../features/helpExchange')
         expect(useHelpExchange).toBeDefined()
     })
 
     it('returns expected shape', async () => {
-        const { useHelpExchange } = await import('../hooks/useHelpExchange')
+        const { useHelpExchange } = await import('../features/helpExchange')
 
         const { result } = renderHook(() =>
             useHelpExchange('circle123', 'user123', 'relative', 'TestUser')
@@ -85,7 +85,7 @@ describe('useHelpExchange Hook', () => {
     })
 
     it('handles null circleId gracefully', async () => {
-        const { useHelpExchange } = await import('../hooks/useHelpExchange')
+        const { useHelpExchange } = await import('../features/helpExchange')
 
         const { result } = renderHook(() =>
             useHelpExchange(null, 'user123', 'relative', 'TestUser')
@@ -98,12 +98,12 @@ describe('useHelpExchange Hook', () => {
 
 describe('useTasks Hook', () => {
     it('can be imported without error', async () => {
-        const { useTasks } = await import('../hooks/useTasks')
+        const { useTasks } = await import('../features/tasks')
         expect(useTasks).toBeDefined()
     })
 
     it('returns expected shape', async () => {
-        const { useTasks } = await import('../hooks/useTasks')
+        const { useTasks } = await import('../features/tasks')
 
         const { result } = renderHook(() => useTasks('circle123'))
 
@@ -114,7 +114,7 @@ describe('useTasks Hook', () => {
     })
 
     it('falls back to INITIAL_TASKS when no circleId', async () => {
-        const { useTasks } = await import('../hooks/useTasks')
+        const { useTasks } = await import('../features/tasks')
 
         const { result } = renderHook(() => useTasks(null))
 

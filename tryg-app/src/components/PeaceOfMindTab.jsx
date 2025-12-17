@@ -1,8 +1,8 @@
 import React from 'react';
 import { Heart, Clock, Pill, CheckCircle, AlertCircle, MessageCircle } from 'lucide-react';
-import { SeniorStatusCard } from './SeniorStatusCard';
-import { ThinkingOfYouIconButton } from './ThinkingOfYou';
-import { ProgressRing } from './ProgressRing';
+import { StatusCard } from '../features/familyPresence';
+import { ThinkingOfYouIconButton } from '../features/thinkingOfYou';
+import { ProgressRing } from '../features/tasks';
 import { useCareCircleContext } from '../contexts/CareCircleContext';
 import { getDailyBriefing } from '../utils/briefing';
 
@@ -104,9 +104,10 @@ export const PeaceOfMindTab = ({
     return (
         <div className="space-y-4">
             {/* HERO: Peace of Mind Card with Atmospheric Background details */}
-            <SeniorStatusCard
-                seniorName={seniorName}
-                lastCheckIn={lastCheckIn}
+            <StatusCard
+                mode="senior"
+                name={seniorName}
+                timestamp={lastCheckIn}
                 completionRate={completionRate}
                 tasks={tasks}
                 symptomCount={symptomCount}

@@ -36,7 +36,9 @@ Last updated: 2025-12-16 (v1.8.0)
 | 2025-12-16 | Dark Overlay on Status Cards | Essential for white text readability against dynamic "Atmospheric" backgrounds |
 | 2025-12-16 | Natural Language Summaries | "Briefing" card preferred over raw stats to reduce cognitive load for relatives |
 | 2025-12-16 | Self-Healing Crash Loop | Auto-purge localStorage (keeping auth) prevents critical support calls |
-| 2025-12-14 | Per-member status tracking | Each relative has own status in `memberStatuses/{userId}`, replaces shared `familyStatus` |
+| 2025-12-17 | Refactored Help Exchange to use "Smart" hooks in `SeniorView`/`CoordinationTab` | Removed `useContext` from `HelpExchange` component |
+| 2025-12-17 | Consolidated `SeniorStatusCard` and `FamilyStatusCard` into unified `StatusCard.jsx` | Mirror Protocol |
+| 2025-12-16 | Completed Match Celebration system completion with sound and task integration | - |
 
 ---
 

@@ -1,9 +1,8 @@
 // Sound utilities for emotional feedback
 // Using Web Audio API for gentle, cross-platform sounds
 
-const audioContext = typeof window !== 'undefined'
-    ? new (window.AudioContext || window.webkitAudioContext)()
-    : null;
+const AudioContext = typeof window !== 'undefined' ? (window.AudioContext || window.webkitAudioContext) : null;
+const audioContext = AudioContext ? new AudioContext() : null;
 
 // Gentle completion chime - warm and reassuring
 export function playCompletionSound() {
