@@ -177,16 +177,40 @@ Bidirectional offer/request system with match celebration when offers align with
 │         └───────────┬────────────┘                          │
 │                     ↓                                        │
 │         ┌────────────────────────┐                          │
-│         │  🎉 Match Celebration  │                          │
+│         │  🎉 Match Celebration  │ ← playMatchSound()       │
 │         │  (Modal/Banner)        │                          │
+│         └───────────┬────────────┘                          │
+│                     ↓                                        │
+│         ┌────────────────────────┐                          │
+│         │  TimePickerModal       │ (Relative only)          │
+│         │  (Select task time)    │                          │
+│         └───────────┬────────────┘                          │
+│                     ↓                                        │
+│         ┌────────────────────────┐                          │
+│         │  📋 Task Created       │                          │
+│         │  (Synced via useTasks) │                          │
 │         └────────────────────────┘                          │
 └─────────────────────────────────────────────────────────────┘
 ```
 
+**Match Action Flow:**
+1. User clicks MatchBanner → Opens MatchCelebration modal
+2. User clicks CTA (e.g., "Ring og hjælp →")
+3. For Relative: TimePickerModal opens for time selection
+4. Task created with title, period, and `createdBy` attribution
+5. Match is dismissed (added to `dismissedMatchIds` state)
+
+**Match Dismissal:**
+- X button on MatchBanner dismisses without action
+- Session-based: `dismissedMatchIds` is a React state (Set)
+- Not persisted to Firestore (matches reappear on refresh)
+
 **Key Files:**
 - `src/config/helpExchangeConfig.js` - Match pairs, status matches, offer/request options
 - `src/hooks/useHelpExchangeMatch.js` - Match detection logic
-- `src/components/MatchCelebration.jsx` - Celebration UI (modal + banner)
+- `src/components/MatchCelebration.jsx` - Celebration UI (modal + banner with `onDismiss` prop)
+- `src/components/TimePickerModal.jsx` - Time selection for task creation
+- `src/utils/sounds.js` - `playMatchSound()` for audio feedback
 
 **See:** [HELPEXCHANGE_MATCHES.md](./HELPEXCHANGE_MATCHES.md) for complete match pairs reference.
 

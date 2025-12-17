@@ -3,6 +3,46 @@
 All notable changes to this project will be documented in this file.
 
 
+## [1.10.0] - 2025-12-17
+
+### 🎉 Help Exchange Match System Completion
+
+**Match Celebration UI for Seniors**
+- Match banner now appears in SeniorView when help exchange matches occur
+- Clicking banner opens MatchCelebration modal with action buttons
+- Match sound (`playMatchSound`) - cheerful ascending arpeggio (G5→B5→D6→G6)
+
+**Match Actions Create Tasks**
+- "Ring og hjælp →" and other CTAs now create actual tasks
+- **TimePickerModal**: New component for selecting task time (Morgen/Formiddag/Eftermiddag/Aften)
+- Tasks include `period` field for proper sorting in views
+- Social attribution: tasks show `createdBy` name
+
+**Match Dismissal**
+- X button on MatchBanner allows dismissing without acting
+- Matches dismissed after task creation don't reappear (session-based)
+- Works in both SeniorView and RelativeView
+
+### 🩺 Symptom Display Improvements
+
+**Severe Symptoms Filter**
+- "Alvorlige symptomer" section now only shows severe symptoms when expanded
+- Added severity badge display in expanded symptom list
+- Filter logic: `trend === 'warning'` triggers severe-only view
+
+### 💊 Medicine Reward Improvements
+
+**Hide Button**
+- Added ✕ button to medicine reward card (minimized and expanded states)
+- Session-based hiding (reappears after refresh)
+
+### 🐛 Bug Fixes
+- Fixed sparkle decoration overlap in MatchCelebration modal
+- Fixed task sync between Relative and Senior views
+- Avatar component refactored to use individual images instead of CSS sprites
+
+---
+
 ## [1.9.0] - 2025-12-16
 
 ### 🎨 Emotional Sensing & Visuals
