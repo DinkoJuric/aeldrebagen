@@ -27,20 +27,20 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
                 {/* Min dag */}
                 <button
                     onClick={() => onTabChange('daily')}
-                    className={`flex flex - col items - center gap - 1 transition - colors ${activeTab === 'daily' ? 'text-teal-600' : 'text-stone-400 hover:text-stone-600'
-                        } `}
+                    className={`flex flex-col items-center gap-1 transition-colors ${activeTab === 'daily' ? 'text-teal-600' : 'text-stone-400 hover:text-stone-600'
+                        }`}
                 >
-                    <Heart className={`w - 6 h - 6 ${activeTab === 'daily' ? 'fill-teal-100' : ''} `} />
+                    <Heart className={`w-6 h-6 ${activeTab === 'daily' ? 'fill-teal-100' : ''}`} />
                     <span className="text-xs font-bold">Min dag</span>
                 </button>
 
                 {/* Familie */}
                 <button
                     onClick={() => onTabChange('family')}
-                    className={`flex flex - col items - center gap - 1 transition - colors ${activeTab === 'family' ? 'text-indigo-600' : 'text-stone-400 hover:text-stone-600'
-                        } `}
+                    className={`flex flex-col items-center gap-1 transition-colors ${activeTab === 'family' ? 'text-indigo-600' : 'text-stone-400 hover:text-stone-600'
+                        }`}
                 >
-                    <Users className={`w - 6 h - 6 ${activeTab === 'family' ? 'fill-indigo-100' : ''} `} />
+                    <Users className={`w-6 h-6 ${activeTab === 'family' ? 'fill-indigo-100' : ''}`} />
                     <span className="text-xs font-bold">Familie</span>
                 </button>
 
@@ -56,10 +56,10 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
                 {/* Spil */}
                 <button
                     onClick={() => onTabChange('spil')}
-                    className={`flex flex - col items - center gap - 1 transition - colors ${activeTab === 'spil' ? 'text-purple-600' : 'text-stone-400 hover:text-stone-600'
-                        } `}
+                    className={`flex flex-col items-center gap-1 transition-colors ${activeTab === 'spil' ? 'text-purple-600' : 'text-stone-400 hover:text-stone-600'
+                        }`}
                 >
-                    <Gamepad2 className={`w - 6 h - 6 ${activeTab === 'spil' ? 'fill-purple-100' : ''} `} />
+                    <Gamepad2 className={`w-6 h-6 ${activeTab === 'spil' ? 'fill-purple-100' : ''}`} />
                     <span className="text-xs font-bold">Spil</span>
                 </button>
             </div>
