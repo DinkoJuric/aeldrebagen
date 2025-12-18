@@ -3,6 +3,12 @@ import { useCareCircleContext } from '../../contexts/CareCircleContext';
 import { usePings } from '../thinkingOfYou/usePings';
 import { useTranslation } from 'react-i18next';
 
+/**
+ * Coffee availability toggle for seniors.
+ * Broadcasts "coffee_ready" status to relatives and sends a ping notification.
+ * Uses amber color palette intentionally to evoke coffee warmth.
+ * @returns {JSX.Element} Coffee toggle button component
+ */
 export const CoffeeToggle = () => {
     const {
         careCircleId,

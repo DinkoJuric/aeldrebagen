@@ -205,5 +205,18 @@
     "confirm": "Onayla",
     "back": "Geri",
     "select_another_location": "Başka yer seç",
-    "go_back_symptom_selection": "Belirti seçimine dön"
+    "go_back_symptom_selection": "Belirti seçimine dön",
+    "daily_photo_title": "Günün Fotoğrafı",
+    "daily_photo_subtitle": "Aileden sevgiyle ❤️",
+    "press_to_show": "Göstermek için dokun",
+    "hide": "Gizle",
+    "medication_taken": "İlaç alındı! ❤️",
+    "press_to_minimize": "Küçültmek için dokun",
+    "calling": "Arıyor...",
+    "calling_to": "{{name}} aranıyor",
+    "end_call": "Aramayı bitir",
+    "what_needs_done": "Ne yapılması gerekiyor?",
+    "example_call_doctor": "Örn. Doktoru ara",
+    "add_task_button": "Görev ekle",
+    "task_created_alert": "✅ Görev oluşturuldu: {{title}}"
 }

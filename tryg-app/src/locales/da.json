@@ -205,5 +205,18 @@
     "confirm": "Bekræft",
     "back": "Tilbage",
     "select_another_location": "Vælg et andet sted",
-    "go_back_symptom_selection": "Gå tilbage til symptomvalg"
+    "go_back_symptom_selection": "Gå tilbage til symptomvalg",
+    "daily_photo_title": "Dagens Billede",
+    "daily_photo_subtitle": "Fra familien med kærlighed ❤️",
+    "press_to_show": "Tryk for at vise",
+    "hide": "Skjul",
+    "medication_taken": "Medicin taget! ❤️",
+    "press_to_minimize": "Tryk for at minimere",
+    "calling": "Ringer op...",
+    "calling_to": "Ringer til {{name}}",
+    "end_call": "Afslut opkald",
+    "what_needs_done": "Hvad skal gøres?",
+    "example_call_doctor": "F.eks. Ring til lægen",
+    "add_task_button": "Tilføj opgave",
+    "task_created_alert": "✅ Opgave oprettet: {{title}}"
 }

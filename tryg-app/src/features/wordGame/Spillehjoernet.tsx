@@ -11,7 +11,15 @@ interface SpillehjoernetProps {
     displayName: string;
 }
 
-// Spillehjørnet - Gaming Corner with Word of the Day
+/**
+ * Spillehjørnet - Gaming Corner with Word of the Day.
+ * Interactive word game with family leaderboard for daily engagement.
+ * @param {SpillehjoernetProps} props - Component props
+ * @param {string} props.circleId - Care circle identifier
+ * @param {string} props.userId - Current user's ID
+ * @param {string} props.displayName - User's display name for leaderboard
+ * @returns {JSX.Element} Gaming corner component
+ */
 export const Spillehjoernet: React.FC<SpillehjoernetProps> = ({ circleId, userId, displayName }) => {
     const { t } = useTranslation();
     const {

@@ -1,6 +1,7 @@
 
 // Word Game Hook - manages game state and Firestore sync
 import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     collection,
     doc,
@@ -12,6 +13,8 @@ import {
 } from 'firebase/firestore';
 import { db } from '../../config/firebase';
 import { getTodaysWords, shuffleAnswers } from '../../data/wordGameData';
+import { getTodaysWordsBS, shuffleAnswersBS } from '../../data/wordGameData_bs';
+import { getTodaysWordsTR, shuffleAnswersTR } from '../../data/wordGameData_tr';
 
 // Get today's date key for localStorage
 const getTodayKey = () => new Date().toISOString().split('T')[0];
@@ -37,6 +40,7 @@ export interface LeaderboardEntry {
 }
 
 export function useWordGame(circleId: string | null, userId: string | null, displayName: string | null) {
+    const { i18n } = useTranslation();
     const [currentWordIndex, setCurrentWordIndex] = useState<number>(0);
     const [score, setScore] = useState<number>(0);
     const [answers, setAnswers] = useState<Record<string, boolean>>({}); // { wordId: isCorrect }
@@ -44,8 +48,20 @@ export function useWordGame(circleId: string | null, userId: string | null, disp
     const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
-    // Get today's words (memoized, same for all family)
-    const todaysWords = useMemo(() => getTodaysWords(), []);
+    // Get locale-specific word functions
+    const { getWords, shuffle } = useMemo(() => {
+        switch (i18n.language) {
+            case 'bs':
+                return { getWords: getTodaysWordsBS, shuffle: shuffleAnswersBS };
+            case 'tr':
+                return { getWords: getTodaysWordsTR, shuffle: shuffleAnswersTR };
+            default:
+                return { getWords: getTodaysWords, shuffle: shuffleAnswers };
+        }
+    }, [i18n.language]);
+
+    // Get today's words (memoized, same for all family, locale-specific)
+    const todaysWords = useMemo(() => getWords(), [getWords]);
 
     // Current word with shuffled answers
     const currentWord = useMemo(() => {
@@ -53,9 +69,9 @@ export function useWordGame(circleId: string | null, userId: string | null, disp
         const word = todaysWords[currentWordIndex];
         return {
             ...word,
-            options: shuffleAnswers(word, currentWordIndex)
+            options: shuffle(word, currentWordIndex)
         };
-    }, [todaysWords, currentWordIndex]);
+    }, [todaysWords, currentWordIndex, shuffle]);
 
     // Load saved progress from localStorage on mount
     useEffect(() => {

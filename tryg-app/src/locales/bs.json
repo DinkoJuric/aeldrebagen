@@ -81,7 +81,7 @@
     "weekly_question_1": "O kome razmišljate danas?",
     "weekly_question_2": "Šta vas je danas nasmijalo?",
     "weekly_question_title": "Sedmično pitanje",
-    "weekly_question_header": "Osedmično pitanje",
+    "weekly_question_header": "Sedmično pitanje",
     "write_answer_placeholder": "Napišite svoj odgovor...",
     "share_your_answer": "Podijelite odgovor",
     "thanks_for_answer": "Hvala na odgovoru!",
@@ -205,5 +205,18 @@
     "confirm": "Potvrdi",
     "back": "Nazad",
     "select_another_location": "Izaberi drugo mjesto",
-    "go_back_symptom_selection": "Vrati se na izbor simptoma"
+    "go_back_symptom_selection": "Vrati se na izbor simptoma",
+    "daily_photo_title": "Danas slika",
+    "daily_photo_subtitle": "Od porodice s ljubavlju ❤️",
+    "press_to_show": "Pritisni za prikaz",
+    "hide": "Sakrij",
+    "medication_taken": "Lijekovi uzeti! ❤️",
+    "press_to_minimize": "Pritisni za smanjenje",
+    "calling": "Zovem...",
+    "calling_to": "Zovem {{name}}",
+    "end_call": "Završi poziv",
+    "what_needs_done": "Šta treba uraditi?",
+    "example_call_doctor": "Npr. Nazvati doktora",
+    "add_task_button": "Dodaj zadatak",
+    "task_created_alert": "✅ Zadatak kreiran: {{title}}"
 }

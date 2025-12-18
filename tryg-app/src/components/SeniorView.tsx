@@ -59,6 +59,7 @@ export interface SeniorViewProps {
     careCircleId?: string | null;
     symptomLogs?: SymptomLog[];
     onAddTask?: (task: Partial<Task>) => void;
+    onToggleLike?: (answerId: string, userId: string) => void;
     onReply?: (answerId: string, reply: any) => void;
     activeTab: 'daily' | 'family' | 'spil';
     onTabChange: (tab: 'daily' | 'family' | 'spil') => void;
@@ -272,16 +273,16 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                                     >
                                         <ImageIcon className="w-5 h-5 text-indigo-600" />
                                         <div>
-                                            <span className="font-bold text-indigo-700">Dagens Billede</span>
-                                            <p className="text-xs text-indigo-500">Fra familien med kærlighed ❤️</p>
+                                            <span className="font-bold text-indigo-700">{t('daily_photo_title')}</span>
+                                            <p className="text-xs text-indigo-500">{t('daily_photo_subtitle')}</p>
                                         </div>
                                     </button>
                                     <div className="flex items-center gap-2">
-                                        <span className="text-xs text-indigo-400">Tryk for at vise</span>
+                                        <span className="text-xs text-indigo-400">{t('press_to_show')}</span>
                                         <button
                                             onClick={() => setHideReward(true)}
                                             className="p-1 rounded-full hover:bg-indigo-200 text-indigo-400 hover:text-indigo-600"
-                                            title="Skjul"
+                                            title={t('hide')}
                                         >
                                             ✕
                                         </button>
@@ -292,7 +293,7 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                                     <button
                                         onClick={() => setHideReward(true)}
                                         className="absolute top-2 right-2 p-1 rounded-full bg-indigo-500 hover:bg-indigo-400 text-indigo-200 hover:text-white text-sm"
-                                        title="Skjul"
+                                        title={t('hide')}
                                     >
                                         ✕
                                     </button>
@@ -302,7 +303,7 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                                     >
                                         <div className="flex items-center justify-center gap-2 mb-2">
                                             <ImageIcon className="w-6 h-6 text-indigo-200" />
-                                            <span className="font-bold text-indigo-100 uppercase tracking-widest text-sm">Dagens Billede</span>
+                                            <span className="font-bold text-indigo-100 uppercase tracking-widest text-sm">{t('daily_photo_title')}</span>
                                         </div>
                                         <div className="w-full h-48 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-xl mb-3 overflow-hidden shadow-lg transform rotate-2 hover:rotate-0 transition-transform duration-500">
                                             {/* Daily nature photo - same image all day using date as seed */}
@@ -312,8 +313,8 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                                                 className="w-full h-full object-cover"
                                             />
                                         </div>
-                                        <p className="font-bold text-lg">Medicin taget! ❤️</p>
-                                        <p className="text-indigo-200 text-sm">Tryk for at minimere</p>
+                                        <p className="font-bold text-lg">{t('medication_taken')}</p>
+                                        <p className="text-indigo-200 text-sm">{t('press_to_minimize')}</p>
                                     </button>
                                 </div>
                             )
@@ -607,9 +608,9 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                             <div className="w-20 h-20 bg-rose-100 rounded-full flex items-center justify-center mx-auto mb-4">
                                 <Phone className="w-10 h-10 text-rose-600" />
                             </div>
-                            <h3 className="text-2xl font-bold text-stone-800 mb-2">Ringer op...</h3>
-                            <p className="text-stone-500 mb-8">Ringer til {relativeName}</p>
-                            <Button variant="danger" onClick={() => setShowCallModal(false)}>Afslut opkald</Button>
+                            <h3 className="text-2xl font-bold text-stone-800 mb-2">{t('calling')}</h3>
+                            <p className="text-stone-500 mb-8">{t('calling_to', { name: relativeName })}</p>
+                            <Button variant="danger" onClick={() => setShowCallModal(false)}>{t('end_call')}</Button>
                         </div>
                     </div>
                 )
@@ -671,15 +672,15 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
             />
 
             {/* Add Task Modal */}
-            <Modal isOpen={showAddTaskModal} onClose={() => setShowAddTaskModal(false)} title="Tilføj egen opgave">
+            <Modal isOpen={showAddTaskModal} onClose={() => setShowAddTaskModal(false)} title={t('add_own_task')}>
                 <div className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-1">Hvad skal gøres?</label>
+                        <label className="block text-sm font-medium text-slate-700 mb-1">{t('what_needs_done')}</label>
                         <input
                             type="text"
                             value={newTaskTitle}
                             onChange={(e) => setNewTaskTitle(e.target.value)}
-                            placeholder="F.eks. Ring til lægen"
+                            placeholder={t('example_call_doctor')}
                             className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-teal-500 focus:outline-none text-lg"
                             autoFocus
                         />
@@ -687,7 +688,7 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
 
                     {/* Period Selector */}
                     <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-2">Hvornår?</label>
+                        <label className="block text-sm font-medium text-slate-700 mb-2">{t('when_question')}</label>
                         <div className="grid grid-cols-2 gap-2">
                             {[
                                 { key: 'morgen', label: 'Morgen', time: 'Kl. 8-11', icon: '☀️' },
@@ -751,7 +752,7 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                         className="w-full"
                         disabled={!newTaskTitle.trim()}
                     >
-                        Tilføj opgave
+                        {t('add_task_button')}
                     </Button>
                 </div>
             </Modal>
@@ -804,7 +805,7 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                             const matchId = `${offerId}-${requestId}`;
                             setDismissedMatchIds(prev => new Set([...prev, matchId]));
 
-                            alert(`✅ Opgave oprettet: ${taskTitle}`);
+                            alert(t('task_created_alert', { title: taskTitle }));
                         }
                         setActiveMatch(null);
                     }}
