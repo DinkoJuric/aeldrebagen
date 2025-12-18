@@ -226,28 +226,33 @@ Bidirectional offer/request system with match celebration when offers align with
 
 ## RelativeView Tab Architecture
 
+> **Note (Dec 2025)**: Navigation state (`activeTab`) is now lifted to `AppCore.tsx`. Both `SeniorView` and `RelativeView` receive `activeTab` and `onTabChange` via props. The `BottomNavigation` component is rendered once in `AppCore`, not inside each view.
+
 ```
-RelativeView
-├── PeaceOfMindTab (Min Dag)        ← Emotional reassurance
-│   ├── Hero "Alt er vel" card
-│   ├── ProgressRing (3-segment Gates)
-│   │   ├── ☀️ Morgen (6-12)
-│   │   ├── 🌤️ Eftermiddag (12-18)
-│   │   └── 🌙 Aften (18-22)
-│   │   Colors: 🟢 On-time | 🟡 Late | 🔴 Overdue
-│   └── Quick glance stats (Medicin, Symptomer)
+AppCore (owns activeTab, SettingsModal, BottomNavigation)
+├── SeniorView (receives activeTab via props)
+│   ├── Daily Tab (Min Hverdag)
+│   ├── Family Tab (Familie)
+│   └── Spil Tab (Gaming Corner)
 │
-├── CoordinationTab (Familie)        ← Practical coordination
-│   ├── Status picker (visible to senior)
-│   ├── HelpExchange (bidirectional)
-│   ├── Match banners
-│   ├── Task lists (open/completed)
-│   └── Symptom summary
-│
-└── RelativeBottomNavigation         ← Tab switching
-    ├── ❤️ Min dag (peace of mind)
-    ├── 👥 Familie (coordination)
-    └── 📄 Rapport (shortcut)
+└── RelativeView (receives activeTab via props)
+    ├── PeaceOfMindTab (Min Dag)
+    │   ├── Hero "Alt er vel" card
+    │   ├── ProgressRing (3-segment Gates)
+    │   │   ├── ☀️ Morgen (6-12)
+    │   │   ├── 🌤️ Eftermiddag (12-18)
+    │   │   └── 🌙 Aften (18-22)
+    │   │   Colors: 🟢 On-time | 🟡 Late | 🔴 Overdue
+    │   └── Quick glance stats (Medicin, Symptomer)
+    │
+    ├── CoordinationTab (Familie)
+    │   ├── Status picker (visible to senior)
+    │   ├── HelpExchange (bidirectional)
+    │   ├── Match banners
+    │   ├── Task lists (open/completed)
+    │   └── Symptom summary
+    │
+    └── Spillehjoernet (Gaming Corner)
 ```
 
 **ProgressRing Component** (`src/features/tasks/ProgressRing.tsx`):

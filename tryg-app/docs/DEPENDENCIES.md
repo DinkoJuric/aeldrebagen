@@ -175,11 +175,10 @@ graph TD
 ### Navigation Feature
 | Component | Uses | Used By |
 |-----------|------|---------|
-| `BottomNavigation.tsx` | lucide-react | SeniorView |
-| `RelativeBottomNavigation.tsx` | lucide-react | RelativeView |
-| `TabNavigation.tsx` | - | - |
+| `BottomNavigation.tsx` | lucide-react, cva | AppCore (global) |
+| `SettingsModal.tsx` | LanguageSwitcher, FamilyConstellation | AppCore |
 
-**Note**: BottomNavigation and RelativeBottomNavigation are 90% identical. **Unification candidate**: ✅
+**Note (Dec 2025)**: Navigation is now unified. `BottomNavigation` is rendered once in `AppCore.tsx`, not in individual views. `activeTab` state is owned by `AppCore` and passed to views via props. `RelativeBottomNavigation` has been removed.
 
 ---
 

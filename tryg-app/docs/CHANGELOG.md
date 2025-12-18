@@ -6,6 +6,30 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### ⚙️ Settings Integration & Navigation Refactoring
+
+**Unified Settings Modal**
+- Created `SettingsModal.tsx` - centralized settings with tabbed interface (General / Privacy & Data)
+- Integrated `LanguageSwitcher` into modal, removed from individual view headers
+- Added family circle management section with invite code display
+- Added privacy controls (export data, delete account placeholders)
+
+**Global Navigation Architecture**
+- Lifted `activeTab` state from views to `AppCore.tsx` for unified navigation
+- Moved `BottomNavigation` rendering to `AppCore.tsx` (no longer duplicated in views)
+- Both `SeniorView` and `RelativeView` now receive `activeTab`/`onTabChange` via props
+- Fixed `RelativeView` period selector - now includes all 4 time periods (was missing 3)
+
+**PhotoViewerModal Enhancement**
+- Added `isOpen` and `onClose` props for proper modal control
+- Added close button (X) in modal header
+
+**Component Cleanup**
+- Removed redundant `LanguageSwitcher` from `SeniorView` Family tab
+- Removed redundant `LanguageSwitcher` from `RelativeView` header
+- Removed unused `BottomNavigation` import from `SeniorView`
+- Fixed type mismatches in `RelativeView` props (`currentUserId`, `dismissedMatchIds`)
+
 ### 🎙️ Livshistorier (Family Heirloom)
 
 **Audio Recording for Weekly Questions**
