@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../hooks/useAuth';
 
 export const LanguageSwitcher = () => {
-    const { i18n, t } = useTranslation();
+    const { i18n } = useTranslation();
     const { userProfile, updateLanguagePreference } = useAuth();
 
     const languages = [
@@ -28,9 +28,6 @@ export const LanguageSwitcher = () => {
 
     return (
         <div className="flex flex-col gap-2 p-4 bg-stone-50 rounded-2xl border border-stone-100 shadow-sm">
-            <h4 className="text-xs font-bold text-stone-400 uppercase tracking-wider mb-1 px-1">
-                {t('language_selection')}
-            </h4>
             <div className="flex gap-2">
                 {languages.map((lang) => (
                     <button
@@ -43,8 +40,13 @@ export const LanguageSwitcher = () => {
                                 : 'text-stone-400 hover:bg-stone-100 hover:text-stone-600'}
                         `}
                     >
-                        <span className="text-lg block mb-0.5">{lang.label.split(' ')[0]}</span>
-                        <span className="block text-[10px] sm:text-xs">{lang.label.split(' ')[1]}</span>
+                        <span
+                            className="text-2xl block mb-1"
+                            style={{ fontFamily: '"Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif' }}
+                        >
+                            {lang.label.split(' ')[0]}
+                        </span>
+                        <span className="block text-[10px] sm:text-xs tracking-tight">{lang.label.split(' ')[1]}</span>
                     </button>
                 ))}
             </div>

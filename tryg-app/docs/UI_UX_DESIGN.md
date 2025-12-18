@@ -62,7 +62,8 @@
 | 9 | Smooth Page Transitions | 2025-12-18 | `tab-content` class with slide animation |
 | 10 | floating heart Upgrade | 2025-12-18 | Framer motion hearts on 'Thinking of You' |
 | 11 | Progress Ring Glow | 2025-12-18 | Green drop-shadow glow at 100% completion |
-| 12 | Typography Refinement | 2025-12-18 | Font-size scale CSS vars |
+| 12 | Typography Refinement | 2025-12-18 | Font-size scale CSS vars & WCAG base (18px) |
+| 13 | Header Navigation Refactor | 2025-12-18 | Split Share/Settings for better ergonomics |
 
 ---
 
@@ -76,29 +77,40 @@
 
 | # | Enhancement | Status | Effort |
 |---|-------------|--------|--------|
-| 13 | Ambient Status "Dashboard" for Relatives | ⏳ BACKLOG | 12h |
-| 14 | Dark Mode / Evening Mode | ⏳ BACKLOG | 8h |
-| 15 | Haptic Feedback Integration | ⏳ BACKLOG | 4h |
-| 16 | Animated Onboarding Flow | ⏳ BACKLOG | 16h |
-| 17 | Family Photo Background Mode | ⏳ BACKLOG | 8h |
+| 14 | Ambient Status "Dashboard" for Relatives | ⏳ BACKLOG | 12h |
+| 15 | Dark Mode / Evening Mode | ⏳ BACKLOG | 8h |
+| 16 | Haptic Feedback Integration | ⏳ BACKLOG | 4h |
+| 17 | Animated Onboarding Flow | ⏳ BACKLOG | 16h |
+| 18 | Family Photo Background Mode | ⏳ BACKLOG | 8h |
 
 ---
 
 ## Enhancement Details
 
-### 1. Breathing Pulse Animation on "Alt er vel" Card
+### 12. Typography Refinement (Accomplished)
 
-**What**: Subtle breathing/pulsing animation on peace of mind card when status is good.
+**What**: Implementation of a scalable typography system in `index.css` using CSS variables.
 
-**Why**: Calm app's looping visuals create serenity. A gentle pulse feels like a calm heartbeat.
+**Why**: To ensure readability for seniors while maintaining a modern, premium aesthetic.
 
-```css
-@keyframes gentle-breathe {
-  0%, 100% { transform: scale(1); opacity: 0.95; }
-  50% { transform: scale(1.015); opacity: 1; }
-}
-.peace-card-ok { animation: gentle-breathe 4s ease-in-out infinite; }
-```
+**Achievements**:
+- **WCAG Compliance**: Set `--font-size-lg` to `1.125rem` (18px) as the recommended base for senior accessibility.
+- **Scalability**: Created a complete scale from `--font-size-xs` (12px) to `--font-size-3xl` (32px).
+- **Legibility**: Integrated 'Inter' as the primary font with system fallbacks for maximum performance and clarity.
+- **Touch Ergonomics**: All interactable text elements adhere to a minimum size/spacing to prevent fatigue.
+
+---
+
+### 13. Header Navigation Refactor
+
+**What**: Splitting the header icons into three distinct zones.
+
+**Why**: User cognitive load is reduced when "Family/Connection" (Share) is separated from "App Configuration" (Settings).
+
+**Implementation**:
+- **Top-Left (Share)**: Opens `ShareModal` (Care Circle ID, Family Constellation).
+- **Center (Settings)**: Opens `SettingsModal` (Language, Privacy).
+- **Top-Right (Logout)**: Quick sign-out for family security.
 
 ---
 

@@ -1,35 +1,24 @@
 import React, { useState } from 'react';
-import { X, Lock, Shield, Trash2, Download, Globe, Users, Share2, LogOut } from 'lucide-react';
+import { X, Lock, Shield, Trash2, Download, Globe, LogOut } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { Button } from './ui/Button';
 import { LanguageSwitcher } from './LanguageSwitcher';
-import { FamilyConstellation } from '../features/familyPresence';
 
 export interface SettingsModalProps {
     user: any;
-    userProfile: any;
     careCircle: any;
-    members: any[];
-    inviteCode: string | null;
-    onGetInviteCode: () => Promise<void>;
     onClose: () => void;
     onSignOut: () => Promise<void>;
 }
 
 export const SettingsModal: React.FC<SettingsModalProps> = ({
     user,
-    userProfile,
     careCircle,
-    members,
-    inviteCode,
-    onGetInviteCode,
     onClose,
     onSignOut
 }) => {
     const { t } = useTranslation();
     const [activeTab, setActiveTab] = useState<'general' | 'privacy'>('general');
 
-    const seniorName = careCircle?.seniorName || (userProfile?.role === 'senior' ? userProfile?.displayName : 'Senior');
 
     return (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4">
@@ -81,46 +70,6 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                                     <h3 className="text-sm font-bold uppercase tracking-wider">{t('language_selection')}</h3>
                                 </div>
                                 <LanguageSwitcher />
-                            </section>
-
-                            {/* Family Circle / Invite */}
-                            <section className="space-y-4">
-                                <div className="flex items-center gap-2 text-stone-600">
-                                    <Users className="w-4 h-4" />
-                                    <h3 className="text-sm font-bold uppercase tracking-wider">{t('family_circle')}</h3>
-                                </div>
-
-                                <div className="bg-stone-50 rounded-2xl p-4 border border-stone-100">
-                                    {inviteCode ? (
-                                        <div className="text-center">
-                                            <p className="text-[10px] text-stone-400 uppercase font-bold mb-1 tracking-widest">{t('invite_code')}</p>
-                                            <p className="text-3xl font-mono font-bold tracking-[0.2em] text-stone-800">{inviteCode}</p>
-                                        </div>
-                                    ) : (
-                                        <Button
-                                            variant="secondary"
-                                            className="w-full bg-white flex items-center justify-center gap-2"
-                                            onClick={onGetInviteCode}
-                                        >
-                                            <Share2 className="w-4 h-4" />
-                                            {t('show_invite_code')}
-                                        </Button>
-                                    )}
-
-                                    {/* Family Constellation */}
-                                    {members.length > 0 && (
-                                        <div className="mt-6 pt-6 border-t border-stone-200/60">
-                                            <p className="text-[10px] text-stone-400 uppercase font-bold mb-4 text-center tracking-widest">{t('family_heart')}</p>
-                                            <div className="scale-90 origin-center -my-4">
-                                                <FamilyConstellation
-                                                    members={members as any}
-                                                    centerMemberName={seniorName}
-                                                    currentUserId={user?.uid}
-                                                />
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
                             </section>
 
                             {/* Sign Out */}

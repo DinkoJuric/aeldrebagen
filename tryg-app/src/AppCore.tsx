@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CareCircleProvider } from './contexts/CareCircleContext';
-import { LivingBackground } from './components/ui/LivingBackground';
 import { LogOut, Settings, Share } from 'lucide-react';
 import { SeniorView } from './components/SeniorView';
 import { RelativeView } from './components/RelativeView';
@@ -11,7 +10,8 @@ import { BottomNavigation } from './components/BottomNavigation';
 import { PingNotification } from './features/thinkingOfYou';
 import { InstallPrompt } from './components/InstallPrompt';
 import { UpdateToast } from './components/UpdateToast';
-import { PhotoCaptureButton, PhotoUploadModal, PhotoViewerModal, PhotoNotificationBadge } from './features/photos';
+import { PhotoUploadModal, PhotoViewerModal, PhotoNotificationBadge } from './features/photos';
+import { ShareModal } from './components/ShareModal';
 import { useTasks } from './features/tasks';
 import { useSymptoms } from './features/symptoms';
 // import { useSettings } from './hooks/useSettings';
@@ -19,8 +19,7 @@ import { useWeeklyQuestions } from './features/weeklyQuestion';
 import { usePings } from './features/thinkingOfYou';
 import { useCheckIn } from './hooks/useCheckIn';
 import { usePhotos } from './features/photos';
-import { useMemberStatus, FamilyConstellation } from './features/familyPresence';
-// import { SENIOR_PROFILE } from './data/constants'; // Unused
+import { useMemberStatus } from './features/familyPresence';
 import { playCompletionSound, playSuccessSound, playPingSound } from './utils/sounds';
 import { FEATURES } from './config/features';
 import './index.css';
@@ -49,11 +48,11 @@ export default function TrygAppCore({
 }: AppCoreProps) {
     const { t } = useTranslation();
     // View is determined by user role - no toggle allowed
-    const isRelative = userProfile?.role === 'relative';
     const isSenior = userProfile?.role === 'senior';
     // const [activePing, setActivePing] = useState(null); // Unused?
     const [notification, setNotification] = useState<any | null>(null);
     const [showSettings, setShowSettings] = useState(false);
+    const [showShare, setShowShare] = useState(false);
     const [activeTab, setActiveTab] = useState<'daily' | 'family' | 'spil'>('daily');
     const [showPhotoViewer, setShowPhotoViewer] = useState(false);
     const [showHealthReport, setShowHealthReport] = useState(false);
@@ -69,7 +68,7 @@ export default function TrygAppCore({
         setMyStatus,
         relativeStatuses,
         seniorStatus
-    } = useMemberStatus(careCircle?.id, user?.uid ?? null, userProfile?.displayName ?? undefined, userProfile?.role);
+    } = useMemberStatus(careCircle?.id, user?.uid ?? null, (userProfile?.displayName ?? undefined) as string | null, userProfile?.role);
     const {
         answers: weeklyAnswers,
         addAnswer: addWeeklyAnswer,
@@ -79,7 +78,7 @@ export default function TrygAppCore({
     const { latestPing, sendPing, dismissPing } = usePings(careCircle?.id, user?.uid ?? null);
     // HelpExchange removed from here - moved to CoordinationTab and SeniorView
     const { lastCheckIn, recordCheckIn } = useCheckIn(careCircle?.id);
-    const { latestPhoto, uploading, uploadPhoto, deletePhoto } = usePhotos(careCircle?.id, user?.uid ?? null);
+    const { latestPhoto, uploading, deletePhoto } = usePhotos(careCircle?.id, user?.uid ?? null);
 
     // HelpExchange filtering removed
 
@@ -137,7 +136,7 @@ export default function TrygAppCore({
 
     const handleSendPing = async (fromName: string, toRole: string) => {
         // Send ping via Firestore for real-time sync
-        await sendPing(fromName, user?.uid, toRole);
+        await sendPing(fromName, (user?.uid ?? undefined) as string, toRole);
     };
 
     const handleWeeklyAnswer = async (answer: string) => {
@@ -195,9 +194,9 @@ export default function TrygAppCore({
 
                     {/* Header - COMPACT: Share / Settings / Logout */}
                     <div className="absolute top-0 left-0 right-0 h-10 bg-black/5 z-50 flex justify-between items-center backdrop-blur-sm px-3">
-                        {/* Share button */}
+                        {/* Share button - Top Left (Care Circle & Invites) */}
                         <button
-                            onClick={onGetInviteCode}
+                            onClick={() => setShowShare(true)}
                             className="p-2 rounded-full hover:bg-white/50 transition-colors"
                             aria-label="Share"
                         >
@@ -213,7 +212,7 @@ export default function TrygAppCore({
                             <Settings className="w-5 h-5 text-stone-600" />
                         </button>
 
-                        {/* Sign out */}
+                        {/* Sign out - Top Right */}
                         <button
                             onClick={onSignOut}
                             className="p-1.5 rounded-full hover:bg-white/50 transition-colors"
@@ -223,15 +222,23 @@ export default function TrygAppCore({
                         </button>
                     </div>
 
+                    {/* Care Circle & Family Share Modal */}
+                    {showShare && (
+                        <ShareModal
+                            members={memberStatuses}
+                            inviteCode={inviteCode}
+                            onGetInviteCode={onGetInviteCode}
+                            seniorName={seniorName}
+                            currentUserId={user?.uid ?? undefined}
+                            onClose={() => setShowShare(false)}
+                        />
+                    )}
+
                     {/* Unified Settings Modal */}
                     {showSettings && (
                         <SettingsModal
                             user={user}
-                            userProfile={userProfile}
                             careCircle={careCircle}
-                            members={memberStatuses}
-                            inviteCode={inviteCode}
-                            onGetInviteCode={onGetInviteCode}
                             onClose={() => setShowSettings(false)}
                             onSignOut={onSignOut}
                         />
