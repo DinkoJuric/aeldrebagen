@@ -179,7 +179,7 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
                         myStatus={myStatus || undefined}
                         onMyStatusChange={onMyStatusChange}
                         memberStatuses={memberStatuses}
-                        currentUserId={currentUserId}
+                        currentUserId={currentUserId || undefined}
                         // HelpExchange props removed - now fetched internally
                         openTasks={openTasks}
                         completedTasks={completedTasksList}
@@ -190,7 +190,7 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
                         onDismissMatch={(matchId) => {
                             setDismissedMatchIds(prev => new Set([...prev, matchId]));
                         }}
-                        dismissedMatchIds={dismissedMatchIds}
+                        dismissedMatchIds={dismissedMatchIds as Set<string>}
                         careCircleId={careCircleId}
                     />
                 )}
@@ -202,7 +202,7 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
                             <Spillehjoernet
                                 circleId={careCircleId || undefined}
                                 userId={currentUserId || undefined}
-                                displayName={userName}
+                                displayName={userName || 'User'}
                             />
                         )}
                     </>

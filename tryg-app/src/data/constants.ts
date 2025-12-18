@@ -21,7 +21,7 @@ export const SYMPTOMS_LIST = [
 
 // Senior profile defaults
 export const SENIOR_PROFILE = {
-    name: 'Birthe Jensen',
+    name: 'Bozana Cosic',
     age: 78,
     status: 'active',
     lastActive: new Date().toISOString(),
