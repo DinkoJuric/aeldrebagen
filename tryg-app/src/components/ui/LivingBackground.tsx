@@ -57,7 +57,7 @@ export const LivingBackground: React.FC<{ children: React.ReactNode }> = ({ chil
     }, [circadianTheme, isDark]);
 
     return (
-        <div className={`min-h-screen w-full transition-all duration-[3000ms] ease-in-out relative overflow-hidden ${theme.gradient}`}>
+        <div className={`h-full w-full transition-all duration-[3000ms] ease-in-out relative ${theme.gradient}`}>
             {/* Ambient Background Blobs - Increased visibility & soft blur */}
             <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden blur-3xl opacity-80">
                 <svg viewBox="0 0 100 100" className="absolute -top-10 -left-10 w-96 h-96 transition-colors duration-[3000ms]">
@@ -77,7 +77,7 @@ export const LivingBackground: React.FC<{ children: React.ReactNode }> = ({ chil
             </div>
 
             {/* Content Container */}
-            <div className="relative z-10 min-h-screen">
+            <div className="relative z-10 h-full">
                 {children}
             </div>
         </div>

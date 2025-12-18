@@ -6,6 +6,34 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### 🐛 Critical Bug Fixes
+
+**Scroll Fix (2025-12-18)**
+- Removed `overflow: hidden` from `body` and `#root` in `index.css`
+- Removed `overflow-hidden` from `LivingBackground.tsx` wrapper div
+- Changed `min-h-screen` to `h-full` in LivingBackground for proper flex child sizing
+- **Root cause**: Multiple nested `overflow-hidden` containers were blocking touch scrolling
+
+---
+
+### 🌍 Codebase Harmonization (Post-Merge Cleanup)
+
+**I18N Sweep**
+- Replaced 15 hardcoded Danish strings in `SeniorView.tsx` with `t()` calls
+- Added 13 new translation keys to `da.json`, `bs.json`, `tr.json`
+- Fixed grammar typo in `bs.json`: "Osedmično" → "Sedmično"
+
+**Word Game Localization**
+- Created `wordGameData_bs.ts` (30 Bosnian cultural words)
+- Created `wordGameData_tr.ts` (30 Turkish cultural words)
+- Updated `useWordGame.ts` to select word list based on `i18n.language`
+
+**Type & Import Cleanup**
+- Added missing `onToggleLike` prop to `SeniorViewProps` interface
+- Added JSDoc documentation to `CoffeeToggle` and `Spillehjoernet` components
+
+---
+
 ### 🌙 Dark Mode / Evening Mode (Circadian Theming)
 
 **Circadian Theme System**
