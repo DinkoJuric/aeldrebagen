@@ -157,10 +157,14 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
     // const totalTasks = tasks.length;
     const completedTasks = tasks.filter(t => t.completed).length;
 
-    // Dynamic greeting based on time
+    // Dynamic greeting based on time with randomization for personality
     const hour = new Date().getHours();
-    const greetingKey = hour < 12 ? 'greeting_morning' : hour < 18 ? 'greeting_afternoon' : 'greeting_evening';
-    const greeting = t(greetingKey);
+    const [greeting] = useState(() => {
+        const period = hour < 12 ? 'morning' : hour < 18 ? 'afternoon' : 'evening';
+        const randomId = Math.floor(Math.random() * 3); // 0, 1, or 2
+        const key = randomId === 0 ? `greeting_${period}` : `greeting_${period}_${randomId}`;
+        return t(key);
+    });
 
     // Get current date in localized format
     const localeId = i18n.language === 'da' ? 'da-DK' : i18n.language === 'tr' ? 'tr-TR' : i18n.language === 'bs' ? 'bs-BA' : 'da-DK';

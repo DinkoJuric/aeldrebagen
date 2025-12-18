@@ -1,6 +1,7 @@
 import React from 'react';
 // We assume Task is exported from useTasks. If not, we might need to view useTasks.ts, but standard practice is to export interfaces.
 import { Task } from './useTasks';
+import { cn } from '../../lib/utils';
 
 /**
  * ProgressRing - A 3-segment ring showing daily progress with color-coded compliance
@@ -136,8 +137,15 @@ export const ProgressRing: React.FC<ProgressRingProps> = ({
 
     return (
         <div className={`relative inline-flex flex-col items-center ${className}`}>
-            {/* SVG Ring */}
-            <svg width={size} height={size} className="transform -rotate-90">
+            {/* SVG Ring with celebratory glow at 100% */}
+            <svg
+                width={size}
+                height={size}
+                className={cn(
+                    "transform -rotate-90 transition-all duration-1000",
+                    progressPercent === 100 && "drop-shadow-[0_0_8px_rgba(16,185,129,0.5)]"
+                )}
+            >
                 {/* Background ring */}
                 <circle
                     cx={size / 2}
@@ -149,7 +157,7 @@ export const ProgressRing: React.FC<ProgressRingProps> = ({
                 />
 
                 {/* Colored segments */}
-                {segments.map((seg, i) => (
+                {segments.map((seg) => (
                     <circle
                         key={seg.period}
                         cx={size / 2}
@@ -198,7 +206,7 @@ interface ProgressRingCompactProps {
 /**
  * Compact version for inline use
  */
-export const ProgressRingCompact: React.FC<ProgressRingCompactProps> = ({ tasks = [], size = 48 }) => {
+export const ProgressRingCompact: React.FC<ProgressRingCompactProps> = ({ tasks = [] }) => {
     const currentHour = new Date().getHours();
     const segments = (['morgen', 'eftermiddag', 'aften'] as Period[]).map(period =>
         getSegmentStatus(tasks, period, currentHour)
@@ -206,7 +214,6 @@ export const ProgressRingCompact: React.FC<ProgressRingCompactProps> = ({ tasks 
 
     const hasOverdue = segments.includes('overdue');
     const hasLate = segments.includes('late');
-    const allGood = !hasOverdue && !hasLate;
 
     const borderColor = hasOverdue ? 'border-red-400' : hasLate ? 'border-yellow-400' : 'border-green-400';
     const bgColor = hasOverdue ? 'bg-red-50' : hasLate ? 'bg-yellow-50' : 'bg-green-50';

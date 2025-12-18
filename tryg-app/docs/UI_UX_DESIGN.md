@@ -57,19 +57,18 @@
 | 4 | Connection Glow on Family Activity | 2025-12-18 | `animate-glow` on 'available' avatars |
 | 5 | Rounded Corners (16px) | 2025-12-18 | CSS var `--radius-lg: 16px` |
 | 6 | Whitespace Breathing | 2025-12-18 | CSS spacing scale vars |
+| 7 | Living Background 2.0 | 2025-12-18 | Animated SVG blobs with circadian gradients |
+| 8 | Personalized Greetings | 2025-12-18 | Randomized header greetings (variations) |
 | 9 | Smooth Page Transitions | 2025-12-18 | `tab-content` class with slide animation |
+| 10 | floating heart Upgrade | 2025-12-18 | Framer motion hearts on 'Thinking of You' |
+| 11 | Progress Ring Glow | 2025-12-18 | Green drop-shadow glow at 100% completion |
 | 12 | Typography Refinement | 2025-12-18 | Font-size scale CSS vars |
 
 ---
 
-### 🟡 Medium Effort (4-8 hours each)
+### 🟡 Medium Effort (In Progress/Backlog)
 
-| # | Enhancement | Status | Effort |
-|---|-------------|--------|--------|
-| 7 | Living Background 2.0 - Subtle Ambient Mode | ⏳ BACKLOG | 6h |
-| 8 | Morning Greeting Personalization | ⏳ BACKLOG | 4h |
-| 10 | "Thinking of You" Heart Animation Upgrade | ⏳ BACKLOG | 4h |
-| 11 | Progress Ring Glow States | ⏳ BACKLOG | 4h |
+*All current Medium Effort items have been moved to ✅ Implemented.*
 
 ---
 
