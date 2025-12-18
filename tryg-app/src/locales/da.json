@@ -225,5 +225,9 @@
     "what_needs_done": "Hvad skal gøres?",
     "example_call_doctor": "F.eks. Ring til lægen",
     "add_task_button": "Tilføj opgave",
-    "task_created_alert": "✅ Opgave oprettet: {{title}}"
+    "task_created_alert": "✅ Opgave oprettet: {{title}}",
+    "dashboard_symptoms": "⚠️ Nye symptomer",
+    "dashboard_symptoms_sub": "Der er rapporteret {{count}} symptomer i dag",
+    "dashboard_tasks_missing": "Mangler opgaver",
+    "dashboard_tasks_missing_sub": "Tjek op på dagens påmindelser"
 }

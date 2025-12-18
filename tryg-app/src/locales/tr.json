@@ -218,5 +218,9 @@
     "what_needs_done": "Ne yapılması gerekiyor?",
     "example_call_doctor": "Örn. Doktoru ara",
     "add_task_button": "Görev ekle",
-    "task_created_alert": "✅ Görev oluşturuldu: {{title}}"
+    "task_created_alert": "✅ Görev oluşturuldu: {{title}}",
+    "dashboard_symptoms": "⚠️ Yeni semptomlar",
+    "dashboard_symptoms_sub": "Bugün {{count}} semptom bildirildi",
+    "dashboard_tasks_missing": "Eksik görevler",
+    "dashboard_tasks_missing_sub": "Bugünün hatırlatıcılarını kontrol edin"
 }

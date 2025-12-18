@@ -218,5 +218,9 @@
     "what_needs_done": "Šta treba uraditi?",
     "example_call_doctor": "Npr. Nazvati doktora",
     "add_task_button": "Dodaj zadatak",
-    "task_created_alert": "✅ Zadatak kreiran: {{title}}"
+    "task_created_alert": "✅ Zadatak kreiran: {{title}}",
+    "dashboard_symptoms": "⚠️ Novi simptomi",
+    "dashboard_symptoms_sub": "Prijavljeno je {{count}} simptoma danas",
+    "dashboard_tasks_missing": "Nedostaju zadaci",
+    "dashboard_tasks_missing_sub": "Provjerite današnje podsjetnike"
 }
