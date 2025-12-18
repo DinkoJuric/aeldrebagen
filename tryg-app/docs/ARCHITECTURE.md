@@ -87,9 +87,9 @@ tryg-app/
 │   │   ├── useCareCircle.ts
 │   │
 │   ├── config/              # Configuration
-│   ├── data/                # Static Data
+│   ├── data/                # Static Data (wordGameData*.ts for localized words)
 │   ├── utils/               # Helpers
-│   └── types/               # TypeScript Definitions
+│   └── locales/             # i18n translation files (da.json, bs.json, tr.json)
 │
 ├── docs/                    # Documentation
 ├── tsconfig.json            # TypeScript Config
