@@ -68,8 +68,8 @@ Connect health data to life events to provide purpose.
 | Feature | Connection Value | Effort | Priority |
 |---------|-----------------|--------|----------|
 | SOSU Bridge (QR Web View) | ★★★★★ | High | High |
-| Voice Note Sharing | ★★★★☆ | Med | High |
-| Two-way Photo Sharing | ★★★★☆ | Med | Med |
+| Voice Note Sharing | ★★★★☆ | Med | ✅ Done (Livshistorier) |
+| Two-way Photo Sharing | ★★★★☆ | Med | Med | // Postpone for now 
 | Emoji Reactions | ★★★★☆ | Low | Med |
 | Pain Severity/History | ★★★☆☆ | Med | Low |
 

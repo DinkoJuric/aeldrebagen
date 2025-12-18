@@ -89,7 +89,7 @@ All stability foundation work has been completed:
 | **Weather integration** | Context-aware care | 3h | ⏳ TODO |
 | **Voice check-in** | Hands-free for tremors | 8h | ⏳ TODO |
 | **Personalized push notifications** | Personal, not robotic | 2h | ⏳ TODO |
-| **Family voice messages** | Emotional payoff | 6h | ⏳ TODO |
+| **Family voice messages** | Emotional payoff | 6h | ✅ Done (Livshistorier) |
 
 ### Trust Builders
 

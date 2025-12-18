@@ -6,6 +6,22 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### 🎙️ Livshistorier (Family Heirloom)
+
+**Audio Recording for Weekly Questions**
+- Added `AudioRecorder` component with visual feedback, playback, and retry
+- Added `useMemories` hook for Firebase Storage uploads and Firestore metadata
+- Added `MemoriesGallery` (Livsbog) for relatives to browse recorded memories
+- Integrated text/audio toggle into Weekly Question modal
+- Added `audioUrl` field to `WeeklyAnswer` type
+- Added Livsbog section to CoordinationTab for relatives
+
+**Translation Keys Added (20+ new keys)**
+- `text_answer`, `audio_answer`: Answer type labels
+- `recording_active`, `stop_recording`, `start_recording`: Recording state
+- `livsbog_title`, `no_memories_yet`, `stories`: Gallery UI
+- `mic_permission_denied`, `audio_recorder_not_supported`: Error handling
+
 ### 🌍 Internationalization (i18n) Expansion
 
 **Symptoms & BodyPainSelector**
