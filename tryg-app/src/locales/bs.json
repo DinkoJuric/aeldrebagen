@@ -222,5 +222,9 @@
     "dashboard_symptoms": "⚠️ Novi simptomi",
     "dashboard_symptoms_sub": "Prijavljeno je {{count}} simptoma danas",
     "dashboard_tasks_missing": "Nedostaju zadaci",
-    "dashboard_tasks_missing_sub": "Provjerite današnje podsjetnike"
+    "dashboard_tasks_missing_sub": "Provjerite današnje podsjetnike",
+    "theme": "Izgled",
+    "theme_auto": "Automatski (Prati sunce)",
+    "theme_light": "Svijetlo",
+    "theme_dark": "Tamno"
 }

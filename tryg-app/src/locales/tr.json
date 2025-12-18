@@ -222,5 +222,9 @@
     "dashboard_symptoms": "⚠️ Yeni semptomlar",
     "dashboard_symptoms_sub": "Bugün {{count}} semptom bildirildi",
     "dashboard_tasks_missing": "Eksik görevler",
-    "dashboard_tasks_missing_sub": "Bugünün hatırlatıcılarını kontrol edin"
+    "dashboard_tasks_missing_sub": "Bugünün hatırlatıcılarını kontrol edin",
+    "theme": "Görünüm",
+    "theme_auto": "Otomatik (Güneşi takip et)",
+    "theme_light": "Açık",
+    "theme_dark": "Koyu"
 }

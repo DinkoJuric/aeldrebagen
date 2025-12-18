@@ -346,8 +346,18 @@ git checkout -b fix-typescript-errors
 |----------|---------|----------|
 | **Prop Type Mismatches** | `onSendPing: (type: string) => void` called as `onSendPing()` | High - fix signatures or callers |
 | **Unused Variables** | `'profile' is declared but never read` | Low - prefix with `_` or remove |
-| **Null vs Undefined** | `string \| null` not assignable to `string \| undefined` | Medium - standardize on one |
+| **Null vs Undefined** | `string | null` not assignable to `string | undefined` | Medium - standardize on one |
 | **Generic Types** | `Set<unknown>` not assignable to `Set<string>` | Medium - add explicit type |
+
+### Circadian UI Transitions
+- **Problem**: Manually updating background and theme at different intervals caused "flicker" or inconsistent atmospheres.
+- **Action**: Centralized all circadian logic into a `ThemeContext` provider that drives both global CSS variables and the `LivingBackground` SVG states.
+- **Future**: Always centralize "Atmospheric State" (Time, Weather, Urgency) in a single provider to ensure UI-wide harmony.
+
+### Documentation Rigor (Standardized)
+- **Problem**: Standards (typography, architecture) can be lost between different agent sessions.
+- **Action**: Created a mandatory `.agent/workflows/onboarding.md` and added it to the global requirements.
+- **Future**: Use workflows to enforce project-specific constraints (e.g., --font-size-lg base).
 
 ### Lesson Learned
 

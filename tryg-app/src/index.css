@@ -65,6 +65,24 @@
   --duration-slower: 800ms;
   --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
   --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  /* === Theme Tokens (Circadian Defaults) === */
+  --theme-bg: hsl(37 20% 95%);
+  --theme-text: hsl(200 10% 20%);
+  --theme-text-muted: hsl(200 10% 45%);
+  --theme-card-bg: white;
+  --theme-card-border: hsl(37 15% 90%);
+  --theme-nav-bg: rgba(255, 255, 255, 0.8);
+}
+
+/* === Dark Mode Tokens === */
+.theme-dark {
+  --theme-bg: hsl(220 30% 10%);
+  --theme-text: hsl(220 20% 95%);
+  --theme-text-muted: hsl(220 15% 75%);
+  --theme-card-bg: hsl(220 25% 15%);
+  --theme-card-border: hsl(220 20% 25%);
+  --theme-nav-bg: rgba(15, 23, 42, 0.8);
 }
 
 /* ============================================
@@ -241,8 +259,11 @@
 /* Card with warm rounded corners */
 .card-warm {
   border-radius: var(--radius-lg);
-  background: white;
+  background: var(--theme-card-bg);
+  border: 1px solid var(--theme-card-border);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 4px 12px rgba(0, 0, 0, 0.03);
+  color: var(--theme-text);
+  transition: background-color var(--duration-normal), border-color var(--duration-normal), color var(--duration-normal);
 }
 
 /* Gradient header (warm teal) */
@@ -278,9 +299,10 @@ body {
   height: 100dvh;
   width: 100vw;
   overflow: hidden;
-  background-color: hsl(37 20% 95%);
-  color: hsl(200 10% 20%);
+  background-color: var(--theme-bg);
+  color: var(--theme-text);
   line-height: 1.5;
+  transition: background-color var(--duration-slow), color var(--duration-slow);
 }
 
 #root {

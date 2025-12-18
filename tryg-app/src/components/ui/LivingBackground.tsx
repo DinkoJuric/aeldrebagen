@@ -1,55 +1,47 @@
-import React, { useState, useEffect } from 'react';
+import { useTheme } from '../../contexts/ThemeContext';
+import React, { useMemo } from 'react';
 
 /**
  * LivingBackground 2.0 - Ambient circadian atmosphere
  * Uses subtle animated SVG blobs and time-aware gradients
  */
 export const LivingBackground: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [theme, setTheme] = useState({
-        gradient: 'bg-stone-50',
-        blob1: 'fill-teal-200/30',
-        blob2: 'fill-amber-100/20'
-    });
+    const { circadianTheme } = useTheme();
 
-    useEffect(() => {
-        const updateAtmosphere = () => {
-            const hour = new Date().getHours();
-
-            if (hour >= 6 && hour < 11) {
-                // MORNING: Fresh clarity
-                setTheme({
+    const theme = useMemo(() => {
+        switch (circadianTheme) {
+            case 'morning':
+                return {
                     gradient: 'bg-gradient-to-br from-teal-50 via-white to-stone-50',
                     blob1: 'fill-teal-200/40',
                     blob2: 'fill-sky-100/30'
-                });
-            } else if (hour >= 11 && hour < 17) {
-                // DAY: Warm activity
-                setTheme({
+                };
+            case 'day':
+                return {
                     gradient: 'bg-gradient-to-br from-amber-50 via-white to-orange-50/40',
                     blob1: 'fill-amber-200/20',
                     blob2: 'fill-orange-100/30'
-                });
-            } else if (hour >= 17 && hour < 22) {
-                // EVENING: Soft cozy settling
-                setTheme({
+                };
+            case 'evening':
+                return {
                     gradient: 'bg-gradient-to-br from-indigo-50 via-stone-50 to-stone-100',
                     blob1: 'fill-indigo-200/20',
                     blob2: 'fill-stone-300/30'
-                });
-            } else {
-                // NIGHT: Deep rest
-                setTheme({
+                };
+            case 'night':
+                return {
                     gradient: 'bg-gradient-to-br from-stone-900 via-slate-800 to-indigo-950',
                     blob1: 'fill-indigo-500/10',
                     blob2: 'fill-slate-700/20'
-                });
-            }
-        };
-
-        updateAtmosphere();
-        const timer = setInterval(updateAtmosphere, 60000);
-        return () => clearInterval(timer);
-    }, []);
+                };
+            default:
+                return {
+                    gradient: 'bg-stone-50',
+                    blob1: 'fill-teal-200/30',
+                    blob2: 'fill-amber-100/20'
+                };
+        }
+    }, [circadianTheme]);
 
     return (
         <div className={`min-h-screen w-full transition-all duration-[3000ms] ease-in-out relative overflow-hidden ${theme.gradient}`}>

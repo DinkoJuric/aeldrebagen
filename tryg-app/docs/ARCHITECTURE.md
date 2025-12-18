@@ -230,18 +230,22 @@ Bidirectional offer/request system with match celebration when offers align with
 
 ## RelativeView Tab Architecture
 
-> **Note (Dec 2025)**: Navigation state (`activeTab`) is now lifted to `AppCore.tsx`. Both `SeniorView` and `RelativeView` receive `activeTab` and `onTabChange` via props. The `BottomNavigation` component is rendered once in `AppCore`, not inside each view.
+> **Note (Dec 2025)**: Navigation state (`activeTab`) is now lifted to `AppCore.tsx`. Both `SeniorView` and `RelativeView` receive `activeTab` and `onTabChange` via props. The `BottomNavigation` component is rendered once in `AppCore`, not inside each view. The header navigation is split into **Share/Care Circle** (Top-Left) and **Settings/Privacy** (Center) to reduce cognitive load.
 
 ```
 AppCore (owns activeTab, SettingsModal, BottomNavigation)
-├── SeniorView (receives activeTab via props)
+├── ThemeProvider (owns Dark Mode / Circadian State)
+├── SeniorView (receives activeTab, isDark via props/context)
 │   ├── Daily Tab (Min Hverdag)
 │   ├── Family Tab (Familie)
 │   └── Spil Tab (Gaming Corner)
 │
 └── RelativeView (receives activeTab via props)
     ├── PeaceOfMindTab (Min Dag)
-    │   ├── Hero "Alt er vel" card
+    │   ├── AmbientDashboard (NEW) - Immersive status hero
+    │   │   ├── Dynamic gradients (Teal/Amber/Rose)
+    │   │   ├── Heartbeat pulse (Framer Motion)
+    │   │   └── Atmospheric blobs (SVG)
     │   ├── ProgressRing (3-segment Gates)
     │   │   ├── ☀️ Morgen (6-12)
     │   │   ├── 🌤️ Eftermiddag (12-18)
@@ -293,7 +297,13 @@ export function useXxx(circleId) {
 }
 ```
 
-### 2. CareCircleContext (State Sharing)
+### 2. Contexts (State Sharing)
+
+| Context | Key Consumers |
+|---|---|
+| `CareCircleContext` | FamilyPresence, PeaceOfMindTab, CoordinationTab |
+| `ThemeContext` | AppCore, LivingBackground, SettingsModal, AmbientDashboard |
+
 To avoid prop drilling, shared data (careCircleId, memberStatuses, currentUserId) is provided via React Context:
 
 ```javascript

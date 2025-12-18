@@ -69,12 +69,8 @@ graph TD
     SeniorView --> StatusCard
     SeniorView --> BottomNav
     
-    RelativeView --> WordGame
-    RelativeView --> HelpExchange
-    RelativeView --> FamilyPresence
-    RelativeView --> WeeklyQuestion
-    RelativeView --> BottomNav
-    
+    RelativeView --> AmbientDashboard
+    AmbientDashboard --> StatusCard
     FamilyPresence --> CareCircle
     StatusCard --> Tasks
 ```
@@ -112,10 +108,11 @@ graph TD
 | Component | Uses | Used By |
 |-----------|------|---------|
 | `StatusCard.tsx` | ProgressRing, ui/Avatar | PeaceOfMindTab, SeniorView |
+| `AmbientDashboard.tsx`| framer-motion, ui/Avatar | PeaceOfMindTab |
 | `FamilyPresence.tsx` | ui/Avatar, CareCircleContext | SeniorView, CoordinationTab |
 | `useMemberStatus.ts` | Firebase | AppCore |
 
-**Dependencies**: Firebase, CareCircleContext, ProgressRing. **Self-contained**: ❌ No
+**Dependencies**: Firebase, CareCircleContext, ProgressRing, Framer Motion. **Self-contained**: ❌ No
 
 ---
 
@@ -209,6 +206,7 @@ graph TD
 | Context | Used By |
 |---------|---------|
 | `CareCircleContext` | FamilyPresence, PeaceOfMindTab, CoordinationTab |
+| `ThemeContext` | AppCore, LivingBackground, SettingsModal, AmbientDashboard |
 
 ### Utilities (`utils/`)
 | Utility | Used By |

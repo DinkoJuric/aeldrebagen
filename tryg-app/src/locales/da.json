@@ -229,5 +229,9 @@
     "dashboard_symptoms": "⚠️ Nye symptomer",
     "dashboard_symptoms_sub": "Der er rapporteret {{count}} symptomer i dag",
     "dashboard_tasks_missing": "Mangler opgaver",
-    "dashboard_tasks_missing_sub": "Tjek op på dagens påmindelser"
+    "dashboard_tasks_missing_sub": "Tjek op på dagens påmindelser",
+    "theme": "Udseende",
+    "theme_auto": "Automatisk (Følg solen)",
+    "theme_light": "Lyst",
+    "theme_dark": "Mørkt"
 }

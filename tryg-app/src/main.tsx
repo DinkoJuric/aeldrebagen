@@ -95,10 +95,14 @@ window.onunhandledrejection = (event) => {
 // APP RENDER
 // ============================================================================
 
+import { ThemeProvider } from './contexts/ThemeContext'
+
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
         <ErrorBoundary>
-            <AppWithAuth />
+            <ThemeProvider>
+                <AppWithAuth />
+            </ThemeProvider>
         </ErrorBoundary>
     </StrictMode>,
 )
