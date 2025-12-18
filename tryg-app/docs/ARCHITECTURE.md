@@ -69,6 +69,10 @@ tryg-app/
 │   │   │   └── useSymptoms.ts
 │   │   ├── wordGame/
 │   │   ├── photos/
+│   │   ├── coffee/              # Spontan Kaffe (Open Door) signaling
+│   │   │   ├── index.ts
+│   │   │   ├── CoffeeToggle.tsx
+│   │   │   └── CoffeeInviteCard.tsx
 │   │   └── ... (thinkingOfYou, weeklyQuestion)
 │   │
 │   ├── components/          # Shared/Orchestration Components

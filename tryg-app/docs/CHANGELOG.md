@@ -67,6 +67,26 @@ All notable changes to this project will be documented in this file.
 - `spillehjoernet_*`: Gaming corner UI
 - `word_game_*`: Word game messages and feedback
 
+### ☕ Spontan Kaffe (Open Door Signal)
+
+**Senior-to-Relative Visit Signaling**
+- Created `CoffeeToggle.tsx` - One-tap toggle for seniors to signal "coffee is ready"
+- Created `CoffeeInviteCard.tsx` - Prominent invitation card for relatives
+- Extended `usePings` hook with optional `type` and `message` fields for typed notifications
+- Integrated coffee toggle in Senior Family tab, invite card in Relative Peace of Mind tab
+
+**Type System Improvements**
+- Added `coffee_ready` and `coffee_coming` to `Member.status` union
+- Unified `CareCircleContextValue` interface in `types.ts` (removed duplicate definitions)
+- Fixed multiple type mismatches in `SeniorView.tsx` and `PeaceOfMindTab.tsx`
+
+**Translation Keys Added (12 new keys)**
+- `coffee_coming_msg`, `status_coffee_ready`, `coffee_give_button`
+- `coffee_coming_title`, `coffee_ready_desc`, `coffee_off_desc`
+- `coffee_invite_title`, `coffee_invite_sub`, `coffee_invite_accept`
+- `peace_morning_missing`, `peace_afternoon_missing`, `peace_all_well`
+- Daily briefing keys (`daily_briefing_all_fine`, `daily_briefing_meds_fine`, etc.)
+
 
 ### 💊 Medication Management Enhancements
 
