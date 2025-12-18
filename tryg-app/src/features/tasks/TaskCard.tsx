@@ -100,9 +100,16 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, onToggle }) => {
                     </div>
                 </div>
 
-                {/* Checkbox */}
-                <div className={cn(checkboxVariants({ state }))}>
+                {/* Checkbox with celebration animation */}
+                <div className={cn(
+                    checkboxVariants({ state }),
+                    task.completed && 'animate-celebrate relative'
+                )}>
                     {task.completed && <CheckCircle className="text-white w-8 h-8" />}
+                    {/* Celebration ring burst */}
+                    {task.completed && (
+                        <span className="absolute inset-0 rounded-full border-2 border-teal-400 animate-ping opacity-75" />
+                    )}
                 </div>
             </div>
         </div>

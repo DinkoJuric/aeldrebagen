@@ -60,7 +60,8 @@ const MemberStatusRow: React.FC<MemberStatusRowProps> = ({ name, status, role, t
             ${isCurrentUser ? 'bg-indigo-50/50 border border-indigo-100/50' : 'hover:bg-stone-50 border border-transparent hover:border-stone-100'}
         `}>
             <div className="flex items-center gap-3">
-                <div className="relative">
+                {/* Avatar with connection glow when available */}
+                <div className={`relative ${status === 'available' ? 'animate-glow' : ''}`}>
                     <Avatar id={avatarId} size="md" className="shadow-sm border-2 border-white" />
                     <div className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full border-2 border-white ${status === 'available' ? 'bg-teal-500' :
                         status === 'home' ? 'bg-green-500' :
