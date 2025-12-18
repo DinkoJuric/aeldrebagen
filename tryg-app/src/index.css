@@ -1,45 +1,172 @@
 @import "tailwindcss";
 
-/* Custom animations */
+/* ============================================
+   TRYG DESIGN SYSTEM - Hygge-Inspired Tokens
+   ============================================ */
+
+:root {
+  /* === Color Palette (Hygge-Inspired) === */
+  
+  /* Primary - Warm Teal (not cold) */
+  --color-primary: 174 55% 38%;
+  --color-primary-light: 174 50% 92%;
+  --color-primary-dark: 174 60% 28%;
+  
+  /* Warm Stone (not gray) */
+  --color-stone: 37 20% 95%;
+  --color-stone-medium: 37 15% 85%;
+  --color-stone-dark: 37 15% 45%;
+  
+  /* Accent - Soft Gold (warmth) */
+  --color-accent: 43 80% 60%;
+  --color-accent-light: 43 75% 92%;
+  
+  /* Success - Soft Green (not harsh) */
+  --color-success: 152 45% 50%;
+  --color-success-light: 152 40% 92%;
+  
+  /* Warning - Warm Amber */
+  --color-warning: 38 92% 50%;
+  --color-warning-light: 38 85% 92%;
+  
+  /* Alert - Warm Red (not alarming) */
+  --color-alert: 8 65% 55%;
+  --color-alert-light: 8 60% 92%;
+  
+  /* === Spacing Scale === */
+  --space-xs: 0.25rem;   /* 4px */
+  --space-sm: 0.5rem;    /* 8px */
+  --space-md: 1rem;      /* 16px */
+  --space-lg: 1.5rem;    /* 24px */
+  --space-xl: 2rem;      /* 32px */
+  --space-2xl: 3rem;     /* 48px */
+  
+  /* === Border Radius (Warm, not sharp) === */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+  
+  /* === Typography === */
+  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-size-xs: 0.75rem;   /* 12px */
+  --font-size-sm: 0.875rem;  /* 14px */
+  --font-size-base: 1rem;    /* 16px */
+  --font-size-lg: 1.125rem;  /* 18px - WCAG minimum */
+  --font-size-xl: 1.25rem;   /* 20px */
+  --font-size-2xl: 1.5rem;   /* 24px */
+  --font-size-3xl: 2rem;     /* 32px */
+  
+  /* === Animation Timing === */
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+  --duration-slower: 800ms;
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* ============================================
+   MICRO-INTERACTION ANIMATIONS
+   ============================================ */
+
+/* === Breathing Pulse (Peace of Mind) === */
+@keyframes gentle-breathe {
+  0%, 100% { 
+    transform: scale(1); 
+    opacity: 0.95; 
+  }
+  50% { 
+    transform: scale(1.015); 
+    opacity: 1; 
+  }
+}
+
+.animate-breathe {
+  animation: gentle-breathe 4s ease-in-out infinite;
+}
+
+/* === Connection Glow (Family Activity) === */
+@keyframes connection-glow {
+  0%, 100% { 
+    box-shadow: 0 0 0 0 rgba(13, 148, 136, 0.4); 
+  }
+  50% { 
+    box-shadow: 0 0 20px 8px rgba(13, 148, 136, 0.15); 
+  }
+}
+
+.animate-glow {
+  animation: connection-glow 2s ease-in-out;
+}
+
+.animate-glow-loop {
+  animation: connection-glow 3s ease-in-out infinite;
+}
+
+/* === Task Celebration === */
+@keyframes celebrate-check {
+  0% { 
+    transform: scale(0.8); 
+    opacity: 0; 
+  }
+  50% { 
+    transform: scale(1.2); 
+  }
+  100% { 
+    transform: scale(1); 
+    opacity: 1; 
+  }
+}
+
+@keyframes celebrate-ring {
+  0% { 
+    transform: scale(0.8); 
+    opacity: 1; 
+  }
+  100% { 
+    transform: scale(2); 
+    opacity: 0; 
+  }
+}
+
+.animate-celebrate {
+  animation: celebrate-check 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+/* === Slide Up === */
 @keyframes slide-up {
   from {
     transform: translateY(100%);
     opacity: 0;
   }
-
   to {
     transform: translateY(0);
     opacity: 1;
   }
 }
 
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
+.animate-slide-up {
+  animation: slide-up 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.animate-slide-up {
-  animation: slide-up 0.3s ease-out;
+/* === Fade In === */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .animate-fade-in {
-  animation: fade-in 0.3s ease-out;
+  animation: fade-in 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Morning sun pulse - gentle warmth animation */
+/* === Sun Pulse (Morning) === */
 @keyframes sun-pulse {
-
-  0%,
-  100% {
+  0%, 100% {
     transform: scale(1);
     opacity: 1;
   }
-
   50% {
     transform: scale(1.1);
     opacity: 0.9;
@@ -50,13 +177,110 @@
   animation: sun-pulse 3s ease-in-out infinite;
 }
 
-/* Base styles */
+/* === Slow Bounce (Coffee feature) === */
+@keyframes bounce-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.animate-bounce-slow {
+  animation: bounce-slow 2s ease-in-out infinite;
+}
+
+/* === Wiggle (Fun micro-interaction) === */
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-5deg); }
+  75% { transform: rotate(5deg); }
+}
+
+.animate-wiggle {
+  animation: wiggle 0.3s ease-in-out;
+}
+
+/* ============================================
+   PAGE TRANSITIONS
+   ============================================ */
+
+/* Tab content transition wrapper */
+.tab-content {
+  animation: tab-enter 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes tab-enter {
+  from {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Fade transition for view switching */
+.view-transition-enter {
+  animation: view-enter 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes view-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ============================================
+   COMPONENT UTILITIES
+   ============================================ */
+
+/* Card with warm rounded corners */
+.card-warm {
+  border-radius: var(--radius-lg);
+  background: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+/* Gradient header (warm teal) */
+.header-gradient {
+  background: linear-gradient(
+    180deg, 
+    hsl(174 62% 35%) 0%, 
+    hsl(174 55% 42%) 100%
+  );
+}
+
+/* Peace of mind card gradient states */
+.peace-card-ok {
+  background: linear-gradient(135deg, hsl(152 45% 45%) 0%, hsl(174 50% 40%) 100%);
+}
+
+.peace-card-warning {
+  background: linear-gradient(135deg, hsl(38 80% 50%) 0%, hsl(25 75% 50%) 100%);
+}
+
+.peace-card-neutral {
+  background: linear-gradient(135deg, hsl(200 15% 50%) 0%, hsl(200 10% 55%) 100%);
+}
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
+
 body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: var(--font-family);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   height: 100dvh;
   width: 100vw;
   overflow: hidden;
+  background-color: hsl(37 20% 95%);
+  color: hsl(200 10% 20%);
+  line-height: 1.5;
 }
 
 #root {
@@ -67,6 +291,27 @@ body {
 
 /* Visible focus indicators for accessibility */
 *:focus-visible {
-  outline: 2px solid #0d9488;
+  outline: 2px solid hsl(174 55% 38%);
   outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Touch target minimum size for seniors (48x48) */
+.touch-target {
+  min-width: 48px;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Smooth scrolling */
+* {
+  scroll-behavior: smooth;
+}
+
+/* Selection color */
+::selection {
+  background-color: hsl(174 50% 85%);
+  color: hsl(174 60% 25%);
 }

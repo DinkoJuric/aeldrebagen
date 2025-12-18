@@ -114,7 +114,7 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
     const hasActiveMatches = filteredTopMatch !== null;
 
     return (
-        <div className="space-y-3">
+        <div className="space-y-3 tab-content">
             <div className="bg-indigo-600 rounded-xl px-3 py-2 text-white shadow-sm">
                 <div className="flex items-center justify-between gap-2">
                     <span className="text-xs text-indigo-200 font-medium">{t('din_status')}:</span>

@@ -262,7 +262,7 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
 
                 {/* ===== DAILY TAB ===== */}
                 {activeTab === 'daily' && (
-                    <>
+                    <div className="tab-content">
                         {/* Reward Card (Behavioral Hook) - Clickable to minimize, can be hidden */}
                         {allMedicineComplete && !hideReward && (
                             rewardMinimized ? (
@@ -464,12 +464,12 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                                 )}
                             </div>
                         )}
-                    </>
+                    </div>
                 )}
 
                 {/* ===== FAMILY TAB ===== */}
                 {(!FEATURES.tabbedLayout || activeTab === 'family') && (
-                    <>
+                    <div className="tab-content">
                         {/* Spontan Kaffe Signal */}
                         <CoffeeToggle />
 
@@ -518,12 +518,12 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                             />
                         )}
 
-                    </>
+                    </div>
                 )}
 
                 {/* ===== SPIL TAB ===== */}
                 {activeTab === 'spil' && (
-                    <>
+                    <div className="tab-content">
                         {/* Spillehjørnet - Gaming Corner */}
                         {FEATURES.spillehjoernet && (
                             <Spillehjoernet
@@ -532,7 +532,7 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                                 displayName={userName || 'Senior'}
                             />
                         )}
-                    </>
+                    </div>
                 )}
 
             </main>

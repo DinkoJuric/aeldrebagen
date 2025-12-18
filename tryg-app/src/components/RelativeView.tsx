@@ -197,7 +197,7 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
 
                 {/* ===== SPIL TAB ===== */}
                 {activeTab === 'spil' && (
-                    <>
+                    <div className="tab-content">
                         {FEATURES.spillehjoernet && (
                             <Spillehjoernet
                                 circleId={careCircleId || undefined}
@@ -205,7 +205,7 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
                                 displayName={userName || 'User'}
                             />
                         )}
-                    </>
+                    </div>
                 )}
             </main>
 

@@ -102,7 +102,7 @@ export const PeaceOfMindTab: React.FC<PeaceOfMindTabProps> = ({
 
 
     return (
-        <div className="space-y-4">
+        <div className="space-y-4 tab-content">
             {/* Spontan Kaffe Signal */}
             <CoffeeInviteCard />
 

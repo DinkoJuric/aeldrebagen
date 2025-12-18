@@ -168,6 +168,7 @@ export const StatusCard: React.FC<StatusCardProps> = ({
                 className={`
                     relative overflow-hidden rounded-2xl shadow-lg border border-white/20 p-6 
                     transition-all duration-500 ease-in-out
+                    ${statusInfo.theme === 'calm' ? 'animate-breathe' : ''}
                     ${className}
                 `}
                 style={{
