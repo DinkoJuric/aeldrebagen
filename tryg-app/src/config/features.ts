@@ -4,6 +4,7 @@
 export const FEATURES = {
     // Layout
     tabbedLayout: true,        // Use tabs instead of scrolling (experimental)
+    livingDesign: true,        // 🏠 New "Velkommen Hjem" aesthetic (set false to fallback)
 
     // Phase 5: Emotional Connection
     weeklyQuestion: true,      // Weekly Question of the Week card

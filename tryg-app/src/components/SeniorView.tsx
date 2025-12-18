@@ -211,335 +211,339 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
 
     return (
         <div className="flex flex-col h-full bg-transparent relative pt-10">
-            {/* Header - COMPACT */}
-            <header className="px-4 py-2 bg-white shadow-sm rounded-b-3xl z-10 shrink-0">
+            {/* Header - COMPACT (uses theme-aware classes for dark mode) */}
+            <header className="px-4 py-2 theme-header shadow-sm rounded-b-3xl z-10 shrink-0">
                 <div className="flex justify-between items-center">
                     <div className="flex items-center gap-3">
                         <Avatar id="senior" size="md" />
                         <div>
-                            <h1 className="text-xl font-bold text-stone-800 leading-tight">{greeting}</h1>
-                            <p className="text-sm text-stone-500">{userName}</p>
+                            <h1 className="text-xl font-bold theme-text leading-tight">{greeting}</h1>
+                            <p className="text-sm theme-text-muted">{userName}</p>
                         </div>
                     </div>
-                    {/* Swap sun for Weekly Question widget on Family tab */}
-                    {FEATURES.weeklyQuestion && activeTab === 'family' ? (
+                    {/* Weekly Question widget (Family tab only) - Sun removed for cleaner look */}
+                    {FEATURES.weeklyQuestion && activeTab === 'family' && (
                         <WeeklyQuestionWidget
                             answers={weeklyAnswers}
                             userName={userName}
                             hasUnread={true}
                             onClick={() => setShowWeeklyModal(true)}
                         />
-                    ) : (
-                        <div className="bg-amber-100 p-1.5 rounded-full animate-sun-pulse">
-                            <Sun className="text-amber-500 w-6 h-6" />
-                        </div>
                     )}
                 </div>
                 <div className="flex items-center gap-2 text-sm">
-                    <span className="text-stone-500 capitalize">{dateString}</span>
+                    <span className="theme-text-muted capitalize">{dateString}</span>
                     <InlineGatesIndicator tasks={tasks} className="ml-2 scale-90 origin-left" />
                 </div>
-            </header>
+            </header >
 
             {/* Main Content - Scrollable with padding for bottom nav */}
-            <main className="flex-1 overflow-y-auto p-4 space-y-4 pb-24">
+            < main className="flex-1 overflow-y-auto p-4 space-y-4 pb-24" >
 
                 {/* Match Celebration Banner - Shows when there's a help exchange match */}
-                {hasMatches && topMatch && (() => {
-                    // Generate match ID for filtering
-                    const offerId = topMatch.offer?.docId || topMatch.offer?.id || 'none';
-                    const requestId = topMatch.request?.docId || topMatch.request?.id || 'none';
-                    const matchId = `${offerId}-${requestId}`;
+                {
+                    hasMatches && topMatch && (() => {
+                        // Generate match ID for filtering
+                        const offerId = topMatch.offer?.docId || topMatch.offer?.id || 'none';
+                        const requestId = topMatch.request?.docId || topMatch.request?.id || 'none';
+                        const matchId = `${offerId}-${requestId}`;
 
-                    if (dismissedMatchIds.has(matchId)) return null;
+                        if (dismissedMatchIds.has(matchId)) return null;
 
-                    return (
-                        <MatchBanner
-                            match={topMatch}
-                            onClick={() => {
-                                playMatchSound();
-                                setActiveMatch(topMatch);
-                            }}
-                            onDismiss={() => {
-                                setDismissedMatchIds(prev => new Set([...prev, matchId]));
-                            }}
-                        />
-                    );
-                })()}
+                        return (
+                            <MatchBanner
+                                match={topMatch}
+                                onClick={() => {
+                                    playMatchSound();
+                                    setActiveMatch(topMatch);
+                                }}
+                                onDismiss={() => {
+                                    setDismissedMatchIds(prev => new Set([...prev, matchId]));
+                                }}
+                            />
+                        );
+                    })()
+                }
 
                 {/* ===== DAILY TAB ===== */}
-                {activeTab === 'daily' && (
-                    <div className="tab-content">
-                        {/* Reward Card (Behavioral Hook) - Clickable to minimize, can be hidden */}
-                        {allMedicineComplete && !hideReward && (
-                            rewardMinimized ? (
-                                <div className="relative w-full rounded-xl p-3 mb-4 bg-indigo-100 border-2 border-indigo-200 flex items-center justify-between">
-                                    <button
-                                        onClick={() => setRewardMinimized(false)}
-                                        className="flex-1 flex items-center gap-2 hover:opacity-80 transition-opacity"
-                                    >
-                                        <ImageIcon className="w-5 h-5 text-indigo-600" />
-                                        <div>
-                                            <span className="font-bold text-indigo-700">{t('daily_photo_title')}</span>
-                                            <p className="text-xs text-indigo-500">{t('daily_photo_subtitle')}</p>
+                {
+                    activeTab === 'daily' && (
+                        <div className="tab-content">
+                            {/* Reward Card (Behavioral Hook) - Clickable to minimize, can be hidden */}
+                            {allMedicineComplete && !hideReward && (
+                                rewardMinimized ? (
+                                    <div className="relative w-full rounded-xl p-3 mb-4 bg-indigo-100 border-2 border-indigo-200 flex items-center justify-between">
+                                        <button
+                                            onClick={() => setRewardMinimized(false)}
+                                            className="flex-1 flex items-center gap-2 hover:opacity-80 transition-opacity"
+                                        >
+                                            <ImageIcon className="w-5 h-5 text-indigo-600" />
+                                            <div>
+                                                <span className="font-bold text-indigo-700">{t('daily_photo_title')}</span>
+                                                <p className="text-xs text-indigo-500">{t('daily_photo_subtitle')}</p>
+                                            </div>
+                                        </button>
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-xs text-indigo-400">{t('press_to_show')}</span>
+                                            <button
+                                                onClick={() => setHideReward(true)}
+                                                className="p-1 rounded-full hover:bg-indigo-200 text-indigo-400 hover:text-indigo-600"
+                                                title={t('hide')}
+                                            >
+                                                ✕
+                                            </button>
                                         </div>
-                                    </button>
-                                    <div className="flex items-center gap-2">
-                                        <span className="text-xs text-indigo-400">{t('press_to_show')}</span>
+                                    </div>
+                                ) : (
+                                    <div className="relative w-full rounded-3xl p-6 mb-6 bg-indigo-600 border-2 border-indigo-600 text-white animate-fade-in">
                                         <button
                                             onClick={() => setHideReward(true)}
-                                            className="p-1 rounded-full hover:bg-indigo-200 text-indigo-400 hover:text-indigo-600"
+                                            className="absolute top-2 right-2 p-1 rounded-full bg-indigo-500 hover:bg-indigo-400 text-indigo-200 hover:text-white text-sm"
                                             title={t('hide')}
                                         >
                                             ✕
                                         </button>
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className="relative w-full rounded-3xl p-6 mb-6 bg-indigo-600 border-2 border-indigo-600 text-white animate-fade-in">
-                                    <button
-                                        onClick={() => setHideReward(true)}
-                                        className="absolute top-2 right-2 p-1 rounded-full bg-indigo-500 hover:bg-indigo-400 text-indigo-200 hover:text-white text-sm"
-                                        title={t('hide')}
-                                    >
-                                        ✕
-                                    </button>
-                                    <button
-                                        onClick={() => setRewardMinimized(true)}
-                                        className="w-full text-center"
-                                    >
-                                        <div className="flex items-center justify-center gap-2 mb-2">
-                                            <ImageIcon className="w-6 h-6 text-indigo-200" />
-                                            <span className="font-bold text-indigo-100 uppercase tracking-widest text-sm">{t('daily_photo_title')}</span>
-                                        </div>
-                                        <div className="w-full h-48 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-xl mb-3 overflow-hidden shadow-lg transform rotate-2 hover:rotate-0 transition-transform duration-500">
-                                            {/* Daily nature photo - same image all day using date as seed */}
-                                            <img
-                                                src={`https://picsum.photos/seed/${new Date().toISOString().split('T')[0]}/600/400`}
-                                                alt="Dagens billede"
-                                                className="w-full h-full object-cover"
-                                            />
-                                        </div>
-                                        <p className="font-bold text-lg">{t('medication_taken')}</p>
-                                        <p className="text-indigo-200 text-sm">{t('press_to_minimize')}</p>
-                                    </button>
-                                </div>
-                            )
-                        )}
-
-                        {/* MEDICINE SECTION - Only show uncompleted, but show summary */}
-                        {medicineTasks.length > 0 && !allMedicineComplete && (
-                            <div className="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-2xl p-4 mb-6 border-2 border-purple-100">
-                                <div className="flex items-center gap-2 mb-3">
-                                    <Pill className="w-6 h-6 text-purple-600" />
-                                    <h2 className="text-lg font-bold text-purple-800">{t('medication_title')}</h2>
-                                    <span className="text-sm text-purple-500 ml-auto">
-                                        {completedMedicine}/{medicineTasks.length} {t('taken')}
-                                    </span>
-                                </div>
-                                <div className="space-y-2">
-                                    {medicineTasks.filter(m => !m.completed).map(med => (
                                         <button
-                                            key={med.id}
-                                            onClick={() => toggleTask(med.id)}
-                                            className="w-full flex items-center gap-3 p-3 rounded-xl transition-all bg-white border-2 border-purple-100 hover:border-purple-300"
+                                            onClick={() => setRewardMinimized(true)}
+                                            className="w-full text-center"
                                         >
-                                            <div className="w-8 h-8 rounded-full border-2 border-purple-300 bg-white flex items-center justify-center transition-colors">
-                                                {/* Empty circle for uncompleted */}
+                                            <div className="flex items-center justify-center gap-2 mb-2">
+                                                <ImageIcon className="w-6 h-6 text-indigo-200" />
+                                                <span className="font-bold text-indigo-100 uppercase tracking-widest text-sm">{t('daily_photo_title')}</span>
                                             </div>
-                                            <span className="font-medium text-purple-800">
-                                                {med.title}
-                                            </span>
-                                            <span className="text-purple-400 text-sm ml-auto">{med.time}</span>
+                                            <div className="w-full h-48 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-xl mb-3 overflow-hidden shadow-lg transform rotate-2 hover:rotate-0 transition-transform duration-500">
+                                                {/* Daily nature photo - same image all day using date as seed */}
+                                                <img
+                                                    src={`https://picsum.photos/seed/${new Date().toISOString().split('T')[0]}/600/400`}
+                                                    alt="Dagens billede"
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            </div>
+                                            <p className="font-bold text-lg">{t('medication_taken')}</p>
+                                            <p className="text-indigo-200 text-sm">{t('press_to_minimize')}</p>
                                         </button>
-                                    ))}
-
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Medicine Complete Collapsed State */}
-                        {medicineTasks.length > 0 && allMedicineComplete && (
-                            <div className="bg-gradient-to-r from-green-50 to-teal-50 rounded-xl p-3 mb-4 border border-green-200 flex items-center gap-3">
-                                <div className="bg-green-500 rounded-full p-1.5">
-                                    <CheckCircle className="w-4 h-4 text-white" />
-                                </div>
-                                <span className="text-green-700 font-medium">{t('medication_taken_check')}</span>
-                            </div>
-                        )}
-
-                        {/* Check-in Status */}
-                        <div className="bg-white rounded-3xl p-6 shadow-sm border-2 border-teal-100 mb-8">
-                            <h2 className="text-xl font-semibold text-stone-800 mb-4">{t('pain_question')}</h2>
-                            <div className="grid grid-cols-2 gap-4">
-                                <Button
-                                    variant="primary"
-                                    size="large"
-                                    className="w-full min-h-32 py-4"
-                                    onClick={() => updateStatus('checked-in')}
-                                >
-                                    <div className="flex flex-col items-center gap-2 text-center">
-                                        <CheckCircle className="w-10 h-10 shrink-0" />
-                                        <span className="text-sm leading-tight">{t('i_feel_good')}</span>
                                     </div>
-                                </Button>
+                                )
+                            )}
 
-                                <Button
-                                    variant="secondary"
-                                    size="large"
-                                    className="w-full min-h-32 py-4 bg-orange-50 text-orange-800 border-2 border-orange-100 hover:bg-orange-100"
-                                    onClick={() => setShowSymptomModal(true)}
-                                >
-                                    <div className="flex flex-col items-center gap-2 text-center">
-                                        <Heart className="w-10 h-10 text-orange-500 shrink-0" />
-                                        <span className="text-sm leading-tight">{t('i_feel_pain')}</span>
+                            {/* MEDICINE SECTION - Only show uncompleted, but show summary */}
+                            {medicineTasks.length > 0 && !allMedicineComplete && (
+                                <div className="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-2xl p-4 mb-6 border-2 border-purple-100">
+                                    <div className="flex items-center gap-2 mb-3">
+                                        <Pill className="w-6 h-6 text-purple-600" />
+                                        <h2 className="text-lg font-bold text-purple-800">{t('medication_title')}</h2>
+                                        <span className="text-sm text-purple-500 ml-auto">
+                                            {completedMedicine}/{medicineTasks.length} {t('taken')}
+                                        </span>
                                     </div>
-                                </Button>
-                            </div>
-                        </div>
-
-                        {/* Contextual Task Lists */}
-                        {renderTaskSection(t('time_period_morning_full'), 'morgen', <Coffee className="w-6 h-6 text-stone-600" />)}
-                        <div className="h-px bg-stone-200 my-4" />
-                        {renderTaskSection(t('time_period_lunch_full'), 'frokost', <Sun className="w-6 h-6 text-stone-600" />)}
-                        <div className="h-px bg-stone-200 my-4" />
-                        {renderTaskSection(t('time_period_afternoon_full'), 'eftermiddag', <Moon className="w-6 h-6 text-stone-600" />)}
-                        <div className="h-px bg-stone-200 my-4" />
-                        {renderTaskSection(t('time_period_evening_full'), 'aften', <Moon className="w-6 h-6 text-stone-600" />)}
-
-                        {/* Add Own Task Button */}
-                        <button
-                            onClick={() => setShowAddTaskModal(true)}
-                            className="w-full flex items-center justify-center gap-2 p-4 mt-4 bg-white border-2 border-dashed border-teal-300 rounded-2xl text-teal-600 font-medium hover:bg-teal-50 hover:border-teal-400 transition-colors"
-                        >
-                            <Plus className="w-5 h-5" />
-                            <span>{t('add_own_task')}</span>
-                        </button>
-
-                        {/* Completed Tasks - DISABLED for now (uncomment to re-enable) */}
-                        {false && completedTasks > 0 && (
-                            <div className="mt-6">
-                                <button
-                                    onClick={() => setShowCompletedTasks(!showCompletedTasks)}
-                                    className="w-full flex items-center justify-between p-4 bg-teal-50 rounded-2xl border-2 border-teal-100 hover:bg-teal-100 transition-colors"
-                                >
-                                    <div className="flex items-center gap-3">
-                                        <CheckCircle className="w-6 h-6 text-teal-600" />
-                                        <span className="font-bold text-teal-800">{t('completed_tasks_count_special', { count: completedTasks })}</span>
-                                    </div>
-                                    {showCompletedTasks ? (
-                                        <ChevronUp className="w-5 h-5 text-teal-600" />
-                                    ) : (
-                                        <ChevronDown className="w-5 h-5 text-teal-600" />
-                                    )}
-                                </button>
-
-                                {showCompletedTasks && (
-                                    <div className="mt-3 space-y-3">
-                                        {tasks.filter(t => t.completed).map(task => (
-                                            <div
-                                                key={task.id}
-                                                onClick={() => toggleTask(task.id)}
-                                                className="p-4 rounded-2xl bg-stone-100 border-2 border-stone-200 cursor-pointer hover:border-stone-300 transition-colors"
+                                    <div className="space-y-2">
+                                        {medicineTasks.filter(m => !m.completed).map(med => (
+                                            <button
+                                                key={med.id}
+                                                onClick={() => toggleTask(med.id)}
+                                                className="w-full flex items-center gap-3 p-3 rounded-xl transition-all bg-white border-2 border-purple-100 hover:border-purple-300"
                                             >
-                                                <div className="flex items-center justify-between">
-                                                    <div className="flex items-center gap-4">
-                                                        <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-stone-200 text-stone-400">
-                                                            {task.type === 'medication' && <Pill className="w-6 h-6" />}
-                                                            {task.type === 'hydration' && <Activity className="w-6 h-6" />}
-                                                            {task.type === 'activity' && <Sun className="w-6 h-6" />}
-                                                            {task.type === 'appointment' && <Clock className="w-6 h-6" />}
+                                                <div className="w-8 h-8 rounded-full border-2 border-purple-300 bg-white flex items-center justify-center transition-colors">
+                                                    {/* Empty circle for uncompleted */}
+                                                </div>
+                                                <span className="font-medium text-purple-800">
+                                                    {med.title}
+                                                </span>
+                                                <span className="text-purple-400 text-sm ml-auto">{med.time}</span>
+                                            </button>
+                                        ))}
+
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Medicine Complete Collapsed State */}
+                            {medicineTasks.length > 0 && allMedicineComplete && (
+                                <div className="bg-gradient-to-r from-green-50 to-teal-50 rounded-xl p-3 mb-4 border border-green-200 flex items-center gap-3">
+                                    <div className="bg-green-500 rounded-full p-1.5">
+                                        <CheckCircle className="w-4 h-4 text-white" />
+                                    </div>
+                                    <span className="text-green-700 font-medium">{t('medication_taken_check')}</span>
+                                </div>
+                            )}
+
+                            {/* Check-in Status */}
+                            <div className="bg-white rounded-3xl p-6 shadow-sm border-2 border-teal-100 mb-8">
+                                <h2 className="text-xl font-semibold text-stone-800 mb-4">{t('pain_question')}</h2>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <Button
+                                        variant="primary"
+                                        size="large"
+                                        className="w-full min-h-32 py-4"
+                                        onClick={() => updateStatus('checked-in')}
+                                    >
+                                        <div className="flex flex-col items-center gap-2 text-center">
+                                            <CheckCircle className="w-10 h-10 shrink-0" />
+                                            <span className="text-sm leading-tight">{t('i_feel_good')}</span>
+                                        </div>
+                                    </Button>
+
+                                    <Button
+                                        variant="secondary"
+                                        size="large"
+                                        className="w-full min-h-32 py-4 bg-orange-50 text-orange-800 border-2 border-orange-100 hover:bg-orange-100"
+                                        onClick={() => setShowSymptomModal(true)}
+                                    >
+                                        <div className="flex flex-col items-center gap-2 text-center">
+                                            <Heart className="w-10 h-10 text-orange-500 shrink-0" />
+                                            <span className="text-sm leading-tight">{t('i_feel_pain')}</span>
+                                        </div>
+                                    </Button>
+                                </div>
+                            </div>
+
+                            {/* Contextual Task Lists - theme-aware icons/dividers */}
+                            {renderTaskSection(t('time_period_morning_full'), 'morgen', <Coffee className="w-6 h-6 theme-text-muted" />)}
+                            <div className="h-px bg-current opacity-10 my-4" />
+                            {renderTaskSection(t('time_period_lunch_full'), 'frokost', <Sun className="w-6 h-6 theme-text-muted" />)}
+                            <div className="h-px bg-current opacity-10 my-4" />
+                            {renderTaskSection(t('time_period_afternoon_full'), 'eftermiddag', <Moon className="w-6 h-6 theme-text-muted" />)}
+                            <div className="h-px bg-current opacity-10 my-4" />
+                            {renderTaskSection(t('time_period_evening_full'), 'aften', <Moon className="w-6 h-6 theme-text-muted" />)}
+
+                            {/* Add Own Task Button */}
+                            <button
+                                onClick={() => setShowAddTaskModal(true)}
+                                className="w-full flex items-center justify-center gap-2 p-4 mt-4 bg-white border-2 border-dashed border-teal-300 rounded-2xl text-teal-600 font-medium hover:bg-teal-50 hover:border-teal-400 transition-colors"
+                            >
+                                <Plus className="w-5 h-5" />
+                                <span>{t('add_own_task')}</span>
+                            </button>
+
+                            {/* Completed Tasks - DISABLED for now (uncomment to re-enable) */}
+                            {false && completedTasks > 0 && (
+                                <div className="mt-6">
+                                    <button
+                                        onClick={() => setShowCompletedTasks(!showCompletedTasks)}
+                                        className="w-full flex items-center justify-between p-4 bg-teal-50 rounded-2xl border-2 border-teal-100 hover:bg-teal-100 transition-colors"
+                                    >
+                                        <div className="flex items-center gap-3">
+                                            <CheckCircle className="w-6 h-6 text-teal-600" />
+                                            <span className="font-bold text-teal-800">{t('completed_tasks_count_special', { count: completedTasks })}</span>
+                                        </div>
+                                        {showCompletedTasks ? (
+                                            <ChevronUp className="w-5 h-5 text-teal-600" />
+                                        ) : (
+                                            <ChevronDown className="w-5 h-5 text-teal-600" />
+                                        )}
+                                    </button>
+
+                                    {showCompletedTasks && (
+                                        <div className="mt-3 space-y-3">
+                                            {tasks.filter(t => t.completed).map(task => (
+                                                <div
+                                                    key={task.id}
+                                                    onClick={() => toggleTask(task.id)}
+                                                    className="p-4 rounded-2xl bg-stone-100 border-2 border-stone-200 cursor-pointer hover:border-stone-300 transition-colors"
+                                                >
+                                                    <div className="flex items-center justify-between">
+                                                        <div className="flex items-center gap-4">
+                                                            <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-stone-200 text-stone-400">
+                                                                {task.type === 'medication' && <Pill className="w-6 h-6" />}
+                                                                {task.type === 'hydration' && <Activity className="w-6 h-6" />}
+                                                                {task.type === 'activity' && <Sun className="w-6 h-6" />}
+                                                                {task.type === 'appointment' && <Clock className="w-6 h-6" />}
+                                                            </div>
+                                                            <div>
+                                                                <h3 className="text-lg font-bold text-stone-500 line-through">{task.title}</h3>
+                                                                <p className="text-stone-400 text-sm">{task.time}</p>
+                                                            </div>
                                                         </div>
-                                                        <div>
-                                                            <h3 className="text-lg font-bold text-stone-500 line-through">{task.title}</h3>
-                                                            <p className="text-stone-400 text-sm">{task.time}</p>
+                                                        <div className="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center">
+                                                            <CheckCircle className="text-white w-6 h-6" />
                                                         </div>
-                                                    </div>
-                                                    <div className="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center">
-                                                        <CheckCircle className="text-white w-6 h-6" />
                                                     </div>
                                                 </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
-                        )}
-                    </div>
-                )}
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    )
+                }
 
                 {/* ===== FAMILY TAB ===== */}
-                {(!FEATURES.tabbedLayout || activeTab === 'family') && (
-                    <div className="tab-content">
-                        {/* Spontan Kaffe Signal */}
-                        <CoffeeToggle />
+                {
+                    (!FEATURES.tabbedLayout || activeTab === 'family') && (
+                        <div className="tab-content">
+                            {/* Spontan Kaffe Signal */}
+                            <CoffeeToggle />
 
-                        {/* Thinking of You - MOVED TO TOP */}
-                        {FEATURES.thinkingOfYou && (
-                            <ThinkingOfYouButton onSendPing={() => onSendPing('heart')} fromName={userName} />
-                        )}
+                            {/* Thinking of You - MOVED TO TOP */}
+                            {FEATURES.thinkingOfYou && (
+                                <ThinkingOfYouButton onSendPing={() => onSendPing('heart')} fromName={userName} />
+                            )}
 
-                        {/* Family Presence - "Familien Nu" for bidirectional visibility */}
-                        {memberStatuses.length > 0 && (
-                            <FamilyPresence
-                                memberStatuses={memberStatuses as any}
-                                currentUserId={currentUserId || ''}
-                                seniorName={userName}
-                            />
-                        )}
+                            {/* Family Presence - "Familien Nu" for bidirectional visibility */}
+                            {memberStatuses.length > 0 && (
+                                <FamilyPresence
+                                    memberStatuses={memberStatuses as any}
+                                    currentUserId={currentUserId || ''}
+                                    seniorName={userName}
+                                />
+                            )}
 
-                        {/* Legacy Family Status List - fallback if no memberStatuses */}
-                        {FEATURES.familyStatusCard && memberStatuses.length === 0 && (
-                            <StatusList
-                                members={members}
-                                relativeStatuses={relativeStatuses}
-                                lastUpdated={statusLastUpdated}
-                            />
-                        )}
+                            {/* Legacy Family Status List - fallback if no memberStatuses */}
+                            {FEATURES.familyStatusCard && memberStatuses.length === 0 && (
+                                <StatusList
+                                    members={members}
+                                    relativeStatuses={relativeStatuses}
+                                    lastUpdated={statusLastUpdated}
+                                />
+                            )}
 
-                        {/* Weekly Question now in header - removed from here */}
+                            {/* Weekly Question now in header - removed from here */}
 
-                        {/* Memory Trigger - toggle with FEATURES.memoryTriggers */}
-                        {FEATURES.memoryTriggers && <MemoryTrigger />}
+                            {/* Memory Trigger - toggle with FEATURES.memoryTriggers */}
+                            {FEATURES.memoryTriggers && <MemoryTrigger />}
 
-                        {/* Language Selection moved to global SettingsModal */}
+                            {/* Language Selection moved to global SettingsModal */}
 
-                        {/* Dignity-Preserving Help Exchange - toggle with FEATURES.helpExchange */}
-                        {FEATURES.helpExchange && (
-                            <HelpExchange
-                                onOffer={onHelpOffer}
-                                onRequest={onHelpRequest}
-                                onRemoveOffer={onRemoveOffer}
-                                onRemoveRequest={onRemoveRequest}
-                                activeOffers={helpOffers}
-                                activeRequests={helpRequests}
-                                relativeOffers={relativeOffers}
-                                relativeRequests={relativeRequests}
-                                seniorName={userName}
-                            />
-                        )}
+                            {/* Dignity-Preserving Help Exchange - toggle with FEATURES.helpExchange */}
+                            {FEATURES.helpExchange && (
+                                <HelpExchange
+                                    onOffer={onHelpOffer}
+                                    onRequest={onHelpRequest}
+                                    onRemoveOffer={onRemoveOffer}
+                                    onRemoveRequest={onRemoveRequest}
+                                    activeOffers={helpOffers}
+                                    activeRequests={helpRequests}
+                                    relativeOffers={relativeOffers}
+                                    relativeRequests={relativeRequests}
+                                    seniorName={userName}
+                                />
+                            )}
 
-                    </div>
-                )}
+                        </div>
+                    )
+                }
 
                 {/* ===== SPIL TAB ===== */}
-                {activeTab === 'spil' && (
-                    <div className="tab-content">
-                        {/* Spillehjørnet - Gaming Corner */}
-                        {FEATURES.spillehjoernet && (
-                            <Spillehjoernet
-                                circleId={careCircleId || ''}
-                                userId={currentUserId || ''}
-                                displayName={userName || 'Senior'}
-                            />
-                        )}
-                    </div>
-                )}
+                {
+                    activeTab === 'spil' && (
+                        <div className="tab-content">
+                            {/* Spillehjørnet - Gaming Corner */}
+                            {FEATURES.spillehjoernet && (
+                                <Spillehjoernet
+                                    circleId={careCircleId || ''}
+                                    userId={currentUserId || ''}
+                                    displayName={userName || 'Senior'}
+                                />
+                            )}
+                        </div>
+                    )
+                }
 
-            </main>
+            </main >
 
             {/* Symptom Modal - Two-step flow for pain */}
-            <Modal
+            < Modal
                 isOpen={showSymptomModal}
                 onClose={() => {
                     setShowSymptomModal(false);
@@ -548,54 +552,55 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                 }}
                 title={showBodySelector ? t('where_does_it_hurt') : t('how_do_you_feel')}
             >
-                {showBodySelector ? (
-                    // Step 2: Body location selector (for Smerter)
-                    <BodyPainSelector
-                        onSelectLocation={(bodyLocation) => {
-                            // Add symptom with body location
-                            addSymptom({
-                                ...selectedSymptom,
-                                bodyLocation: bodyLocation
-                            });
-                            setShowSymptomModal(false);
-                            setSelectedSymptom(null);
-                            setShowBodySelector(false);
-                        }}
-                        onBack={() => {
-                            setShowBodySelector(false);
-                            setSelectedSymptom(null);
-                        }}
-                    />
-                ) : (
-                    // Step 1: Symptom type selector
-                    <div className="grid grid-cols-2 gap-4">
-                        {SYMPTOMS_LIST.map(sym => (
-                            <button
-                                key={sym.id}
-                                onClick={() => {
-                                    // If it's pain (smerter), show body location picker
-                                    if (sym.id === 'pain') {
-                                        setSelectedSymptom(sym);
-                                        setShowBodySelector(true);
-                                    } else {
-                                        // For other symptoms, add directly
-                                        addSymptom(sym);
-                                        setShowSymptomModal(false);
-                                    }
-                                }}
-                                className={`
+                {
+                    showBodySelector ? (
+                        // Step 2: Body location selector (for Smerter)
+                        <BodyPainSelector
+                            onSelectLocation={(bodyLocation) => {
+                                // Add symptom with body location
+                                addSymptom({
+                                    ...selectedSymptom,
+                                    bodyLocation: bodyLocation
+                                });
+                                setShowSymptomModal(false);
+                                setSelectedSymptom(null);
+                                setShowBodySelector(false);
+                            }}
+                            onBack={() => {
+                                setShowBodySelector(false);
+                                setSelectedSymptom(null);
+                            }}
+                        />
+                    ) : (
+                        // Step 1: Symptom type selector
+                        <div className="grid grid-cols-2 gap-4">
+                            {SYMPTOMS_LIST.map(sym => (
+                                <button
+                                    key={sym.id}
+                                    onClick={() => {
+                                        // If it's pain (smerter), show body location picker
+                                        if (sym.id === 'pain') {
+                                            setSelectedSymptom(sym);
+                                            setShowBodySelector(true);
+                                        } else {
+                                            // For other symptoms, add directly
+                                            addSymptom(sym);
+                                            setShowSymptomModal(false);
+                                        }
+                                    }}
+                                    className={`
                                     flex flex-col items-center justify-center gap-2 p-6 rounded-2xl
                                     transition-transform active:scale-95 border-2 border-transparent hover:border-stone-300
                                     ${sym.color}
                                 `}
-                            >
-                                <sym.icon className="w-10 h-10" />
-                                <span className="font-bold">{sym.label}</span>
-                            </button>
-                        ))}
-                    </div>
-                )}
-            </Modal>
+                                >
+                                    <sym.icon className="w-10 h-10" />
+                                    <span className="font-bold">{sym.label}</span>
+                                </button>
+                            ))}
+                        </div>
+                    )}
+            </Modal >
 
 
 
@@ -630,39 +635,41 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
             />
             {/* Match Celebration Modal - full screen confetti! */}
             {/* Match Celebration Modal - full screen confetti! */}
-            {topMatch && !dismissedMatchIds.has(`${topMatch.offer?.id || 'o'}-${topMatch.request?.id || 'r'}`) && (
-                <MatchCelebration
-                    match={topMatch}
-                    onDismiss={() => {
-                        const mId = `${topMatch.offer?.id || 'o'}-${topMatch.request?.id || 'r'}`;
-                        setDismissedMatchIds(prev => new Set([...prev, mId]));
-                    }}
-                    onAction={(action) => {
-                        console.log('Senior action:', action);
-                        if (action === 'plan-visit' || action === 'contact') {
-                            // Create an appointment task automatically
-                            const matchName = topMatch.celebration.title || 'Pårørende'; // Fallback
-                            const taskTitle = action === 'plan-visit'
-                                ? `Besøg af ${matchName}`
-                                : `Ring til ${matchName}`;
-
-                            if (onAddTask) {
-                                onAddTask({
-                                    title: taskTitle,
-                                    period: 'eftermiddag', // Default to afternoon
-                                    type: 'appointment',
-                                    createdByRole: 'senior', // Self-created via match
-                                    createdByName: userName
-                                });
-                            }
-
-                            // Close match modal
+            {
+                topMatch && !dismissedMatchIds.has(`${topMatch.offer?.id || 'o'}-${topMatch.request?.id || 'r'}`) && (
+                    <MatchCelebration
+                        match={topMatch}
+                        onDismiss={() => {
                             const mId = `${topMatch.offer?.id || 'o'}-${topMatch.request?.id || 'r'}`;
                             setDismissedMatchIds(prev => new Set([...prev, mId]));
-                        }
-                    }}
-                />
-            )}
+                        }}
+                        onAction={(action) => {
+                            console.log('Senior action:', action);
+                            if (action === 'plan-visit' || action === 'contact') {
+                                // Create an appointment task automatically
+                                const matchName = topMatch.celebration.title || 'Pårørende'; // Fallback
+                                const taskTitle = action === 'plan-visit'
+                                    ? `Besøg af ${matchName}`
+                                    : `Ring til ${matchName}`;
+
+                                if (onAddTask) {
+                                    onAddTask({
+                                        title: taskTitle,
+                                        period: 'eftermiddag', // Default to afternoon
+                                        type: 'appointment',
+                                        createdByRole: 'senior', // Self-created via match
+                                        createdByName: userName
+                                    });
+                                }
+
+                                // Close match modal
+                                const mId = `${topMatch.offer?.id || 'o'}-${topMatch.request?.id || 'r'}`;
+                                setDismissedMatchIds(prev => new Set([...prev, mId]));
+                            }
+                        }}
+                    />
+                )
+            }
 
             {/* Health Report Modal */}
             <HealthReport
@@ -759,59 +766,61 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
             </Modal>
 
             {/* Match Celebration Modal */}
-            {activeMatch && (
-                <MatchCelebration
-                    match={activeMatch}
-                    seniorName={userName || 'Senior'}
-                    onDismiss={() => setActiveMatch(null)}
-                    onAction={(action) => {
-                        // Create task based on action type
-                        const { celebration } = activeMatch;
-                        let taskTitle = '';
+            {
+                activeMatch && (
+                    <MatchCelebration
+                        match={activeMatch}
+                        seniorName={userName || 'Senior'}
+                        onDismiss={() => setActiveMatch(null)}
+                        onAction={(action) => {
+                            // Create task based on action type
+                            const { celebration } = activeMatch;
+                            let taskTitle = '';
 
-                        switch (action) {
-                            case 'call':
-                                taskTitle = `📞 Ring med ${relativeName}`;
-                                break;
-                            case 'plan-visit':
-                                taskTitle = `☕ Besøg fra ${relativeName}`;
-                                break;
-                            case 'plan-meal':
-                                taskTitle = `🍳 Lav mad med ${relativeName}`;
-                                break;
-                            case 'plan-transport':
-                                taskTitle = `🚗 Tur med ${relativeName}`;
-                                break;
-                            case 'plan-garden':
-                                taskTitle = `🌿 Havearbejde med ${relativeName}`;
-                                break;
-                            default:
-                                taskTitle = celebration?.title || `Aktivitet med ${relativeName}`;
-                        }
+                            switch (action) {
+                                case 'call':
+                                    taskTitle = `📞 Ring med ${relativeName}`;
+                                    break;
+                                case 'plan-visit':
+                                    taskTitle = `☕ Besøg fra ${relativeName}`;
+                                    break;
+                                case 'plan-meal':
+                                    taskTitle = `🍳 Lav mad med ${relativeName}`;
+                                    break;
+                                case 'plan-transport':
+                                    taskTitle = `🚗 Tur med ${relativeName}`;
+                                    break;
+                                case 'plan-garden':
+                                    taskTitle = `🌿 Havearbejde med ${relativeName}`;
+                                    break;
+                                default:
+                                    taskTitle = celebration?.title || `Aktivitet med ${relativeName}`;
+                            }
 
-                        // Create the task
-                        if (onAddTask && taskTitle) {
-                            onAddTask({
-                                title: taskTitle,
-                                time: '10:00',
-                                period: 'morgen',
-                                type: 'appointment',
-                                createdByRole: 'senior', // Self-created via match
-                                createdByName: userName
-                            });
+                            // Create the task
+                            if (onAddTask && taskTitle) {
+                                onAddTask({
+                                    title: taskTitle,
+                                    time: '10:00',
+                                    period: 'morgen',
+                                    type: 'appointment',
+                                    createdByRole: 'senior', // Self-created via match
+                                    createdByName: userName
+                                });
 
-                            // Dismiss the match so it doesn't reappear
-                            const offerId = activeMatch.offer?.docId || activeMatch.offer?.id || 'none';
-                            const requestId = activeMatch.request?.docId || activeMatch.request?.id || 'none';
-                            const matchId = `${offerId}-${requestId}`;
-                            setDismissedMatchIds(prev => new Set([...prev, matchId]));
+                                // Dismiss the match so it doesn't reappear
+                                const offerId = activeMatch.offer?.docId || activeMatch.offer?.id || 'none';
+                                const requestId = activeMatch.request?.docId || activeMatch.request?.id || 'none';
+                                const matchId = `${offerId}-${requestId}`;
+                                setDismissedMatchIds(prev => new Set([...prev, matchId]));
 
-                            alert(t('task_created_alert', { title: taskTitle }));
-                        }
-                        setActiveMatch(null);
-                    }}
-                />
-            )}
+                                alert(t('task_created_alert', { title: taskTitle }));
+                            }
+                            setActiveMatch(null);
+                        }}
+                    />
+                )
+            }
         </div >
     );
 };

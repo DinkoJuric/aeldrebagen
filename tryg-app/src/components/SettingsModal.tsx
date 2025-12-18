@@ -24,7 +24,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
     return (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4">
-            <div className="bg-white w-full sm:max-w-md h-[90vh] sm:h-auto sm:max-h-[85vh] sm:rounded-[2.5rem] flex flex-col overflow-hidden shadow-2xl theme-aware-border">
+            <div className="theme-card w-full sm:max-w-md h-[90vh] sm:h-auto sm:max-h-[85vh] sm:rounded-[2.5rem] flex flex-col overflow-hidden shadow-2xl theme-aware-border">
                 {/* Header */}
                 <div className="px-6 py-6 border-b border-stone-100 flex justify-between items-center bg-stone-50/50">
                     <div>

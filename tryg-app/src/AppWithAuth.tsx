@@ -6,6 +6,8 @@ import { CircleSetup } from './components/CircleSetup';
 import { ConsentModal } from './components/ConsentModal';
 import TrygAppCore from './AppCore';
 import { FEATURES } from './config/features';
+import { LivingBackground } from './components/ui/LivingBackground';
+import { ThemeProvider } from './contexts/ThemeContext';
 
 // Main app wrapper with Firebase integration
 export default function AppWithAuth() {
@@ -105,7 +107,7 @@ function FirebaseApp() {
 
     // Not authenticated - show auth screen
     if (!user) {
-        return (
+        const screen = (
             <AuthScreen
                 onAuth={handleAuth}
                 onResetPassword={resetPassword}
@@ -113,6 +115,12 @@ function FirebaseApp() {
                 loading={authLoading}
             />
         );
+        // Wrap in Living Design if enabled
+        return FEATURES.livingDesign ? (
+            <ThemeProvider>
+                <LivingBackground>{screen}</LivingBackground>
+            </ThemeProvider>
+        ) : screen;
     }
 
     // Authenticated but no consent given - show consent modal

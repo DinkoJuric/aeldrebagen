@@ -130,8 +130,8 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
 
     return (
         <div className="flex flex-col h-full bg-transparent relative pt-10">
-            {/* Header - COMPACT */}
-            <header className="px-4 py-2 bg-white shadow-sm rounded-b-3xl z-10 shrink-0">
+            {/* Header - COMPACT (uses theme-aware classes for dark mode) */}
+            <header className="px-4 py-2 theme-header shadow-sm rounded-b-3xl z-10 shrink-0">
                 <div className="flex justify-between items-center">
                     <div className="flex items-center gap-2">
                         <Avatar
@@ -139,7 +139,7 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
                             size="md"
                             className="bg-indigo-50"
                         />
-                        <span className="font-semibold text-stone-700 text-sm">{t('greeting_relative', { name: userName })}</span>
+                        <span className="font-semibold theme-text text-sm">{t('greeting_relative', { name: userName })}</span>
                     </div>
                     <div className="flex items-center gap-1">
                         {/* Weekly Question widget + Thinking of You */}

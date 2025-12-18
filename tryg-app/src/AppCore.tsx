@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CareCircleProvider } from './contexts/CareCircleContext';
-import { LogOut, Settings, Share } from 'lucide-react';
+import { LogOut, Settings, Users } from 'lucide-react';
 import { SeniorView } from './components/SeniorView';
 import { RelativeView } from './components/RelativeView';
 import { SettingsModal } from './components/SettingsModal';
@@ -22,6 +22,7 @@ import { usePhotos } from './features/photos';
 import { useMemberStatus } from './features/familyPresence';
 import { playCompletionSound, playSuccessSound, playPingSound } from './utils/sounds';
 import { FEATURES } from './config/features';
+import { LivingBackground } from './components/ui/LivingBackground';
 import './index.css';
 import { User } from 'firebase/auth'; // Or your custom user type
 import { UserProfile, Member } from './types';
@@ -192,15 +193,15 @@ export default function TrygAppCore({
                         )}
                     </div>
 
-                    {/* Header - COMPACT: Share / Settings / Logout */}
-                    <div className="absolute top-0 left-0 right-0 h-10 bg-black/5 z-50 flex justify-between items-center backdrop-blur-sm px-3">
-                        {/* Share button - Top Left (Care Circle & Invites) */}
+                    {/* Header - COMPACT: Care Circle / Settings / Logout - now theme-aware */}
+                    <div className="absolute top-0 left-0 right-0 h-10 z-50 flex justify-between items-center backdrop-blur-sm px-3 bg-black/5 theme-dark:bg-white/5">
+                        {/* Care Circle button - Top Left */}
                         <button
                             onClick={() => setShowShare(true)}
                             className="p-2 rounded-full hover:bg-white/50 transition-colors"
-                            aria-label="Share"
+                            aria-label="Care Circle"
                         >
-                            <Share className="w-5 h-5 text-stone-600" />
+                            <Users className="w-5 h-5 theme-text" />
                         </button>
 
                         {/* Center: Settings gear (Unified Settings) */}
@@ -209,7 +210,7 @@ export default function TrygAppCore({
                             className="p-2 rounded-full hover:bg-white/50 transition-colors"
                             aria-label={t('settings')}
                         >
-                            <Settings className="w-5 h-5 text-stone-600" />
+                            <Settings className="w-5 h-5 theme-text" />
                         </button>
 
                         {/* Sign out - Top Right */}
@@ -218,7 +219,7 @@ export default function TrygAppCore({
                             className="p-1.5 rounded-full hover:bg-white/50 transition-colors"
                             aria-label={t('sign_out')}
                         >
-                            <LogOut className="w-4 h-4 text-stone-600" />
+                            <LogOut className="w-4 h-4 theme-text" />
                         </button>
                     </div>
 
@@ -245,77 +246,147 @@ export default function TrygAppCore({
                     )}
 
                     <div className="h-full relative z-10">
-                        {/* LivingBackground temporarily disabled - using fixed gradient */}
-                        <div className="h-full bg-gradient-to-b from-sky-100 via-sky-50 to-stone-100">
-                            <div className="h-full overflow-y-auto">
-                                {/* Ping Notification from Firestore */}
-                                {latestPing && (
-                                    <PingNotification
-                                        ping={latestPing}
-                                        onDismiss={dismissPing}
-                                    />
-                                )}
-
-                                {isSenior ? (
-                                    <SeniorView
-                                        tasks={tasks}
-                                        toggleTask={handleToggleTask}
-                                        updateStatus={handleCheckIn}
-                                        addSymptom={handleAddSymptom}
-                                        statusLastUpdated={null}
-                                        onSendPing={(type: string) => handleSendPing(seniorName, 'relative')}
-                                        weeklyAnswers={weeklyAnswers}
-                                        onWeeklyAnswer={handleWeeklyAnswer}
-                                        members={members}
-                                        memberStatuses={memberStatuses}
-                                        currentUserId={user?.uid ?? null}
-                                        relativeStatuses={relativeStatuses}
-                                        userName={seniorName}
-                                        relativeName={relativeName}
-                                        careCircleId={careCircle?.id ?? null}
-                                        symptomLogs={symptoms}
-                                        onAddTask={addTask}
-                                        onToggleLike={onToggleLike}
-                                        onReply={onReply}
-                                        activeTab={activeTab}
-                                        onTabChange={setActiveTab}
-                                        showHealthReport={showHealthReport}
-                                        setShowHealthReport={setShowHealthReport}
-                                    />
-                                ) : (
-                                    <RelativeView
-                                        tasks={tasks}
-                                        onAddTask={handleAddTaskFromRelative}
-                                        lastCheckIn={lastCheckIn}
-                                        symptomLogs={symptoms}
-                                        myStatus={myStatus}
-                                        onMyStatusChange={setMyStatus}
-                                        memberStatuses={memberStatuses}
-                                        currentUserId={user?.uid}
-                                        onSendPing={(type) => handleSendPing(relativeName, 'senior')}
-                                        weeklyAnswers={weeklyAnswers}
-                                        onWeeklyAnswer={handleWeeklyAnswer}
-                                        onToggleLike={onToggleLike}
-                                        onReply={onReply}
-                                        userName={relativeName}
-                                        seniorName={seniorName}
-                                        careCircleId={careCircle?.id}
-                                        activeTab={activeTab}
-                                        onTabChange={setActiveTab}
-                                    />
-                                )}
-
-                                {/* Photo notification badge */}
-                                {latestPhoto && (
-                                    <div className="absolute bottom-24 left-4 right-4 z-40 flex justify-center">
-                                        <PhotoNotificationBadge
-                                            photo={latestPhoto}
-                                            onClick={() => setShowPhotoViewer(true)}
+                        {/* LivingBackground for circadian atmosphere (Living Design 🏠) */}
+                        {FEATURES.livingDesign ? (
+                            <LivingBackground>
+                                <div className="h-full overflow-y-auto">
+                                    {/* Ping Notification from Firestore */}
+                                    {latestPing && (
+                                        <PingNotification
+                                            ping={latestPing}
+                                            onDismiss={dismissPing}
                                         />
-                                    </div>
-                                )}
+                                    )}
+
+                                    {isSenior ? (
+                                        <SeniorView
+                                            tasks={tasks}
+                                            toggleTask={handleToggleTask}
+                                            updateStatus={handleCheckIn}
+                                            addSymptom={handleAddSymptom}
+                                            statusLastUpdated={null}
+                                            onSendPing={(type: string) => handleSendPing(seniorName, 'relative')}
+                                            weeklyAnswers={weeklyAnswers}
+                                            onWeeklyAnswer={handleWeeklyAnswer}
+                                            members={members}
+                                            memberStatuses={memberStatuses}
+                                            currentUserId={user?.uid ?? null}
+                                            relativeStatuses={relativeStatuses}
+                                            userName={seniorName}
+                                            relativeName={relativeName}
+                                            careCircleId={careCircle?.id ?? null}
+                                            symptomLogs={symptoms}
+                                            onAddTask={addTask}
+                                            onToggleLike={onToggleLike}
+                                            onReply={onReply}
+                                            activeTab={activeTab}
+                                            onTabChange={setActiveTab}
+                                            showHealthReport={showHealthReport}
+                                            setShowHealthReport={setShowHealthReport}
+                                        />
+                                    ) : (
+                                        <RelativeView
+                                            tasks={tasks}
+                                            onAddTask={handleAddTaskFromRelative}
+                                            lastCheckIn={lastCheckIn}
+                                            symptomLogs={symptoms}
+                                            myStatus={myStatus}
+                                            onMyStatusChange={setMyStatus}
+                                            memberStatuses={memberStatuses}
+                                            currentUserId={user?.uid}
+                                            onSendPing={(type) => handleSendPing(relativeName, 'senior')}
+                                            weeklyAnswers={weeklyAnswers}
+                                            onWeeklyAnswer={handleWeeklyAnswer}
+                                            onToggleLike={onToggleLike}
+                                            onReply={onReply}
+                                            userName={relativeName}
+                                            seniorName={seniorName}
+                                            careCircleId={careCircle?.id}
+                                            activeTab={activeTab}
+                                            onTabChange={setActiveTab}
+                                        />
+                                    )}
+
+                                    {/* Photo notification badge */}
+                                    {latestPhoto && (
+                                        <div className="absolute bottom-24 left-4 right-4 z-40 flex justify-center">
+                                            <PhotoNotificationBadge
+                                                photo={latestPhoto}
+                                                onClick={() => setShowPhotoViewer(true)}
+                                            />
+                                        </div>
+                                    )}
+                                </div>
+                            </LivingBackground>
+                        ) : (
+                            /* Fallback: Static gradient when Living Design is disabled */
+                            <div className="h-full bg-gradient-to-b from-sky-100 via-sky-50 to-stone-100">
+                                <div className="h-full overflow-y-auto">
+                                    {latestPing && (
+                                        <PingNotification
+                                            ping={latestPing}
+                                            onDismiss={dismissPing}
+                                        />
+                                    )}
+                                    {isSenior ? (
+                                        <SeniorView
+                                            tasks={tasks}
+                                            toggleTask={handleToggleTask}
+                                            updateStatus={handleCheckIn}
+                                            addSymptom={handleAddSymptom}
+                                            statusLastUpdated={null}
+                                            onSendPing={(type: string) => handleSendPing(seniorName, 'relative')}
+                                            weeklyAnswers={weeklyAnswers}
+                                            onWeeklyAnswer={handleWeeklyAnswer}
+                                            members={members}
+                                            memberStatuses={memberStatuses}
+                                            currentUserId={user?.uid ?? null}
+                                            relativeStatuses={relativeStatuses}
+                                            userName={seniorName}
+                                            relativeName={relativeName}
+                                            careCircleId={careCircle?.id ?? null}
+                                            symptomLogs={symptoms}
+                                            onAddTask={addTask}
+                                            onToggleLike={onToggleLike}
+                                            onReply={onReply}
+                                            activeTab={activeTab}
+                                            onTabChange={setActiveTab}
+                                            showHealthReport={showHealthReport}
+                                            setShowHealthReport={setShowHealthReport}
+                                        />
+                                    ) : (
+                                        <RelativeView
+                                            tasks={tasks}
+                                            onAddTask={handleAddTaskFromRelative}
+                                            lastCheckIn={lastCheckIn}
+                                            symptomLogs={symptoms}
+                                            myStatus={myStatus}
+                                            onMyStatusChange={setMyStatus}
+                                            memberStatuses={memberStatuses}
+                                            currentUserId={user?.uid}
+                                            onSendPing={(type) => handleSendPing(relativeName, 'senior')}
+                                            weeklyAnswers={weeklyAnswers}
+                                            onWeeklyAnswer={handleWeeklyAnswer}
+                                            onToggleLike={onToggleLike}
+                                            onReply={onReply}
+                                            userName={relativeName}
+                                            seniorName={seniorName}
+                                            careCircleId={careCircle?.id}
+                                            activeTab={activeTab}
+                                            onTabChange={setActiveTab}
+                                        />
+                                    )}
+                                    {latestPhoto && (
+                                        <div className="absolute bottom-24 left-4 right-4 z-40 flex justify-center">
+                                            <PhotoNotificationBadge
+                                                photo={latestPhoto}
+                                                onClick={() => setShowPhotoViewer(true)}
+                                            />
+                                        </div>
+                                    )}
+                                </div>
                             </div>
-                        </div>
+                        )}
 
                         {/* Global Bottom Navigation */}
                         <BottomNavigation
@@ -323,7 +394,6 @@ export default function TrygAppCore({
                             onTabChange={setActiveTab}
                             onShowReport={() => setShowHealthReport(true)}
                         />
-                        {/* End of temporary fixed background */}
                     </div>
 
                     {/* Photo upload modal */}

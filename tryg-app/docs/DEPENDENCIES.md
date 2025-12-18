@@ -218,8 +218,24 @@ graph TD
 | Config | Used By |
 |--------|---------|
 | `firebase.ts` | All hooks |
-| `features.ts` | AppCore, SeniorView, CoordinationTab |
+| `features.ts` | AppCore, SeniorView, CoordinationTab, AuthScreen, AppWithAuth |
 | `helpExchangeConfig.ts` | HelpExchange, CoordinationTab |
+
+---
+
+## Living Design Feature 🏠
+
+**Feature Flag**: `livingDesign` in `features.ts`
+
+| Component | Uses | Used By |
+|-----------|------|---------|
+| `LivingBackground.tsx` | ThemeContext | AppWithAuth, AppCore |
+| `AuthScreen.tsx` | FEATURES.livingDesign | AppWithAuth |
+| `glass-panel` (CSS) | — | AuthScreen |
+
+**Dependencies**: ThemeContext, framer-motion. **Self-contained**: ⚠️ Needs context
+
+**Toggle**: Set `livingDesign: false` in `features.ts` to revert to classic design.
 
 ---
 

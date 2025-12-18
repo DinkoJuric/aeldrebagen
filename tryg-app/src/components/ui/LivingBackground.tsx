@@ -4,11 +4,23 @@ import React, { useMemo } from 'react';
 /**
  * LivingBackground 2.0 - Ambient circadian atmosphere
  * Uses subtle animated SVG blobs and time-aware gradients
+ * NOW respects isDark for manual dark mode toggle
  */
 export const LivingBackground: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const { circadianTheme } = useTheme();
+    const { circadianTheme, isDark } = useTheme();
 
     const theme = useMemo(() => {
+        // If user explicitly set dark mode, OR it's evening/night, use dark themes
+        if (isDark) {
+            // Dark mode: use night-like colors regardless of actual time
+            return {
+                gradient: 'bg-gradient-to-br from-indigo-950 via-slate-900 to-slate-950',
+                blob1: 'fill-indigo-500/10',
+                blob2: 'fill-slate-700/20'
+            };
+        }
+
+        // Light mode: use circadian time-based gradients
         switch (circadianTheme) {
             case 'morning':
                 return {
@@ -23,14 +35,15 @@ export const LivingBackground: React.FC<{ children: React.ReactNode }> = ({ chil
                     blob2: 'fill-orange-100/30'
                 };
             case 'evening':
+                // Evening is NOW darker (deep indigo twilight)
                 return {
-                    gradient: 'bg-gradient-to-br from-indigo-50 via-stone-50 to-stone-100',
-                    blob1: 'fill-indigo-200/20',
-                    blob2: 'fill-stone-300/30'
+                    gradient: 'bg-gradient-to-br from-indigo-200 via-slate-200 to-stone-300',
+                    blob1: 'fill-indigo-300/30',
+                    blob2: 'fill-slate-400/20'
                 };
             case 'night':
                 return {
-                    gradient: 'bg-gradient-to-br from-stone-900 via-slate-800 to-indigo-950',
+                    gradient: 'bg-gradient-to-br from-indigo-950 via-slate-900 to-slate-950',
                     blob1: 'fill-indigo-500/10',
                     blob2: 'fill-slate-700/20'
                 };
@@ -41,7 +54,7 @@ export const LivingBackground: React.FC<{ children: React.ReactNode }> = ({ chil
                     blob2: 'fill-amber-100/20'
                 };
         }
-    }, [circadianTheme]);
+    }, [circadianTheme, isDark]);
 
     return (
         <div className={`min-h-screen w-full transition-all duration-[3000ms] ease-in-out relative overflow-hidden ${theme.gradient}`}>

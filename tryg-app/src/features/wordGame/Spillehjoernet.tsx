@@ -41,8 +41,8 @@ export const Spillehjoernet: React.FC<SpillehjoernetProps> = ({ circleId, userId
                     <Gamepad2 className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                    <h2 className="font-bold text-stone-800 text-lg">{t('spillehjoernet_title')}</h2>
-                    <p className="text-xs text-stone-500">{t('spillehjoernet_subtitle')}</p>
+                    <h2 className="font-bold theme-text text-lg">{t('spillehjoernet_title')}</h2>
+                    <p className="text-xs theme-text-muted">{t('spillehjoernet_subtitle')}</p>
                 </div>
             </div>
 

@@ -264,6 +264,88 @@ description: Master record of all project and cross-project learnings
   2. Test scroll behavior immediately after adding such components
   3. Avoid `overflow: hidden` on wrapper elements if children need to scroll
 
+---
+
+### ✅ CANONICAL: LivingBackground Architecture (Dec 2025)
+
+> **This is the APPROVED baseline for all atmospheric/background implementations going forward.**
+
+After significant trial and error with backgrounds, headers, navigation bars, and screen sizes, the following pattern is now established as correct:
+
+#### The Correct Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  LivingBackground (OUTER WRAPPER)                           │
+│  ├── className="min-h-screen w-full relative overflow-hidden"│
+│  ├── Gradient theme (via ThemeContext circadianTheme)       │
+│  │                                                          │
+│  │  ┌─────────────────────────────────────────────────────┐ │
+│  │  │  Ambient SVG Blobs (DECORATIVE LAYER)               │ │
+│  │  │  ├── className="absolute inset-0 z-0 pointer-events-none"│
+│  │  │  └── blur-3xl opacity effects                       │ │
+│  │  └─────────────────────────────────────────────────────┘ │
+│  │                                                          │
+│  │  ┌─────────────────────────────────────────────────────┐ │
+│  │  │  Content Container (SCROLLABLE)                     │ │
+│  │  │  ├── className="relative z-10 min-h-screen"         │ │
+│  │  │  └── Children are passed here                       │ │
+│  │  └─────────────────────────────────────────────────────┘ │
+│  │                                                          │
+└──┴──────────────────────────────────────────────────────────┘
+```
+
+#### Key Principles
+
+| Principle | Implementation |
+|-----------|---------------|
+| **Background is decorative** | `pointer-events-none` on blobs, `z-0` |
+| **Content is interactive** | `z-10` on content wrapper |
+| **Layout is preserved** | Content wrapper has `min-h-screen`, NOT `h-full` |
+| **Scroll is unaffected** | Parent has `overflow-hidden`, CHILDREN scroll |
+| **Theme is centralized** | `useTheme()` from `ThemeContext` drives gradient |
+
+#### Critical CSS Pattern
+
+```tsx
+// LivingBackground.tsx (CORRECT)
+<div className={`min-h-screen w-full transition-all duration-[3000ms] relative overflow-hidden ${theme.gradient}`}>
+    {/* Blobs - MUST be absolute + pointer-events-none */}
+    <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden blur-3xl opacity-80">
+        {/* SVG blobs here */}
+    </div>
+    
+    {/* Content - MUST be relative + z-10 */}
+    <div className="relative z-10 min-h-screen">
+        {children}
+    </div>
+</div>
+```
+
+#### What NOT To Do ❌
+
+| Anti-Pattern | Why It Breaks |
+|--------------|--------------|
+| `h-screen` on content wrapper | Clips content on mobile (use `min-h-screen`) |
+| `overflow-hidden` on content area | Blocks scrolling in views |
+| `position: fixed` inside background | CSS transforms break fixed positioning |
+| Nested `h-full` without parent height | Collapses to 0 |
+
+#### Integration Points
+
+| Entry Point | How to Integrate |
+|-------------|-----------------|
+| `AppWithAuth.tsx` | Wrap AuthScreen conditionally with `<ThemeProvider><LivingBackground>` |
+| `AppCore.tsx` | Conditional: `{FEATURES.livingDesign ? <LivingBackground>...</LivingBackground> : <div className="static-gradient">...</div>}` |
+
+#### Feature Flag Fallback
+
+Always gate with `FEATURES.livingDesign` in `features.ts`:
+- `true` = Use circadian LivingBackground
+- `false` = Use static gradient (instant revert)
+
+---
+
 ### Bottom Navigation Positioning
 - **Problem**: `position: absolute; bottom: 0` didn't work properly inside scrollable containers.
 - **Root Cause**: `absolute` positioning places element at the bottom of the **scroll content**, not the viewport.
@@ -283,6 +365,23 @@ description: Master record of all project and cross-project learnings
   - `memberStatuses` from `useMemberStatus` (memberStatuses subcollection) - **has archetype**
 - **Action**: Changed `FamilyConstellation` to receive `memberStatuses` instead of `members`.
 - **Future**: Always trace data flow when a field appears missing. Check which hook/collection the data comes from.
+
+---
+
+### Dark Mode Typography Pattern (Dec 2025)
+- **Problem**: Hardcoded text colors (`text-stone-800`, `text-stone-500`) become invisible on dark backgrounds.
+- **Root Cause**: Tailwind colors don't respond to `.theme-dark` class - need CSS variables.
+- **Solution**: Created theme-aware utility classes in `index.css`:
+  ```css
+  .theme-text { color: var(--theme-text); }
+  .theme-text-muted { color: var(--theme-text-muted); }
+  .theme-card { background: var(--theme-card-bg); }
+  ```
+- **Where to apply**:
+  - All headers: `className="theme-text"` instead of `text-stone-800`
+  - All subtext: `className="theme-text-muted"` instead of `text-stone-500`
+  - All cards/modals: `className="theme-card"` instead of `bg-white`
+- **Future**: When adding new components, ALWAYS use `theme-text` / `theme-card` classes. Never hardcode `bg-white` or `text-stone-*`.
 
 ---
 
