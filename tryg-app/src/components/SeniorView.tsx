@@ -216,7 +216,10 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                 <div className="flex justify-between items-center">
                     <div className="flex items-center gap-3">
                         <Avatar id="senior" size="md" />
-                        <h1 className="text-xl font-bold text-stone-800">{greeting}, {userName}</h1>
+                        <div>
+                            <h1 className="text-xl font-bold text-stone-800 leading-tight">{greeting}</h1>
+                            <p className="text-sm text-stone-500">{userName}</p>
+                        </div>
                     </div>
                     {/* Swap sun for Weekly Question widget on Family tab */}
                     {FEATURES.weeklyQuestion && activeTab === 'family' ? (
@@ -324,7 +327,7 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                             )
                         )}
 
-                        {/* MEDICINE SECTION - Separate from tasks, with tick marks */}
+                        {/* MEDICINE SECTION - Only show uncompleted, but show summary */}
                         {medicineTasks.length > 0 && !allMedicineComplete && (
                             <div className="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-2xl p-4 mb-6 border-2 border-purple-100">
                                 <div className="flex items-center gap-2 mb-3">
@@ -335,28 +338,22 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                                     </span>
                                 </div>
                                 <div className="space-y-2">
-                                    {medicineTasks.map(med => (
+                                    {medicineTasks.filter(m => !m.completed).map(med => (
                                         <button
                                             key={med.id}
                                             onClick={() => toggleTask(med.id)}
-                                            className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all ${med.completed
-                                                ? 'bg-purple-100 border-2 border-purple-200'
-                                                : 'bg-white border-2 border-purple-100 hover:border-purple-300'
-                                                }`}
+                                            className="w-full flex items-center gap-3 p-3 rounded-xl transition-all bg-white border-2 border-purple-100 hover:border-purple-300"
                                         >
-                                            <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-colors ${med.completed
-                                                ? 'bg-purple-500 border-purple-500'
-                                                : 'border-purple-300 bg-white'
-                                                }`}>
-                                                {med.completed && <CheckCircle className="w-5 h-5 text-white" />}
+                                            <div className="w-8 h-8 rounded-full border-2 border-purple-300 bg-white flex items-center justify-center transition-colors">
+                                                {/* Empty circle for uncompleted */}
                                             </div>
-                                            <span className={`font-medium ${med.completed ? 'text-purple-500 line-through' : 'text-purple-800'
-                                                }`}>
+                                            <span className="font-medium text-purple-800">
                                                 {med.title}
                                             </span>
                                             <span className="text-purple-400 text-sm ml-auto">{med.time}</span>
                                         </button>
                                     ))}
+
                                 </div>
                             </div>
                         )}
