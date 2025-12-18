@@ -42,6 +42,7 @@ export interface CareCircle {
     seniorName: string;
     inviteCode: string;
     createdAt: any;
+    lastResetDate?: string; // Daily reset tracker (YYYY-MM-DD)
 }
 
 export interface CareCircleContextValue {

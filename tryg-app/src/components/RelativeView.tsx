@@ -1,10 +1,8 @@
 import React, { useState, useMemo } from 'react';
-import { Settings } from 'lucide-react';
 import { Modal } from './ui/Modal';
 import { Button } from './ui/Button';
 import { WeeklyQuestionWidget, WeeklyQuestionModal } from '../features/weeklyQuestion';
 import { ThinkingOfYouIconButton } from '../features/thinkingOfYou';
-import { RelativeBottomNavigation } from './BottomNavigation';
 import { PeaceOfMindTab } from './PeaceOfMindTab';
 import { CoordinationTab } from './CoordinationTab';
 import { MatchCelebration } from '../features/helpExchange';
@@ -17,11 +15,9 @@ import { Avatar } from './ui/Avatar';
 import { Task } from '../features/tasks/useTasks';
 import { SymptomLog } from '../features/symptoms/useSymptoms';
 import { useTranslation } from 'react-i18next';
-import { LanguageSwitcher } from './LanguageSwitcher';
 
 export interface RelativeViewProps {
     tasks: Task[];
-    profile: any; // UserProfile
     lastCheckIn?: any;
     symptomLogs: SymptomLog[];
     onAddTask: (task: Partial<Task>) => void;
@@ -32,20 +28,22 @@ export interface RelativeViewProps {
     onSendPing: (type: string) => void;
     weeklyAnswers: any[];
     onWeeklyAnswer: (answer: string) => void;
-    onOpenSettings: () => void;
     userName: string;
     seniorName: string;
     careCircleId: any;
     onToggleLike?: (answerId: string, userId: string, isLiked: boolean) => void;
     onReply?: (answerId: string, reply: any) => void;
+    activeTab: 'daily' | 'family' | 'spil';
+    onTabChange: (tab: 'daily' | 'family' | 'spil') => void;
 }
 
 export const RelativeView: React.FC<RelativeViewProps> = ({
-    tasks, profile, lastCheckIn, symptomLogs, onAddTask,
+    tasks, lastCheckIn, symptomLogs, onAddTask,
     myStatus = 'home', onMyStatusChange,
     memberStatuses = [], currentUserId = null,
     onSendPing, weeklyAnswers, onWeeklyAnswer, onToggleLike, onReply,
-    onOpenSettings, userName = 'Pårørende', seniorName = 'Mor', careCircleId = null
+    userName = 'Pårørende', seniorName = 'Mor', careCircleId = null,
+    activeTab, onTabChange
 }) => {
     const { t } = useTranslation();
     const [showAddModal, setShowAddModal] = useState(false);
@@ -53,11 +51,11 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
     const [showWeeklyModal, setShowWeeklyModal] = useState(false);
     const [newTaskTitle, setNewTaskTitle] = useState('');
     const [newTaskPeriod, setNewTaskPeriod] = useState('morgen'); // Period selector for new tasks
-    const [activeTab, setActiveTab] = useState<'daily' | 'family' | 'spil'>('daily'); // 'daily' = Peace of Mind, 'family' = Coordination, 'spil' = Gaming
+    const [newTaskRecurring, setNewTaskRecurring] = useState(false);
     const [activeMatch, setActiveMatch] = useState<any | null>(null); // 
     const [pendingAction, setPendingAction] = useState<any | null>(null); // Stores action info for time picker
     const [showTimePicker, setShowTimePicker] = useState(false);
-    const [dismissedMatchIds, setDismissedMatchIds] = useState(new Set()); // Track dismissed matches
+    const [dismissedMatchIds, setDismissedMatchIds] = useState<Set<string>>(new Set()); // Track dismissed matches
 
     const openTasks = tasks.filter(t => !t.completed);
     const completedTasksList = tasks.filter(t => t.completed);
@@ -87,10 +85,12 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
             time: PERIOD_TIMES[newTaskPeriod],
             type: 'appointment',
             description: `Tilføjet af ${userName}`,
-            period: newTaskPeriod
+            period: newTaskPeriod,
+            recurring: newTaskRecurring
         });
         setNewTaskTitle('');
         setNewTaskPeriod('morgen');
+        setNewTaskRecurring(false);
         setShowAddModal(false);
     };
 
@@ -139,13 +139,9 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
                             size="md"
                             className="bg-indigo-50"
                         />
-                        <span className="font-semibold text-stone-700 text-sm">Hej, {userName}</span>
+                        <span className="font-semibold text-stone-700 text-sm">{t('greeting_relative', { name: userName })}</span>
                     </div>
                     <div className="flex items-center gap-1">
-                        {/* Language Switcher in Header (Relative) */}
-                        <div className="scale-75 origin-right">
-                            <LanguageSwitcher />
-                        </div>
                         {/* Weekly Question widget + Thinking of You */}
                         {FEATURES.weeklyQuestion && (
                             <WeeklyQuestionWidget
@@ -169,8 +165,8 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
                         lastCheckIn={lastCheckIn}
                         tasks={tasks}
                         symptomCount={todaySymptomCount}
-                        onSendPing={onSendPing}
-                        onViewSymptoms={() => setActiveTab('family')}
+                        onSendPing={() => onSendPing('thinking_of_you')}
+                        onViewSymptoms={() => onTabChange('family')}
                         recentActivity={recentActivity}
                     />
                 )}
@@ -180,7 +176,7 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
                     <CoordinationTab
                         seniorName={seniorName}
                         userName={userName}
-                        myStatus={myStatus}
+                        myStatus={myStatus || undefined}
                         onMyStatusChange={onMyStatusChange}
                         memberStatuses={memberStatuses}
                         currentUserId={currentUserId}
@@ -213,22 +209,15 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
                 )}
             </main>
 
-            {/* Bottom Navigation */}
-            <RelativeBottomNavigation
-                activeTab={activeTab}
-                onTabChange={setActiveTab}
-                onShowReport={() => setShowReport(true)}
-            />
-
             {/* Add Task Modal */}
-            <Modal isOpen={showAddModal} onClose={() => setShowAddModal(false)} title="Ny påmindelse">
+            <Modal isOpen={showAddModal} onClose={() => setShowAddModal(false)} title={t('new_reminder')}>
                 <div className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-1">Titel</label>
+                        <label className="block text-sm font-medium text-slate-700 mb-1">{t('title_label')}</label>
                         <input
                             type="text"
                             className="w-full p-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none"
-                            placeholder="F.eks. Lægebesøg"
+                            placeholder={t('reminder_placeholder')}
                             value={newTaskTitle}
                             onChange={(e) => setNewTaskTitle(e.target.value)}
                         />
@@ -236,13 +225,13 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
 
                     {/* Period Selector */}
                     <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-1">Hvornår?</label>
+                        <label className="block text-sm font-medium text-slate-700 mb-1">{t('when_question')}</label>
                         <div className="grid grid-cols-2 gap-2">
                             {[
-                                { id: 'morgen', label: 'Morgen', time: '8-11', emoji: '☀️' },
-                                { id: 'frokost', label: 'Frokost', time: '12-13', emoji: '🍽️' },
-                                { id: 'eftermiddag', label: 'Eftermiddag', time: '14-17', emoji: '🌤️' },
-                                { id: 'aften', label: 'Aften', time: '18-21', emoji: '🌙' }
+                                { id: 'morgen', label: t('morning'), time: '08-11', emoji: '🌅' },
+                                { id: 'frokost', label: t('lunch'), time: '12-13', emoji: '☀️' },
+                                { id: 'eftermiddag', label: t('afternoon'), time: '14-17', emoji: '☕' },
+                                { id: 'aften', label: t('evening'), time: '18-21', emoji: '🌙' }
                             ].map(period => (
                                 <button
                                     key={period.id}
@@ -260,15 +249,29 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
                         </div>
                     </div>
 
-                    <div className="p-3 bg-blue-50 text-blue-800 text-sm rounded-xl">
-                        Denne påmindelse vil straks dukke op på {seniorName}s skærm.
+                    {/* Recurring Toggle */}
+                    <div className="flex items-center gap-3 p-4 bg-indigo-50 rounded-xl border-2 border-indigo-100">
+                        <input
+                            type="checkbox"
+                            id="recurring-relative"
+                            checked={newTaskRecurring}
+                            onChange={(e) => setNewTaskRecurring(e.target.checked)}
+                            className="w-6 h-6 rounded-md border-indigo-300 text-indigo-600 focus:ring-indigo-500"
+                        />
+                        <label htmlFor="recurring-relative" className="flex-1 font-medium text-indigo-700 cursor-pointer">
+                            {t('recurring')}
+                        </label>
                     </div>
-                    <Button className="w-full" onClick={handleAddTask}>Tilføj</Button>
+
+                    <div className="p-3 bg-blue-50 text-blue-800 text-sm rounded-xl">
+                        {t('reminder_notice', { name: seniorName })}
+                    </div>
+                    <Button className="w-full" onClick={handleAddTask}>{t('add_button')}</Button>
                 </div>
             </Modal>
 
             {/* Doctor Report Modal */}
-            <Modal isOpen={showReport} onClose={() => setShowReport(false)} title="Rapport til Lægen">
+            <Modal isOpen={showReport} onClose={() => setShowReport(false)} title={t('doctor_report_title')}>
                 <div className="space-y-6">
                     {/* Summary Stats */}
                     {(() => {
@@ -283,12 +286,12 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
                             <div className="grid grid-cols-2 gap-3">
                                 <div className="bg-orange-50 rounded-xl p-3 border border-orange-100">
                                     <p className="text-2xl font-bold text-orange-600">{totalSymptoms}</p>
-                                    <p className="text-xs text-orange-500">Symptomer (14 dage)</p>
+                                    <p className="text-xs text-orange-500">{t('symptoms_14_days')}</p>
                                 </div>
                                 {mostCommon && (
                                     <div className="bg-purple-50 rounded-xl p-3 border border-purple-100">
                                         <p className="text-lg font-bold text-purple-600 truncate">{mostCommon[0]}</p>
-                                        <p className="text-xs text-purple-500">Mest hyppige ({mostCommon[1]}x)</p>
+                                        <p className="text-xs text-purple-500">{t('most_frequent_count', { count: mostCommon[1] })}</p>
                                     </div>
                                 )}
                             </div>
@@ -297,7 +300,7 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
 
                     {/* 14-day symptom overview chart with counts */}
                     <div className="p-4 bg-orange-50 rounded-xl border border-orange-200">
-                        <h4 className="font-bold text-slate-800 mb-2">Symptom-oversigt (14 dage)</h4>
+                        <h4 className="font-bold text-slate-800 mb-2">{t('symptom_overview_14_days')}</h4>
                         <div className="flex items-end gap-1 h-24 pb-2">
                             {(() => {
                                 const days = Array(14).fill(0);
@@ -317,20 +320,20 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
                                         <div
                                             className={`w-full rounded-t-sm transition-opacity ${count > 0 ? 'bg-orange-400 hover:bg-orange-500' : 'bg-slate-200'}`}
                                             style={{ height: `${Math.max((count / max) * 60, 4)}px` }}
-                                            title={`${count} symptomer`}
+                                            title={t('symptoms_count', { count })}
                                         />
                                     </div>
                                 ));
                             })()}
                         </div>
                         <div className="flex justify-between text-xs text-slate-400">
-                            <span>-14 dage</span><span>I dag</span>
+                            <span>{t('days_ago', { count: 14 })}</span><span>{t('today')}</span>
                         </div>
                     </div>
 
                     {/* Medicine compliance with percentage labels */}
                     <div className="p-4 bg-slate-50 rounded-xl border border-slate-200">
-                        <h4 className="font-bold text-slate-800 mb-2">Overholdelse af medicin (7 dage)</h4>
+                        <h4 className="font-bold text-slate-800 mb-2">{t('medicine_compliance_7_days')}</h4>
                         <div className="flex items-end gap-2 h-28 pb-2">
                             {[80, 90, 100, 85, 95, 100, completionRate].map((h, i) => (
                                 <div key={i} className="flex-1 flex flex-col items-center gap-1">
@@ -343,22 +346,22 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
                             ))}
                         </div>
                         <div className="flex justify-between text-xs text-slate-400">
-                            <span>-7 dage</span><span>I dag</span>
+                            <span>{t('days_ago', { count: 7 })}</span><span>{t('today')}</span>
                         </div>
                     </div>
 
                     {/* Symptom Log - Grouped by Date */}
                     <div>
-                        <h4 className="font-bold text-slate-800 mb-3">Symptom Log (sidste 14 dage)</h4>
+                        <h4 className="font-bold text-slate-800 mb-3">{t('symptom_log_14_days')}</h4>
                         {symptomLogs.length === 0 ? (
-                            <p className="text-slate-500 text-sm italic">Ingen symptomer registreret.</p>
+                            <p className="text-slate-500 text-sm italic">{t('no_symptoms_registered')}</p>
                         ) : (
                             (() => {
                                 // Group symptoms by date
                                 const grouped: Record<string, any[]> = {};
                                 symptomLogs.forEach(log => {
                                     const date = (log.loggedAt as any)?.toDate ? (log.loggedAt as any).toDate() : new Date(log.loggedAt as any);
-                                    const dateKey = date.toLocaleDateString('da-DK', { weekday: 'short', day: 'numeric', month: 'short' });
+                                    const dateKey = date.toLocaleDateString(t('locale_code'), { weekday: 'short', day: 'numeric', month: 'short' });
                                     if (!grouped[dateKey]) grouped[dateKey] = [];
                                     grouped[dateKey].push({ ...log, dateObj: date });
                                 });
@@ -376,7 +379,7 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
                                                     {logs.map((log, i) => {
                                                         const symptomDef = SYMPTOMS_LIST.find(s => s.id === log.id) || {} as any;
                                                         const SymptomIcon = symptomDef.icon || AlertCircle;
-                                                        const timeStr = log.dateObj.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' });
+                                                        const timeStr = log.dateObj.toLocaleTimeString(t('locale_code'), { hour: '2-digit', minute: '2-digit' });
 
                                                         return (
                                                             <li key={i} className="flex flex-col gap-1 text-sm p-3 bg-white border rounded-lg">
@@ -387,9 +390,9 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
                                                                 </div>
                                                                 {log.bodyLocation && (
                                                                     <div className="ml-8 text-xs text-slate-500 space-y-1">
-                                                                        <div>📍 Lokation: <span className="font-medium">{log.bodyLocation.emoji} {log.bodyLocation.label}</span></div>
+                                                                        <div>📍 {t('location_label')}: <span className="font-medium">{log.bodyLocation.emoji} {log.bodyLocation.label}</span></div>
                                                                         {log.bodyLocation.severity && (
-                                                                            <div>📊 Intensitet: <span className="font-medium">{log.bodyLocation.severity.emoji} {log.bodyLocation.severity.label}</span></div>
+                                                                            <div>📊 {t('intensity_label')}: <span className="font-medium">{log.bodyLocation.severity.emoji} {log.bodyLocation.severity.label}</span></div>
                                                                         )}
                                                                     </div>
                                                                 )}
@@ -412,7 +415,7 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
                 isOpen={showWeeklyModal}
                 onClose={() => setShowWeeklyModal(false)}
                 answers={weeklyAnswers}
-                onAnswer={onWeeklyAnswer}
+                onAnswer={(answer) => onWeeklyAnswer(answer.text || '')}
                 userName={userName}
                 onToggleLike={onToggleLike}
                 onReply={onReply}
@@ -470,8 +473,8 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
                     setShowTimePicker(false);
                     setPendingAction(null);
                 }}
-                title="Hvornår?"
-                actionLabel={pendingAction?.title || 'Opret opgave'}
+                title={t('when_question')}
+                actionLabel={pendingAction?.title || t('create_task_label')}
                 seniorName={seniorName}
                 onConfirm={({ time, label, period }) => {
                     if (onAddTask && pendingAction) {

@@ -1,5 +1,5 @@
-import React from 'react';
 import { Crown, Medal, Award, Users } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { LeaderboardEntry } from './useWordGame';
 
 interface LeaderboardProps {
@@ -9,12 +9,13 @@ interface LeaderboardProps {
 
 // Leaderboard Component - Family rankings for word game
 export const Leaderboard: React.FC<LeaderboardProps> = ({ scores, currentUserId }) => {
+    const { t } = useTranslation();
     if (!scores || scores.length === 0) {
         return (
             <div className="bg-stone-50 rounded-xl p-4 text-center">
                 <Users className="w-8 h-8 text-stone-300 mx-auto mb-2" />
-                <p className="text-stone-400 text-sm">Ingen har spillet endnu i dag</p>
-                <p className="text-stone-300 text-xs">Vær den første!</p>
+                <p className="text-stone-400 text-sm">{t('no_one_played_today')}</p>
+                <p className="text-stone-300 text-xs">{t('be_the_first')}</p>
             </div>
         );
     }
@@ -49,7 +50,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ scores, currentUserId 
         <div className="bg-white rounded-2xl p-4 border-2 border-stone-100 shadow-sm">
             <h3 className="text-sm font-bold text-stone-500 uppercase tracking-wider mb-3 flex items-center gap-2">
                 <Crown className="w-4 h-4 text-amber-500" />
-                Dagens Rangliste
+                {t('todays_leaderboard')}
             </h3>
 
             <div className="space-y-2">
@@ -72,7 +73,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ scores, currentUserId 
                                     </span>
                                     {isMe && (
                                         <span className="text-[10px] bg-indigo-200 text-indigo-700 px-1.5 py-0.5 rounded-full font-bold">
-                                            DIG
+                                            {t('you_caps')}
                                         </span>
                                     )}
                                 </div>

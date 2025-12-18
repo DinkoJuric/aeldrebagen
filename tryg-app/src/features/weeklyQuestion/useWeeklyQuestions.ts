@@ -35,6 +35,7 @@ export interface WeeklyAnswer {
     answeredAt?: any; // Firestore Timestamp
     likes?: string[]; // userIds
     replies?: WeeklyReply[];
+    audioUrl?: string; // For Family Heirloom feature
     [key: string]: any;
 }
 

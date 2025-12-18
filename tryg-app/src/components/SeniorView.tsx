@@ -27,7 +27,6 @@ import { MemoryTrigger } from '../features/weeklyQuestion';
 import { WeeklyQuestionWidget, WeeklyQuestionModal } from '../features/weeklyQuestion';
 import { HelpExchange } from '../features/helpExchange';
 import { CoffeeToggle } from '../features/coffee';
-import { BottomNavigation } from './BottomNavigation';
 import { SYMPTOMS_LIST } from '../data/constants';
 import { FEATURES } from '../config/features';
 import { useHelpExchangeMatch } from '../features/helpExchange';
@@ -41,7 +40,6 @@ import { Task } from '../features/tasks/useTasks';
 import { SymptomLog } from '../features/symptoms/useSymptoms';
 import { Member } from '../types';
 import { useTranslation } from 'react-i18next';
-import { LanguageSwitcher } from './LanguageSwitcher';
 
 export interface SeniorViewProps {
     tasks: Task[];
@@ -61,28 +59,31 @@ export interface SeniorViewProps {
     careCircleId?: string | null;
     symptomLogs?: SymptomLog[];
     onAddTask?: (task: Partial<Task>) => void;
-    onToggleLike?: (answerId: string, userId: string, isLiked: boolean) => void;
     onReply?: (answerId: string, reply: any) => void;
+    activeTab: 'daily' | 'family' | 'spil';
+    onTabChange: (tab: 'daily' | 'family' | 'spil') => void;
+    showHealthReport: boolean;
+    setShowHealthReport: (show: boolean) => void;
 }
 
 export const SeniorView: React.FC<SeniorViewProps> = ({
     tasks, toggleTask, updateStatus, addSymptom, statusLastUpdated, onSendPing,
     weeklyAnswers, onWeeklyAnswer, onToggleLike, onReply,
     members = [], memberStatuses = [], currentUserId = null, relativeStatuses = [],
-    userName = 'Senior', relativeName = 'Familie', careCircleId = null, symptomLogs = [], onAddTask
+    userName = 'Senior', relativeName = 'Familie', careCircleId = null, symptomLogs = [], onAddTask,
+    activeTab, onTabChange, showHealthReport, setShowHealthReport
 }) => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const [showCallModal, setShowCallModal] = useState(false);
     const [showSymptomModal, setShowSymptomModal] = useState(false);
     const [showWeeklyModal, setShowWeeklyModal] = useState(false);
     const [showCompletedTasks, setShowCompletedTasks] = useState(false);
-    const [showHealthReport, setShowHealthReport] = useState(false);
     const [showAddTaskModal, setShowAddTaskModal] = useState(false);
     const [rewardMinimized, setRewardMinimized] = useState(true);
     const [newTaskTitle, setNewTaskTitle] = useState('');
     const [newTaskPeriod, setNewTaskPeriod] = useState('morgen');
+    const [newTaskRecurring, setNewTaskRecurring] = useState(false);
     const [activePeriod, setActivePeriod] = useState<string | null>('morgen');
-    const [activeTab, setActiveTab] = useState<'daily' | 'family' | 'spil'>('daily'); // 'daily', 'family', or 'spil'
     const [activeMatch, setActiveMatch] = useState<any | null>(null); // For match celebration modal
     const [dismissedMatchIds, setDismissedMatchIds] = useState(new Set()); // Track dismissed matches
     const [hideReward, setHideReward] = useState(false); // Hide medicine reward for session
@@ -157,12 +158,13 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
 
     // Dynamic greeting based on time
     const hour = new Date().getHours();
-    const greetingKey = hour < 12 ? 'greeting_morning' : hour < 18 ? 'Goddag' : 'Godaften';
+    const greetingKey = hour < 12 ? 'greeting_morning' : hour < 18 ? 'greeting_afternoon' : 'greeting_evening';
     const greeting = t(greetingKey);
 
-    // Get current date in Danish format
+    // Get current date in localized format
+    const localeId = i18n.language === 'da' ? 'da-DK' : i18n.language === 'tr' ? 'tr-TR' : i18n.language === 'bs' ? 'bs-BA' : 'da-DK';
     const dateOptions: Intl.DateTimeFormatOptions = { weekday: 'long', day: 'numeric', month: 'long' };
-    const dateString = new Date().toLocaleDateString('da-DK', dateOptions);
+    const dateString = new Date().toLocaleDateString(localeId, dateOptions);
 
     // Render task section by period (only incomplete, NON-MEDICINE tasks)
     const renderTaskSection = (periodTitle: string, periodKey: string, icon: React.ReactNode) => {
@@ -183,7 +185,7 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                 >
                     {icon}
                     <h2 className="text-xl font-bold text-stone-800">{periodTitle}</h2>
-                    {!isActive && <span className="text-sm text-stone-400">(Tryk for at se)</span>}
+                    {!isActive && <span className="text-sm text-stone-400">{t('press_to_see')}</span>}
                 </div>
 
                 {isActive && (
@@ -324,7 +326,7 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                                     <Pill className="w-6 h-6 text-purple-600" />
                                     <h2 className="text-lg font-bold text-purple-800">{t('medication_title')}</h2>
                                     <span className="text-sm text-purple-500 ml-auto">
-                                        {completedMedicine}/{medicineTasks.length} taget
+                                        {completedMedicine}/{medicineTasks.length} {t('taken')}
                                     </span>
                                 </div>
                                 <div className="space-y-2">
@@ -360,7 +362,7 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                                 <div className="bg-green-500 rounded-full p-1.5">
                                     <CheckCircle className="w-4 h-4 text-white" />
                                 </div>
-                                <span className="text-green-700 font-medium">Medicin taget ✓</span>
+                                <span className="text-green-700 font-medium">{t('medication_taken_check')}</span>
                             </div>
                         )}
 
@@ -376,7 +378,7 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                                 >
                                     <div className="flex flex-col items-center gap-2 text-center">
                                         <CheckCircle className="w-10 h-10 shrink-0" />
-                                        <span className="text-sm leading-tight">Jeg har det godt</span>
+                                        <span className="text-sm leading-tight">{t('i_feel_good')}</span>
                                     </div>
                                 </Button>
 
@@ -388,20 +390,20 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                                 >
                                     <div className="flex flex-col items-center gap-2 text-center">
                                         <Heart className="w-10 h-10 text-orange-500 shrink-0" />
-                                        <span className="text-sm leading-tight">Jeg har ondt</span>
+                                        <span className="text-sm leading-tight">{t('i_feel_pain')}</span>
                                     </div>
                                 </Button>
                             </div>
                         </div>
 
                         {/* Contextual Task Lists */}
-                        {renderTaskSection('Morgen (Kl. 8-11)', 'morgen', <Coffee className="w-6 h-6 text-stone-600" />)}
+                        {renderTaskSection(t('time_period_morning_full'), 'morgen', <Coffee className="w-6 h-6 text-stone-600" />)}
                         <div className="h-px bg-stone-200 my-4" />
-                        {renderTaskSection('Frokost (Kl. 12-13)', 'frokost', <Sun className="w-6 h-6 text-stone-600" />)}
+                        {renderTaskSection(t('time_period_lunch_full'), 'frokost', <Sun className="w-6 h-6 text-stone-600" />)}
                         <div className="h-px bg-stone-200 my-4" />
-                        {renderTaskSection('Eftermiddag (Kl. 14-17)', 'eftermiddag', <Moon className="w-6 h-6 text-stone-600" />)}
+                        {renderTaskSection(t('time_period_afternoon_full'), 'eftermiddag', <Moon className="w-6 h-6 text-stone-600" />)}
                         <div className="h-px bg-stone-200 my-4" />
-                        {renderTaskSection('Aften (Kl. 18-21)', 'aften', <Moon className="w-6 h-6 text-stone-600" />)}
+                        {renderTaskSection(t('time_period_evening_full'), 'aften', <Moon className="w-6 h-6 text-stone-600" />)}
 
                         {/* Add Own Task Button */}
                         <button
@@ -409,7 +411,7 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                             className="w-full flex items-center justify-center gap-2 p-4 mt-4 bg-white border-2 border-dashed border-teal-300 rounded-2xl text-teal-600 font-medium hover:bg-teal-50 hover:border-teal-400 transition-colors"
                         >
                             <Plus className="w-5 h-5" />
-                            <span>Tilføj egen opgave</span>
+                            <span>{t('add_own_task')}</span>
                         </button>
 
                         {/* Completed Tasks - DISABLED for now (uncomment to re-enable) */}
@@ -421,7 +423,7 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                                 >
                                     <div className="flex items-center gap-3">
                                         <CheckCircle className="w-6 h-6 text-teal-600" />
-                                        <span className="font-bold text-teal-800">Udførte opgaver ({completedTasks})</span>
+                                        <span className="font-bold text-teal-800">{t('completed_tasks_count_special', { count: completedTasks })}</span>
                                     </div>
                                     {showCompletedTasks ? (
                                         <ChevronUp className="w-5 h-5 text-teal-600" />
@@ -498,10 +500,7 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                         {/* Memory Trigger - toggle with FEATURES.memoryTriggers */}
                         {FEATURES.memoryTriggers && <MemoryTrigger />}
 
-                        {/* Language Selection - Senior View (Family Tab) */}
-                        <div className="mt-8 mb-4">
-                            <LanguageSwitcher />
-                        </div>
+                        {/* Language Selection moved to global SettingsModal */}
 
                         {/* Dignity-Preserving Help Exchange - toggle with FEATURES.helpExchange */}
                         {FEATURES.helpExchange && (
@@ -545,7 +544,7 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                     setSelectedSymptom(null);
                     setShowBodySelector(false);
                 }}
-                title={showBodySelector ? "Hvor gør det ondt?" : "Hvordan har du det?"}
+                title={showBodySelector ? t('where_does_it_hurt') : t('how_do_you_feel')}
             >
                 {showBodySelector ? (
                     // Step 2: Body location selector (for Smerter)
@@ -599,11 +598,6 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
 
 
             {/* Bottom Navigation */}
-            <BottomNavigation
-                activeTab={activeTab}
-                onTabChange={setActiveTab}
-                onViewReport={() => setShowHealthReport(true)}
-            />
 
             {/* Call Modal */}
             {
@@ -723,6 +717,20 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                         </div>
                     </div>
 
+                    {/* Recurring Toggle */}
+                    <div className="flex items-center gap-3 p-4 bg-slate-50 rounded-xl border-2 border-slate-100">
+                        <input
+                            type="checkbox"
+                            id="recurring-senior"
+                            checked={newTaskRecurring}
+                            onChange={(e) => setNewTaskRecurring(e.target.checked)}
+                            className="w-6 h-6 rounded-md border-slate-300 text-teal-600 focus:ring-teal-500"
+                        />
+                        <label htmlFor="recurring-senior" className="flex-1 font-medium text-slate-700 cursor-pointer">
+                            {t('make_daily')}
+                        </label>
+                    </div>
+
                     <Button
                         onClick={() => {
                             if (newTaskTitle.trim()) {
@@ -730,11 +738,13 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                                     onAddTask({
                                         title: newTaskTitle.trim(),
                                         period: newTaskPeriod,
-                                        type: 'activity'
+                                        type: 'activity',
+                                        recurring: newTaskRecurring
                                     });
                                 }
                                 setNewTaskTitle('');
                                 setNewTaskPeriod('morgen');
+                                setNewTaskRecurring(false);
                                 setShowAddTaskModal(false);
                             }
                         }}

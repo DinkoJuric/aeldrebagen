@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { AlertCircle, ChevronDown, ChevronUp, TrendingUp, TrendingDown, Phone, Calendar } from 'lucide-react';
 import { SYMPTOMS_LIST } from '../../data/constants';
+import { useTranslation } from 'react-i18next';
 import { SymptomLog } from './useSymptoms';
 
 interface TrendAnalysis {
@@ -35,7 +36,7 @@ const isWithinDays = (timestamp: any, days: number) => {
 };
 
 // Get trend analysis for symptoms
-const analyzeTrend = (symptoms: SymptomLog[]): TrendAnalysis => {
+const analyzeTrend = (symptoms: SymptomLog[], t: any): TrendAnalysis => {
     if (symptoms.length === 0) return { trend: 'none', message: null, cta: null };
 
     // Count symptoms by day for last 7 days
@@ -53,30 +54,30 @@ const analyzeTrend = (symptoms: SymptomLog[]): TrendAnalysis => {
     if (severeCount >= 2) {
         return {
             trend: 'warning',
-            message: `${severeCount} alvorlige symptomer denne uge`,
-            cta: { icon: Phone, text: 'Overvej at kontakte læge', action: 'call' }
+            message: t('severe_symptoms_count', { count: severeCount }),
+            cta: { icon: Phone, text: t('contact_doctor_cta'), action: 'call' }
         };
     }
 
     if (last3Days > prev4Days * 1.5 && last3Days >= 3) {
         return {
             trend: 'increasing',
-            message: 'Flere symptomer de seneste dage',
-            cta: { icon: Calendar, text: 'Book tid hos læge?', action: 'book' }
+            message: t('increasing_symptoms_msg'),
+            cta: { icon: Calendar, text: t('book_doctor_cta'), action: 'book' }
         };
     }
 
     if (last3Days < prev4Days * 0.5) {
         return {
             trend: 'decreasing',
-            message: 'Symptomerne aftager 👍',
+            message: t('decreasing_symptoms_msg'),
             cta: null
         };
     }
 
     return {
         trend: 'stable',
-        message: `${symptoms.length} symptomer denne uge`,
+        message: t('stable_symptoms_msg', { count: symptoms.length }),
         cta: null
     };
 };
@@ -89,6 +90,7 @@ interface SymptomSummaryProps {
 
 // Symptom Summary Card - shows today's symptoms with 7-day overview
 export const SymptomSummary: React.FC<SymptomSummaryProps> = ({ symptomLogs = [], onViewReport, hideTitle = false }) => {
+    const { t } = useTranslation();
     const [showOlder, setShowOlder] = useState(false);
 
     // Split symptoms
@@ -100,7 +102,7 @@ export const SymptomSummary: React.FC<SymptomSummaryProps> = ({ symptomLogs = []
 
     // Get trend analysis
     const weeklySymptoms = symptomLogs.filter(s => isWithinDays(s.loggedAt, 7));
-    const trend = useMemo(() => analyzeTrend(weeklySymptoms), [weeklySymptoms]);
+    const trend = useMemo(() => analyzeTrend(weeklySymptoms, t), [weeklySymptoms, t]);
 
     // Count symptoms by type for summary
     const symptomCounts = useMemo(() => {
@@ -124,7 +126,7 @@ export const SymptomSummary: React.FC<SymptomSummaryProps> = ({ symptomLogs = []
                     {!hideTitle && (
                         <h4 className="text-orange-800 font-bold flex items-center gap-2 mb-2">
                             <AlertCircle className="w-5 h-5" />
-                            Symptomer i dag ({todaySymptoms.length})
+                            {t('symptoms_today_count', { count: todaySymptoms.length })}
                         </h4>
                     )}
                     <div className="space-y-2">
@@ -163,7 +165,7 @@ export const SymptomSummary: React.FC<SymptomSummaryProps> = ({ symptomLogs = []
                             {trend.trend === 'stable' && <AlertCircle className="w-4 h-4" />}
                             {trend.trend === 'warning' && <AlertCircle className="w-4 h-4 text-red-500" />}
                             <span className="font-medium">
-                                {trend.message || `${weekSymptoms.length} symptomer denne uge`}
+                                {trend.message || t('symptoms_this_week', { count: weekSymptoms.length })}
                             </span>
                         </div>
                         {showOlder ? (
@@ -241,7 +243,7 @@ export const SymptomSummary: React.FC<SymptomSummaryProps> = ({ symptomLogs = []
                     onClick={onViewReport}
                     className="w-full text-center text-xs text-orange-500 hover:text-orange-700 transition-colors"
                 >
-                    Se fuld symptom-historik →
+                    {t('see_full_history')}
                 </button>
             )}
         </div>

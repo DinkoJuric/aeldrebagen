@@ -70,15 +70,17 @@ export const PhotoUploadModal: React.FC<PhotoUploadModalProps> = ({ isOpen }) =>
 };
 
 interface PhotoViewerModalProps {
+    isOpen: boolean;
+    onClose: () => void;
     photo: Photo | null;
     onDelete: (id: string, storagePath: string) => Promise<void>;
 }
 
 // Photo viewer modal (for recipient)
-export const PhotoViewerModal: React.FC<PhotoViewerModalProps> = ({ photo, onDelete }) => {
+export const PhotoViewerModal: React.FC<PhotoViewerModalProps> = ({ isOpen, onClose, photo, onDelete }) => {
     const [deleting, setDeleting] = useState(false);
 
-    if (!photo) return null;
+    if (!isOpen || !photo) return null;
 
     const handleDelete = async () => {
         setDeleting(true);
@@ -110,6 +112,14 @@ export const PhotoViewerModal: React.FC<PhotoViewerModalProps> = ({ photo, onDel
                             {formatDate(photo.uploadedAt)}
                         </p>
                     </div>
+                    <button
+                        onClick={onClose}
+                        className="p-2 text-white/70 hover:text-white transition-colors"
+                    >
+                        <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
                 </div>
             </div>
 

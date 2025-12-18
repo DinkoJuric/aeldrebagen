@@ -4,14 +4,8 @@ import { WeeklyAnswer } from './useWeeklyQuestions';
 
 // Weekly questions to rotate through
 export const WEEKLY_QUESTIONS = [
-    "Hvad var det bedste øjeblik denne uge?",
-    "Hvad glæder du dig til i denne uge?",
-    "Hvem tænker du på i dag?",
-    "Hvad har fået dig til at smile i dag?",
-    "Hvad er du taknemmelig for?",
-    "Hvad vil du gerne fortælle din familie?",
-    "Hvad har du lært denne uge?",
-    "Hvad savner du?",
+    "weekly_question_1",
+    "weekly_question_2"
 ];
 
 // Get week number of the year

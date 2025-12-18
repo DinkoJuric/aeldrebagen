@@ -1,23 +1,24 @@
-// Compact Weekly Question widget for hero section
-// Shows notification badge when relative answers, opens modal on tap
-
 import React, { useState } from 'react';
 import { MessageCircle, X, Check, Heart, MessageSquare, Send, Sparkles } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { WEEKLY_QUESTIONS, getWeekNumber } from './WeeklyQuestion';
 import { WeeklyAnswer, WeeklyReply } from './useWeeklyQuestions';
+import { AudioRecorder } from '../memories/AudioRecorder';
+import { useMemories } from '../memories/useMemories';
+import { Loader2, Mic, Play as PlayIcon } from 'lucide-react';
 
 // Simple time ago formatter (no external deps)
-const formatTimeAgo = (isoString?: string) => {
+const formatTimeAgo = (isoString: string, t: any) => {
     if (!isoString) return '';
     try {
         const date = new Date(isoString);
         const now = new Date();
         const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
 
-        if (diffInSeconds < 60) return 'Lige nu';
-        if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m siden`;
-        if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}t siden`;
-        return `${Math.floor(diffInSeconds / 86400)}d siden`;
+        if (diffInSeconds < 60) return t('just_now');
+        if (diffInSeconds < 3600) return t('minutes_ago', { count: Math.floor(diffInSeconds / 60) });
+        if (diffInSeconds < 86400) return t('hours_ago', { count: Math.floor(diffInSeconds / 3600) });
+        return t('days_ago_relative', { count: Math.floor(diffInSeconds / 86400) });
     } catch (e) {
         return '';
     }
@@ -32,8 +33,10 @@ interface WeeklyQuestionWidgetProps {
 
 // Compact widget for header
 export const WeeklyQuestionWidget: React.FC<WeeklyQuestionWidgetProps> = ({ answers = [], userName, hasUnread = false, onClick }) => {
+    const { t } = useTranslation();
     const weekNumber = getWeekNumber();
-    const question = WEEKLY_QUESTIONS[weekNumber % WEEKLY_QUESTIONS.length];
+    const questionKey = WEEKLY_QUESTIONS[weekNumber % WEEKLY_QUESTIONS.length];
+    const question = t(questionKey);
     const answersThisWeek = answers.filter(a => a.question === question);
     const unreadCount = hasUnread ? answersThisWeek.filter(a => a.userName !== userName).length : 0;
 
@@ -41,7 +44,7 @@ export const WeeklyQuestionWidget: React.FC<WeeklyQuestionWidgetProps> = ({ answ
         <button
             onClick={onClick}
             className="relative bg-indigo-100 p-1.5 rounded-full hover:bg-indigo-200 transition-colors flex items-center justify-center shrink-0"
-            aria-label="Åbn ugens spørgsmål"
+            aria-label={t('open_weekly_question')}
             style={{ width: '36px', height: '36px' }}
         >
             <MessageCircle className="w-5 h-5 text-indigo-600" />
@@ -79,9 +82,14 @@ export const WeeklyQuestionModal: React.FC<WeeklyQuestionModalProps> = ({
     const [myAnswer, setMyAnswer] = useState('');
     const [replyText, setReplyText] = useState('');
     const [replyingToId, setReplyingToId] = useState<string | null>(null);
+    const [answerType, setAnswerType] = useState<'text' | 'audio'>('text');
+    const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
+    const { t } = useTranslation();
+    const { uploadMemory, isUploading } = useMemories();
 
     const weekNumber = getWeekNumber();
-    const question = WEEKLY_QUESTIONS[weekNumber % WEEKLY_QUESTIONS.length];
+    const questionKey = WEEKLY_QUESTIONS[weekNumber % WEEKLY_QUESTIONS.length];
+    const question = t(questionKey);
 
     // Filter answers for this week's question
     const answersThisWeek = answers.filter(a => a.question === question);
@@ -98,8 +106,8 @@ export const WeeklyQuestionModal: React.FC<WeeklyQuestionModalProps> = ({
         return timeB - timeA;
     });
 
-    const handleSubmit = () => {
-        if (myAnswer.trim()) {
+    const handleSubmit = async () => {
+        if (answerType === 'text' && myAnswer.trim()) {
             onAnswer?.({
                 question,
                 answer: myAnswer.trim(),
@@ -107,6 +115,16 @@ export const WeeklyQuestionModal: React.FC<WeeklyQuestionModalProps> = ({
                 userName
             });
             setMyAnswer('');
+        } else if (answerType === 'audio' && audioBlob) {
+            // Audio submission logic will be handled here
+            onAnswer?.({
+                question,
+                answer: t('audio_answer_placeholder'),
+                timestamp: new Date().toISOString(),
+                userName,
+                audioBlob // Passed to parent to handle upload
+            });
+            setAudioBlob(null);
         }
     };
 
@@ -146,7 +164,7 @@ export const WeeklyQuestionModal: React.FC<WeeklyQuestionModalProps> = ({
                         <div className="bg-indigo-100 p-2 rounded-full">
                             <MessageCircle className="w-5 h-5 text-indigo-600" />
                         </div>
-                        <span className="font-bold text-stone-800">Ugens spørgsmål</span>
+                        <span className="font-bold text-stone-800">{t('weekly_question_title')}</span>
                     </div>
                     <button onClick={onClose} className="p-2 hover:bg-stone-100 rounded-full">
                         <X className="w-6 h-6 text-stone-500" />
@@ -157,28 +175,62 @@ export const WeeklyQuestionModal: React.FC<WeeklyQuestionModalProps> = ({
                 <div className="flex-1 overflow-y-auto p-4 space-y-4 pb-20">
                     {/* Question */}
                     <div className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl p-6 text-white shadow-lg">
-                        <p className="text-indigo-200 text-sm mb-2 uppercase tracking-wide font-bold">Denne uges spørgsmål</p>
+                        <p className="text-indigo-200 text-sm mb-2 uppercase tracking-wide font-bold">{t('weekly_question_header')}</p>
                         <p className="text-xl font-bold leading-relaxed">{question}</p>
                     </div>
 
                     {/* Answer input (only if not answered) */}
                     {!hasAnsweredThisWeek ? (
-                        <div className="space-y-3 animate-fade-in">
+                        <div className="space-y-4 animate-fade-in">
+                            {/* Toggle between text and audio */}
+                            <div className="flex bg-stone-100 p-1 rounded-2xl">
+                                <button
+                                    onClick={() => setAnswerType('text')}
+                                    className={`flex-1 py-3 rounded-xl font-bold transition-all ${answerType === 'text' ? 'bg-white shadow-sm text-indigo-600' : 'text-stone-500'}`}
+                                >
+                                    <div className="flex items-center justify-center gap-2">
+                                        <MessageSquare className="w-4 h-4" />
+                                        {t('text_answer')}
+                                    </div>
+                                </button>
+                                <button
+                                    onClick={() => setAnswerType('audio')}
+                                    className={`flex-1 py-3 rounded-xl font-bold transition-all ${answerType === 'audio' ? 'bg-white shadow-sm text-indigo-600' : 'text-stone-500'}`}
+                                >
+                                    <div className="flex items-center justify-center gap-2">
+                                        <Mic className="w-4 h-4" />
+                                        {t('audio_answer')}
+                                    </div>
+                                </button>
+                            </div>
+
                             <div className="relative">
-                                <textarea
-                                    value={myAnswer}
-                                    onChange={(e) => setMyAnswer(e.target.value)}
-                                    placeholder="Skriv dit svar her..."
-                                    className="w-full p-4 rounded-2xl border-2 border-stone-200 focus:border-indigo-400 focus:outline-none resize-none h-32 text-lg shadow-sm"
-                                />
+                                {answerType === 'text' ? (
+                                    <textarea
+                                        value={myAnswer}
+                                        onChange={(e) => setMyAnswer(e.target.value)}
+                                        placeholder={t('write_answer_placeholder')}
+                                        className="w-full p-4 rounded-2xl border-2 border-stone-200 focus:border-indigo-400 focus:outline-none resize-none h-32 text-lg shadow-sm"
+                                    />
+                                ) : (
+                                    <AudioRecorder
+                                        onRecordingComplete={(blob) => setAudioBlob(blob)}
+                                        onReset={() => setAudioBlob(null)}
+                                        placeholder={t('tell_your_story_placeholder')}
+                                    />
+                                )}
                             </div>
                             <button
                                 onClick={handleSubmit}
-                                disabled={!myAnswer.trim()}
+                                disabled={answerType === 'text' ? !myAnswer.trim() : (!audioBlob || isUploading)}
                                 className="w-full p-4 bg-indigo-600 text-white font-bold rounded-2xl hover:bg-indigo-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 shadow-md active:scale-95 transform transition-transform"
                             >
-                                <Sparkles className="w-5 h-5" />
-                                Del dit svar
+                                {isUploading ? (
+                                    <Loader2 className="w-5 h-5 animate-spin" />
+                                ) : (
+                                    <Sparkles className="w-5 h-5" />
+                                )}
+                                {isUploading ? t('uploading') : t('share_your_answer')}
                             </button>
                         </div>
                     ) : (
@@ -186,7 +238,7 @@ export const WeeklyQuestionModal: React.FC<WeeklyQuestionModalProps> = ({
                             <div className="bg-green-100 p-1 rounded-full">
                                 <Check className="w-4 h-4 text-green-700" />
                             </div>
-                            <p className="text-green-700 font-medium">Tak for dit svar!</p>
+                            <p className="text-green-700 font-medium">{t('thanks_for_answer')}</p>
                         </div>
                     )}
 
@@ -194,7 +246,7 @@ export const WeeklyQuestionModal: React.FC<WeeklyQuestionModalProps> = ({
                     <div className="space-y-4">
                         {sortedAnswers.length > 0 ? (
                             <>
-                                <p className="text-stone-500 text-sm font-bold ml-1 uppercase tracking-wide">Svar fra familien ({sortedAnswers.length})</p>
+                                <p className="text-stone-500 text-sm font-bold ml-1 uppercase tracking-wide">{t('family_answers_count', { count: sortedAnswers.length })}</p>
                                 {sortedAnswers.map((answer) => {
                                     const isLiked = currentUserId && answer.likes?.includes(currentUserId);
                                     const likeCount = answer.likes?.length || 0;
@@ -208,7 +260,7 @@ export const WeeklyQuestionModal: React.FC<WeeklyQuestionModalProps> = ({
                                                     <p className="font-bold text-stone-800 text-lg">{answer.userName}</p>
                                                     {answer.answeredAt && (
                                                         <p className="text-xs text-stone-400">
-                                                            {formatTimeAgo(answer.answeredAt?.toDate?.()?.toISOString() || answer.answeredAt)}
+                                                            {formatTimeAgo(answer.answeredAt?.toDate?.()?.toISOString() || answer.answeredAt, t)}
                                                         </p>
                                                     )}
                                                 </div>
@@ -226,7 +278,20 @@ export const WeeklyQuestionModal: React.FC<WeeklyQuestionModalProps> = ({
                                             </div>
 
                                             {/* Answer Text */}
-                                            <p className="text-stone-700 text-lg leading-relaxed mb-4">{answer.answer || answer.text}</p>
+                                            {answer.audioUrl ? (
+                                                <div className="mb-4 bg-stone-50 p-3 rounded-xl border border-stone-100 flex items-center gap-3">
+                                                    <button
+                                                        onClick={() => new Audio(answer.audioUrl).play()}
+                                                        className="w-10 h-10 bg-indigo-100 flex items-center justify-center rounded-full text-indigo-600 hover:bg-indigo-200"
+                                                    >
+                                                        <PlayIcon size={20} fill="currentColor" />
+                                                    </button>
+                                                    <div className="flex-1 h-1 bg-stone-200 rounded-full" />
+                                                    <Mic size={16} className="text-stone-300" />
+                                                </div>
+                                            ) : (
+                                                <p className="text-stone-700 text-lg leading-relaxed mb-4">{answer.answer || answer.text}</p>
+                                            )}
 
                                             {/* Action Bar */}
                                             <div className="flex items-center gap-4 border-t border-stone-100 pt-3">
@@ -235,7 +300,7 @@ export const WeeklyQuestionModal: React.FC<WeeklyQuestionModalProps> = ({
                                                     className="flex items-center gap-2 text-stone-500 hover:text-indigo-600 transition-colors text-sm font-medium"
                                                 >
                                                     <MessageSquare className="w-4 h-4" />
-                                                    {answer.replies?.length ? `${answer.replies.length} svar` : 'Svar'}
+                                                    {answer.replies?.length ? t('replies_count', { count: answer.replies.length }) : t('reply_verb')}
                                                 </button>
                                             </div>
 
@@ -259,7 +324,7 @@ export const WeeklyQuestionModal: React.FC<WeeklyQuestionModalProps> = ({
                                                             <textarea
                                                                 value={replyText}
                                                                 onChange={(e) => setReplyText(e.target.value)}
-                                                                placeholder="Skriv et svar..."
+                                                                placeholder={t('write_reply_placeholder')}
                                                                 className="flex-1 bg-stone-50 border border-stone-200 rounded-xl p-2 text-sm focus:border-indigo-400 focus:outline-none resize-none h-20"
                                                                 autoFocus
                                                             />
@@ -280,7 +345,7 @@ export const WeeklyQuestionModal: React.FC<WeeklyQuestionModalProps> = ({
                             </>
                         ) : (
                             <div className="text-center py-8 text-stone-400">
-                                <p>Ingen svar endnu. Vær den første!</p>
+                                <p>{t('no_answers_yet')}</p>
                             </div>
                         )}
                     </div>

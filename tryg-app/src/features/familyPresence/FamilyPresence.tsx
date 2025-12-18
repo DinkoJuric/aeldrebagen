@@ -1,5 +1,5 @@
 import React from 'react';
-import { Users, Home, Briefcase, Car, Coffee, Moon, Heart } from 'lucide-react';
+import { Users } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 // @ts-ignore - Context not yet converted
 import { useCareCircleContext } from '../../contexts/CareCircleContext';

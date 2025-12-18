@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-    Plus, Pill, Clock, Activity, ChevronDown, ChevronUp, CheckCircle,
+    Plus, Pill, Clock, Activity, ChevronDown, ChevronUp,
     AlertCircle, HandHeart, X
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -16,6 +16,7 @@ import { useCareCircleContext } from '../contexts/CareCircleContext';
 import { Member, CareCircleContextValue } from '../types';
 import { Task } from '../features/tasks/useTasks';
 import { SymptomLog } from '../features/symptoms/useSymptoms';
+import { MemoriesGallery } from '../features/memories/MemoriesGallery';
 
 export interface CoordinationTabProps {
     seniorName?: string;
@@ -43,7 +44,6 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
     memberStatuses: propMemberStatuses,
     currentUserId: propCurrentUserId,
     openTasks = [],
-    completedTasks = [],
     symptomLogs = [],
     onAddTask,
     onViewReport,
@@ -62,7 +62,6 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
 
     const [showStatusPicker, setShowStatusPicker] = useState(false);
     const [showOpenTasks, setShowOpenTasks] = useState(true);
-    const [showCompleted, setShowCompleted] = useState(false);
     const [showSymptoms, setShowSymptoms] = useState(true);
     const [showOfferPicker, setShowOfferPicker] = useState(false);
     const [showRequestPicker, setShowRequestPicker] = useState(false);
@@ -280,6 +279,11 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
                     )}
                 </div>
             </div>
+
+            {/* Family Heirloom - Livsbog */}
+            {careCircleId && (
+                <MemoriesGallery circleId={careCircleId} />
+            )}
 
             {(() => {
                 const todaySymptoms = symptomLogs.filter(s => {

@@ -6,7 +6,9 @@ import { useState, useEffect, useCallback } from 'react';
 import {
     collection,
     doc,
+    getDoc,
     setDoc,
+    updateDoc,
     deleteDoc,
     onSnapshot,
     serverTimestamp,
@@ -21,10 +23,12 @@ export interface Task {
     title: string;
     period: string;
     time: string;
-    emoji: string;
+    emoji?: string;
     completed: boolean;
     createdAt?: any;
     completedAt?: any;
+    recurring?: boolean; // If true, reset every day
+    originalId?: string; // Reference to template if needed
     [key: string]: any; // Allow other props
 }
 
@@ -67,6 +71,61 @@ export function useTasks(circleId: string | null) {
 
         return () => unsubscribe();
     }, [circleId]);
+
+    // Check for daily reset on load
+    useEffect(() => {
+        if (circleId && tasks.length > 0) {
+            checkDailyReset(circleId, tasks);
+        }
+    }, [circleId, tasks.length > 0]);
+
+    const checkDailyReset = async (cId: string, currentTasks: Task[]) => {
+        try {
+            const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+            const circleRef = doc(db, 'careCircles', cId);
+            const circleDoc = await getDoc(circleRef);
+
+            if (circleDoc.exists()) {
+                const data = circleDoc.data();
+                if (data.lastResetDate !== today) {
+                    console.log('🌅 New day detected! Resetting daily tasks...');
+                    await performDailyReset(cId, currentTasks, today);
+                }
+            }
+        } catch (err) {
+            console.error('Error checking daily reset:', err);
+        }
+    };
+
+    const performDailyReset = async (cId: string, currentTasks: Task[], dateStr: string) => {
+        try {
+            // 1. Reset all recurring tasks
+            for (const task of currentTasks) {
+                // Medication tasks are recurring by default
+                const isMedication = task.type === 'medication' || task.title?.toLowerCase().includes('medicin');
+                const isRecurring = task.recurring || isMedication;
+
+                if (isRecurring) {
+                    const docId = task.id.startsWith('task_') ? task.id : `task_${task.id}`;
+                    await updateDoc(doc(db, 'careCircles', cId, 'tasks', docId), {
+                        completed: false,
+                        completedAt: null
+                    });
+                } else if (task.completed) {
+                    // Optional: Archive or delete old non-recurring tasks
+                    // For now, we'll just leave them or you could delete them if they are older than 24h
+                }
+            }
+
+            // 2. Update the reset date
+            await updateDoc(doc(db, 'careCircles', cId), {
+                lastResetDate: dateStr
+            });
+            console.log('✅ Daily reset complete for', dateStr);
+        } catch (err) {
+            console.error('Error performing daily reset:', err);
+        }
+    };
 
     // Initialize default tasks for new circles
     const initializeDefaultTasks = async (cId: string) => {
@@ -125,6 +184,7 @@ export function useTasks(circleId: string | null) {
                 ...newTask,
                 time: newTask.time || (newTask.period ? defaultTimes[newTask.period] : '12:00'),
                 completed: false,
+                recurring: newTask.recurring || false,
                 createdAt: serverTimestamp(),
                 completedAt: null,
             });

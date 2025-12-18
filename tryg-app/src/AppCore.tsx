@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { CareCircleProvider } from './contexts/CareCircleContext';
 import { LivingBackground } from './components/ui/LivingBackground';
-import { Share2, LogOut, Settings } from 'lucide-react';
+import { LogOut, Settings } from 'lucide-react';
 import { SeniorView } from './components/SeniorView';
 import { RelativeView } from './components/RelativeView';
+import { SettingsModal } from './components/SettingsModal';
+import { BottomNavigation } from './components/BottomNavigation';
 import { PingNotification } from './features/thinkingOfYou';
-import { PrivacySettings } from './components/PrivacySettings';
 import { InstallPrompt } from './components/InstallPrompt';
 import { UpdateToast } from './components/UpdateToast';
 import { PhotoCaptureButton, PhotoUploadModal, PhotoViewerModal, PhotoNotificationBadge } from './features/photos';
@@ -22,7 +24,7 @@ import { playCompletionSound, playSuccessSound, playPingSound } from './utils/so
 import { FEATURES } from './config/features';
 import './index.css';
 import { User } from 'firebase/auth'; // Or your custom user type
-import { UserProfile, Member, CareCircle } from './types';
+import { UserProfile, Member } from './types';
 import { Task } from './features/tasks/useTasks';
 
 export interface AppCoreProps {
@@ -44,14 +46,16 @@ export default function TrygAppCore({
     onGetInviteCode,
     members = []
 }: AppCoreProps) {
+    const { t } = useTranslation();
     // View is determined by user role - no toggle allowed
     const isRelative = userProfile?.role === 'relative';
     const isSenior = userProfile?.role === 'senior';
     // const [activePing, setActivePing] = useState(null); // Unused?
     const [notification, setNotification] = useState<any | null>(null);
     const [showSettings, setShowSettings] = useState(false);
-    const [showPrivacySettings, setShowPrivacySettings] = useState(false);
+    const [activeTab, setActiveTab] = useState<'daily' | 'family' | 'spil'>('daily');
     const [showPhotoViewer, setShowPhotoViewer] = useState(false);
+    const [showHealthReport, setShowHealthReport] = useState(false);
 
     // Firebase hooks for real-time data
     const { tasks, toggleTask, addTask } = useTasks(careCircle?.id);
@@ -64,17 +68,17 @@ export default function TrygAppCore({
         setMyStatus,
         relativeStatuses,
         seniorStatus
-    } = useMemberStatus(careCircle?.id, user?.uid, userProfile?.displayName, userProfile?.role);
+    } = useMemberStatus(careCircle?.id, user?.uid ?? null, userProfile?.displayName ?? undefined, userProfile?.role);
     const {
         answers: weeklyAnswers,
         addAnswer: addWeeklyAnswer,
         toggleLike: onToggleLike,
         addReply: onReply
     } = useWeeklyQuestions(careCircle?.id);
-    const { latestPing, sendPing, dismissPing } = usePings(careCircle?.id, user?.uid);
+    const { latestPing, sendPing, dismissPing } = usePings(careCircle?.id, user?.uid ?? null);
     // HelpExchange removed from here - moved to CoordinationTab and SeniorView
     const { lastCheckIn, recordCheckIn } = useCheckIn(careCircle?.id);
-    const { latestPhoto, uploading, uploadPhoto, deletePhoto } = usePhotos(careCircle?.id, user?.uid);
+    const { latestPhoto, uploading, uploadPhoto, deletePhoto } = usePhotos(careCircle?.id, user?.uid ?? null);
 
     // HelpExchange filtering removed
 
@@ -136,7 +140,7 @@ export default function TrygAppCore({
     };
 
     const handleWeeklyAnswer = async (answer: string) => {
-        await addWeeklyAnswer(answer);
+        await addWeeklyAnswer({ text: answer } as any);
     };
 
     // Get display names
@@ -160,7 +164,7 @@ export default function TrygAppCore({
             memberStatuses={memberStatuses}
             relativeStatuses={relativeStatuses}
             seniorStatus={seniorStatus}
-            myStatus={myStatus}
+            myStatus={myStatus as any}
             setMyStatus={setMyStatus}
         >
             <div className="flex justify-center items-center min-h-screen bg-stone-50 sm:bg-zinc-800 sm:p-4 font-sans">
@@ -190,78 +194,38 @@ export default function TrygAppCore({
 
                     {/* Header - COMPACT: Share / Settings / Logout */}
                     <div className="absolute top-0 left-0 right-0 h-10 bg-black/5 z-50 flex justify-between items-center backdrop-blur-sm px-3">
-                        {/* Left: Share (opens invite panel) */}
+                        {/* Center: Settings gear (Unified Settings) */}
                         <button
-                            onClick={() => setShowSettings(!showSettings)}
-                            className="p-1.5 rounded-full hover:bg-white/50 transition-colors"
-                            aria-label="Del familie-kode"
-                        >
-                            <Share2 className="w-4 h-4 text-stone-600" />
-                        </button>
-
-                        {/* Center: Settings gear (opens Privacy & Data directly) */}
-                        <button
-                            onClick={() => setShowPrivacySettings(true)}
+                            onClick={() => setShowSettings(true)}
                             className="p-2 rounded-full hover:bg-white/50 transition-colors"
-                            aria-label="Indstillinger"
+                            aria-label={t('settings')}
                         >
                             <Settings className="w-5 h-5 text-stone-600" />
                         </button>
 
-                        {/* Right: Sign out */}
-                        <button
-                            onClick={onSignOut}
-                            className="p-1.5 rounded-full hover:bg-white/50 transition-colors"
-                            aria-label="Log ud"
-                        >
-                            <LogOut className="w-4 h-4 text-stone-600" />
-                        </button>
+                        <div className="flex items-center gap-1">
+                            {/* Sign out */}
+                            <button
+                                onClick={onSignOut}
+                                className="p-1.5 rounded-full hover:bg-white/50 transition-colors"
+                                aria-label={t('sign_out')}
+                            >
+                                <LogOut className="w-4 h-4 text-stone-600" />
+                            </button>
+                        </div>
                     </div>
 
-                    {/* Settings panel (invite code + privacy) */}
+                    {/* Unified Settings Modal */}
                     {showSettings && (
-                        <div className="absolute top-10 left-4 right-4 bg-white rounded-2xl shadow-lg p-4 z-40 border border-stone-200">
-                            <h3 className="font-bold text-stone-800 mb-2">Familie-cirkel</h3>
-                            {inviteCode ? (
-                                <div className="bg-stone-100 rounded-xl p-3 text-center mb-3">
-                                    <p className="text-xs text-stone-500 mb-1">Invitationskode</p>
-                                    <p className="text-2xl font-mono font-bold tracking-widest">{inviteCode}</p>
-                                </div>
-                            ) : (
-                                <button
-                                    onClick={onGetInviteCode}
-                                    className="w-full py-2 bg-teal-100 text-teal-700 rounded-xl font-medium mb-3"
-                                >
-                                    Vis invitationskode
-                                </button>
-                            )}
-
-                            <p className="text-xs text-stone-400 mt-3">
-                                Logget ind som: {user?.email}
-                            </p>
-
-                            {/* Family Constellation - Orbit Visualization */}
-                            {memberStatuses.length > 0 && (
-                                <div className="mt-4 pt-4 border-t border-stone-200">
-                                    <div className="flex items-center gap-2 mb-3">
-                                        <span className="text-sm font-medium text-stone-600">Familiens Hjerte</span>
-                                    </div>
-                                    <FamilyConstellation
-                                        members={memberStatuses as any}
-                                        centerMemberName={seniorName}
-                                        currentUserId={user?.uid}
-                                    />
-                                </div>
-                            )}
-                        </div>
-                    )}
-
-                    {/* Privacy Settings Modal */}
-                    {showPrivacySettings && (
-                        <PrivacySettings
+                        <SettingsModal
                             user={user}
+                            userProfile={userProfile}
                             careCircle={careCircle}
-                            onClose={() => setShowPrivacySettings(false)}
+                            members={memberStatuses}
+                            inviteCode={inviteCode}
+                            onGetInviteCode={onGetInviteCode}
+                            onClose={() => setShowSettings(false)}
+                            onSignOut={onSignOut}
                         />
                     )}
 
@@ -298,12 +262,15 @@ export default function TrygAppCore({
                                         onAddTask={addTask}
                                         onToggleLike={onToggleLike}
                                         onReply={onReply}
+                                        activeTab={activeTab}
+                                        onTabChange={setActiveTab}
+                                        showHealthReport={showHealthReport}
+                                        setShowHealthReport={setShowHealthReport}
                                     />
                                 ) : (
                                     <RelativeView
                                         tasks={tasks}
                                         onAddTask={handleAddTaskFromRelative}
-                                        profile={userProfile}
                                         lastCheckIn={lastCheckIn}
                                         symptomLogs={symptoms}
                                         myStatus={myStatus}
@@ -315,10 +282,11 @@ export default function TrygAppCore({
                                         onWeeklyAnswer={handleWeeklyAnswer}
                                         onToggleLike={onToggleLike}
                                         onReply={onReply}
-                                        onOpenSettings={() => setShowPrivacySettings(true)}
                                         userName={relativeName}
                                         seniorName={seniorName}
                                         careCircleId={careCircle?.id}
+                                        activeTab={activeTab}
+                                        onTabChange={setActiveTab}
                                     />
                                 )}
 
@@ -333,6 +301,13 @@ export default function TrygAppCore({
                                 )}
                             </div>
                         </div>
+
+                        {/* Global Bottom Navigation */}
+                        <BottomNavigation
+                            activeTab={activeTab}
+                            onTabChange={setActiveTab}
+                            onShowReport={() => setShowHealthReport(true)}
+                        />
                         {/* End of temporary fixed background */}
                     </div>
 
@@ -342,6 +317,8 @@ export default function TrygAppCore({
                     {/* Photo viewer modal */}
                     {showPhotoViewer && latestPhoto && (
                         <PhotoViewerModal
+                            isOpen={showPhotoViewer}
+                            onClose={() => setShowPhotoViewer(false)}
                             photo={latestPhoto}
                             onDelete={async (id, path) => {
                                 await deletePhoto(id, path);
