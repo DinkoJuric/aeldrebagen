@@ -85,9 +85,12 @@ graph TD
 | `Spillehjoernet.tsx` | WordGame, Leaderboard, useWordGame | SeniorView, CoordinationTab |
 | `WordGame.tsx` | - | Spillehjoernet |
 | `Leaderboard.tsx` | - | Spillehjoernet |
-| `useWordGame.ts` | Firebase (db) | Spillehjoernet |
+| `useWordGame.ts` | Firebase (db), i18n, wordGameData_* | Spillehjoernet |
+| `wordGameData.ts` | - | useWordGame (Danish) |
+| `wordGameData_bs.ts` | - | useWordGame (Bosnian) |
+| `wordGameData_tr.ts` | - | useWordGame (Turkish) |
 
-**Dependencies**: Firebase Firestore only. **Self-contained**: ✅ Yes
+**Dependencies**: Firebase Firestore, i18n. **Self-contained**: ✅ Yes
 
 ---
 

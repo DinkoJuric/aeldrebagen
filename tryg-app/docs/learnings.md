@@ -266,7 +266,18 @@ description: Master record of all project and cross-project learnings
 
 ---
 
-### ✅ CANONICAL: LivingBackground Architecture (Dec 2025)
+### Nested Overflow-Hidden Scroll Blocking (Dec 2025)
+- **Problem**: App couldn't scroll at all — content was stuck in place.
+- **Root Cause**: THREE levels of `overflow-hidden`: `body`, `#root` (both in `index.css`), AND `LivingBackground.tsx` wrapper.
+- **Symptoms**: Pull-to-refresh worked, but actual content scrolling was blocked.
+- **Action**: Removed `overflow: hidden` from `body` and `#root`, removed `overflow-hidden` from LivingBackground, changed `min-h-screen` to `h-full`.
+- **Future**: 
+  1. Never use `overflow-hidden` on layout containers (`body`, `#root`, page wrappers)
+  2. `overflow-hidden` should only be on decorative elements with clipped rounded corners
+  3. Test scroll behavior immediately after touching layout CSS
+
+---
+
 
 > **This is the APPROVED baseline for all atmospheric/background implementations going forward.**
 
