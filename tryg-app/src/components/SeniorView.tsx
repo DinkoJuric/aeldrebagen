@@ -189,8 +189,8 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                     onClick={() => setActivePeriod(activePeriod === periodKey ? null : periodKey)}
                 >
                     {icon}
-                    <h2 className="text-xl font-bold text-stone-800">{periodTitle}</h2>
-                    {!isActive && <span className="text-sm text-stone-400">{t('press_to_see')}</span>}
+                    <h2 className="text-xl font-bold theme-text">{periodTitle}</h2>
+                    {!isActive && <span className="text-sm theme-text-muted">{t('press_to_see')}</span>}
                 </div>
 
                 {isActive && (
@@ -369,7 +369,7 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
 
                             {/* Check-in Status */}
                             <div className="bg-white rounded-3xl p-6 shadow-sm border-2 border-teal-100 mb-8">
-                                <h2 className="text-xl font-semibold text-stone-800 mb-4">{t('pain_question')}</h2>
+                                <h2 className="text-xl font-semibold theme-text mb-4">{t('pain_question')}</h2>
                                 <div className="grid grid-cols-2 gap-4">
                                     <Button
                                         variant="primary"
@@ -450,8 +450,8 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                                                                 {task.type === 'appointment' && <Clock className="w-6 h-6" />}
                                                             </div>
                                                             <div>
-                                                                <h3 className="text-lg font-bold text-stone-500 line-through">{task.title}</h3>
-                                                                <p className="text-stone-400 text-sm">{task.time}</p>
+                                                                <h3 className="text-lg font-bold theme-text-muted line-through">{task.title}</h3>
+                                                                <p className="theme-text-muted text-sm">{task.time}</p>
                                                             </div>
                                                         </div>
                                                         <div className="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center">
@@ -614,8 +614,8 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                             <div className="w-20 h-20 bg-rose-100 rounded-full flex items-center justify-center mx-auto mb-4">
                                 <Phone className="w-10 h-10 text-rose-600" />
                             </div>
-                            <h3 className="text-2xl font-bold text-stone-800 mb-2">{t('calling')}</h3>
-                            <p className="text-stone-500 mb-8">{t('calling_to', { name: relativeName })}</p>
+                            <h3 className="text-2xl font-bold theme-text mb-2">{t('calling')}</h3>
+                            <p className="theme-text-muted mb-8">{t('calling_to', { name: relativeName })}</p>
                             <Button variant="danger" onClick={() => setShowCallModal(false)}>{t('end_call')}</Button>
                         </div>
                     </div>
