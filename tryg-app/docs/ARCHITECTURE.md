@@ -114,9 +114,10 @@ careCircles/
       ├── seniorId, seniorName
       ├── inviteCode
       ├── createdAt
+      ├── lastResetDate                ← Daily reset tracker (YYYY-MM-DD)
       │
       ├── tasks/
-      │   └── {taskId}: title, time, period, completed, completedAt  ← Used for activity feed
+      │   └── {taskId}: title, time, period, completed, completedAt, recurring  ← recurring for daily reset
       │
       ├── symptoms/
       │   └── {symptomId}: type, location, timestamp

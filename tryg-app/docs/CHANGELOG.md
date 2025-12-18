@@ -6,6 +6,31 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### 💊 Medication Management Enhancements
+
+**Daily Reset Logic**
+- Added automatic daily reset for recurring/medication tasks
+- On app load, `useTasks` checks if `lastResetDate` differs from today
+- If new day detected, all `recurring: true` tasks are unchecked automatically
+- `lastResetDate` stored in `careCircles/{circleId}` to prevent duplicate resets
+
+**Recurring Task Support**
+- Added "Gentag hver dag" (Repeat daily) checkbox to Add Task modals
+- Both SeniorView and RelativeView support creating recurring tasks
+- Medication-type tasks default to recurring behavior
+
+**PWA Notifications (Helper)**
+- Created `src/utils/notifications.ts` with:
+  - `requestNotificationPermission()` - Browser permission request
+  - `scheduleNotification(title, time)` - Time-based scheduling
+  - `showMedicationReminder(title, time)` - Immediate notification display
+- Ready for integration in AppCore.tsx
+
+**Schema Updates**
+- `Task` interface: Added `recurring?: boolean` and `originalId?: string`
+- `CareCircle` interface: Added `lastResetDate?: string` (YYYY-MM-DD format)
+- `INITIAL_TASKS` IDs changed from numbers to strings for type consistency
+
 ### Refactor
 - **TypeScript Migration**: Converted entire UI layer (`SeniorView`, `RelativeView`, `App`, `AppCore`, `main`), all custom hooks (`useAuth`, `useCareCircle`, etc.), and utility functions to TypeScript (`.tsx`/`.ts`).
 - **Feature Folders**: Restructured codebase into domain-specific feature folders (`features/tasks`, `features/helpExchange`, etc.) with barrel exports.
