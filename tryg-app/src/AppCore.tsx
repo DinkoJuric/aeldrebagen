@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CareCircleProvider } from './contexts/CareCircleContext';
 import { LivingBackground } from './components/ui/LivingBackground';
-import { LogOut, Settings } from 'lucide-react';
+import { LogOut, Settings, Share } from 'lucide-react';
 import { SeniorView } from './components/SeniorView';
 import { RelativeView } from './components/RelativeView';
 import { SettingsModal } from './components/SettingsModal';
+import { HealthReport } from './components/HealthReport';
 import { BottomNavigation } from './components/BottomNavigation';
 import { PingNotification } from './features/thinkingOfYou';
 import { InstallPrompt } from './components/InstallPrompt';
@@ -194,6 +195,15 @@ export default function TrygAppCore({
 
                     {/* Header - COMPACT: Share / Settings / Logout */}
                     <div className="absolute top-0 left-0 right-0 h-10 bg-black/5 z-50 flex justify-between items-center backdrop-blur-sm px-3">
+                        {/* Share button */}
+                        <button
+                            onClick={onGetInviteCode}
+                            className="p-2 rounded-full hover:bg-white/50 transition-colors"
+                            aria-label="Share"
+                        >
+                            <Share className="w-5 h-5 text-stone-600" />
+                        </button>
+
                         {/* Center: Settings gear (Unified Settings) */}
                         <button
                             onClick={() => setShowSettings(true)}
@@ -203,16 +213,14 @@ export default function TrygAppCore({
                             <Settings className="w-5 h-5 text-stone-600" />
                         </button>
 
-                        <div className="flex items-center gap-1">
-                            {/* Sign out */}
-                            <button
-                                onClick={onSignOut}
-                                className="p-1.5 rounded-full hover:bg-white/50 transition-colors"
-                                aria-label={t('sign_out')}
-                            >
-                                <LogOut className="w-4 h-4 text-stone-600" />
-                            </button>
-                        </div>
+                        {/* Sign out */}
+                        <button
+                            onClick={onSignOut}
+                            className="p-1.5 rounded-full hover:bg-white/50 transition-colors"
+                            aria-label={t('sign_out')}
+                        >
+                            <LogOut className="w-4 h-4 text-stone-600" />
+                        </button>
                     </div>
 
                     {/* Unified Settings Modal */}
@@ -332,6 +340,14 @@ export default function TrygAppCore({
 
                     {/* PWA Update Toast */}
                     <UpdateToast />
+
+                    {/* Global Health Report Modal */}
+                    <HealthReport
+                        isOpen={showHealthReport}
+                        onClose={() => setShowHealthReport(false)}
+                        symptomLogs={symptoms}
+                        tasks={tasks}
+                    />
 
                     {/* Home indicator */}
                     <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 w-32 h-1.5 bg-black/20 rounded-full z-50"></div>
