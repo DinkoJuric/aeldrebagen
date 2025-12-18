@@ -75,8 +75,8 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
     const handleReport = onViewReport || onShowReport;
 
     return (
-        <div className="sticky bottom-0 left-0 right-0 bg-white border-t border-stone-200 px-4 py-2 z-40">
-            <div className="flex justify-between items-center max-w-sm mx-auto">
+        <div className="sticky bottom-0 left-0 right-0 bg-white border-t border-stone-200 px-2 py-2 pb-5 z-40">
+            <div className="flex justify-around items-center max-w-xs mx-auto">
                 <NavTab
                     icon={<Heart className={cn("w-6 h-6", activeTab === 'daily' && "fill-teal-100")} />}
                     label={t('bottom_nav_daily')}
