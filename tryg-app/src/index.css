@@ -382,7 +382,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   height: 100dvh;
   width: 100vw;
-  overflow: hidden;
+  /* Removed: overflow: hidden - was blocking scroll! */
   background-color: var(--theme-bg);
   color: var(--theme-text);
   line-height: 1.5;
@@ -392,7 +392,7 @@ body {
 #root {
   height: 100dvh;
   width: 100vw;
-  overflow: hidden;
+  /* Removed: overflow: hidden - was blocking scroll! */
 }
 
 /* Visible focus indicators for accessibility */
