@@ -77,8 +77,8 @@
 
 | # | Enhancement | Status | Effort |
 |---|-------------|--------|--------|
-| 14 | Ambient Status "Dashboard" for Relatives | ⏳ BACKLOG | 12h |
-| 15 | Dark Mode / Evening Mode | ⏳ BACKLOG | 8h |
+| 14 | Ambient Status "Dashboard" for Relatives | ✅ Complete | 12h |
+| 15 | Dark Mode / Evening Mode | ✅ Complete | 8h |
 | 16 | Haptic Feedback Integration | ⏳ BACKLOG | 4h |
 | 17 | Animated Onboarding Flow | ⏳ BACKLOG | 16h |
 | 18 | Family Photo Background Mode | ⏳ BACKLOG | 8h |

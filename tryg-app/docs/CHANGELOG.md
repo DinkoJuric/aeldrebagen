@@ -6,6 +6,48 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### 🌙 Dark Mode / Evening Mode (Circadian Theming)
+
+**Circadian Theme System**
+- Created `ThemeContext.tsx` with automatic Morning/Day/Evening/Night detection
+- Theme shifts based on local time (6am-11am Morning, 11am-5pm Day, 5pm-9pm Evening, 9pm-6am Night)
+- CSS variable orchestration via `--theme-*` tokens in `index.css`
+- Manual override in Settings (Auto/Light/Dark) with localStorage persistence
+
+**Component Integration**
+- `LivingBackground` now syncs with circadian state for atmospheric color shifts
+- `SettingsModal` gained new "Udseende" (Theme) section with Sun/Moon icons
+- All `.card-warm` elements respond to theme tokens
+
+**Localization**
+- Added theme-related keys to `da.json`, `bs.json`, `tr.json`
+
+---
+
+### 🌈 Ambient Status Dashboard (RelativeView)
+
+**Atmospheric Status Communication**
+- Created `AmbientDashboard.tsx` using framer-motion animations
+- Dynamic color gradients (Teal=Calm, Amber=Alert, Rose=Attention) communicate wellbeing through color
+- Replaced static `StatusCard` in `PeaceOfMindTab` with the new atmospheric dashboard
+- "Heartbeat" pulse effect when Senior is active
+
+---
+
+### 🛠️ Documentation & Standards
+
+**Onboarding Workflow**
+- Created `.agent/workflows/onboarding.md` to enforce project standards for future agents
+- Codified Typography (1.125rem base), Mirror Protocol, and Documentation Rigor
+
+**Docs Updated**
+- `ARCHITECTURE.md`: Added ThemeContext to component tree
+- `DEPENDENCIES.md`: Added ThemeContext to shared resources
+- `LEARNINGS.md`: Documented circadian UI transitions pattern
+- `ROADMAP.md`: Created with prioritized backlog
+
+---
+
 ### ⚙️ Settings Integration & Navigation Refactoring
 
 **Unified Settings Modal**
