@@ -150,8 +150,13 @@ All stability foundation work has been completed:
 - **Anticipation Calendar**: "42 days until Emma's wedding"
 
 ### Translations
-- **Multilingual Support**: Add support for multiple languages (Danish, Bosnian, Turkish)
-- **Language Switcher**: Add language switcher in settings
+- **Multilingual Support**: Add support for multiple languages (Danish, Bosnian, Turkish) ✅ CORE COMPLETE
+  - ✅ da.json, bs.json, tr.json locale files created
+  - ✅ Gaming corner (Spillehjørnet) fully localized
+  - ✅ Symptoms/BodyPainSelector fully localized
+  - ⏳ HelpExchange offers/requests still hardcoded
+  - ⏳ StatusCard options still hardcoded
+- **Language Switcher**: Add language switcher in settings ✅ DONE
 
 ### UI/UX
 - **Dark Mode**: Add dark mode support

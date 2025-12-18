@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { CheckCircle, XCircle, Trophy, Sparkles, ArrowRight } from 'lucide-react';
 import { Word } from './useWordGame';
+import { useTranslation } from 'react-i18next';
 
 interface WordGameProps {
     currentWord: Word | null;
@@ -28,6 +29,7 @@ export const WordGame: React.FC<WordGameProps> = ({
     onAnswer,
     loading
 }) => {
+    const { t } = useTranslation();
     const [feedback, setFeedback] = useState<FeedbackState | null>(null);
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
@@ -55,22 +57,22 @@ export const WordGame: React.FC<WordGameProps> = ({
                 <div className="mb-4 -mt-2">
                     <img
                         src={`${baseUrl}assets/success_trophy.png`}
-                        alt="Succes Trophy"
+                        alt="Success Trophy"
                         className="w-full max-w-[200px] mx-auto object-contain animate-in zoom-in duration-500 drop-shadow-xl"
                     />
                 </div>
 
-                <h3 className="text-2xl font-bold mb-2 relative z-10">Dagens ord er klaret!</h3>
+                <h3 className="text-2xl font-bold mb-2 relative z-10">{t('word_game_complete')}</h3>
                 <div className="bg-white/20 rounded-xl p-4 mb-4 backdrop-blur-sm relative z-10">
                     <p className="text-4xl font-bold">{score}/{totalWords}</p>
-                    <p className="text-amber-100">rigtige svar</p>
+                    <p className="text-amber-100">{t('correct_answers')}</p>
                 </div>
                 <p className="text-amber-100 text-sm relative z-10">
                     {percentage >= 80
-                        ? 'Fantastisk! Du er en ordmester!'
+                        ? t('word_game_80_percent')
                         : percentage >= 60
-                            ? 'Godt gået! Du kender dine ord.'
-                            : 'Godt forsøgt! Prøv igen i morgen.'}
+                            ? t('word_game_60_percent')
+                            : t('word_game_below_60')}
                 </p>
             </div>
         );
@@ -87,10 +89,10 @@ export const WordGame: React.FC<WordGameProps> = ({
                     {feedback.isCorrect ? <CheckCircle className="w-12 h-12 mx-auto" /> : <XCircle className="w-12 h-12 mx-auto" />}
                 </div>
                 <h3 className="text-xl font-bold mb-2">
-                    {feedback.isCorrect ? 'Helt rigtigt! 🎉' : 'Ikke helt...'}
+                    {feedback.isCorrect ? t('answer_correct') : t('answer_wrong')}
                 </h3>
                 <p className="text-white/80 mb-4 text-sm">
-                    <span className="font-bold">{feedback.word}</span> betyder:
+                    <span className="font-bold">{feedback.word}</span> {t('word_means')}
                     <br />
                     "{feedback.correctAnswer}"
                 </p>
@@ -101,7 +103,7 @@ export const WordGame: React.FC<WordGameProps> = ({
                     }}
                     className="bg-white/20 hover:bg-white/30 px-6 py-3 rounded-xl font-bold flex items-center gap-2 mx-auto transition-colors"
                 >
-                    Næste ord <ArrowRight className="w-4 h-4" />
+                    {t('next_word')} <ArrowRight className="w-4 h-4" />
                 </button>
             </div>
         );
@@ -131,10 +133,10 @@ export const WordGame: React.FC<WordGameProps> = ({
             {/* Progress */}
             <div className="flex justify-between items-center mb-4">
                 <span className="text-xs font-bold text-stone-400 uppercase tracking-wide">
-                    Ord {currentWordIndex + 1} af {totalWords}
+                    {t('word_of', { current: currentWordIndex + 1, total: totalWords })}
                 </span>
                 <span className="text-xs font-bold text-teal-600 flex items-center gap-1">
-                    <Trophy className="w-3 h-3" /> {score} point
+                    <Trophy className="w-3 h-3" /> {score} {t('points')}
                 </span>
             </div>
 
@@ -150,7 +152,7 @@ export const WordGame: React.FC<WordGameProps> = ({
             <div className="text-center mb-5">
                 <div className="flex items-center justify-center gap-2 mb-1">
                     <Sparkles className="w-4 h-4 text-amber-500" />
-                    <span className="text-xs text-stone-400 uppercase tracking-wider">Hvad betyder</span>
+                    <span className="text-xs text-stone-400 uppercase tracking-wider">{t('what_does_mean')}</span>
                     <Sparkles className="w-4 h-4 text-amber-500" />
                 </div>
                 <h2 className="text-2xl font-bold text-stone-800">{currentWord?.word}</h2>

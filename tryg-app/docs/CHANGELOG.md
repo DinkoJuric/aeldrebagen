@@ -6,6 +6,28 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### 🌍 Internationalization (i18n) Expansion
+
+**Symptoms & BodyPainSelector**
+- Added `getBodyRegions(t)` factory function for localized body region labels
+- Added `getSeverityLevels(t)` factory function for localized severity labels  
+- Updated BodyPainSelector UI text to use translation keys
+- Added `getSymptomsList(t)` in `constants.ts` for localized symptom names
+- Translations added: Danish (da), Bosnian (bs), Turkish (tr)
+
+**Gaming Corner (Spillehjørnet)**
+- Added i18n support to `Spillehjoernet.tsx` - title and subtitle now localized
+- Full i18n overhaul of `WordGame.tsx` - all game messages, feedback, progress indicators
+- 15+ new translation keys for game UI
+
+**Translation Keys Added (45+ new keys)**
+- `symptom_*`: Symptom names (pain, dizzy, nausea, fever, sleep, sweats, appetite)
+- `body_*`: Body region labels (head, neck, chest, back, stomach, arms, legs)
+- `severity_*`: Severity levels (mild, moderate, severe)
+- `spillehjoernet_*`: Gaming corner UI
+- `word_game_*`: Word game messages and feedback
+
+
 ### 💊 Medication Management Enhancements
 
 **Daily Reset Logic**

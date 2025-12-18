@@ -3,6 +3,7 @@ import { Gamepad2 } from 'lucide-react';
 import { WordGame } from './WordGame';
 import { Leaderboard } from './Leaderboard';
 import { useWordGame } from './useWordGame';
+import { useTranslation } from 'react-i18next';
 
 interface SpillehjoernetProps {
     circleId: string;
@@ -12,6 +13,7 @@ interface SpillehjoernetProps {
 
 // Spillehjørnet - Gaming Corner with Word of the Day
 export const Spillehjoernet: React.FC<SpillehjoernetProps> = ({ circleId, userId, displayName }) => {
+    const { t } = useTranslation();
     const {
         currentWord,
         currentWordIndex,
@@ -31,8 +33,8 @@ export const Spillehjoernet: React.FC<SpillehjoernetProps> = ({ circleId, userId
                     <Gamepad2 className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                    <h2 className="font-bold text-stone-800 text-lg">Spillehjørnet</h2>
-                    <p className="text-xs text-stone-500">Dagens ordleg med familien</p>
+                    <h2 className="font-bold text-stone-800 text-lg">{t('spillehjoernet_title')}</h2>
+                    <p className="text-xs text-stone-500">{t('spillehjoernet_subtitle')}</p>
                 </div>
             </div>
 
