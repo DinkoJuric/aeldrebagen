@@ -52,20 +52,13 @@
 | # | Enhancement | Date | Notes |
 |---|-------------|------|-------|
 | 1 | Breathing Pulse Animation on "Alt er vel" Card | 2025-12-18 | `animate-breathe` class on calm status |
+| 2 | Task Completion Celebration | 2025-12-18 | `animate-celebrate` bounce + ping ring burst |
 | 3 | Warm Gradient Header | 2025-12-18 | `header-gradient` utility class |
+| 4 | Connection Glow on Family Activity | 2025-12-18 | `animate-glow` on 'available' avatars |
 | 5 | Rounded Corners (16px) | 2025-12-18 | CSS var `--radius-lg: 16px` |
 | 6 | Whitespace Breathing | 2025-12-18 | CSS spacing scale vars |
 | 9 | Smooth Page Transitions | 2025-12-18 | `tab-content` class with slide animation |
 | 12 | Typography Refinement | 2025-12-18 | Font-size scale CSS vars |
-
----
-
-### 🟢 Quick Wins (1-4 hours each)
-
-| # | Enhancement | Status | Effort |
-|---|-------------|--------|--------|
-| 2 | Task Completion Celebration Micro-Interaction | ⏳ BACKLOG | 3h |
-| 4 | "Connection Glow" on Family Activity | ⏳ BACKLOG | 2h |
 
 ---
 
