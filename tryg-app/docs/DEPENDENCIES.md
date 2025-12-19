@@ -110,8 +110,8 @@ graph TD
 ### Family Presence Feature
 | Component | Uses | Used By |
 |-----------|------|---------|
-| `StatusCard.tsx` | ProgressRing, ui/Avatar | PeaceOfMindTab, SeniorView |
-| `AmbientDashboard.tsx`| framer-motion, ui/Avatar | PeaceOfMindTab |
+| `StatusCard.tsx` | ProgressRing, ui/Avatar | AmbientTab, SeniorView |
+| `AmbientDashboard.tsx`| framer-motion, ui/Avatar | AmbientHero (via AmbientTab) |
 | `FamilyPresence.tsx` | ui/Avatar, CareCircleContext | SeniorView, CoordinationTab |
 | `useMemberStatus.ts` | Firebase | AppCore |
 

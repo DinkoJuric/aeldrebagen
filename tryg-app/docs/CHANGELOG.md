@@ -6,6 +6,13 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### 🪞 Phase 8: AmbientTab Unification (2025-12-20)
+- **Mirror Protocol Enhancement**: Unified `DailyTab` (Senior) and `PeaceOfMindTab` (Relative) into a single role-aware `AmbientTab.tsx`.
+- **New Feature Bundle**: Created `src/features/ambient/` with `AmbientHero.tsx`, `BriefingStory.tsx`, and `ActivityTimeline.tsx`.
+- **Component Deletion**: Removed deprecated `DailyTab.tsx` (247 lines) and `PeaceOfMindTab.tsx` (122 lines).
+- **Architecture Simplification**: Both views now render `AmbientTab` with `role="senior"` or `role="relative"` prop.
+- **Build Integrity**: All `tsc`, `lint`, and `build` checks pass.
+
 ### 💎 Phase 5-7: Hardening, Verification & Localization (2025-12-20)
 - **100% Type Safety**: Achieved a clean `tsc --noEmit` build with zero errors. Systematically purged all `any` types from the codebase.
 - **Centralized Type System**: Established `src/types.ts` as the definitive source for all domain interfaces (`Task`, `SymptomLog`, `Ping`, etc.).
