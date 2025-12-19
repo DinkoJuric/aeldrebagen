@@ -14,6 +14,16 @@ All notable changes to this project will be documented in this file.
 - **Modular Modals**: Centralized all senior-specific modals in `SeniorModals.tsx`
 - **Lint & Types**: Resolved 50+ TypeScript/ESLint warnings and improved component type safety
 
+### 🧱 Phase 4: Component Decomposition & Unified Context (2025-12-19)
+- **Relative View Refactor**: Decomposed `RelativeView.tsx` into a lean, context-driven orchestrator.
+- **Peace of Mind Elevation**: Refactored `PeaceOfMindTab.tsx` to directly consume data from `CareCircleContext`.
+- **Coordination Optimization**: Refactored `CoordinationTab.tsx` to eliminate prop drilling and standardize help exchange integration.
+- **Modular Modals**: Extracted all relative-specific modals and side-effect logic into `RelativeModals.tsx`.
+- **Mirror Protocol**: Integrated shared high-fidelity `HealthTab` and `SpilTab` components into the relative experience.
+- **Prop Drilling Cure**: Successfully purged legacy props from `AppCore.tsx`, unifying the state management pattern for both roles.
+- **Type Safety**: Resolved complex type mismatches in member status tracking and help exchange match detection.
+- **Architecture Visuals**: Added "The Prop Drilling Cure" visual map to `ARCHITECTURE.md`.
+
 ### 🌍 Localization Sweep (2025-12-19)
 - Added 29 new translation keys for recurring tasks, privacy modal, and match task titles
 - Fully localized `PrivacySettings.tsx` (removed all hardcoded Danish strings)
