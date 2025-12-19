@@ -10,7 +10,7 @@ import { useHelpExchange } from '../features/helpExchange';
 import { FEATURES } from '../config/features';
 import { useCareCircleContext } from '../contexts/CareCircleContext';
 
-import { DailyTab } from './senior/DailyTab';
+import { AmbientTab } from './shared/AmbientTab';
 import { FamilyTab } from './senior/FamilyTab';
 import { SpilTab } from './shared/SpilTab';
 import { HealthTab } from './shared/HealthTab';
@@ -100,7 +100,7 @@ export const SeniorView: React.FC = () => {
                     />
                 )}
 
-                {activeTab === 'daily' && <DailyTab onOpenSymptomModal={() => setShowSymptomModal(true)} onOpenAddTaskModal={() => setShowAddTaskModal(true)} />}
+                {activeTab === 'daily' && <AmbientTab role="senior" onOpenSymptomModal={() => setShowSymptomModal(true)} onOpenAddTaskModal={() => setShowAddTaskModal(true)} />}
                 {activeTab === 'family' && <FamilyTab />}
                 {activeTab === 'health' && <HealthTab />}
                 {activeTab === 'spil' && <SpilTab />}

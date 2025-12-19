@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { WeeklyQuestionWidget } from '../features/weeklyQuestion';
 import { ThinkingOfYouIconButton } from '../features/thinkingOfYou';
-import { PeaceOfMindTab } from './PeaceOfMindTab';
+import { AmbientTab } from './shared/AmbientTab';
 import { CoordinationTab } from './CoordinationTab';
 import { HealthTab } from './shared/HealthTab';
 import { SpilTab } from './shared/SpilTab';
@@ -58,7 +58,7 @@ export const RelativeView: React.FC = () => {
 
             {/* Main Content - Tab based */}
             <main className="flex-1 p-4 overflow-y-auto pb-28">
-                {activeTab === 'daily' && <PeaceOfMindTab />}
+                {activeTab === 'daily' && <AmbientTab role="relative" />}
 
                 {activeTab === 'family' && (
                     <CoordinationTab

@@ -1,43 +1,50 @@
 import React, { useState } from 'react';
 import {
-    CheckCircle,
-    Heart,
     Pill,
     Sun,
     Moon,
     Coffee,
     Image as ImageIcon,
-    Plus
+    Plus,
+    CheckCircle
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useCareCircleContext } from '../../contexts/CareCircleContext';
-import { Button } from '../ui/Button';
 import { LiquidList, LiquidItem } from '../ui/LiquidView';
 import { TaskCard } from '../../features/tasks/TaskCard';
 import { playCompletionSound } from '../../utils/sounds';
 import { FEATURES } from '../../config/features';
+import { CoffeeInviteCard } from '../../features/coffee';
+import { AmbientHero, BriefingStory, ActivityTimeline } from '../../features/ambient';
 
-interface DailyTabProps {
-    onOpenSymptomModal: () => void;
-    onOpenAddTaskModal: () => void;
+export interface AmbientTabProps {
+    role: 'senior' | 'relative';
+    onOpenSymptomModal?: () => void;
+    onOpenAddTaskModal?: () => void;
 }
 
-export const DailyTab: React.FC<DailyTabProps> = ({
+/**
+ * AmbientTab - The unified "Daily" (Senior) and "Peace of Mind" (Relative) tab.
+ * Uses role-aware rendering to switch between interactive (Senior) and ambient (Relative) modes.
+ * Strengthens the Mirror Protocol by ensuring both roles see reflections of the same data.
+ */
+export const AmbientTab: React.FC<AmbientTabProps> = ({
+    role,
     onOpenSymptomModal,
-    onOpenAddTaskModal,
+    onOpenAddTaskModal
 }) => {
     const { t } = useTranslation();
     const {
-        tasks,
+        tasks = [],
         toggleTask,
-        recordCheckIn,
+        recordCheckIn
     } = useCareCircleContext();
 
     const [rewardMinimized, setRewardMinimized] = useState(true);
     const [hideReward, setHideReward] = useState(false);
     const [activePeriod, setActivePeriod] = useState<string | null>('morgen');
 
-    // Reward Logic - unlock photo when ALL MEDICINE is complete
+    // Medicine logic (Senior only)
     const medicineTasks = tasks.filter(t =>
         t.title?.toLowerCase().includes('medicin') ||
         t.title?.toLowerCase().includes('pille') ||
@@ -60,6 +67,7 @@ export const DailyTab: React.FC<DailyTabProps> = ({
         await recordCheckIn();
     };
 
+    // Senior task section renderer
     const renderTaskSection = (periodTitle: string, periodKey: string, icon: React.ReactNode) => {
         const periodTasks = tasks.filter(t =>
             t.period === periodKey &&
@@ -93,13 +101,33 @@ export const DailyTab: React.FC<DailyTabProps> = ({
                         ))}
                     </LiquidList>
                 )}
-            </div >
+            </div>
         );
     };
 
+    // ========== RELATIVE MODE ==========
+    if (role === 'relative') {
+        return (
+            <div className="space-y-6 tab-content">
+                {/* Coffee Signal */}
+                <CoffeeInviteCard />
+
+                {/* Hero: Ambient Dashboard Rings */}
+                <AmbientHero role="relative" />
+
+                {/* Smart Briefing */}
+                <BriefingStory />
+
+                {/* Activity Timeline */}
+                <ActivityTimeline role="relative" />
+            </div>
+        );
+    }
+
+    // ========== SENIOR MODE ==========
     return (
         <div className="tab-content animate-fade-in">
-            {/* Reward Card (Behavioral Hook) */}
+            {/* Reward Card (Photo unlock on all medicine complete) */}
             {allMedicineComplete && !hideReward && (
                 rewardMinimized ? (
                     <div className="relative w-full rounded-xl p-3 mb-4 bg-indigo-100 border-2 border-indigo-200 flex items-center justify-between">
@@ -155,7 +183,7 @@ export const DailyTab: React.FC<DailyTabProps> = ({
                 )
             )}
 
-            {/* MEDICINE SECTION */}
+            {/* Medicine Section */}
             {medicineTasks.length > 0 && !allMedicineComplete && (
                 <div className="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-2xl p-4 mb-6 border-2 border-purple-100">
                     <div className="flex items-center gap-2 mb-3">
@@ -184,7 +212,7 @@ export const DailyTab: React.FC<DailyTabProps> = ({
                 </div>
             )}
 
-            {/* Medicine Complete Collapsed State */}
+            {/* Medicine Complete Badge */}
             {medicineTasks.length > 0 && allMedicineComplete && (
                 <div className="bg-gradient-to-r from-green-50 to-teal-50 rounded-xl p-3 mb-4 border border-green-200 flex items-center gap-3">
                     <div className="bg-green-500 rounded-full p-1.5">
@@ -194,35 +222,12 @@ export const DailyTab: React.FC<DailyTabProps> = ({
                 </div>
             )}
 
-            {/* Check-in Status */}
-            <div className="bg-white rounded-3xl p-6 shadow-sm border-2 border-teal-100 mb-8">
-                <h2 className="text-xl font-semibold theme-text mb-4">{t('pain_question')}</h2>
-                <div className="grid grid-cols-2 gap-4">
-                    <Button
-                        variant="primary"
-                        size="large"
-                        className="w-full min-h-32 py-4"
-                        onClick={handleCheckIn}
-                    >
-                        <div className="flex flex-col items-center gap-2 text-center">
-                            <CheckCircle className="w-10 h-10 shrink-0" />
-                            <span className="text-sm leading-tight">{t('i_feel_good')}</span>
-                        </div>
-                    </Button>
-
-                    <Button
-                        variant="secondary"
-                        size="large"
-                        className="w-full min-h-32 py-4 bg-orange-50 text-orange-800 border-2 border-orange-100 hover:bg-orange-100"
-                        onClick={onOpenSymptomModal}
-                    >
-                        <div className="flex flex-col items-center gap-2 text-center">
-                            <Heart className="w-10 h-10 text-orange-500 shrink-0" />
-                            <span className="text-sm leading-tight">{t('i_feel_pain')}</span>
-                        </div>
-                    </Button>
-                </div>
-            </div>
+            {/* Hero: Check-in Buttons */}
+            <AmbientHero
+                role="senior"
+                onCheckIn={handleCheckIn}
+                onOpenSymptomModal={onOpenSymptomModal}
+            />
 
             {/* Contextual Task Lists */}
             {renderTaskSection(t('time_period_morning_full'), 'morgen', <Coffee className="w-6 h-6 theme-text-muted" />)}
@@ -244,3 +249,5 @@ export const DailyTab: React.FC<DailyTabProps> = ({
         </div>
     );
 };
+
+export default AmbientTab;
