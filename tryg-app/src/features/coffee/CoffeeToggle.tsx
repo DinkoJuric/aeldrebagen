@@ -1,7 +1,7 @@
 import { Coffee } from 'lucide-react';
 import { useCareCircleContext } from '../../contexts/CareCircleContext';
-import { usePings } from '../thinkingOfYou/usePings';
 import { useTranslation } from 'react-i18next';
+import { usePings } from '../thinkingOfYou/usePings';
 
 /**
  * Coffee availability toggle for seniors.
@@ -11,18 +11,17 @@ import { useTranslation } from 'react-i18next';
  */
 export const CoffeeToggle = () => {
     const {
-        careCircleId,
-        currentUserId,
-        userName,
         myStatus,
         setMyStatus,
-        seniorStatus
+        seniorStatus,
+        careCircleId,
+        currentUserId
     } = useCareCircleContext();
     const { t } = useTranslation();
     const { sendPing } = usePings(careCircleId, currentUserId);
 
-    const isCoffeeTime = myStatus?.status === 'coffee_ready';
-    const isCoffeeComing = myStatus?.status === 'coffee_coming' || seniorStatus?.status === 'coffee_coming';
+    const isCoffeeTime = myStatus === 'coffee_ready';
+    const isCoffeeComing = myStatus === 'coffee_coming' || seniorStatus?.status === 'coffee_coming';
 
     const toggleCoffee = async () => {
         if (isCoffeeTime) {
@@ -32,7 +31,7 @@ export const CoffeeToggle = () => {
             // Turn it on
             await setMyStatus('coffee_ready');
             // Send a ping to relatives
-            await sendPing(userName, currentUserId!, 'relative', 'coffee_invite', t('coffee_coming_msg', { name: userName }));
+            await sendPing('relative');
         }
     };
 
@@ -44,7 +43,8 @@ export const CoffeeToggle = () => {
                 flex items-center justify-between overflow-hidden
                 ${isCoffeeTime
                     ? 'bg-amber-100 border-amber-400 shadow-amber-200 shadow-lg scale-[1.02]'
-                    : 'bg-stone-50 border-stone-200 grayscale-[0.5]'}
+                    : 'bg-stone-50 border-stone-200 grayscale-[0.5]'
+                }
                 ${isCoffeeComing ? 'ring-4 ring-green-400' : ''}
             `}
         >

@@ -1,6 +1,4 @@
-import React from 'react';
-// We assume Task is exported from useTasks. If not, we might need to view useTasks.ts, but standard practice is to export interfaces.
-import { Task } from './useTasks';
+import { Task } from '../../types';
 import { cn } from '../../lib/utils';
 
 /**

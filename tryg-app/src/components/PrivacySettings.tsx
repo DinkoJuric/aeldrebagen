@@ -19,8 +19,7 @@ import { collection, getDocs, doc, writeBatch } from 'firebase/firestore';
 import { deleteUser } from 'firebase/auth';
 import { db, auth } from '../config/firebase';
 import { CareCircle } from '../types';
-import { Task } from '../features/tasks/useTasks';
-import { SymptomLog } from '../features/symptoms/useSymptoms';
+import { Task, SymptomLog } from '../types';
 
 export interface PrivacySettingsProps {
     user: any; // User from firebase/auth

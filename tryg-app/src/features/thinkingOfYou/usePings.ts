@@ -15,16 +15,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../../config/firebase';
 
-export interface Ping {
-    id: string;
-    fromName: string;
-    fromUserId: string;
-    toRole: 'senior' | 'relative';
-    sentAt: Date;
-    toUserId?: string;
-    type?: string;
-    message?: string;
-}
+import { Ping } from '../../types';
 
 export function usePings(circleId: string | null, currentUserId: string | null) {
     const [pings, setPings] = useState<Ping[]>([]);
@@ -96,17 +87,16 @@ export function usePings(circleId: string | null, currentUserId: string | null) 
     }, [circleId, currentUserId]);
 
     // Send a ping
-    const sendPing = useCallback(async (fromName: string, fromUserId: string, toRole: 'senior' | 'relative', type?: string, message?: string) => {
-        if (!circleId) return;
+    const sendPing = useCallback(async (toView: 'senior' | 'relative', type: string = 'thinking_of_you', message: string = '') => {
+        if (!circleId || !currentUserId) return;
 
         const pingId = `ping_${Date.now()}`;
         const pingRef = doc(db, 'careCircles', circleId, 'pings', pingId);
 
         try {
             await setDoc(pingRef, {
-                fromName,
-                fromUserId,
-                toRole,
+                fromUserId: currentUserId,
+                toRole: toView,
                 sentAt: serverTimestamp(),
                 type,
                 message

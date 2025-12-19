@@ -1,11 +1,12 @@
 import React, { useState, useMemo } from 'react';
 import { ChevronDown, ChevronUp, AlertCircle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useCareCircleContext } from '../../contexts/CareCircleContext';
 import { SYMPTOMS_LIST } from '../../data/constants';
 
 export const HealthTab: React.FC = () => {
+    const { t } = useTranslation();
     const {
-        tasks = [],
         symptoms: symptomLogs = []
     } = useCareCircleContext();
 
@@ -15,11 +16,6 @@ export const HealthTab: React.FC = () => {
     });
     const [filterDate, setFilterDate] = useState<string | null>(null);
 
-    // Calculate completion rate
-    const completionRate = useMemo(() => {
-        if (tasks.length === 0) return 100;
-        return Math.round((tasks.filter(t => t.completed).length / tasks.length) * 100);
-    }, [tasks]);
 
     // Group symptoms by date
     const groupedSymptoms = useMemo<Record<string, any[]>>(() => {
@@ -89,7 +85,7 @@ export const HealthTab: React.FC = () => {
 
     return (
         <div className="tab-content animate-fade-in p-4 space-y-6">
-            <h2 className="text-2xl font-bold theme-text mb-2">Sundhed & Velvære</h2>
+            <h2 className="text-2xl font-bold theme-text mb-2">{t('health_title')}</h2>
 
             {/* Summary Stats */}
             {totalSymptoms > 0 && (
@@ -116,66 +112,67 @@ export const HealthTab: React.FC = () => {
                             onClick={() => setFilterDate(null)}
                             className="text-xs text-orange-600 font-medium hover:underline"
                         >
-                            Vis alle
+                            {t('view_all')}
                         </button>
                     )}
                 </div>
-                <p className="text-xs text-slate-500 mb-3">Tryk på en søjle for at filtrere</p>
+                <p className="text-xs text-slate-500 mb-3">{t('chart_filter_hint')}</p>
                 <div className="flex items-end gap-1 h-24 pb-2">
                     {chartData.map((day, i) => (
                         <button
                             key={i}
                             onClick={() => day.count > 0 && handleChartClick(day.dateKey)}
-                            className={`flex-1 flex flex-col items-center gap-1 transition-all ${filterDate === day.dateKey ? 'scale-110' : ''
-                                } ${day.count > 0 ? 'cursor-pointer' : 'cursor-default'}`}
+                            className={`flex - 1 flex flex - col items - center gap - 1 transition - all ${filterDate === day.dateKey ? 'scale-110' : ''
+                                } ${day.count > 0 ? 'cursor-pointer' : 'cursor-default'} `}
                         >
                             {day.count > 0 && (
-                                <span className={`text-[10px] font-bold ${filterDate === day.dateKey ? 'text-orange-800' : 'text-orange-600'
-                                    }`}>{day.count}</span>
+                                <span className={`text - [10px] font - bold ${filterDate === day.dateKey ? 'text-orange-800' : 'text-orange-600'
+                                    } `}>{day.count}</span>
                             )}
                             <div
-                                className={`w-full rounded-t-sm transition-all ${day.count > 0
+                                className={`w - full rounded - t - sm transition - all ${day.count > 0
                                     ? filterDate === day.dateKey
                                         ? 'bg-orange-600'
                                         : 'bg-orange-400 hover:bg-orange-500'
                                     : 'bg-slate-200'
-                                    }`}
-                                style={{ height: `${Math.max((day.count / maxCount) * 60, 4)}px` }}
+                                    } `}
+                                style={{ height: `${Math.max((day.count / maxCount) * 60, 4)} px` }}
                             />
                         </button>
                     ))}
                 </div>
-                <div className="flex justify-between text-xs text-slate-400">
-                    <span>-14 dage</span><span>I dag</span>
+                <div className="flex justify-between text-[10px] text-stone-400 font-bold px-2">
+                    <span>{t('time_days_ago_short', { count: 14 })}</span><span>{t('today')}</span>
                 </div>
             </div>
 
-            {/* Medicine compliance */}
-            <div className="p-4 theme-card-secondary rounded-xl border border-slate-200">
-                <h4 className="font-bold theme-text mb-2">Overholdelse af medicin (7 dage)</h4>
-                <div className="flex items-end gap-2 h-28 pb-2">
-                    {[80, 90, 100, 85, 95, 100, completionRate].map((h, i) => (
-                        <div key={i} className="flex-1 flex flex-col items-center gap-1">
-                            <span className="text-[10px] font-bold text-indigo-600">{h}%</span>
-                            <div
-                                className="w-full bg-indigo-500 rounded-t-sm opacity-80 hover:opacity-100 transition-opacity"
-                                style={{ height: `${h * 0.6}px` }}
-                            />
-                        </div>
+            {/* Steps Trend */}
+            <div className="bg-stone-50 rounded-2xl p-4 border border-stone-100">
+                <div className="flex justify-between items-center mb-4">
+                    <h4 className="text-sm font-bold text-stone-600 uppercase tracking-wider">{t('health_steps')}</h4>
+                    <span className="text-teal-600 font-black">6.420 {t('steps_avg')}</span>
+                </div>
+                <div className="h-16 flex items-end gap-1 mb-2">
+                    {[35, 45, 30, 65, 85, 40, 55].map((h, i) => (
+                        <div
+                            key={i}
+                            className="flex-1 bg-teal-200 rounded-t-sm"
+                            style={{ height: `${h}% ` }}
+                        ></div>
                     ))}
                 </div>
-                <div className="flex justify-between text-xs text-slate-400">
-                    <span>-7 dage</span><span>I dag</span>
+                <div className="flex justify-between text-[10px] text-stone-400 font-bold px-2">
+                    <span>{t('time_days_ago_short', { count: 7 })}</span><span>{t('today')}</span>
                 </div>
             </div>
 
             {/* Symptom Log */}
             <div>
                 <h4 className="font-bold theme-text mb-3">
-                    Symptom Log {filterDate ? `(${filterDate})` : '(sidste 14 dage)'}
+                    {t('symptom_log_title')} {filterDate ? `(${filterDate})` : t('symptom_log_last_14_days')}
                 </h4>
                 {Object.keys(displayedSymptoms).length === 0 ? (
-                    <p className="text-slate-500 text-sm italic">Ingen symptomer registreret.</p>
+                    <p className="text-slate-500 text-sm italic">{t('no_symptoms_recorded')}</p>
                 ) : (
                     <div className="space-y-2">
                         {Object.entries(displayedSymptoms).map(([dateStr, logs]) => (
@@ -186,7 +183,7 @@ export const HealthTab: React.FC = () => {
                                 >
                                     <span className="font-bold theme-text">{dateStr}</span>
                                     <div className="flex items-center gap-2">
-                                        <span className="text-xs text-slate-500">{logs?.length || 0} symptomer</span>
+                                        <span className="text-xs text-slate-500">{logs?.length || 0} {t('symptoms_count_label')}</span>
                                         {expandedDates[dateStr] ? (
                                             <ChevronUp className="w-4 h-4 text-slate-400" />
                                         ) : (
@@ -198,7 +195,7 @@ export const HealthTab: React.FC = () => {
                                 {expandedDates[dateStr] && logs && (
                                     <ul className="divide-y border-t bg-white">
                                         {logs.map((log: any, i: number) => {
-                                            const symptomDef = SYMPTOMS_LIST.find(s => s.id === log.id) || { icon: AlertCircle, label: 'Ukendt' };
+                                            const symptomDef = SYMPTOMS_LIST.find(s => s.id === log.id) || { icon: AlertCircle, label: t('unknown') };
                                             const SymptomIcon = symptomDef.icon || AlertCircle;
                                             const timeStr = log.dateObj.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' });
 
@@ -211,9 +208,9 @@ export const HealthTab: React.FC = () => {
                                                     </div>
                                                     {log.bodyLocation && (
                                                         <div className="ml-8 text-xs text-slate-500 space-y-1">
-                                                            <div>📍 Lokation: <span className="font-medium">{log.bodyLocation.emoji} {log.bodyLocation.label}</span></div>
+                                                            <div>📍 {t('location_prefix')}: <span className="font-medium">{log.bodyLocation.emoji} {log.bodyLocation.label}</span></div>
                                                             {log.bodyLocation.severity && (
-                                                                <div>📊 Intensitet: <span className="font-medium">{log.bodyLocation.severity.emoji} {log.bodyLocation.severity.label}</span></div>
+                                                                <div>📊 {t('intensity_prefix')}: <span className="font-medium">{log.bodyLocation.severity.emoji} {log.bodyLocation.severity.label}</span></div>
                                                             )}
                                                         </div>
                                                     )}

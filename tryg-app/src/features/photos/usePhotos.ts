@@ -23,16 +23,7 @@ import {
 import { db, storage } from '../../config/firebase';
 import { resizeImage } from '../../utils/imageUtils';
 
-export interface Photo {
-    id: string;
-    imageUrl: string;
-    storagePath?: string;
-    fromUserId: string;
-    fromName: string;
-    uploadedAt: any; // Firestore Timestamp
-    viewedAt?: any; // Firestore Timestamp
-    [key: string]: any;
-}
+import { Photo } from '../../types';
 
 export function usePhotos(circleId: string | null, currentUserId: string | null) {
     const [photos, setPhotos] = useState<Photo[]>([]);

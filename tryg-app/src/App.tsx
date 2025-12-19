@@ -2,36 +2,24 @@ import { useState, useEffect } from 'react';
 import { Activity } from 'lucide-react';
 import { SeniorView } from './components/SeniorView';
 import { RelativeView } from './components/RelativeView';
-import { PingNotification } from './features/thinkingOfYou';
-import { useLocalStorage } from './hooks/useLocalStorage';
-import { INITIAL_TASKS, SENIOR_PROFILE } from './data/constants';
-import { playCompletionSound, playSuccessSound } from './utils/sounds';
+import { useTranslation } from 'react-i18next';
 import { FEATURES } from './config/features';
+import { cn } from './lib/utils';
 import './index.css';
-import { Task } from './features/tasks/useTasks';
 // import { UserProfile } from './types'; // Removed unused import
 
 export default function TrygApp() {
+    const { t } = useTranslation();
     const [view, setView] = useState('senior');
-    const [tasks, setTasks] = useLocalStorage<Task[]>('tryg-tasks', INITIAL_TASKS as Task[]);
-    const [lastCheckIn, setLastCheckIn] = useLocalStorage<string | null>('tryg-checkin', null);
-    const [symptomLogs, setSymptomLogs] = useLocalStorage<any[]>('tryg-symptoms', []);
-    const [familyStatus, setFamilyStatus] = useLocalStorage<string>('tryg-family-status', 'work');
-    const [activePing, setActivePing] = useState<any | null>(null);
     const [notification, setNotification] = useState<any | null>(null);
-
-    // Phase 5: Emotional Connection state
-    const [weeklyAnswers, setWeeklyAnswers] = useLocalStorage<any[]>('tryg-weekly-answers', []);
-    // const [helpOffers, setHelpOffers] = useLocalStorage<any[]>('tryg-help-offers', []); // Unused in TSX views
-    // const [helpRequests, setHelpRequests] = useLocalStorage<any[]>('tryg-help-requests', []); // Unused in TSX views
 
     // Simulated notification after 5 seconds (only if enabled)
     useEffect(() => {
         if (!FEATURES.demoNotification) return;
         const timer = setTimeout(() => {
             setNotification({
-                title: "Husk at drikke vand",
-                body: "Det er tid til dit glas vand kl. 10:00",
+                title: t('notification_water_title'),
+                body: t('notification_water_body'),
                 icon: Activity
             });
         }, 5000);
@@ -45,70 +33,6 @@ export default function TrygApp() {
             return () => clearTimeout(timer);
         }
     }, [notification]);
-
-    const toggleTask = (id: string) => {
-        const task = tasks.find(t => t.id === id);
-        const willBeCompleted = task && !task.completed;
-
-        setTasks(tasks.map(t =>
-            t.id === id ? { ...t, completed: !t.completed } : t
-        ));
-
-        // Play sound when completing (not uncompleting)
-        if (willBeCompleted) {
-            playCompletionSound();
-        }
-    };
-
-    const handleCheckIn = (status: string) => {
-        const now = new Date();
-        const timeString = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-        setLastCheckIn(timeString);
-        if (status === 'checked-in') {
-            playSuccessSound(); // Celebratory sound for check-in
-        }
-    };
-
-    const addSymptom = (symptomType: any) => {
-        const now = new Date();
-        const timeString = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-
-        setSymptomLogs(prev => [{
-            ...symptomType,
-            time: timeString,
-            date: new Date().toLocaleDateString('da-DK')
-        }, ...prev]);
-
-        console.log('Symptom logged:', symptomType.label);
-    };
-
-    const handleAddTaskFromRelative = (newTask: Partial<Task>) => {
-        // Mock ID generation
-        // const newId = Math.max(...tasks.map(t => typeof t.id === 'number' ? t.id : 0), 0) + 1;
-        // Using string IDs to match Task interface
-        const newId = `local_${Date.now()}`;
-        setTasks(prev => [...prev, { ...newTask, id: newId, completed: false } as Task]);
-    };
-
-    // Send "thinking of you" ping
-    const handleSendPing = (fromName: string, toView: string) => {
-        const now = new Date();
-        const timeString = now.getHours().toString().padStart(2, '0') + ':' +
-            now.getMinutes().toString().padStart(2, '0');
-        setActivePing({
-            fromName,
-            toView,
-            time: timeString
-        });
-    };
-
-    // Weekly question answer handler
-    const handleWeeklyAnswer = (answer: string) => {
-        setWeeklyAnswers(prev => [answer, ...prev]);
-    };
-
-    // Help exchange handlers REMOVED because SeniorView/RelativeView fetch data internally now.
-    // Demo mode does not support help exchange unless we mock the hook, which is out of scope here.
 
     return (
         <div className="flex justify-center items-center min-h-screen bg-zinc-800 p-4 font-sans">
@@ -135,62 +59,33 @@ export default function TrygApp() {
                     )}
                 </div>
 
-                {/* View Toggle */}
-                <div className="absolute top-0 left-0 right-0 h-16 bg-black/5 z-50 flex justify-center items-center backdrop-blur-sm">
-                    <div className="bg-white/80 p-1 rounded-full flex text-xs font-bold shadow-lg">
+                <div className="relative h-full overflow-y-auto">
+                    {/* Role Toggles for Demo */}
+                    <div className="absolute top-4 right-4 z-50 flex bg-stone-100 rounded-full p-1 shadow-md">
                         <button
                             onClick={() => setView('senior')}
-                            className={`px-4 py-2 rounded-full transition-colors ${view === 'senior' ? 'bg-teal-600 text-white' : 'text-stone-600 hover:bg-stone-100'}`}
+                            className={cn(
+                                "px-3 py-1.5 rounded-full text-xs font-semibold transition-colors",
+                                view === 'senior' ? "bg-white text-stone-900 shadow-sm" : "text-stone-500 hover:text-stone-700"
+                            )}
                         >
-                            Senior View
+                            {t('role_senior')}
                         </button>
                         <button
                             onClick={() => setView('relative')}
-                            className={`px-4 py-2 rounded-full transition-colors ${view === 'relative' ? 'bg-indigo-600 text-white' : 'text-stone-600 hover:bg-stone-100'}`}
+                            className={cn(
+                                "px-3 py-1.5 rounded-full text-xs font-semibold transition-colors",
+                                view === 'relative' ? "bg-white text-stone-900 shadow-sm" : "text-stone-500 hover:text-stone-700"
+                            )}
                         >
-                            Pårørende View
+                            {t('role_relative')}
                         </button>
                     </div>
-                </div>
 
-                <div className="pt-14 h-full">
-                    {/* Ping Notification - shows when receiving a ping in current view */}
-                    {activePing && activePing.toView === view && (
-                        <PingNotification
-                            ping={activePing}
-                            onDismiss={() => setActivePing(null)}
-                        />
-                    )}
-
-                    {view === 'senior' ? (
-                        <SeniorView
-                            tasks={tasks}
-                            toggleTask={toggleTask}
-                            updateStatus={handleCheckIn}
-                            addSymptom={addSymptom}
-                            // familyStatus={familyStatus} // Not in props?
-                            onSendPing={() => handleSendPing('Birthe', 'relative')}
-                            weeklyAnswers={weeklyAnswers}
-                            onWeeklyAnswer={handleWeeklyAnswer}
-                        />
-                    ) : (
-                        <RelativeView
-                            tasks={tasks}
-                            seniorName={SENIOR_PROFILE.name}
-                            userName="Fatima"
-                            lastCheckIn={lastCheckIn}
-                            symptomLogs={symptomLogs}
-                            onAddTask={handleAddTaskFromRelative}
-                            myStatus={familyStatus}
-                            onMyStatusChange={setFamilyStatus}
-                            onSendPing={() => handleSendPing('Louise', 'senior')}
-                            weeklyAnswers={weeklyAnswers}
-                            onWeeklyAnswer={handleWeeklyAnswer}
-                            activeTab="daily"
-                            onTabChange={() => { }}
-                            careCircleId={null}
-                        />
-                    )}
+                    {/* Content */}
+                    <div className="flex-1 overflow-hidden">
+                        {view === 'senior' ? <SeniorView /> : <RelativeView />}
+                    </div>
                 </div>
 
                 {/* Home indicator */}

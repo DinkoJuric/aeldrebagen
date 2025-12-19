@@ -1,7 +1,7 @@
 import { cva } from 'class-variance-authority';
 import { CheckCircle, Pill, Activity, Sun, Clock, Heart } from 'lucide-react';
 import { cn } from '../../lib/utils';
-import { Task } from './useTasks';
+import { Task } from '../../types';
 
 /**
  * Task card container variants

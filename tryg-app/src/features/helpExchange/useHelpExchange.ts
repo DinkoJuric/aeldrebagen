@@ -16,29 +16,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../../config/firebase';
 
-export interface HelpOffer {
-    docId: string;
-    id: string;
-    label: string;
-    emoji: string;
-    createdByUid?: string;
-    createdByRole?: string;
-    createdByName?: string;
-    createdAt?: any;
-    [key: string]: any;
-}
-
-export interface HelpRequest {
-    docId: string;
-    id: string;
-    label: string;
-    emoji: string;
-    createdByUid?: string;
-    createdByRole?: string;
-    createdByName?: string;
-    createdAt?: any;
-    [key: string]: any;
-}
+import { HelpOffer, HelpRequest } from '../../types';
 
 export function useHelpExchange(
     circleId: string | null,
@@ -108,11 +86,12 @@ export function useHelpExchange(
     // React components (icon) and their Symbol properties are NOT safe
     const SAFE_HELP_FIELDS = ['id', 'label', 'emoji'];
 
-    const sanitizeHelpData = (data: any) => {
-        const clean: any = {};
+    const sanitizeHelpData = (data: Partial<HelpOffer | HelpRequest>) => {
+        const clean: Record<string, any> = {};
         SAFE_HELP_FIELDS.forEach(key => {
-            if (data[key] !== undefined && typeof data[key] !== 'function' && typeof data[key] !== 'symbol') {
-                clean[key] = data[key];
+            const val = (data as any)[key];
+            if (val !== undefined && typeof val !== 'function' && typeof val !== 'symbol') {
+                clean[key] = val;
             }
         });
         return clean;

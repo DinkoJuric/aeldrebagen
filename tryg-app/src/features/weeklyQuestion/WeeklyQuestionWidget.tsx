@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { MessageCircle, X, Check, Heart, MessageSquare, Send, Sparkles } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { WEEKLY_QUESTIONS, getWeekNumber } from './WeeklyQuestion';
-import { WeeklyAnswer, WeeklyReply } from './useWeeklyQuestions';
+import { WeeklyAnswer, WeeklyReply } from '../../types';
 import { AudioRecorder } from '../memories/AudioRecorder';
 import { Loader2, Mic, Play as PlayIcon } from 'lucide-react';
 
@@ -35,8 +35,7 @@ export const WeeklyQuestionWidget: React.FC<WeeklyQuestionWidgetProps> = ({ answ
     const { t } = useTranslation();
     const weekNumber = getWeekNumber();
     const questionKey = WEEKLY_QUESTIONS[weekNumber % WEEKLY_QUESTIONS.length];
-    const question = t(questionKey);
-    const answersThisWeek = answers.filter(a => a.question === question);
+    const answersThisWeek = answers.filter(a => a.questionId === questionKey);
     const unreadCount = hasUnread ? answersThisWeek.filter(a => a.userName !== userName).length : 0;
 
     return (
@@ -91,7 +90,7 @@ export const WeeklyQuestionModal: React.FC<WeeklyQuestionModalProps> = ({
     const question = t(questionKey);
 
     // Filter answers for this week's question
-    const answersThisWeek = answers.filter(a => a.question === question);
+    const answersThisWeek = answers.filter(a => a.questionId === questionKey);
     const hasAnsweredThisWeek = answersThisWeek.some(a => a.userName === userName);
 
     // Sorting: Popularity (likes) -> Newest
@@ -108,20 +107,19 @@ export const WeeklyQuestionModal: React.FC<WeeklyQuestionModalProps> = ({
     const handleSubmit = async () => {
         if (answerType === 'text' && myAnswer.trim()) {
             onAnswer?.({
-                question,
-                answer: myAnswer.trim(),
-                timestamp: new Date().toISOString(),
+                questionId: questionKey,
+                text: myAnswer.trim(),
+                answeredAt: new Date(),
                 userName
             });
             setMyAnswer('');
         } else if (answerType === 'audio' && audioBlob) {
             // Audio submission logic will be handled here
             onAnswer?.({
-                question,
-                answer: t('audio_answer_placeholder'),
-                timestamp: new Date().toISOString(),
-                userName,
-                audioBlob // Passed to parent to handle upload
+                questionId: questionKey,
+                text: t('audio_answer_placeholder'),
+                answeredAt: new Date(),
+                userName
             });
             setAudioBlob(null);
         }
@@ -289,7 +287,7 @@ export const WeeklyQuestionModal: React.FC<WeeklyQuestionModalProps> = ({
                                                     <Mic size={16} className="text-stone-300" />
                                                 </div>
                                             ) : (
-                                                <p className="text-stone-700 text-lg leading-relaxed mb-4">{answer.answer || answer.text}</p>
+                                                <p className="text-stone-700 text-lg leading-relaxed mb-4">{answer.text}</p>
                                             )}
 
                                             {/* Action Bar */}

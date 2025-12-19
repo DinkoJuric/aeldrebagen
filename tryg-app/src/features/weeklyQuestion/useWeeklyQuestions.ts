@@ -18,26 +18,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../../config/firebase';
 
-export interface WeeklyReply {
-    id: string;
-    userId: string;
-    userName: string;
-    text: string;
-    createdAt: string; // ISO string for simplicity in UI
-}
-
-export interface WeeklyAnswer {
-    id: string;
-    questionId?: string;
-    text?: string;
-    userId?: string;
-    userName?: string;
-    answeredAt?: any; // Firestore Timestamp
-    likes?: string[]; // userIds
-    replies?: WeeklyReply[];
-    audioUrl?: string; // For Family Heirloom feature
-    [key: string]: any;
-}
+import { WeeklyAnswer, WeeklyReply } from '../../types';
 
 export function useWeeklyQuestions(circleId: string | null) {
     const [answers, setAnswers] = useState<WeeklyAnswer[]>([]);

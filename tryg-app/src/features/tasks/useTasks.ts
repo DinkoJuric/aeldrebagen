@@ -18,19 +18,7 @@ import {
 import { db } from '../../config/firebase';
 import { INITIAL_TASKS } from '../../data/constants';
 
-export interface Task {
-    id: string;
-    title: string;
-    period: string;
-    time: string;
-    emoji?: string;
-    completed: boolean;
-    createdAt?: any;
-    completedAt?: any;
-    recurring?: boolean; // If true, reset every day
-    originalId?: string; // Reference to template if needed
-    [key: string]: any; // Allow other props
-}
+import { Task } from '../../types';
 
 export function useTasks(circleId: string | null) {
     const [tasks, setTasks] = useState<Task[]>([]);

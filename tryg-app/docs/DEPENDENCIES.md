@@ -97,13 +97,13 @@ graph TD
 ### Help Exchange Feature
 | Component | Uses | Used By |
 |-----------|------|---------|
-| `HelpExchange.tsx` | ui/Pictogram | SeniorView |
+| `HelpExchange.tsx` | ui/Pictogram | SeniorView (via Context) |
 | `MatchCelebration.tsx` | ui/Button, sounds | SeniorView, RelativeView, CoordinationTab |
 | `useHelpExchange.ts` | Firebase, CareCircleContext | SeniorView, CoordinationTab |
-| `useHelpExchangeMatch.ts` | - | SeniorView, CoordinationTab |
+| `useHelpExchangeMatch.ts` | CareCircleContext | SeniorView, CoordinationTab |
 | `helpExchangeConfig.ts` | - | CoordinationTab, HelpExchange |
 
-**Dependencies**: Firebase, CareCircleContext. **Self-contained**: ⚠️ Needs context
+**Dependencies**: Firebase, CareCircleContext. **Self-contained**: ⚠️ Integrated via context
 
 ---
 
@@ -166,9 +166,9 @@ graph TD
 |-----------|------|---------|
 | `ProgressRing.tsx` | - | StatusCard, PeaceOfMindTab |
 | `TimePickerModal.tsx` | ui/Button | RelativeView |
-| `useTasks.ts` | Firebase | AppCore |
+| `useTasks.ts` | Firebase | AppCore (via Context) |
 
-**Dependencies**: Firebase only. **Self-contained**: ✅ Yes
+**Dependencies**: Firebase only. **Self-contained**: ✅ Yes (Integrated via Context)
 
 ---
 

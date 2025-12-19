@@ -1,6 +1,109 @@
-import { Task } from './features/tasks/useTasks';
-import { SymptomLog } from './features/symptoms/useSymptoms';
+export interface Task {
+    id: string;
+    title: string;
+    period: string;
+    time: string;
+    emoji?: string;
+    completed: boolean;
+    createdAt?: any;
+    completedAt?: any;
+    recurring?: boolean;
+    originalId?: string;
+    type?: string; // e.g. 'medication'
+    [key: string]: any;
+}
+export interface WeeklyReply {
+    id: string;
+    userId: string;
+    userName: string;
+    text: string;
+    createdAt: string;
+}
 
+export interface WeeklyAnswer {
+    id: string;
+    questionId?: string;
+    text?: string;
+    userId?: string;
+    userName?: string;
+    answeredAt?: any; // Firestore Timestamp
+    likes?: string[];
+    replies?: WeeklyReply[];
+    audioUrl?: string;
+}
+
+export interface Ping {
+    id: string;
+    fromName: string;
+    fromUserId: string;
+    toRole: 'senior' | 'relative';
+    sentAt: any; // Date | Timestamp
+    toUserId?: string;
+    type?: string;
+    message?: string;
+}
+
+export interface Photo {
+    id: string;
+    imageUrl: string;
+    storagePath?: string;
+    fromUserId: string;
+    fromName: string;
+    uploadedAt: any;
+    viewedAt?: any;
+}
+
+export interface HelpOffer {
+    docId: string;
+    id: string;
+    label: string;
+    emoji: string;
+    createdByUid?: string;
+    createdByRole?: string;
+    createdByName?: string;
+    createdAt?: any;
+}
+
+export interface HelpRequest {
+    docId: string;
+    id: string;
+    label: string;
+    emoji: string;
+    createdByUid?: string;
+    createdByRole?: string;
+    createdByName?: string;
+    createdAt?: any;
+}
+
+export interface Severity {
+    id: 'mild' | 'moderate' | 'severe';
+    label: string;
+    emoji: string;
+    level: number;
+}
+
+export interface BodyLocation {
+    id: string;
+    label: string;
+    emoji: string;
+    severity?: Severity;
+}
+
+export interface SymptomLog {
+    id: string;
+    label?: string;
+    type?: string; // e.g. 'pain', 'dizzy'
+    color?: string;
+    bodyLocation?: BodyLocation;
+    time: string;
+    date: string;
+    loggedAt?: any; // Firestore Timestamp
+}
+
+export interface SymptomStats {
+    count: number;
+    lastOccurrence: string | null;
+}
 
 /**
  * Core Type Definitions for Tryg App
@@ -85,20 +188,20 @@ export interface CareCircleContextValue {
 
     // Symptoms
     symptoms: SymptomLog[];
-    addSymptom: (symptom: any) => void; // Return type changed
+    addSymptom: (symptom: Partial<SymptomLog>) => Promise<string | undefined>;
 
     // Weekly Questions
-    weeklyAnswers: any[]; // Type changed from WeeklyAnswer[] to any[]
-    addWeeklyAnswer: (answer: string) => void; // Return type changed
-    toggleLike: (answerId: string, userId: string, isLiked: boolean) => void; // Signature changed
-    addReply: (answerId: string, reply: any) => void; // Signature changed
+    weeklyAnswers: WeeklyAnswer[];
+    addWeeklyAnswer: (answer: string) => Promise<string | undefined>;
+    toggleLike: (answerId: string, userId: string, isLiked: boolean) => Promise<void>;
+    addReply: (answerId: string, reply: Omit<WeeklyReply, 'id'>) => Promise<void>;
 
     // "Thinking of You" (Pings)
-    latestPing: any | null; // Ping type
-    sendPing: (toRole: 'senior' | 'relative') => void; // Return type changed
-    dismissPing: (pingId: string) => void; // Signature changed
+    latestPing: Ping | null;
+    sendPing: (toRole: 'senior' | 'relative') => Promise<string | undefined>;
+    dismissPing: () => void;
 
     // Check-in
-    lastCheckIn: any | null; // Type changed
-    recordCheckIn: (status: string) => Promise<string | void | undefined>; // Signature changed
+    lastCheckIn: string | null;
+    recordCheckIn: () => Promise<string | void | undefined>;
 }

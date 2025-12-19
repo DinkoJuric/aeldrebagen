@@ -16,35 +16,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../../config/firebase';
 
-export interface Severity {
-    id: 'mild' | 'moderate' | 'severe';
-    label: string;
-    emoji: string;
-    level: number;
-}
-
-export interface BodyLocation {
-    id: string;
-    label: string;
-    emoji: string;
-    severity?: Severity;
-}
-
-export interface SymptomLog {
-    id: string;
-    label?: string;
-    color?: string;
-    bodyLocation?: BodyLocation;
-    time: string;
-    date: string;
-    loggedAt?: any; // Firestore Timestamp
-    [key: string]: any;
-}
-
-export interface SymptomStats {
-    count: number;
-    lastOccurrence: string | null;
-}
+import { SymptomLog, SymptomStats } from '../../types';
 
 export function useSymptoms(circleId: string | null) {
     const [symptoms, setSymptoms] = useState<SymptomLog[]>([]);
@@ -85,11 +57,12 @@ export function useSymptoms(circleId: string | null) {
     // React components and their Symbol properties are NOT safe
     const SAFE_SYMPTOM_FIELDS = ['id', 'label', 'color', 'bodyLocation'];
 
-    const sanitizeSymptomData = (data: any) => {
-        const clean: any = {};
+    const sanitizeSymptomData = (data: Partial<SymptomLog>) => {
+        const clean: Record<string, any> = {};
         SAFE_SYMPTOM_FIELDS.forEach(key => {
-            if (data[key] !== undefined && typeof data[key] !== 'function' && typeof data[key] !== 'symbol') {
-                clean[key] = data[key];
+            const val = (data as any)[key];
+            if (val !== undefined && typeof val !== 'function' && typeof val !== 'symbol') {
+                clean[key] = val;
             }
         });
         return clean;

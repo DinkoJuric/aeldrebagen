@@ -24,8 +24,7 @@ import { FEATURES } from './config/features';
 import { LivingBackground } from './components/ui/LivingBackground';
 import './index.css';
 import { User } from 'firebase/auth'; // Or your custom user type
-import { AppTab, UserProfile, Member } from './types';
-import { Task } from './features/tasks/useTasks';
+import { AppTab, UserProfile, Member, Task, SymptomLog } from './types';
 
 
 export interface AppCoreProps {
@@ -102,15 +101,15 @@ export default function TrygAppCore({
         }
     };
 
-    const handleCheckIn = async (status: string) => {
+    const handleCheckIn = async () => {
         await recordCheckIn();
-        if (status === 'checked-in' && FEATURES.completionSounds) {
+        if (FEATURES.completionSounds) {
             playSuccessSound();
         }
     };
 
-    const handleAddSymptom = async (symptomType: any) => {
-        return await addSymptom(symptomType);
+    const handleAddSymptom = async (symptomData: Partial<SymptomLog>) => {
+        return await addSymptom(symptomData);
     };
 
     const handleAddTaskFromRelative = async (newTask: Partial<Task>) => {
@@ -128,7 +127,11 @@ export default function TrygAppCore({
     };
 
     const handleWeeklyAnswer = async (answer: string) => {
-        return await addWeeklyAnswer({ text: answer } as any);
+        return await addWeeklyAnswer({
+            text: answer,
+            userId: user?.uid,
+            userName: isSenior ? seniorName : (relativeName || 'Pårørende')
+        });
     };
 
     // Get display names

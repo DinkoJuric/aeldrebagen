@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 // @ts-ignore - sounds util not converted yet
 import { playPingSound } from '../../utils/sounds';
 import { Avatar } from '../../components/ui/Avatar';
-import { Ping } from './usePings';
+import { Ping } from '../../types';
 
 interface FloatingHeart {
     id: number;

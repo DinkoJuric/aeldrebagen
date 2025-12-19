@@ -3,7 +3,7 @@
 
 import React, { useState, useRef } from 'react';
 import { Camera, Trash2, Loader2, Image as ImageIcon } from 'lucide-react';
-import { Photo } from './usePhotos';
+import { Photo } from '../../types';
 
 interface PhotoCaptureButtonProps {
     onCapture: (file: File) => void;

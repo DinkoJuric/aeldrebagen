@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { MATCH_PAIRS, STATUS_MATCHES, Celebration } from './config';
-import { HelpOffer, HelpRequest } from './useHelpExchange';
+import { HelpOffer, HelpRequest } from '../../types';
 import { MemberStatus } from '../familyPresence/useMemberStatus';
 
 interface MatchProps {

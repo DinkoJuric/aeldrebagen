@@ -474,13 +474,17 @@ git checkout -b fix-typescript-errors
 - **Action**: Created a mandatory `.agent/workflows/onboarding.md` and added it to the global requirements.
 - **Future**: Use workflows to enforce project-specific constraints (e.g., --font-size-lg base).
 
-### Lesson Learned
+### Mass Refactoring Risk (Dec 2025)
+- **Problem**: Renaming dozens of files to `.tsx` and refactoring prop flows simultaneously introduced a cascade of 50+ type errors.
+- **Action**: Established a baseline `tsc --noEmit`, then fixed errors component-by-component, starting with the Shared Context.
+- **Future**: Always refactor incrementally. Commit after each successful `tsc` verification of a single module.
 
-> **Never do a mass file extension rename without incremental `tsc --noEmit` checks.**
-> 
-> The correct approach:
-> 1. Convert ONE file at a time
-> 2. Fix ALL its type errors
-> 3. Run `tsc --noEmit` - must pass
-> 4. Commit
-> 5. Repeat for next file
+### i18n Migration Syntax Errors
+- **Problem**: Accidental markdown fences and broken template literals were injected during bulk string replacement in `HealthTab.tsx`.
+- **Action**: Surgically repaired the syntax errors and verified with `tsc`.
+- **Future**: When performing multi-file search-and-replace for localization, perform a final lint audit specifically on the affected files before committing.
+
+### Type Safety as Architectural Documentation
+- **Problem**: Hardcoded `any` and local interface duplication obscured the relationship between features.
+- **Action**: Centralized all domain types in `src/types.ts`.
+- **Future**: Treat `types.ts` as the "Source of Truth" for the app's data model. Never duplicate a core interface locally.

@@ -22,7 +22,7 @@ export const CoffeeInviteCard = () => {
         // Update relative's status to notify the circle they are coming
         await setMyStatus('traveling');
         // Send a response ping to the senior
-        await sendPing(userName, currentUserId!, 'senior', 'coffee_coming', t('coffee_coming_msg', { name: userName }));
+        await sendPing('senior', 'coffee_coming', t('coffee_coming_msg', { name: userName }));
     };
 
     return (

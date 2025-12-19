@@ -10,7 +10,6 @@ import { useHelpExchange } from '../features/helpExchange';
 import { FEATURES } from '../config/features';
 import { useCareCircleContext } from '../contexts/CareCircleContext';
 
-// Extracted Tabs
 import { DailyTab } from './senior/DailyTab';
 import { FamilyTab } from './senior/FamilyTab';
 import { SpilTab } from './shared/SpilTab';
@@ -23,7 +22,6 @@ export const SeniorView: React.FC = () => {
         tasks,
         userName,
         activeTab,
-        setActiveTab,
         weeklyAnswers,
         careCircleId,
         currentUserId,

@@ -6,14 +6,14 @@
  * a human-readable status instead of raw data.
  */
 
-import { Task } from '../features/tasks/useTasks';
+import { Task, SymptomLog } from '../types';
 
 interface BriefingParams {
     tasks?: Task[];
-    symptoms?: any[]; // Keep flexible if Symptom type not strictly defined globally yet
+    symptoms?: SymptomLog[];
     seniorName?: string;
-    lastCheckIn?: any;
-    t: any;
+    lastCheckIn?: string | null;
+    t: any; // i18next t function
 }
 
 /**
@@ -21,8 +21,14 @@ interface BriefingParams {
  */
 const isToday = (date: any): boolean => {
     if (!date) return false;
-    // @ts-ignore - Firestore timestamps have toDate()
-    const d = date.toDate ? date.toDate() : new Date(date);
+    let d: Date;
+    if (date.toDate) {
+        d = date.toDate();
+    } else if (typeof date === 'string') {
+        d = new Date(date);
+    } else {
+        d = new Date(date);
+    }
     const today = new Date();
     return d.toDateString() === today.toDateString();
 };

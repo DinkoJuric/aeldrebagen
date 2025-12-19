@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { HandHeart, X, Plus } from 'lucide-react';
 import { SENIOR_OFFERS, SENIOR_REQUESTS, ItemTemplate } from './config';
 import { Pictogram } from '../../components/ui/Pictogram';
-import { HelpOffer, HelpRequest } from './useHelpExchange';
+import { HelpOffer, HelpRequest } from '../../types';
 
 interface HelpExchangeProps {
     onOffer?: (item: ItemTemplate) => void;

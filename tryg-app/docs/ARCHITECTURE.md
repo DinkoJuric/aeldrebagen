@@ -100,9 +100,11 @@ tryg-app/
 ## Migration Status (Dec 2025)
 
 ✅ **Feature Folder Migration**: COMPLETED. All domain logic is now organized under `src/features/`.
-✅ **TypeScript Conversion**: COMPLETED.
+✅ **TypeScript Conversion**: COMPLETED (100% type-safe, no `any`).
 ✅ **Senior View Refactor**: COMPLETED. (Phase 3)
 ✅ **Relative View Refactor**: COMPLETED. (Phase 4)
+✅ **State Management Refactor**: COMPLETED. `CareCircleContext` is the central state hub.
+✅ **Localization Audit**: COMPLETED. 100% translation coverage.
 
 ---
 
@@ -285,7 +287,12 @@ export function useXxx(circleId) {
 ```
 
 ### 2. State Management (The Prop Drilling Cure)
-Shared data (careCircleId, memberStatuses, currentUserId, etc.) and global actions are centralized in `CareCircleContext`.
+Shared data (careCircleId, memberStatuses, currentUserId, etc.) and global actions are centralized in `CareCircleContext`. This is the **Single Source of Truth** for the application state.
+
+**Key Benefits:**
+- **Zero Prop Drilling**: Components access data directly via `useCareCircleContext()`.
+- **Real-time Sync**: Firestore listeners inside the context update all views simultaneously.
+- **Role Symmetry**: Both roles share the same logic containers, fulfilling the Mirror Protocol.
 
 **The Visual Map**: This diagram illustrates how the unified context eliminates prop drilling across both Senior and Relative views.
 

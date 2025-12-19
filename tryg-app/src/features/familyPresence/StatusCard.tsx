@@ -2,8 +2,7 @@ import React from 'react';
 import { Clock, Pill, Briefcase, Home, Car, Coffee, Moon } from 'lucide-react';
 import { InlineGatesIndicator } from '../tasks/ProgressRing';
 import { Avatar } from '../../components/ui/Avatar';
-import { Task } from '../tasks/useTasks';
-import { MemberStatus } from './useMemberStatus';
+import { Task, MemberStatus } from '../../types';
 import { useTranslation } from 'react-i18next';
 
 // ============================================================================

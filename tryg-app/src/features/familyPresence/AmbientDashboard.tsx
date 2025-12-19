@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Clock, Activity, AlertCircle, CheckCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Avatar } from '../../components/ui/Avatar';
-import { Task } from '../tasks/useTasks';
+import { Task } from '../../types';
 
 export interface AmbientDashboardProps {
     seniorName: string;

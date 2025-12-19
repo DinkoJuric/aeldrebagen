@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MessageCircle, ChevronRight, Sparkles } from 'lucide-react';
-import { WeeklyAnswer } from './useWeeklyQuestions';
+import { WeeklyAnswer } from '../../types';
 
 // Weekly questions to rotate through
 export const WEEKLY_QUESTIONS = [
@@ -35,9 +35,9 @@ export const WeeklyQuestionCard: React.FC<WeeklyQuestionCardProps> = ({ onAnswer
     const handleSubmit = () => {
         if (myAnswer.trim()) {
             onAnswer?.({
-                question,
-                answer: myAnswer.trim(),
-                timestamp: new Date().toISOString(),
+                questionId: question,
+                text: myAnswer.trim(),
+                userId: '', // Will be filled by handler
                 userName
             });
             setMyAnswer('');
@@ -46,7 +46,7 @@ export const WeeklyQuestionCard: React.FC<WeeklyQuestionCardProps> = ({ onAnswer
     };
 
     const hasAnsweredThisWeek = answers.some(a =>
-        a.question === question &&
+        a.questionId === question &&
         a.userName === userName
     );
 
@@ -65,15 +65,15 @@ export const WeeklyQuestionCard: React.FC<WeeklyQuestionCardProps> = ({ onAnswer
             {!isExpanded ? (
                 <>
                     {/* Show existing answers */}
-                    {answers.filter(a => a.question === question).length > 0 && (
+                    {answers.filter(a => a.questionId === question).length > 0 && (
                         <div className="space-y-2 mb-3">
                             {answers
-                                .filter(a => a.question === question)
+                                .filter(a => a.questionId === question)
                                 .slice(0, 3)
                                 .map((answer, i) => (
                                     <div key={i} className="bg-white/10 rounded-xl p-3">
                                         <p className="font-medium text-indigo-100">{answer.userName}:</p>
-                                        <p className="text-white/90 text-sm">{answer.answer}</p>
+                                        <p className="text-white/90 text-sm">{answer.text}</p>
                                     </div>
                                 ))}
                         </div>
