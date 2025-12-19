@@ -262,26 +262,7 @@ export default function TrygAppCore({
                                     {isSenior ? (
                                         <SeniorView />
                                     ) : (
-                                        <RelativeView
-                                            tasks={tasks}
-                                            onAddTask={handleAddTaskFromRelative}
-                                            lastCheckIn={lastCheckIn}
-                                            symptomLogs={symptoms}
-                                            myStatus={myStatus}
-                                            onMyStatusChange={setMyStatus}
-                                            memberStatuses={memberStatuses}
-                                            currentUserId={user?.uid}
-                                            onSendPing={() => handleSendPing('senior')}
-                                            weeklyAnswers={weeklyAnswers}
-                                            onWeeklyAnswer={handleWeeklyAnswer}
-                                            onToggleLike={onToggleLike}
-                                            onReply={onReply}
-                                            userName={relativeName}
-                                            seniorName={seniorName}
-                                            careCircleId={careCircle?.id}
-                                            activeTab={activeTab}
-                                            onTabChange={setActiveTab}
-                                        />
+                                        <RelativeView />
                                     )}
                                     {/* Photo notification badge */}
                                     {latestPhoto && (
@@ -307,26 +288,7 @@ export default function TrygAppCore({
                                     {isSenior ? (
                                         <SeniorView />
                                     ) : (
-                                        <RelativeView
-                                            tasks={tasks}
-                                            onAddTask={handleAddTaskFromRelative}
-                                            lastCheckIn={lastCheckIn}
-                                            symptomLogs={symptoms}
-                                            myStatus={myStatus}
-                                            onMyStatusChange={setMyStatus}
-                                            memberStatuses={memberStatuses}
-                                            currentUserId={user?.uid}
-                                            onSendPing={() => handleSendPing('senior')}
-                                            weeklyAnswers={weeklyAnswers}
-                                            onWeeklyAnswer={handleWeeklyAnswer}
-                                            onToggleLike={onToggleLike}
-                                            onReply={onReply}
-                                            userName={relativeName}
-                                            seniorName={seniorName}
-                                            careCircleId={careCircle?.id}
-                                            activeTab={activeTab}
-                                            onTabChange={setActiveTab}
-                                        />
+                                        <RelativeView />
                                     )}
                                     {latestPhoto && (
                                         <div className="absolute bottom-24 left-4 right-4 z-40 flex justify-center">

@@ -1,41 +1,65 @@
 // PeaceOfMindTab - Relative's main emotional tab
+import React, { useMemo } from 'react';
 import { CoffeeInviteCard } from '../features/coffee';
 import { useCareCircleContext } from '../contexts/CareCircleContext';
 import { getDailyBriefing } from '../utils/briefing';
 import { useTranslation } from 'react-i18next';
-import { Task } from '../features/tasks/useTasks';
-import { SymptomLog } from '../features/symptoms/useSymptoms';
 import { AmbientDashboard } from '../features/familyPresence/AmbientDashboard';
-
-export interface PeaceOfMindTabProps {
-    seniorName?: string;
-    lastCheckIn?: any;
-    tasks?: Task[];
-    symptomCount?: number;
-    symptoms?: SymptomLog[];
-    onSendPing?: () => void;
-    onViewSymptoms?: () => void;
-    recentActivity?: any[];
-}
 
 /**
  * Peace of Mind Tab - emotional reassurance focused
  * Shows: Ambient Dashboard hero, smart briefing, and connection moments.
  */
-export const PeaceOfMindTab: React.FC<PeaceOfMindTabProps> = ({
-    seniorName: propSeniorName,
-    lastCheckIn,
-    tasks = [],
-    symptomCount = 0,
-    symptoms = [],
-    onViewSymptoms: _onViewSymptoms,
-    recentActivity = []
-}) => {
+export const PeaceOfMindTab: React.FC = () => {
     const { t } = useTranslation();
-    const context = useCareCircleContext() as any;
-    const seniorName = propSeniorName ?? context.seniorName ?? 'Senior';
+    const {
+        seniorName,
+        tasks = [],
+        symptoms: symptomLogs = [],
+        lastCheckIn
+    } = useCareCircleContext();
 
-    // Note: completionRate calculation removed as it's not used in render
+    // Count today's symptoms
+    const todaySymptomCount = useMemo(() => {
+        return symptomLogs.filter(s => {
+            const date = (s.loggedAt as any)?.toDate ? (s.loggedAt as any).toDate() : new Date(s.loggedAt as any);
+            return date.toDateString() === new Date().toDateString();
+        }).length;
+    }, [symptomLogs]);
+
+    // Generate activity feed from tasks and symptoms
+    const recentActivity = useMemo(() => {
+        const activities: any[] = [];
+
+        // Add completed tasks
+        tasks.filter(t => t.completed && t.completedAt).forEach(t => {
+            activities.push({
+                type: 'task',
+                timestamp: (t.completedAt as any)?.toDate ? (t.completedAt as any).toDate() : new Date(t.completedAt as any),
+                text: `Udført: ${t.title}`,
+                emoji: '✅'
+            });
+        });
+
+        // Add symptoms
+        symptomLogs.forEach(s => {
+            activities.push({
+                type: 'symptom',
+                timestamp: (s.loggedAt as any)?.toDate ? (s.loggedAt as any).toDate() : new Date(s.loggedAt as any),
+                text: `Symptom: ${s.label || s.type || 'Ukendt'}`,
+                emoji: '🩺'
+            });
+        });
+
+        // Sort by time (newest first)
+        return activities
+            .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
+            .slice(0, 5)
+            .map(a => ({
+                ...a,
+                time: a.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            }));
+    }, [tasks, symptomLogs]);
 
     return (
         <div className="space-y-6 tab-content">
@@ -47,12 +71,12 @@ export const PeaceOfMindTab: React.FC<PeaceOfMindTabProps> = ({
                 seniorName={seniorName}
                 lastCheckIn={lastCheckIn}
                 tasks={tasks}
-                symptomCount={symptomCount}
+                symptomCount={todaySymptomCount}
             />
 
             {/* SMART SUMMARY - Natural Language Briefing */}
             {(() => {
-                const briefing = getDailyBriefing({ tasks, symptoms, seniorName, lastCheckIn, t });
+                const briefing = getDailyBriefing({ tasks, symptoms: symptomLogs, seniorName, lastCheckIn, t });
                 return (
                     <div className={`p-5 rounded-[1.5rem] border-2 shadow-sm transition-all duration-300 ${briefing.type === 'success' ? 'bg-emerald-50 border-emerald-100 shadow-emerald-50/50' :
                         briefing.type === 'warning' ? 'bg-amber-50 border-amber-100 shadow-amber-50/50' :
@@ -80,7 +104,7 @@ export const PeaceOfMindTab: React.FC<PeaceOfMindTabProps> = ({
                         {t('seneste_aktivitet') || 'Seneste aktivitet'}
                     </h3>
                     <div className="space-y-4">
-                        {recentActivity.slice(0, 5).map((activity, i) => (
+                        {recentActivity.map((activity, i) => (
                             <div key={i} className="flex items-center gap-3 text-sm text-stone-700">
                                 <span className="font-bold text-stone-300 w-12">{activity.time}</span>
                                 <span className="text-lg">{activity.emoji}</span>

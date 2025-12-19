@@ -13,52 +13,35 @@ import { RELATIVE_OFFERS, RELATIVE_REQUESTS } from '../features/helpExchange';
 import { useHelpExchangeMatch } from '../features/helpExchange';
 import { useHelpExchange } from '../features/helpExchange';
 import { useCareCircleContext } from '../contexts/CareCircleContext';
-import { Member, CareCircleContextValue } from '../types';
-import { Task } from '../features/tasks/useTasks';
-import { SymptomLog } from '../features/symptoms/useSymptoms';
 import { MemoriesGallery } from '../features/memories/MemoriesGallery';
 
 export interface CoordinationTabProps {
-    seniorName?: string;
-    userName?: string;
-    myStatus?: string;
-    onMyStatusChange?: (status: string) => void;
-    memberStatuses?: Member[];
-    currentUserId?: string;
-    openTasks?: Task[];
-    completedTasks?: Task[];
-    symptomLogs?: SymptomLog[];
     onAddTask?: () => void;
     onViewReport?: () => void;
     onMatchAction?: (match: any) => void;
     onDismissMatch?: (matchId: string) => void;
     dismissedMatchIds?: Set<string>;
-    careCircleId?: string;
 }
 
 export const CoordinationTab: React.FC<CoordinationTabProps> = ({
-    seniorName: propSeniorName,
-    userName: propUserName,
-    myStatus = 'home',
-    onMyStatusChange,
-    memberStatuses: propMemberStatuses,
-    currentUserId: propCurrentUserId,
-    openTasks = [],
-    symptomLogs = [],
     onAddTask,
     onViewReport,
     onMatchAction,
     onDismissMatch,
-    dismissedMatchIds = new Set(),
-    careCircleId: propCareCircleId
+    dismissedMatchIds = new Set()
 }) => {
     const { t } = useTranslation();
-    const context = useCareCircleContext() as CareCircleContextValue;
-    const seniorName = propSeniorName ?? context.seniorName ?? 'Senior';
-    const userName = propUserName ?? context.userName ?? 'Pårørende';
-    const memberStatuses = propMemberStatuses ?? context.memberStatuses ?? [];
-    const currentUserId = propCurrentUserId ?? context.currentUserId;
-    const careCircleId = propCareCircleId ?? context.careCircleId;
+    const {
+        seniorName,
+        userName,
+        memberStatuses = [],
+        currentUserId,
+        careCircleId,
+        myStatus = 'home',
+        setMyStatus: onMyStatusChange,
+        tasks = [],
+        symptoms: symptomLogs = []
+    } = useCareCircleContext();
 
     const [showStatusPicker, setShowStatusPicker] = useState(false);
     const [showOpenTasks, setShowOpenTasks] = useState(true);
@@ -112,6 +95,8 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
 
     const filteredTopMatch = topMatch && !dismissedMatchIds.has(getMatchId(topMatch)!) ? topMatch : null;
     const hasActiveMatches = filteredTopMatch !== null;
+
+    const openTasks = tasks.filter(t => !t.completed);
 
     return (
         <div className="space-y-3 tab-content">

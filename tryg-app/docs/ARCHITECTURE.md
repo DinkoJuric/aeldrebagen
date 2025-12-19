@@ -100,7 +100,9 @@ tryg-app/
 ## Migration Status (Dec 2025)
 
 ✅ **Feature Folder Migration**: COMPLETED. All domain logic is now organized under `src/features/`.
-✅ **TypeScript Conversion**: COMPLETED. The entire UI layer and logic hooks have been migrated to `.tsx` and `.ts`.
+✅ **TypeScript Conversion**: COMPLETED.
+✅ **Senior View Refactor**: COMPLETED. (Phase 3)
+✅ **Relative View Refactor**: COMPLETED. (Phase 4)
 
 ---
 
@@ -240,27 +242,12 @@ AppCore (owns activeTab, SettingsModal, BottomNavigation)
 │   ├── Family Tab (Familie)
 │   └── Spil Tab (Gaming Corner)
 │
-└── RelativeView (receives activeTab via props)
-    ├── PeaceOfMindTab (Min Dag)
-    │   ├── AmbientDashboard (NEW) - Immersive status hero
-    │   │   ├── Dynamic gradients (Teal/Amber/Rose)
-    │   │   ├── Heartbeat pulse (Framer Motion)
-    │   │   └── Atmospheric blobs (SVG)
-    │   ├── ProgressRing (3-segment Gates)
-    │   │   ├── ☀️ Morgen (6-12)
-    │   │   ├── 🌤️ Eftermiddag (12-18)
-    │   │   └── 🌙 Aften (18-22)
-    │   │   Colors: 🟢 On-time | 🟡 Late | 🔴 Overdue
-    │   └── Quick glance stats (Medicin, Symptomer)
-    │
-    ├── CoordinationTab (Familie)
-    │   ├── Status picker (visible to senior)
-    │   ├── HelpExchange (bidirectional)
-    │   ├── Match banners
-    │   ├── Task lists (open/completed)
-    │   └── Symptom summary
-    │
-    └── Spillehjoernet (Gaming Corner)
+└── RelativeView (Context-driven)
+    ├── PeaceOfMindTab (Daily reassurance)
+    ├── CoordinationTab (Family coordination)
+    ├── HealthTab (Shared - High Fidelity)
+    ├── SpilTab (Shared - Gaming Corner)
+    └── RelativeModals (Extracted logic)
 ```
 
 **ProgressRing Component** (`src/features/tasks/ProgressRing.tsx`):
@@ -300,29 +287,29 @@ export function useXxx(circleId) {
 ### 2. State Management (The Prop Drilling Cure)
 Shared data (careCircleId, memberStatuses, currentUserId, etc.) and global actions are centralized in `CareCircleContext`.
 
-**The Problem**: Previously, `AppCore.tsx` was passing down dozens of props through multiple layers, leading to "Prop Drilling" which made the code fragile and hard to refactor.
-
-**The Solution**: Components now consume data directly via the `useCareCircleContext` hook.
+**The Visual Map**: This diagram illustrates how the unified context eliminates prop drilling across both Senior and Relative views.
 
 ```mermaid
 graph TD
     AppCore[AppCore.tsx] --> Provider[CareCircleProvider]
-    Provider --> SeniorView[SeniorView.tsx]
-    SeniorView --> Daily[DailyTab]
-    SeniorView --> Family[FamilyTab]
-    SeniorView --> Health[HealthTab]
-    SeniorView --> Spil[SpilTab]
-    SeniorView --> Modals[SeniorModals]
     
-    Daily -.-> Context[useCareCircleContext]
-    Family -.-> Context
-    Modals -.-> Context
+    Provider --> SeniorView[SeniorView.tsx]
+    SeniorView --> STabs[Tabs: Daily, Family, Health, Spil]
+    SeniorView --> SModals[SeniorModals.tsx]
+    
+    Provider --> RelativeView[RelativeView.tsx]
+    RelativeView --> RTabs[Tabs: PeaceOfMind, Coordination, Health, Spil]
+    RelativeView --> RModals[RelativeModals.tsx]
+    
+    STabs -.-> Context[useCareCircleContext]
+    RTabs -.-> Context
+    SModals -.-> Context
+    RModals -.-> Context
 ```
 
 **Key Consumers:**
-- `DailyTab`, `FamilyTab`, `HealthTab`, `SpilTab`
-- `SeniorModals` (Call, Symptom, Task, Weekly Question)
-- `CoordinationTab`, `PeaceOfMindTab` (In-progress)
+- All Tabs: `DailyTab`, `FamilyTab`, `PeaceOfMindTab`, `CoordinationTab`, `HealthTab`, `SpilTab`
+- All Modals: `SeniorModals`, `RelativeModals`
 
 **Key files:**
 - `src/contexts/CareCircleContext.tsx` - Provider + Hook

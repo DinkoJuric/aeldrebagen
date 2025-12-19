@@ -64,11 +64,11 @@ export interface CareCircleContextValue {
     relativeName: string; // Added
 
     // Member statuses (for FamilyPresence, etc.)
-    memberStatuses: any[]; // Type changed from MemberStatus[] to any[]
-    members: Member[]; // Added
-    relativeStatuses: any[]; // Type changed from MemberStatus[] to any[]
+    memberStatuses: MemberStatus[];
+    members: Member[];
+    relativeStatuses: MemberStatus[];
     seniorStatus: MemberStatus | null;
-    myStatus: MemberStatus | null;
+    myStatus: string; // Changed from MemberStatus | null to string
     setMyStatus: (status: string) => Promise<void>;
 
     // Feature Data & Actions (The Prop Drilling Cure)

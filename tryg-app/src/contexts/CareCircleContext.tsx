@@ -13,7 +13,7 @@ export const CareCircleContext = createContext<CareCircleContextValue>({
     members: [],
     relativeStatuses: [],
     seniorStatus: null,
-    myStatus: null,
+    myStatus: 'home',
     setMyStatus: async () => { },
     activeTab: 'daily',
     setActiveTab: () => { },
