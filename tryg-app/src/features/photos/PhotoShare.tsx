@@ -73,7 +73,7 @@ interface PhotoViewerModalProps {
     isOpen: boolean;
     onClose: () => void;
     photo: Photo | null;
-    onDelete: (id: string, storagePath: string) => Promise<void>;
+    onDelete: (id: string, storagePath?: string) => Promise<void>;
 }
 
 // Photo viewer modal (for recipient)

@@ -364,7 +364,7 @@ export function getTodaysWords(date = new Date()) {
     const seed = parseInt(dateStr, 10);
 
     // Simple seeded random using the date
-    const seededRandom = (i) => {
+    const seededRandom = (i: number): number => {
         const x = Math.sin(seed + i) * 10000;
         return x - Math.floor(x);
     };
@@ -382,7 +382,7 @@ export function getTodaysWords(date = new Date()) {
 /**
  * Shuffle answers for a word (returns [option1, option2] in random order)
  */
-export function shuffleAnswers(word, seed = 0) {
+export function shuffleAnswers(word: { id: string; correctAnswer: string; wrongAnswer: string }, seed = 0) {
     const x = Math.sin(seed + word.id.charCodeAt(0)) * 10000;
     const random = x - Math.floor(x);
 

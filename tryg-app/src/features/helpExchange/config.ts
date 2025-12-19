@@ -1,7 +1,7 @@
 // HelpExchange Match Pairs Configuration
 // Easy to extend - just add new entries to the arrays
 
-import { PictogramPosition, PictogramSheet } from '../../components/ui/Pictogram';
+import { PictogramPosition } from '../../components/ui/Pictogram';
 
 // Re-export this if needed elsewhere, but Pictogram defines them
 type SpriteConfig = {

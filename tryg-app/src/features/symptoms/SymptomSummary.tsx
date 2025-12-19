@@ -1,6 +1,5 @@
 import React, { useState, useMemo } from 'react';
 import { AlertCircle, ChevronDown, ChevronUp, TrendingUp, TrendingDown, Phone, Calendar } from 'lucide-react';
-import { SYMPTOMS_LIST } from '../../data/constants';
 import { useTranslation } from 'react-i18next';
 import { SymptomLog } from './useSymptoms';
 

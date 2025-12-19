@@ -3,10 +3,9 @@
 // See .env.example for required variables
 
 import { initializeApp } from 'firebase/app';
-import { getAuth, connectAuthEmulator } from 'firebase/auth';
+import { getAuth } from 'firebase/auth';
 import {
     getFirestore,
-    connectFirestoreEmulator,
     enableIndexedDbPersistence
 } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';

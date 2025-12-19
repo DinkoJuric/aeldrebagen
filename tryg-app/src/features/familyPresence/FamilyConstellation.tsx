@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { Member } from '../../types';
 import { Avatar } from '../../components/ui/Avatar';
 import { SuperpowerBadge, Archetype } from './SuperpowerBadge';
@@ -74,12 +74,12 @@ export const FamilyConstellation: React.FC<FamilyConstellationProps> = ({
 
         // Fallback defaults when Firestore doesn't have archetype
         const name = member.displayName?.toLowerCase() || '';
-        if (name.includes('fatima')) return 'organizer';
+        if (name.includes('fatima')) return 'tech_wizard';
         if (name.includes('louise')) return 'fixer';
-        if (name.includes('brad')) return 'connector';
+        if (name.includes('brad')) return 'cheerleader';
 
         // Default based on orbit layer
-        return getOrbitLayer(member) === 'inner' ? 'organizer' : 'protector';
+        return getOrbitLayer(member) === 'inner' ? 'listener' : 'driver';
     };
 
     return (

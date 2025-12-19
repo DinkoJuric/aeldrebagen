@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Activity } from 'lucide-react';
 import { SeniorView } from './components/SeniorView';
 import { RelativeView } from './components/RelativeView';
@@ -176,17 +176,19 @@ export default function TrygApp() {
                     ) : (
                         <RelativeView
                             tasks={tasks}
-                            profile={SENIOR_PROFILE}
+                            seniorName={SENIOR_PROFILE.name}
+                            userName="Fatima"
                             lastCheckIn={lastCheckIn}
                             symptomLogs={symptomLogs}
                             onAddTask={handleAddTaskFromRelative}
-                            // familyStatus={familyStatus} // Not in props? RelativeView has myStatus
                             myStatus={familyStatus}
                             onMyStatusChange={setFamilyStatus}
                             onSendPing={() => handleSendPing('Louise', 'senior')}
                             weeklyAnswers={weeklyAnswers}
                             onWeeklyAnswer={handleWeeklyAnswer}
-                            onOpenSettings={() => { }}
+                            activeTab="daily"
+                            onTabChange={() => { }}
+                            careCircleId={null}
                         />
                     )}
                 </div>

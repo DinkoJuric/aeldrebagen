@@ -7,7 +7,7 @@
  * experience by guiding seniors to "Add to Home Screen".
  */
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { X, Share } from 'lucide-react';
 
 /**
@@ -15,7 +15,7 @@ import { X, Share } from 'lucide-react';
  */
 const useIOSInstallPrompt = () => {
     const [shouldShow, setShouldShow] = useState(false);
-    const [dismissed, setDismissed] = useState(false);
+    const [_dismissed, setDismissed] = useState(false);
 
     useEffect(() => {
         // Check if iOS device

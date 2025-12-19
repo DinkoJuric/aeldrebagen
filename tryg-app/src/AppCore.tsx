@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CareCircleProvider } from './contexts/CareCircleContext';
 import { LogOut, Settings, Users } from 'lucide-react';
@@ -69,7 +69,7 @@ export default function TrygAppCore({
         setMyStatus,
         relativeStatuses,
         seniorStatus
-    } = useMemberStatus(careCircle?.id, user?.uid ?? null, (userProfile?.displayName ?? undefined) as string | null, userProfile?.role);
+    } = useMemberStatus(careCircle?.id, user?.uid ?? null, (userProfile?.displayName ?? undefined) as string | null, userProfile?.role ?? 'relative');
     const {
         answers: weeklyAnswers,
         addAnswer: addWeeklyAnswer,
@@ -135,7 +135,7 @@ export default function TrygAppCore({
         });
     };
 
-    const handleSendPing = async (fromName: string, toRole: string) => {
+    const handleSendPing = async (fromName: string, toRole: 'senior' | 'relative') => {
         // Send ping via Firestore for real-time sync
         await sendPing(fromName, (user?.uid ?? undefined) as string, toRole);
     };
@@ -265,7 +265,7 @@ export default function TrygAppCore({
                                             updateStatus={handleCheckIn}
                                             addSymptom={handleAddSymptom}
                                             statusLastUpdated={null}
-                                            onSendPing={(type: string) => handleSendPing(seniorName, 'relative')}
+                                            onSendPing={() => handleSendPing(seniorName, 'relative')}
                                             weeklyAnswers={weeklyAnswers}
                                             onWeeklyAnswer={handleWeeklyAnswer}
                                             members={members}
@@ -294,7 +294,7 @@ export default function TrygAppCore({
                                             onMyStatusChange={setMyStatus}
                                             memberStatuses={memberStatuses}
                                             currentUserId={user?.uid}
-                                            onSendPing={(type) => handleSendPing(relativeName, 'senior')}
+                                            onSendPing={() => handleSendPing(relativeName, 'senior')}
                                             weeklyAnswers={weeklyAnswers}
                                             onWeeklyAnswer={handleWeeklyAnswer}
                                             onToggleLike={onToggleLike}
@@ -335,7 +335,7 @@ export default function TrygAppCore({
                                             updateStatus={handleCheckIn}
                                             addSymptom={handleAddSymptom}
                                             statusLastUpdated={null}
-                                            onSendPing={(type: string) => handleSendPing(seniorName, 'relative')}
+                                            onSendPing={() => handleSendPing(seniorName, 'relative')}
                                             weeklyAnswers={weeklyAnswers}
                                             onWeeklyAnswer={handleWeeklyAnswer}
                                             members={members}
@@ -364,7 +364,7 @@ export default function TrygAppCore({
                                             onMyStatusChange={setMyStatus}
                                             memberStatuses={memberStatuses}
                                             currentUserId={user?.uid}
-                                            onSendPing={(type) => handleSendPing(relativeName, 'senior')}
+                                            onSendPing={() => handleSendPing(relativeName, 'senior')}
                                             weeklyAnswers={weeklyAnswers}
                                             onWeeklyAnswer={handleWeeklyAnswer}
                                             onToggleLike={onToggleLike}

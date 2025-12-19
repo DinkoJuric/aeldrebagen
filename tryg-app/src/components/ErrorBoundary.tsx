@@ -26,7 +26,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
         console.error('App Error:', error, errorInfo);
 
         // Send to Sentry for production monitoring
-        Sentry.captureException(error, { extra: errorInfo });
+        Sentry.captureException(error, { contexts: { react: { componentStack: errorInfo.componentStack } } });
     }
 
     handleRetry = () => {

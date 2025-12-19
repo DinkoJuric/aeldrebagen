@@ -1,5 +1,4 @@
-import React from 'react';
-import { cva, type VariantProps } from 'class-variance-authority';
+import { cva } from 'class-variance-authority';
 import { CheckCircle, Pill, Activity, Sun, Clock, Heart } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { Task } from './useTasks';

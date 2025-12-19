@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { WEEKLY_QUESTIONS, getWeekNumber } from './WeeklyQuestion';
 import { WeeklyAnswer, WeeklyReply } from './useWeeklyQuestions';
 import { AudioRecorder } from '../memories/AudioRecorder';
-import { useMemories } from '../memories/useMemories';
 import { Loader2, Mic, Play as PlayIcon } from 'lucide-react';
 
 // Simple time ago formatter (no external deps)
@@ -85,7 +84,7 @@ export const WeeklyQuestionModal: React.FC<WeeklyQuestionModalProps> = ({
     const [answerType, setAnswerType] = useState<'text' | 'audio'>('text');
     const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
     const { t } = useTranslation();
-    const { uploadMemory, isUploading } = useMemories();
+    const [isUploading] = useState(false); // Local state since audio upload isn't implemented yet
 
     const weekNumber = getWeekNumber();
     const questionKey = WEEKLY_QUESTIONS[weekNumber % WEEKLY_QUESTIONS.length];

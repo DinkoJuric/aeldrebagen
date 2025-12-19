@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { CheckCircle, XCircle, Trophy, Sparkles, ArrowRight } from 'lucide-react';
 import { Word } from './useWordGame';
 import { useTranslation } from 'react-i18next';
@@ -9,7 +9,7 @@ interface WordGameProps {
     totalWords: number;
     score: number;
     isComplete: boolean;
-    onAnswer: (wordId: string, isCorrect: boolean) => Promise<void>;
+    onAnswer: (wordId: string, isCorrect: boolean) => Promise<void | { isCorrect: boolean; newScore: number; isComplete: boolean }>;
     loading: boolean;
 }
 
@@ -160,7 +160,7 @@ export const WordGame: React.FC<WordGameProps> = ({
 
             {/* Options */}
             <div className="space-y-3">
-                {currentWord?.options.map((option, i) => (
+                {currentWord?.options?.map((option, i) => (
                     <button
                         key={i}
                         onClick={() => handleAnswer(option, i)}

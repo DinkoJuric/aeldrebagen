@@ -1,7 +1,8 @@
 // Privacy Settings Screen - GDPR data export, deletion, and pause controls
 // Accessible from app settings
 
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     Shield,
     Download,
@@ -14,7 +15,7 @@ import {
     Loader2,
     X
 } from 'lucide-react';
-import { collection, getDocs, deleteDoc, doc, writeBatch } from 'firebase/firestore';
+import { collection, getDocs, doc, writeBatch } from 'firebase/firestore';
 import { deleteUser } from 'firebase/auth';
 import { db, auth } from '../config/firebase';
 import { CareCircle } from '../types';
@@ -36,6 +37,7 @@ export const PrivacySettings: React.FC<PrivacySettingsProps> = ({
     onPauseChange,
     isPaused = false
 }) => {
+    const { t } = useTranslation();
     const [exporting, setExporting] = useState(false);
     const [exported, setExported] = useState(false);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -97,7 +99,7 @@ export const PrivacySettings: React.FC<PrivacySettingsProps> = ({
             setTimeout(() => setExported(false), 3000);
         } catch (err) {
             console.error('Export error:', err);
-            alert('Der opstod en fejl ved eksport af data');
+            alert(t('privacy_export_error'));
         } finally {
             setExporting(false);
         }
@@ -161,9 +163,9 @@ export const PrivacySettings: React.FC<PrivacySettingsProps> = ({
         } catch (err: any) {
             console.error('Delete error:', err);
             if (err.code === 'auth/requires-recent-login') {
-                setDeleteError('Du skal logge ind igen for at slette din konto. Log ud og log ind igen.');
+                setDeleteError(t('privacy_error_relogin'));
             } else {
-                setDeleteError('Der opstod en fejl. Prøv igen senere.');
+                setDeleteError(t('privacy_error_generic'));
             }
             setDeleting(false);
         }
@@ -179,7 +181,7 @@ export const PrivacySettings: React.FC<PrivacySettingsProps> = ({
                         <div className="w-10 h-10 bg-teal-100 rounded-xl flex items-center justify-center">
                             <Shield className="w-5 h-5 text-teal-600" />
                         </div>
-                        <h2 className="text-xl font-bold text-stone-800">Privatliv & Data</h2>
+                        <h2 className="text-xl font-bold text-stone-800">{t('privacy_title')}</h2>
                     </div>
                     <button
                         onClick={onClose}
@@ -201,9 +203,9 @@ export const PrivacySettings: React.FC<PrivacySettingsProps> = ({
                                     <Play className="w-6 h-6 text-teal-600" />
                                 )}
                                 <div>
-                                    <h3 className="font-bold text-stone-800">Pause deling</h3>
+                                    <h3 className="font-bold text-stone-800">{t('privacy_pause_sharing')}</h3>
                                     <p className="text-sm text-stone-500">
-                                        {isPaused ? 'Din familie kan ikke se dine aktiviteter' : 'Din familie kan se dine aktiviteter'}
+                                        {isPaused ? t('privacy_pause_on') : t('privacy_pause_off')}
                                     </p>
                                 </div>
                             </div>
@@ -233,8 +235,8 @@ export const PrivacySettings: React.FC<PrivacySettingsProps> = ({
                                 <Download className="w-6 h-6 text-teal-600" />
                             )}
                             <div className="text-left">
-                                <h3 className="font-bold text-stone-800">Download mine data</h3>
-                                <p className="text-sm text-stone-500">Få en kopi af alle dine data</p>
+                                <h3 className="font-bold text-stone-800">{t('privacy_download_data')}</h3>
+                                <p className="text-sm text-stone-500">{t('privacy_download_desc')}</p>
                             </div>
                         </div>
                         <ChevronRight className="w-5 h-5 text-stone-400" />
@@ -249,8 +251,8 @@ export const PrivacySettings: React.FC<PrivacySettingsProps> = ({
                             <div className="flex items-center gap-3">
                                 <Trash2 className="w-6 h-6 text-red-600" />
                                 <div className="text-left">
-                                    <h3 className="font-bold text-red-800">Slet min konto</h3>
-                                    <p className="text-sm text-red-600">Sletter alle dine data permanent</p>
+                                    <h3 className="font-bold text-red-800">{t('privacy_delete_account')}</h3>
+                                    <p className="text-sm text-red-600">{t('privacy_delete_desc')}</p>
                                 </div>
                             </div>
                             <ChevronRight className="w-5 h-5 text-red-400" />
@@ -259,11 +261,10 @@ export const PrivacySettings: React.FC<PrivacySettingsProps> = ({
                         <div className="bg-red-50 rounded-2xl p-4 border-2 border-red-200">
                             <div className="flex items-center gap-2 mb-3">
                                 <AlertTriangle className="w-6 h-6 text-red-600" />
-                                <h3 className="font-bold text-red-800">Er du sikker?</h3>
+                                <h3 className="font-bold text-red-800">{t('privacy_confirm_title')}</h3>
                             </div>
                             <p className="text-sm text-red-700 mb-4">
-                                Dette vil permanent slette alle dine data, inklusiv opgaver, symptomer, og din konto.
-                                Dette kan ikke fortrydes.
+                                {t('privacy_confirm_desc')}
                             </p>
 
                             {deleteError && (
@@ -277,7 +278,7 @@ export const PrivacySettings: React.FC<PrivacySettingsProps> = ({
                                     onClick={() => setShowDeleteConfirm(false)}
                                     className="flex-1 py-2 bg-white text-stone-700 rounded-xl font-medium hover:bg-stone-100"
                                 >
-                                    Annuller
+                                    {t('privacy_cancel')}
                                 </button>
                                 <button
                                     onClick={handleDeleteAccount}
@@ -287,10 +288,10 @@ export const PrivacySettings: React.FC<PrivacySettingsProps> = ({
                                     {deleting ? (
                                         <>
                                             <Loader2 className="w-4 h-4 animate-spin" />
-                                            Sletter...
+                                            {t('privacy_deleting')}
                                         </>
                                     ) : (
-                                        'Ja, slet alt'
+                                        t('privacy_confirm_delete')
                                     )}
                                 </button>
                             </div>
@@ -300,13 +301,13 @@ export const PrivacySettings: React.FC<PrivacySettingsProps> = ({
                     {/* Info section */}
                     <div className="text-center pt-4">
                         <p className="text-xs text-stone-400">
-                            Dine data opbevares i EU (Frankfurt) og er krypteret.
+                            {t('privacy_info_storage')}
                         </p>
                         <a
                             href="/privacy-policy.html"
                             className="text-xs text-teal-600 hover:underline"
                         >
-                            Læs vores fulde privatlivspolitik
+                            {t('privacy_policy_link')}
                         </a>
                     </div>
                 </div>

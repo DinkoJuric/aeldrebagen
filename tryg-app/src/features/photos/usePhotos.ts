@@ -12,8 +12,7 @@ import {
     serverTimestamp,
     query,
     orderBy,
-    limit,
-    Timestamp
+    limit
 } from 'firebase/firestore';
 import {
     ref,

@@ -6,6 +6,13 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### 🌍 Localization Sweep (2025-12-19)
+- Added 29 new translation keys for recurring tasks, privacy modal, and match task titles
+- Fully localized `PrivacySettings.tsx` (removed all hardcoded Danish strings)
+- Localized period labels in Add Task modal (SeniorView)
+- Localized match-generated task titles in both Senior and Relative views
+- Verified build and cross-language consistency (DA/TR/BS)
+
 ### 🐛 Critical Bug Fixes
 
 **Scroll Fix (2025-12-18)**

@@ -36,7 +36,7 @@ export const FEATURES = {
 };
 
 // Helper to check if feature is enabled
-export const isFeatureEnabled = (featureName) => {
+export const isFeatureEnabled = (featureName: keyof typeof FEATURES): boolean => {
     return FEATURES[featureName] ?? true;
 };
 

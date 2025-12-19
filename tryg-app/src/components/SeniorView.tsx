@@ -59,12 +59,12 @@ export interface SeniorViewProps {
     careCircleId?: string | null;
     symptomLogs?: SymptomLog[];
     onAddTask?: (task: Partial<Task>) => void;
-    onToggleLike?: (answerId: string, userId: string) => void;
+    onToggleLike?: (answerId: string, userId: string, isLiked: boolean) => void;
     onReply?: (answerId: string, reply: any) => void;
-    activeTab: 'daily' | 'family' | 'spil';
-    onTabChange: (tab: 'daily' | 'family' | 'spil') => void;
-    showHealthReport: boolean;
-    setShowHealthReport: (show: boolean) => void;
+    activeTab?: 'daily' | 'family' | 'spil';
+    onTabChange?: (tab: 'daily' | 'family' | 'spil') => void;
+    showHealthReport?: boolean;
+    setShowHealthReport?: (show: boolean) => void;
 }
 
 export const SeniorView: React.FC<SeniorViewProps> = ({
@@ -72,7 +72,7 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
     weeklyAnswers, onWeeklyAnswer, onToggleLike, onReply,
     members = [], memberStatuses = [], currentUserId = null, relativeStatuses = [],
     userName = 'Senior', relativeName = 'Familie', careCircleId = null, symptomLogs = [], onAddTask,
-    activeTab, onTabChange, showHealthReport, setShowHealthReport
+    activeTab = 'daily', onTabChange: _onTabChange, showHealthReport = false, setShowHealthReport
 }) => {
     const { t, i18n } = useTranslation();
     const [showCallModal, setShowCallModal] = useState(false);
@@ -673,8 +673,8 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
 
             {/* Health Report Modal */}
             <HealthReport
-                isOpen={showHealthReport}
-                onClose={() => setShowHealthReport(false)}
+                isOpen={!!showHealthReport}
+                onClose={() => setShowHealthReport?.(false)}
                 symptomLogs={symptomLogs}
                 tasks={tasks}
             />
@@ -699,10 +699,10 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                         <label className="block text-sm font-medium text-slate-700 mb-2">{t('when_question')}</label>
                         <div className="grid grid-cols-2 gap-2">
                             {[
-                                { key: 'morgen', label: 'Morgen', time: 'Kl. 8-11', icon: '☀️' },
-                                { key: 'frokost', label: 'Frokost', time: 'Kl. 12-13', icon: '🍽️' },
-                                { key: 'eftermiddag', label: 'Eftermiddag', time: 'Kl. 14-17', icon: '🌤️' },
-                                { key: 'aften', label: 'Aften', time: 'Kl. 18-21', icon: '🌙' }
+                                { key: 'morgen', labelKey: 'time_period_morning', timeKey: 'time_period_morning_full', icon: '☀️' },
+                                { key: 'frokost', labelKey: 'time_period_lunch', timeKey: 'time_period_lunch_full', icon: '🍽️' },
+                                { key: 'eftermiddag', labelKey: 'time_period_afternoon', timeKey: 'time_period_afternoon_full', icon: '🌤️' },
+                                { key: 'aften', labelKey: 'time_period_evening', timeKey: 'time_period_evening_full', icon: '🌙' }
                             ].map(period => (
                                 <button
                                     key={period.key}
@@ -716,9 +716,9 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                                         <span className="text-lg">{period.icon}</span>
                                         <div>
                                             <p className={`font-medium ${newTaskPeriod === period.key ? 'text-teal-700' : 'text-slate-700'}`}>
-                                                {period.label}
+                                                {t(period.labelKey)}
                                             </p>
-                                            <p className="text-xs text-slate-400">{period.time}</p>
+                                            <p className="text-xs text-slate-400">{t(period.timeKey).split('(')[1]?.replace(')', '') || ''}</p>
                                         </div>
                                     </div>
                                 </button>
@@ -779,22 +779,22 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
 
                             switch (action) {
                                 case 'call':
-                                    taskTitle = `📞 Ring med ${relativeName}`;
+                                    taskTitle = t('match_task_call', { name: relativeName });
                                     break;
                                 case 'plan-visit':
-                                    taskTitle = `☕ Besøg fra ${relativeName}`;
+                                    taskTitle = t('match_task_visit', { name: relativeName });
                                     break;
                                 case 'plan-meal':
-                                    taskTitle = `🍳 Lav mad med ${relativeName}`;
+                                    taskTitle = t('match_task_meal', { name: relativeName });
                                     break;
                                 case 'plan-transport':
-                                    taskTitle = `🚗 Tur med ${relativeName}`;
+                                    taskTitle = t('match_task_transport', { name: relativeName });
                                     break;
                                 case 'plan-garden':
-                                    taskTitle = `🌿 Havearbejde med ${relativeName}`;
+                                    taskTitle = t('match_task_garden', { name: relativeName });
                                     break;
                                 default:
-                                    taskTitle = celebration?.title || `Aktivitet med ${relativeName}`;
+                                    taskTitle = celebration?.title || t('match_task_default', { name: relativeName });
                             }
 
                             // Create the task

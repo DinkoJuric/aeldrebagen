@@ -213,6 +213,11 @@ description: Master record of all project and cross-project learnings
 - **Action**: Added bidirectional support.
 - **Future**: For communication features (pings, status), design both directions simultaneously.
 
+### Standardized Translation Keys for Shared Events
+- **Problem**: Match events generated task titles in hardcoded Danish, inconsistent between views.
+- **Action**: Created standardized `match_task_*` keys that handle both Senior-actor (`match_task_call`) and Relative-actor (`match_task_call_relative`) perspectives.
+- **Future**: When an action in one view creates a record in another, use shared translation keys with parameters (e.g., `{{name}}`) to maintain brand voice symmetry across all locales.
+
 ---
 
 ## Documentation & Workflow

@@ -1,7 +1,7 @@
 import React from 'react';
 
-type PictogramSheet = '1' | '2';
-type PictogramPosition = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+export type PictogramSheet = '1' | '2';
+export type PictogramPosition = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
 
 interface PictogramProps {
     sheet: PictogramSheet;

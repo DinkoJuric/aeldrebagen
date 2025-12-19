@@ -1,11 +1,10 @@
 
-import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, Transition } from 'framer-motion';
 import { useAuth } from '../../hooks/useAuth';
 
 // Define the two "Dialects" of motion
-const TRANSITIONS = {
-    senior: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as any }, // Slow, smooth "ease out"
+const TRANSITIONS: Record<string, Transition> = {
+    senior: { duration: 0.6, ease: [0.22, 1, 0.36, 1] }, // Slow, smooth "ease out"
     relative: { type: "spring", stiffness: 400, damping: 30 } // Bouncy, fast spring
 };
 

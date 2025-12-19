@@ -1,4 +1,3 @@
-import React from 'react';
 import { Gamepad2 } from 'lucide-react';
 import { WordGame } from './WordGame';
 import { Leaderboard } from './Leaderboard';
@@ -6,8 +5,8 @@ import { useWordGame } from './useWordGame';
 import { useTranslation } from 'react-i18next';
 
 interface SpillehjoernetProps {
-    circleId: string;
-    userId: string;
+    circleId?: string;
+    userId?: string;
     displayName: string;
 }
 
@@ -31,7 +30,7 @@ export const Spillehjoernet: React.FC<SpillehjoernetProps> = ({ circleId, userId
         loading,
         submitAnswer,
         leaderboard
-    } = useWordGame(circleId, userId, displayName);
+    } = useWordGame(circleId ?? null, userId ?? null, displayName);
 
     return (
         <div className="space-y-4">
@@ -60,7 +59,7 @@ export const Spillehjoernet: React.FC<SpillehjoernetProps> = ({ circleId, userId
             {/* Leaderboard */}
             <Leaderboard
                 scores={leaderboard}
-                currentUserId={userId}
+                currentUserId={userId ?? ''}
             />
         </div>
     );

@@ -7,8 +7,8 @@ import { Users, Plus, Key, Copy, Check, ArrowRight, Loader2 } from 'lucide-react
 export interface CircleSetupProps {
     userRole?: 'senior' | 'relative';
     userName?: string;
-    onCreateCircle: (userName: string) => Promise<string>;
-    onJoinCircle: (code: string, userName: string) => Promise<void>;
+    onCreateCircle: (userName: string) => Promise<string | undefined>;
+    onJoinCircle: (code: string, userName: string) => Promise<string | undefined | void>;
     loading?: boolean;
     error?: string | null;
 }
@@ -23,7 +23,7 @@ export const CircleSetup: React.FC<CircleSetupProps> = ({ userRole, userName, on
         setStep('creating');
         try {
             const code = await onCreateCircle(userName || '');
-            setCreatedCode(code);
+            setCreatedCode(code ?? null);
             setStep('created');
         } catch (err) {
             setStep('initial');

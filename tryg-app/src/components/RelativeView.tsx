@@ -151,7 +151,7 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
                                 onClick={() => setShowWeeklyModal(true)}
                             />
                         )}
-                        <ThinkingOfYouIconButton onSendPing={onSendPing} />
+                        <ThinkingOfYouIconButton onSendPing={() => onSendPing('thinking_of_you')} />
                     </div>
                 </div>
             </header>
@@ -278,7 +278,8 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
                         const totalSymptoms = symptomLogs.length;
                         const symptomCounts: Record<string, number> = {};
                         symptomLogs.forEach(log => {
-                            symptomCounts[log.label] = (symptomCounts[log.label] || 0) + 1;
+                            const key = log.label || log.type || 'unknown';
+                            symptomCounts[key] = (symptomCounts[key] || 0) + 1;
                         });
                         const mostCommon = Object.entries(symptomCounts).sort((a, b) => b[1] - a[1])[0];
 
@@ -435,22 +436,22 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
 
                         switch (action) {
                             case 'call':
-                                taskTitle = `📞 Ring til ${seniorName}`;
+                                taskTitle = t('match_task_call_relative', { name: seniorName });
                                 break;
                             case 'plan-visit':
-                                taskTitle = `☕ Besøg hos ${seniorName}`;
+                                taskTitle = t('match_task_visit_relative', { name: seniorName });
                                 break;
                             case 'plan-meal':
-                                taskTitle = `🍳 Lav mad med ${seniorName}`;
+                                taskTitle = t('match_task_meal', { name: seniorName });
                                 break;
                             case 'plan-transport':
-                                taskTitle = `🚗 Kør ${seniorName}`;
+                                taskTitle = t('match_task_transport_relative', { name: seniorName });
                                 break;
                             case 'plan-garden':
-                                taskTitle = `🌿 Havearbejde med ${seniorName}`;
+                                taskTitle = t('match_task_garden', { name: seniorName });
                                 break;
                             default:
-                                taskTitle = celebration?.title || `Opgave med ${seniorName}`;
+                                taskTitle = celebration?.title || t('match_task_default', { name: seniorName });
                         }
 
                         // Store pending action and show time picker
@@ -476,7 +477,7 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
                 title={t('when_question')}
                 actionLabel={pendingAction?.title || t('create_task_label')}
                 seniorName={seniorName}
-                onConfirm={({ time, label, period }) => {
+                onConfirm={({ time, period }) => {
                     if (onAddTask && pendingAction) {
                         onAddTask({
                             title: pendingAction.title,

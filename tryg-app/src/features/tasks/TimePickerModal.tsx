@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { X, Clock, Phone, Calendar } from 'lucide-react';
+import { useState } from 'react';
+import { X, Clock, Phone } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 
 interface TimeConfirmData {

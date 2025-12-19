@@ -1,4 +1,4 @@
-import React from 'react';
+// PeaceOfMindTab - Relative's main emotional tab
 import { CoffeeInviteCard } from '../features/coffee';
 import { useCareCircleContext } from '../contexts/CareCircleContext';
 import { getDailyBriefing } from '../utils/briefing';
@@ -28,17 +28,14 @@ export const PeaceOfMindTab: React.FC<PeaceOfMindTabProps> = ({
     tasks = [],
     symptomCount = 0,
     symptoms = [],
-    onViewSymptoms,
+    onViewSymptoms: _onViewSymptoms,
     recentActivity = []
 }) => {
     const { t } = useTranslation();
     const context = useCareCircleContext() as any;
     const seniorName = propSeniorName ?? context.seniorName ?? 'Senior';
 
-    // Calculate completion rate from tasks
-    const totalTasks = tasks.length;
-    const completedTasks = tasks.filter(t => t.completed).length;
-    const completionRate = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 100;
+    // Note: completionRate calculation removed as it's not used in render
 
     return (
         <div className="space-y-6 tab-content">
@@ -58,15 +55,15 @@ export const PeaceOfMindTab: React.FC<PeaceOfMindTabProps> = ({
                 const briefing = getDailyBriefing({ tasks, symptoms, seniorName, lastCheckIn, t });
                 return (
                     <div className={`p-5 rounded-[1.5rem] border-2 shadow-sm transition-all duration-300 ${briefing.type === 'success' ? 'bg-emerald-50 border-emerald-100 shadow-emerald-50/50' :
-                            briefing.type === 'warning' ? 'bg-amber-50 border-amber-100 shadow-amber-50/50' :
-                                'bg-stone-50 border-stone-200 shadow-stone-50/50'
+                        briefing.type === 'warning' ? 'bg-amber-50 border-amber-100 shadow-amber-50/50' :
+                            'bg-stone-50 border-stone-200 shadow-stone-50/50'
                         }`}>
                         <div className="flex items-start gap-4">
                             <span className="text-3xl filter drop-shadow-sm">{briefing.emoji}</span>
                             <div className="flex-1">
                                 <p className={`text-lg font-semibold leading-relaxed ${briefing.type === 'success' ? 'text-emerald-900' :
-                                        briefing.type === 'warning' ? 'text-amber-900' :
-                                            'text-stone-800'
+                                    briefing.type === 'warning' ? 'text-amber-900' :
+                                        'text-stone-800'
                                     }`}>
                                     {briefing.message}
                                 </p>

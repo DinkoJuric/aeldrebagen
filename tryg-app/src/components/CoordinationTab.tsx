@@ -158,7 +158,7 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
             {memberStatuses.length > 0 && (
                 <FamilyPresence
                     memberStatuses={memberStatuses}
-                    currentUserId={currentUserId}
+                    currentUserId={currentUserId ?? ''}
                     seniorName={seniorName}
                 />
             )}

@@ -3,7 +3,7 @@
 // Critical: Would have caught the PWA crash from undefined familyStatus
 
 import { describe, it, expect, vi } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render } from '@testing-library/react'
 
 // Mock Firebase modules before importing components
 vi.mock('../config/firebase', () => ({
