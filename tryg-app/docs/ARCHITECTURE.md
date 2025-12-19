@@ -297,34 +297,36 @@ export function useXxx(circleId) {
 }
 ```
 
-### 2. Contexts (State Sharing)
+### 2. State Management (The Prop Drilling Cure)
+Shared data (careCircleId, memberStatuses, currentUserId, etc.) and global actions are centralized in `CareCircleContext`.
 
-| Context | Key Consumers |
-|---|---|
-| `CareCircleContext` | FamilyPresence, PeaceOfMindTab, CoordinationTab |
-| `ThemeContext` | AppCore, LivingBackground, SettingsModal, AmbientDashboard |
+**The Problem**: Previously, `AppCore.tsx` was passing down dozens of props through multiple layers, leading to "Prop Drilling" which made the code fragile and hard to refactor.
 
-To avoid prop drilling, shared data (careCircleId, memberStatuses, currentUserId) is provided via React Context:
+**The Solution**: Components now consume data directly via the `useCareCircleContext` hook.
 
-```javascript
-// In AppCore.tsx
-<CareCircleProvider
-    careCircleId={careCircle?.id}
-    memberStatuses={memberStatuses}
-    currentUserId={user?.uid}
-    ...
->
-    {/* Views */}
-</CareCircleProvider>
-
-// In any nested component
-const { memberStatuses, currentUserId } = useCareCircleContext();
+```mermaid
+graph TD
+    AppCore[AppCore.tsx] --> Provider[CareCircleProvider]
+    Provider --> SeniorView[SeniorView.tsx]
+    SeniorView --> Daily[DailyTab]
+    SeniorView --> Family[FamilyTab]
+    SeniorView --> Health[HealthTab]
+    SeniorView --> Spil[SpilTab]
+    SeniorView --> Modals[SeniorModals]
+    
+    Daily -.-> Context[useCareCircleContext]
+    Family -.-> Context
+    Modals -.-> Context
 ```
+
+**Key Consumers:**
+- `DailyTab`, `FamilyTab`, `HealthTab`, `SpilTab`
+- `SeniorModals` (Call, Symptom, Task, Weekly Question)
+- `CoordinationTab`, `PeaceOfMindTab` (In-progress)
 
 **Key files:**
-- `src/contexts/CareCircleContext.tsx` - Provider + hook
-- `src/features/familyPresence/FamilyPresence.tsx` - Uses context for memberStatuses
-```
+- `src/contexts/CareCircleContext.tsx` - Provider + Hook
+- `src/types.ts` - `CareCircleContextValue` definition
 
 ### 2. Role-Based Views
 View is determined by `userProfile.role`:
@@ -336,9 +338,13 @@ No toggle - users only see their own role's view.
 ### 3. Feature Flags
 Toggle features in `src/config/features.ts`:
 ```javascript
-photoSharing: false,  // Requires Firebase Blaze plan
-weeklyQuestion: true,
-thinkingOfYou: true,
+export const FEATURES = {
+  photoSharing: false,  // Requires Firebase Blaze plan
+  weeklyQuestion: true,
+  thinkingOfYou: true,
+}
+```
+
 ### 4. Natural Language Generator (Smart Summary)
 Logic resides in `src/utils/briefing.ts`:
 - Inputs: Tasks (completed/total), Symptoms (count/severity), Streak info

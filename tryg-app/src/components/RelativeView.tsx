@@ -16,6 +16,8 @@ import { Task } from '../features/tasks/useTasks';
 import { SymptomLog } from '../features/symptoms/useSymptoms';
 import { useTranslation } from 'react-i18next';
 
+import { AppTab } from '../types';
+
 export interface RelativeViewProps {
     tasks: Task[];
     lastCheckIn?: any;
@@ -33,8 +35,8 @@ export interface RelativeViewProps {
     careCircleId: any;
     onToggleLike?: (answerId: string, userId: string, isLiked: boolean) => void;
     onReply?: (answerId: string, reply: any) => void;
-    activeTab: 'daily' | 'family' | 'spil';
-    onTabChange: (tab: 'daily' | 'family' | 'spil') => void;
+    activeTab: AppTab;
+    onTabChange: (tab: AppTab) => void;
 }
 
 export const RelativeView: React.FC<RelativeViewProps> = ({

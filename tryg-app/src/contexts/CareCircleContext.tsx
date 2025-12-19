@@ -1,81 +1,50 @@
-/**
- * CareCircleContext
- * 
- * Provides shared care circle data to all components without prop drilling.
- * Use `useCareCircleContext()` to access data like careCircleId, memberStatuses, etc.
- */
-
-import { createContext, useContext, ReactNode } from 'react';
+import { createContext, useContext } from 'react';
 import { CareCircleContextValue } from '../types';
 
-
-const defaultValue: CareCircleContextValue = {
+export const CareCircleContext = createContext<CareCircleContextValue>({
     careCircleId: null,
     seniorId: null,
     seniorName: 'Senior',
     currentUserId: null,
     userRole: null,
-    userName: '',
+    userName: 'Bruger',
+    relativeName: 'Pårørende',
     memberStatuses: [],
+    members: [],
     relativeStatuses: [],
     seniorStatus: null,
     myStatus: null,
     setMyStatus: async () => { },
-};
-
-const CareCircleContext = createContext<CareCircleContextValue>(defaultValue);
+    activeTab: 'daily',
+    setActiveTab: () => { },
+    tasks: [],
+    toggleTask: () => { },
+    addTask: () => { },
+    symptoms: [],
+    addSymptom: () => { },
+    weeklyAnswers: [],
+    addWeeklyAnswer: () => { },
+    toggleLike: () => { },
+    addReply: () => { },
+    latestPing: null,
+    sendPing: () => { },
+    dismissPing: () => { },
+    lastCheckIn: null,
+    recordCheckIn: async () => undefined,
+});
 
 /**
  * Hook to access CareCircle context
  */
-export function useCareCircleContext(): CareCircleContextValue {
+export const useCareCircleContext = () => {
     const context = useContext(CareCircleContext);
     if (!context) {
         throw new Error('useCareCircleContext must be used within a CareCircleProvider');
     }
     return context;
-}
-
-export interface CareCircleProviderProps extends Partial<CareCircleContextValue> {
-    children: ReactNode;
-}
+};
 
 /**
- * Provider component that wraps the app and provides care circle data
+ * Provider component that wraps the app and provides circle state
  */
-export function CareCircleProvider({
-    children,
-    careCircleId = null,
-    seniorId = null,
-    seniorName = 'Senior',
-    currentUserId = null,
-    userRole = null,
-    userName = '',
-    memberStatuses = [],
-    relativeStatuses = [],
-    seniorStatus = null,
-    myStatus = null,
-    setMyStatus = async () => { },
-}: CareCircleProviderProps) {
-    const value: CareCircleContextValue = {
-        careCircleId,
-        seniorId,
-        seniorName,
-        currentUserId,
-        userRole,
-        userName,
-        memberStatuses,
-        relativeStatuses,
-        seniorStatus,
-        myStatus,
-        setMyStatus,
-    };
-
-    return (
-        <CareCircleContext.Provider value={value}>
-            {children}
-        </CareCircleContext.Provider>
-    );
-}
-
-export default CareCircleContext;
+export const CareCircleProvider = CareCircleContext.Provider;

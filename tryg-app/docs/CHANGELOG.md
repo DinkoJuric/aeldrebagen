@@ -6,6 +6,14 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### 🧱 Phase 3: Component Decomposition & Shared Tabs (2025-12-19)
+- **Senior View Refactor**: Decomposed `SeniorView.tsx` into a lean orchestrator with modular tabs
+- **Shared Tab Elevation**: Migrated `HealthReport.tsx` modal to a shared `HealthTab.tsx` with 14-day history visualizations
+- **Shared Word Game**: Extracted `SpilTab.tsx` as a shared component for both roles
+- **State Management**: Implemented "Prop Drilling Cure" by centralizing data in `CareCircleContext.tsx`
+- **Modular Modals**: Centralized all senior-specific modals in `SeniorModals.tsx`
+- **Lint & Types**: Resolved 50+ TypeScript/ESLint warnings and improved component type safety
+
 ### 🌍 Localization Sweep (2025-12-19)
 - Added 29 new translation keys for recurring tasks, privacy modal, and match task titles
 - Fully localized `PrivacySettings.tsx` (removed all hardcoded Danish strings)

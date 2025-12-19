@@ -29,10 +29,12 @@ const tabVariants = cva(
     }
 );
 
+import { AppTab } from '../types';
+
 export interface BottomNavigationProps {
-    activeTab: 'daily' | 'family' | 'spil';
-    onTabChange: (tab: 'daily' | 'family' | 'spil') => void;
-    onViewReport?: () => void;
+    activeTab: AppTab;
+    onTabChange: (tab: AppTab) => void;
+    onViewReport?: () => void; // Keep for now, but will likely be removed
     onShowReport?: () => void;
 }
 
@@ -68,15 +70,12 @@ const NavTab: React.FC<NavTabProps> = ({ icon, label, onClick, isActive, activeC
 export const BottomNavigation: React.FC<BottomNavigationProps> = ({
     activeTab,
     onTabChange,
-    onViewReport,
-    onShowReport
 }) => {
     const { t } = useTranslation();
-    const handleReport = onViewReport || onShowReport;
 
     return (
         <div className="sticky bottom-0 left-0 right-0 theme-card border-t border-stone-200 px-2 py-2 pb-5 z-40">
-            <div className="flex justify-around items-center max-w-xs mx-auto">
+            <div className="flex justify-around items-center max-w-sm mx-auto">
                 <NavTab
                     icon={<Heart className={cn("w-6 h-6", activeTab === 'daily' && "fill-teal-100")} />}
                     label={t('bottom_nav_daily')}
@@ -93,13 +92,13 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
                     activeColor="indigo"
                 />
 
-                <button
-                    onClick={handleReport}
-                    className={cn(tabVariants({ state: 'inactive' }))}
-                >
-                    <FileText className="w-6 h-6" />
-                    <span className="text-xs font-bold">{t('bottom_nav_report')}</span>
-                </button>
+                <NavTab
+                    icon={<FileText className={cn("w-6 h-6", activeTab === 'health' && "fill-sky-100")} />}
+                    label={t('bottom_nav_report')} // User can rename this in i18n later if they want "Health"
+                    onClick={() => onTabChange('health')}
+                    isActive={activeTab === 'health'}
+                    activeColor="indigo" // Or another color variant if added
+                />
 
                 <NavTab
                     icon={<Gamepad2 className={cn("w-6 h-6", activeTab === 'spil' && "fill-purple-100")} />}

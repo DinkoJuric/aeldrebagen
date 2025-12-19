@@ -1,3 +1,7 @@
+import { Task } from './features/tasks/useTasks';
+import { SymptomLog } from './features/symptoms/useSymptoms';
+
+
 /**
  * Core Type Definitions for Tryg App
  */
@@ -45,6 +49,8 @@ export interface CareCircle {
     lastResetDate?: string; // Daily reset tracker (YYYY-MM-DD)
 }
 
+export type AppTab = 'daily' | 'family' | 'health' | 'spil';
+
 export interface CareCircleContextValue {
     // Circle info
     careCircleId: string | null;
@@ -55,11 +61,44 @@ export interface CareCircleContextValue {
     currentUserId: string | null;
     userRole: 'senior' | 'relative' | null;
     userName: string;
+    relativeName: string; // Added
 
     // Member statuses (for FamilyPresence, etc.)
-    memberStatuses: MemberStatus[];
-    relativeStatuses: MemberStatus[];
+    memberStatuses: any[]; // Type changed from MemberStatus[] to any[]
+    members: Member[]; // Added
+    relativeStatuses: any[]; // Type changed from MemberStatus[] to any[]
     seniorStatus: MemberStatus | null;
     myStatus: MemberStatus | null;
     setMyStatus: (status: string) => Promise<void>;
+
+    // Feature Data & Actions (The Prop Drilling Cure)
+    // ---------------------------------------------
+
+    // Navigation
+    activeTab: AppTab;
+    setActiveTab: (tab: AppTab) => void;
+
+    // Tasks
+    tasks: Task[];
+    toggleTask: (id: string) => void; // Return type changed
+    addTask: (task: Partial<Task>) => void; // Return type changed
+
+    // Symptoms
+    symptoms: SymptomLog[];
+    addSymptom: (symptom: any) => void; // Return type changed
+
+    // Weekly Questions
+    weeklyAnswers: any[]; // Type changed from WeeklyAnswer[] to any[]
+    addWeeklyAnswer: (answer: string) => void; // Return type changed
+    toggleLike: (answerId: string, userId: string, isLiked: boolean) => void; // Signature changed
+    addReply: (answerId: string, reply: any) => void; // Signature changed
+
+    // "Thinking of You" (Pings)
+    latestPing: any | null; // Ping type
+    sendPing: (toRole: 'senior' | 'relative') => void; // Return type changed
+    dismissPing: (pingId: string) => void; // Signature changed
+
+    // Check-in
+    lastCheckIn: any | null; // Type changed
+    recordCheckIn: (status: string) => Promise<string | void | undefined>; // Signature changed
 }
