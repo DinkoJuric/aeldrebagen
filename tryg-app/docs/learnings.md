@@ -488,3 +488,8 @@ git checkout -b fix-typescript-errors
 - **Problem**: Hardcoded `any` and local interface duplication obscured the relationship between features.
 - **Action**: Centralized all domain types in `src/types.ts`.
 - **Future**: Treat `types.ts` as the "Source of Truth" for the app's data model. Never duplicate a core interface locally.
+
+### Tailwind Class Corruption (2025-12-20)
+- **Problem**: Symptom chart bars weren't rendering. Classes like `flex - 1` (with spaces) were breaking styling silently.
+- **Action**: Fixed by removing spurious spaces (`flex-1`, `w-full`, etc.) and `{h}px` instead of `{h} px`.
+- **Future**: When charts or layouts break unexpectedly, grep for spaces in Tailwind class strings. Template literal formatting can inject unwanted whitespace.

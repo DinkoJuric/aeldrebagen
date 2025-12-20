@@ -28,16 +28,10 @@ This document tracks future enhancements, technical ideations, and non-critical 
 - **Goal**: Play a warm vocal greeting when the app is opened (e.g., "Godmorgen, Louise").
 - **Value**: Accessibility for visually impaired seniors.
 
-### 5. Prop Drilling Refactor 🔧
-- **Goal**: Move frequently-drilled props (careCircleId, currentUserId, memberStatuses, tab state) to React Context.
-- **Problem**: Props currently pass through 3-4 component layers (AppCore → SeniorView/RelativeView → Tabs → Widgets).
-- **Value**: Cleaner component interfaces, easier testing, reduced coupling.
-- **Estimated Effort**: 8h (Context setup + component migration).
-- **Identified Props to Lift**:
-  - `careCircleId` - used in 10+ components
-  - `currentUserId` - used for permissions and like/reply features
-  - `memberStatuses` - shared family presence state
-  - `activeTab` / `onTabChange` - tab navigation state
+### 5. ~~Prop Drilling Refactor~~ ✅ (COMPLETED in Phase 2)
+- **Goal**: Move frequently-drilled props to React Context.
+- **Status**: ✅ Completed. `CareCircleContext` is now the central state hub.
+- **Components now use**: `useCareCircleContext()` hook instead of prop drilling.
 
 ---
 *Standards: Refer to [.agent/workflows/onboarding.md](../../.agent/workflows/onboarding.md) for implementation rules.*

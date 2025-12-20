@@ -33,9 +33,12 @@ function scanDirectory(dir, fileList = []) {
 const extraFiles = [
     path.join(__dirname, 'tryg-app', 'package.json'),
     path.join(__dirname, 'tryg-app', 'vite.config.js'),
-    path.join(__dirname, 'tryg-app', 'IDEATION.md'),
-    path.join(__dirname, 'learnings.md') // In the root
+    path.join(__dirname, 'tryg-app', 'BACKGROUND.md'),
+    path.join(__dirname, 'tryg-app', 'Branding_Guide.md'),
+    path.join(__dirname, 'tryg-app', 'Architecture.md'),
+    path.join(__dirname, 'tryg-app', 'COMPETITOR_ANALYSIS.md')
 ];
+
 
 let content = `# Codebase Context: aeldrebagen\n\n`;
 

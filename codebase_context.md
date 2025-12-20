@@ -25,11 +25,17 @@
     "@capacitor/core": "^8.0.0",
     "@capacitor/ios": "^8.0.0",
     "@sentry/react": "^10.30.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "firebase": "^12.6.0",
     "framer-motion": "^12.23.26",
+    "i18next": "^25.7.3",
+    "i18next-browser-languagedetector": "^8.2.0",
     "lucide-react": "^0.559.0",
     "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "react-dom": "^19.2.0",
+    "react-i18next": "^16.5.0",
+    "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
@@ -144,203 +150,30 @@ export default defineConfig(({ mode }) => {
 ```
 ---
 
-## File: IDEATION.md
-```md
-# Tryg App - Feature Ideation
-
-A living document for brainstorming features that could make Tryg more valuable.
-
-> **Core Philosophy Shift**: Tryg is not a monitoring tool. It's a **shared family space** where connection flows both ways. The senior is a **host and contributor**, not a data source.
-
----
-
-## 🌟 Connection-First Features (Priority)
-
-### Bidirectional Visibility ("Mirror Features") ✅ IMPLEMENTED
-The key to avoiding surveillance: **reciprocity by default**.
-
-| Senior Sees | Family Sees |
-|-------------|-------------|
-| "Louise er på arbejde" | "Mor har det godt" |
-| "Børnene er kommet hjem fra skole" | "Farmor tog sin morgen medicin" |
-| "Emma løb 5km i morges" | "Farmor har gået en tur i haven" |
-
-**Implementation**: ✅ `FamilyStatusCard.jsx` shows relative's status (work, home, traveling, available, busy). Picker in RelativeView, display in SeniorView.
-
----
-
-### Shared Moments (Not Data)
-Replace "health dashboard" with **shared experiences**.
-
-**Photo Exchange**
-- **Daily Photo Ritual**: Family sends one photo → Senior sees it as "Dagens Billede" (already built!)
-- **Two-Way**: Senior can share photos back (simplified camera UI)
-- **Reactions**: Simple emoji reactions (❤️ 😊 👍) on shared content
-
-**Voice Notes** 
-- 30-second voice clips instead of text (better for motor issues)
-- Grandchildren recording "Godmorgen Farmor!" as morning greeting
-- Senior can respond with voice, not typing
-
-**"Jeg tænker på dig" Button** ✅ IMPLEMENTED
-- ✅ One-tap "thinking of you" ping (`ThinkingOfYou.jsx`)
-- ✅ Visual: Heart animation on recipient's screen
-- ✅ Pink toast notification with auto-dismiss
-- ✅ Web Audio ping sound for emotional feedback
-
----
-
-### Weekly Rituals ✅ IMPLEMENTED
-
-**Family Question of the Week**
-> "Hvad var det bedste øjeblik denne uge?"
-
-- ✅ Everyone answers (family + senior) via `WeeklyQuestionCard.jsx`
-- ✅ Creates shared stories and memories
-- ✅ Displayed as a carousel of answers
-- ✅ 8 rotating questions based on week number
-
-**Sunday Coffee Chat**
-- Scheduled video drop-in time
-- "Kafferum" indicator shows who's available
-- Low-pressure, can leave anytime
-
----
-
-### Dignity-Preserving Help Requests ✅ IMPLEMENTED
-
-Instead of: "Alert: Mom needs help"
-Reframe as: **Mutual exchange**
-
-| Senior Can Offer | Senior Can Request |
-|-----------------|-------------------|
-| "Jeg kan hjælpe med at lytte" | "Kan nogen ringe mig i dag?" |
-| "Jeg har en god opskrift" | "Hjælp til indkøb denne uge" |
-| "Vil gerne høre om jeres dag" | "Følgeskab til lægen" |
-
-**The senior contributes value, not just receives care.**
-
-✅ `HelpExchange.jsx` - Two-way offers/requests with success feedback
-
----
-
-## 💡 "Dancing at the Wedding" Features
-
-Features that connect health goals to **meaningful life moments**:
-
-### Milestone Celebrations
-- "Du har gået 100 ture denne måned! 🎉"
-- "Klar til at danse til Emmas bryllup"
-- Connect streaks to personal goals, not abstract metrics
-
-### Memory Triggers ✅ IMPLEMENTED
-- ✅ "Husker du da...?" via `MemoryTrigger` component
-- ✅ Rotating memories every 10 seconds
-- ⏳ Photo memories from family shared album (TODO)
-
-### Anticipation Calendar
-- Countdown to family events
-- "42 dage til Emmas bryllup"
-- Daily motivation tied to real moments
-
----
-
-## 🔒 Anti-Surveillance Design Principles
-
-1. **Notification when viewed**: "Louise så din opdatering" - interaction, not silent watching
-2. **Share controls**: "Del kun med nær familie / alle / kun mig"
-3. **Temporary sharing**: "Del min placering de næste 2 timer"
-4. **Pause mode**: "Gå på pause" - take a break from sharing
-5. **Senior initiates**: Most data sharing should be senior-triggered, not automatic
-
----
-
-## 🏥 Health Tracking Enhancements
-
-### Body Pain Mapping ✅ IMPLEMENTED
-When senior clicks "Jeg har ondt" → "Smerter", they can tap WHERE on their body:
-- ✅ `BodyPainSelector.jsx` with large touch-friendly grid
-- ✅ Regions: Head, Neck, Chest, Arms (L/R), Stomach, Back, Legs (L/R)
-- ✅ Stored with timestamp and shown in doctor report
-- ⏳ TODO: Visual history ("You've had head pain 3 times this week")
-
-### Pain Severity Scale
-- After location, ask "Hvor ondt?" (How much?)
-- 3-level pictogram: 🙂 Lidt → 😐 Noget → 😣 Meget
-- Avoid clinical 1-10 scales - too complex for seniors
-
-### Symptom Patterns
-- Weekly summary: "Du har ofte hovedpine om morgenen"
-- Helpful for doctor consultations
-- Non-alarming presentation
-
----
-
-## 🎯 High-Value / Low-Effort (MVP+1)
-
-| Feature | Connection Value | Effort | Status |
-|---------|-----------------|--------|--------|
-| Two-way status ("Louise er...") | ★★★★★ | 2h | ✅ Done |
-| "Tænker på dig" one-tap ping | ★★★★★ | 1h | ✅ Done |
-| Voice note sharing | ★★★★☆ | 4h | ⏳ TODO |
-| Simple photo sharing from senior | ★★★★☆ | 3h | ⏳ TODO |
-| Emoji reactions on photos | ★★★★☆ | 2h | ⏳ TODO |
-
----
-
-## 📚 Research References
-
-- **Reciprocity in eldercare apps**: Bidirectional features reduce surveillance perception
-- **Shared activities > monitoring**: Connection comes from doing things together
-- **Agency and control**: Strong privacy controls build trust
-- **Voice-first**: Better for motor/vision issues and feels more personal
-- **Participatory design**: Co-design with actual seniors
-
-Sources: JMIR Formative Research, ACM CHI, PMC studies on technology for reducing elderly loneliness
-
----
-
-*Last updated: 2025-12-11*
-
-```
----
-
 ## File: tryg-app\src\App.tsx
 ```tsx
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Activity } from 'lucide-react';
 import { SeniorView } from './components/SeniorView';
 import { RelativeView } from './components/RelativeView';
-import { PingNotification } from './features/thinkingOfYou';
-import { useLocalStorage } from './hooks/useLocalStorage';
-import { INITIAL_TASKS, SENIOR_PROFILE } from './data/constants';
-import { playCompletionSound, playSuccessSound } from './utils/sounds';
+import { useTranslation } from 'react-i18next';
 import { FEATURES } from './config/features';
+import { cn } from './lib/utils';
 import './index.css';
-import { Task } from './features/tasks/useTasks';
 // import { UserProfile } from './types'; // Removed unused import
 
 export default function TrygApp() {
+    const { t } = useTranslation();
     const [view, setView] = useState('senior');
-    const [tasks, setTasks] = useLocalStorage<Task[]>('tryg-tasks', INITIAL_TASKS as Task[]);
-    const [lastCheckIn, setLastCheckIn] = useLocalStorage<string | null>('tryg-checkin', null);
-    const [symptomLogs, setSymptomLogs] = useLocalStorage<any[]>('tryg-symptoms', []);
-    const [familyStatus, setFamilyStatus] = useLocalStorage<string>('tryg-family-status', 'work');
-    const [activePing, setActivePing] = useState<any | null>(null);
     const [notification, setNotification] = useState<any | null>(null);
-
-    // Phase 5: Emotional Connection state
-    const [weeklyAnswers, setWeeklyAnswers] = useLocalStorage<any[]>('tryg-weekly-answers', []);
-    // const [helpOffers, setHelpOffers] = useLocalStorage<any[]>('tryg-help-offers', []); // Unused in TSX views
-    // const [helpRequests, setHelpRequests] = useLocalStorage<any[]>('tryg-help-requests', []); // Unused in TSX views
 
     // Simulated notification after 5 seconds (only if enabled)
     useEffect(() => {
         if (!FEATURES.demoNotification) return;
         const timer = setTimeout(() => {
             setNotification({
-                title: "Husk at drikke vand",
-                body: "Det er tid til dit glas vand kl. 10:00",
+                title: t('notification_water_title'),
+                body: t('notification_water_body'),
                 icon: Activity
             });
         }, 5000);
@@ -354,70 +187,6 @@ export default function TrygApp() {
             return () => clearTimeout(timer);
         }
     }, [notification]);
-
-    const toggleTask = (id: string) => {
-        const task = tasks.find(t => t.id === id);
-        const willBeCompleted = task && !task.completed;
-
-        setTasks(tasks.map(t =>
-            t.id === id ? { ...t, completed: !t.completed } : t
-        ));
-
-        // Play sound when completing (not uncompleting)
-        if (willBeCompleted) {
-            playCompletionSound();
-        }
-    };
-
-    const handleCheckIn = (status: string) => {
-        const now = new Date();
-        const timeString = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-        setLastCheckIn(timeString);
-        if (status === 'checked-in') {
-            playSuccessSound(); // Celebratory sound for check-in
-        }
-    };
-
-    const addSymptom = (symptomType: any) => {
-        const now = new Date();
-        const timeString = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-
-        setSymptomLogs(prev => [{
-            ...symptomType,
-            time: timeString,
-            date: new Date().toLocaleDateString('da-DK')
-        }, ...prev]);
-
-        console.log('Symptom logged:', symptomType.label);
-    };
-
-    const handleAddTaskFromRelative = (newTask: Partial<Task>) => {
-        // Mock ID generation
-        // const newId = Math.max(...tasks.map(t => typeof t.id === 'number' ? t.id : 0), 0) + 1;
-        // Using string IDs to match Task interface
-        const newId = `local_${Date.now()}`;
-        setTasks(prev => [...prev, { ...newTask, id: newId, completed: false } as Task]);
-    };
-
-    // Send "thinking of you" ping
-    const handleSendPing = (fromName: string, toView: string) => {
-        const now = new Date();
-        const timeString = now.getHours().toString().padStart(2, '0') + ':' +
-            now.getMinutes().toString().padStart(2, '0');
-        setActivePing({
-            fromName,
-            toView,
-            time: timeString
-        });
-    };
-
-    // Weekly question answer handler
-    const handleWeeklyAnswer = (answer: string) => {
-        setWeeklyAnswers(prev => [answer, ...prev]);
-    };
-
-    // Help exchange handlers REMOVED because SeniorView/RelativeView fetch data internally now.
-    // Demo mode does not support help exchange unless we mock the hook, which is out of scope here.
 
     return (
         <div className="flex justify-center items-center min-h-screen bg-zinc-800 p-4 font-sans">
@@ -444,60 +213,33 @@ export default function TrygApp() {
                     )}
                 </div>
 
-                {/* View Toggle */}
-                <div className="absolute top-0 left-0 right-0 h-16 bg-black/5 z-50 flex justify-center items-center backdrop-blur-sm">
-                    <div className="bg-white/80 p-1 rounded-full flex text-xs font-bold shadow-lg">
+                <div className="relative h-full overflow-y-auto">
+                    {/* Role Toggles for Demo */}
+                    <div className="absolute top-4 right-4 z-50 flex bg-stone-100 rounded-full p-1 shadow-md">
                         <button
                             onClick={() => setView('senior')}
-                            className={`px-4 py-2 rounded-full transition-colors ${view === 'senior' ? 'bg-teal-600 text-white' : 'text-stone-600 hover:bg-stone-100'}`}
+                            className={cn(
+                                "px-3 py-1.5 rounded-full text-xs font-semibold transition-colors",
+                                view === 'senior' ? "bg-white text-stone-900 shadow-sm" : "text-stone-500 hover:text-stone-700"
+                            )}
                         >
-                            Senior View
+                            {t('role_senior')}
                         </button>
                         <button
                             onClick={() => setView('relative')}
-                            className={`px-4 py-2 rounded-full transition-colors ${view === 'relative' ? 'bg-indigo-600 text-white' : 'text-stone-600 hover:bg-stone-100'}`}
+                            className={cn(
+                                "px-3 py-1.5 rounded-full text-xs font-semibold transition-colors",
+                                view === 'relative' ? "bg-white text-stone-900 shadow-sm" : "text-stone-500 hover:text-stone-700"
+                            )}
                         >
-                            Pårørende View
+                            {t('role_relative')}
                         </button>
                     </div>
-                </div>
 
-                <div className="pt-14 h-full">
-                    {/* Ping Notification - shows when receiving a ping in current view */}
-                    {activePing && activePing.toView === view && (
-                        <PingNotification
-                            ping={activePing}
-                            onDismiss={() => setActivePing(null)}
-                        />
-                    )}
-
-                    {view === 'senior' ? (
-                        <SeniorView
-                            tasks={tasks}
-                            toggleTask={toggleTask}
-                            updateStatus={handleCheckIn}
-                            addSymptom={addSymptom}
-                            // familyStatus={familyStatus} // Not in props?
-                            onSendPing={() => handleSendPing('Birthe', 'relative')}
-                            weeklyAnswers={weeklyAnswers}
-                            onWeeklyAnswer={handleWeeklyAnswer}
-                        />
-                    ) : (
-                        <RelativeView
-                            tasks={tasks}
-                            profile={SENIOR_PROFILE}
-                            lastCheckIn={lastCheckIn}
-                            symptomLogs={symptomLogs}
-                            onAddTask={handleAddTaskFromRelative}
-                            // familyStatus={familyStatus} // Not in props? RelativeView has myStatus
-                            myStatus={familyStatus}
-                            onMyStatusChange={setFamilyStatus}
-                            onSendPing={() => handleSendPing('Louise', 'senior')}
-                            weeklyAnswers={weeklyAnswers}
-                            onWeeklyAnswer={handleWeeklyAnswer}
-                            onOpenSettings={() => { }}
-                        />
-                    )}
+                    {/* Content */}
+                    <div className="flex-1 overflow-hidden">
+                        {view === 'senior' ? <SeniorView /> : <RelativeView />}
+                    </div>
                 </div>
 
                 {/* Home indicator */}
@@ -512,31 +254,34 @@ export default function TrygApp() {
 
 ## File: tryg-app\src\AppCore.tsx
 ```tsx
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { CareCircleProvider } from './contexts/CareCircleContext';
-import { Share2, LogOut } from 'lucide-react';
+import { LogOut, Settings, Users } from 'lucide-react';
 import { SeniorView } from './components/SeniorView';
 import { RelativeView } from './components/RelativeView';
+import { SettingsModal } from './components/SettingsModal';
+import { BottomNavigation } from './components/BottomNavigation';
 import { PingNotification } from './features/thinkingOfYou';
-import { PrivacySettings } from './components/PrivacySettings';
 import { InstallPrompt } from './components/InstallPrompt';
 import { UpdateToast } from './components/UpdateToast';
-import { PhotoCaptureButton, PhotoUploadModal, PhotoViewerModal, PhotoNotificationBadge } from './features/photos';
+import { PhotoUploadModal, PhotoViewerModal, PhotoNotificationBadge } from './features/photos';
+import { ShareModal } from './components/ShareModal';
 import { useTasks } from './features/tasks';
 import { useSymptoms } from './features/symptoms';
-import { useSettings } from './hooks/useSettings';
+// import { useSettings } from './hooks/useSettings';
 import { useWeeklyQuestions } from './features/weeklyQuestion';
 import { usePings } from './features/thinkingOfYou';
 import { useCheckIn } from './hooks/useCheckIn';
 import { usePhotos } from './features/photos';
 import { useMemberStatus } from './features/familyPresence';
-import { SENIOR_PROFILE } from './data/constants';
 import { playCompletionSound, playSuccessSound, playPingSound } from './utils/sounds';
 import { FEATURES } from './config/features';
+import { LivingBackground } from './components/ui/LivingBackground';
 import './index.css';
 import { User } from 'firebase/auth'; // Or your custom user type
-import { UserProfile, Member, CareCircle } from './types';
-import { Task } from './features/tasks/useTasks';
+import { AppTab, UserProfile, Member, Task, SymptomLog } from './types';
+
 
 export interface AppCoreProps {
     user: User | null;
@@ -557,44 +302,45 @@ export default function TrygAppCore({
     onGetInviteCode,
     members = []
 }: AppCoreProps) {
+    const { t } = useTranslation();
     // View is determined by user role - no toggle allowed
-    const isRelative = userProfile?.role === 'relative';
     const isSenior = userProfile?.role === 'senior';
     // const [activePing, setActivePing] = useState(null); // Unused?
     const [notification, setNotification] = useState<any | null>(null);
     const [showSettings, setShowSettings] = useState(false);
-    const [showPrivacySettings, setShowPrivacySettings] = useState(false);
+    const [showShare, setShowShare] = useState(false);
+    const [activeTab, setActiveTab] = useState<AppTab>('daily');
     const [showPhotoViewer, setShowPhotoViewer] = useState(false);
 
     // Firebase hooks for real-time data
     const { tasks, toggleTask, addTask } = useTasks(careCircle?.id);
     const { symptoms, addSymptom } = useSymptoms(careCircle?.id);
-    const { settings } = useSettings(careCircle?.id);
-    // Per-member status tracking (each member has their own status)
+    // Per-member status tracking
     const {
         memberStatuses,
         myStatus,
         setMyStatus,
         relativeStatuses,
         seniorStatus
-    } = useMemberStatus(careCircle?.id, user?.uid, userProfile?.displayName, userProfile?.role);
-    const { answers: weeklyAnswers, addAnswer: addWeeklyAnswer } = useWeeklyQuestions(careCircle?.id);
-    const { latestPing, sendPing, dismissPing } = usePings(careCircle?.id, user?.uid);
-    // HelpExchange removed from here - moved to CoordinationTab and SeniorView
+    } = useMemberStatus(careCircle?.id, user?.uid ?? null, (userProfile?.displayName ?? undefined) as string | null, userProfile?.role ?? 'relative');
+    const {
+        answers: weeklyAnswers,
+        addAnswer: addWeeklyAnswer,
+        toggleLike: onToggleLike,
+        addReply: onReply
+    } = useWeeklyQuestions(careCircle?.id);
+    const { latestPing, sendPing, dismissPing } = usePings(careCircle?.id, user?.uid ?? null);
     const { lastCheckIn, recordCheckIn } = useCheckIn(careCircle?.id);
-    const { latestPhoto, uploading, uploadPhoto, deletePhoto } = usePhotos(careCircle?.id, user?.uid);
+    const { latestPhoto, uploading, deletePhoto } = usePhotos(careCircle?.id, user?.uid ?? null);
 
-    // HelpExchange filtering removed
-
-
-    // Handle incoming pings from Firestore
+    // Incoming pings logic
     useEffect(() => {
         if (latestPing && FEATURES.pingSound) {
             playPingSound();
         }
     }, [latestPing]);
 
-    // Clear notification after 4 seconds
+    // Notification clear logic
     useEffect(() => {
         if (notification) {
             const timer = setTimeout(() => setNotification(null), 4000);
@@ -605,32 +351,25 @@ export default function TrygAppCore({
     const handleToggleTask = async (id: string) => {
         const task = tasks.find(t => t.id === id || t.id === `task_${id}`);
         const willBeCompleted = task && !task.completed;
-
-        // Wait for Firestore update to complete
         await toggleTask(id);
-
         if (willBeCompleted && FEATURES.completionSounds) {
             playCompletionSound();
         }
     };
 
-    const handleCheckIn = async (status: string) => {
-        // Record check-in to Firestore for real-time sync
-        await recordCheckIn(); // status arg removed from hook? assuming it toggles/sets 'checked-in'
-        // recordCheckIn likely takes no args or specific args. Based on usage in previous file, recordCheckIn() was called.
-        // Actually line 96 in AppCore.jsx called recordCheckIn() with no args.
-        if (status === 'checked-in' && FEATURES.completionSounds) {
+    const handleCheckIn = async () => {
+        await recordCheckIn();
+        if (FEATURES.completionSounds) {
             playSuccessSound();
         }
     };
 
-    const handleAddSymptom = async (symptomType: any) => {
-        await addSymptom(symptomType);
+    const handleAddSymptom = async (symptomData: Partial<SymptomLog>) => {
+        return await addSymptom(symptomData);
     };
 
     const handleAddTaskFromRelative = async (newTask: Partial<Task>) => {
-        // Include social attribution for tasks created by relatives
-        await addTask({
+        return await addTask({
             ...newTask,
             createdByRole: 'relative',
             createdByName: relativeName || userProfile?.displayName || 'Familie',
@@ -638,42 +377,57 @@ export default function TrygAppCore({
         });
     };
 
-    const handleSendPing = async (fromName: string, toRole: string) => {
-        // Send ping via Firestore for real-time sync
-        await sendPing(fromName, user?.uid, toRole);
+    const handleSendPing = async (toRole: 'senior' | 'relative') => {
+        const fromName = isSenior ? seniorName : relativeName;
+        return await sendPing(fromName, (user?.uid ?? undefined) as string, toRole);
     };
 
     const handleWeeklyAnswer = async (answer: string) => {
-        await addWeeklyAnswer(answer);
+        return await addWeeklyAnswer({
+            text: answer,
+            userId: user?.uid,
+            userName: isSenior ? seniorName : (relativeName || 'Pårørende')
+        });
     };
 
     // Get display names
     const seniorName = careCircle?.seniorName || (userProfile?.role === 'senior' ? userProfile?.displayName : 'Senior');
-
-    // For relatives, use the LOGGED-IN user's name, not just any relative in the circle
     const relativeName = userProfile?.role === 'relative'
         ? userProfile?.displayName || 'Pårørende'
         : members.find(m => m.role === 'relative')?.displayName || 'Pårørende';
 
-    const profile = {
-        ...SENIOR_PROFILE,
-        name: seniorName,
-    };
-
     return (
-        <CareCircleProvider
-            careCircleId={careCircle?.id}
-            seniorId={careCircle?.seniorId}
-            seniorName={seniorName}
-            currentUserId={user?.uid}
-            userRole={userProfile?.role}
-            userName={isSenior ? seniorName : relativeName}
-            memberStatuses={memberStatuses}
-            relativeStatuses={relativeStatuses}
-            seniorStatus={seniorStatus}
-            myStatus={myStatus}
-            setMyStatus={setMyStatus}
-        >
+        <CareCircleProvider value={{
+            careCircleId: careCircle?.id ?? null,
+            seniorId: careCircle?.seniorId || null,
+            seniorName: seniorName,
+            currentUserId: user?.uid ?? null,
+            userRole: userProfile?.role ?? null,
+            userName: isSenior ? seniorName : relativeName,
+            relativeName: relativeName,
+            memberStatuses,
+            members,
+            relativeStatuses,
+            seniorStatus: seniorStatus || null,
+            myStatus: myStatus as any,
+            setMyStatus: setMyStatus,
+            activeTab: activeTab as AppTab,
+            setActiveTab: setActiveTab,
+            tasks,
+            toggleTask: handleToggleTask,
+            addTask: isSenior ? addTask : handleAddTaskFromRelative,
+            symptoms,
+            addSymptom: handleAddSymptom,
+            weeklyAnswers,
+            addWeeklyAnswer: handleWeeklyAnswer,
+            toggleLike: (answerId: string, userId: string, isLiked: boolean) => onToggleLike(answerId, userId, isLiked),
+            addReply: onReply,
+            latestPing,
+            sendPing: handleSendPing,
+            dismissPing: dismissPing,
+            lastCheckIn,
+            recordCheckIn: handleCheckIn
+        }}>
             <div className="flex justify-center items-center min-h-screen bg-stone-50 sm:bg-zinc-800 sm:p-4 font-sans">
 
                 {/* Phone Frame Simulator (Responsive) */}
@@ -699,200 +453,119 @@ export default function TrygAppCore({
                         )}
                     </div>
 
-                    {/* Header with role indicator - COMPACT */}
-                    <div className="absolute top-0 left-0 right-0 h-10 bg-black/5 z-50 flex justify-center items-center backdrop-blur-sm px-2">
-                        {/* Settings button (left) */}
-                        <div className="absolute left-3 flex items-center gap-1">
-                            <button
-                                onClick={() => setShowSettings(!showSettings)}
-                                className="p-1.5 rounded-full hover:bg-white/50 transition-colors"
-                                aria-label="Indstillinger"
-                            >
-                                <Share2 className="w-4 h-4 text-stone-600" />
-                            </button>
-                            {FEATURES.photoSharing && (
-                                <PhotoCaptureButton
-                                    onCapture={async (file) => {
-                                        await uploadPhoto(file, userProfile?.displayName || 'Familie');
-                                    }}
-                                    disabled={uploading}
-                                />
-                            )}
-                        </div>
+                    {/* Header - COMPACT: Care Circle / Settings / Logout - now theme-aware */}
+                    <div className="absolute top-0 left-0 right-0 h-10 z-50 flex justify-between items-center backdrop-blur-sm px-3 bg-black/5 theme-dark:bg-white/5">
+                        {/* Care Circle button - Top Left */}
+                        <button
+                            onClick={() => setShowShare(true)}
+                            className="p-2 rounded-full hover:bg-white/50 transition-colors"
+                            aria-label="Care Circle"
+                        >
+                            <Users className="w-5 h-5 theme-text" />
+                        </button>
 
-                        {/* Role indicator (center) - compact */}
-                        <div className={`px-3 py-1 rounded-full text-xs font-bold shadow-md ${isSenior ? 'bg-teal-600 text-white' : 'bg-indigo-600 text-white'
-                            }`}>
-                            {isSenior ? `👤 ${seniorName}` : `👥 ${relativeName}`}
-                        </div>
+                        {/* Center: Settings gear (Unified Settings) */}
+                        <button
+                            onClick={() => setShowSettings(true)}
+                            className="p-2 rounded-full hover:bg-white/50 transition-colors"
+                            aria-label={t('settings')}
+                        >
+                            <Settings className="w-5 h-5 theme-text" />
+                        </button>
 
-                        {/* Sign out button (right) */}
+                        {/* Sign out - Top Right */}
                         <button
                             onClick={onSignOut}
-                            className="absolute right-3 p-1.5 rounded-full hover:bg-white/50 transition-colors"
-                            aria-label="Log ud"
+                            className="p-1.5 rounded-full hover:bg-white/50 transition-colors"
+                            aria-label={t('sign_out')}
                         >
-                            <LogOut className="w-4 h-4 text-stone-600" />
+                            <LogOut className="w-4 h-4 theme-text" />
                         </button>
                     </div>
 
-                    {/* Settings panel (invite code + privacy) */}
-                    {showSettings && (
-                        <div className="absolute top-10 left-4 right-4 bg-white rounded-2xl shadow-lg p-4 z-40 border border-stone-200">
-                            <h3 className="font-bold text-stone-800 mb-2">Familie-cirkel</h3>
-                            {inviteCode ? (
-                                <div className="bg-stone-100 rounded-xl p-3 text-center mb-3">
-                                    <p className="text-xs text-stone-500 mb-1">Invitationskode</p>
-                                    <p className="text-2xl font-mono font-bold tracking-widest">{inviteCode}</p>
-                                </div>
-                            ) : (
-                                <button
-                                    onClick={onGetInviteCode}
-                                    className="w-full py-2 bg-teal-100 text-teal-700 rounded-xl font-medium mb-3"
-                                >
-                                    Vis invitationskode
-                                </button>
-                            )}
-
-                            <button
-                                onClick={() => {
-                                    setShowSettings(false);
-                                    setShowPrivacySettings(true);
-                                }}
-                                className="w-full flex items-center justify-center gap-2 py-2 bg-stone-100 text-stone-700 rounded-xl font-medium hover:bg-stone-200 transition-colors"
-                            >
-                                <Share2 className="w-4 h-4" /> {/* Settings icon was imported as Settings but used as Share2? No imported Settings */}
-                                Privatliv & Data
-                            </button>
-
-                            <p className="text-xs text-stone-400 mt-3">
-                                Logget ind som: {user?.email}
-                            </p>
-
-                            {/* Circle members list - Elder first */}
-                            {members.length > 0 && (() => {
-                                // Sort senior to top
-                                const senior = members.find(m => m.role === 'senior');
-                                const relatives = members.filter(m => m.role !== 'senior');
-
-                                return (
-                                    <div className="mt-4 pt-4 border-t border-stone-200">
-                                        <div className="flex items-center gap-2 mb-3">
-                                            {/* Users icon imported */}
-                                            <span className="text-sm font-medium text-stone-600">Vores Familie</span>
-                                        </div>
-
-                                        {/* The Elder - Distinguished at top */}
-                                        {senior && (
-                                            <div className="bg-gradient-to-r from-amber-50 to-teal-50 rounded-xl p-3 mb-3 border border-amber-200/50">
-                                                <div className="flex items-center gap-3">
-                                                    <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-md">
-                                                        {senior.displayName?.charAt(0) || '👴'}
-                                                    </div>
-                                                    <div className="flex-1">
-                                                        <p className="font-semibold text-stone-800">{senior.displayName || 'Vores Elder'}</p>
-                                                        <p className="text-xs text-amber-600 flex items-center gap-1">
-                                                            <span>👑</span> Familiens hjerte
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )}
-
-                                        {/* Pårørende - Simpler styling */}
-                                        {relatives.length > 0 && (
-                                            <div className="space-y-2 pl-2">
-                                                {relatives.map((member) => (
-                                                    <div key={member.id} className="flex items-center gap-2 text-sm">
-                                                        <div className="w-7 h-7 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-700 font-bold text-xs">
-                                                            {member.displayName?.charAt(0) || '?'}
-                                                        </div>
-                                                        <span className="text-stone-700">{member.displayName || 'Ukendt'}</span>
-                                                        <span className="text-xs text-indigo-500">Pårørende</span>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        )}
-                                    </div>
-                                );
-                            })()}
-                        </div>
-                    )}
-
-                    {/* Privacy Settings Modal */}
-                    {showPrivacySettings && (
-                        <PrivacySettings
-                            user={user}
-                            careCircle={careCircle}
-                            onClose={() => setShowPrivacySettings(false)}
+                    {/* Care Circle & Family Share Modal */}
+                    {showShare && (
+                        <ShareModal
+                            members={memberStatuses}
+                            inviteCode={inviteCode}
+                            onGetInviteCode={onGetInviteCode}
+                            seniorName={seniorName}
+                            currentUserId={user?.uid ?? undefined}
+                            onClose={() => setShowShare(false)}
                         />
                     )}
 
-                    <div className="pt-10 h-full">
-                        {/* Ping Notification from Firestore */}
-                        {latestPing && (
-                            <PingNotification
-                                ping={{
-                                    fromName: latestPing.fromName,
-                                    toView: latestPing.toRole,
-                                    time: (latestPing.sentAt as any)?.toLocaleTimeString?.('da-DK', { hour: '2-digit', minute: '2-digit' }) || ''
-                                }}
-                                onDismiss={dismissPing}
-                            />
-                        )}
+                    {/* Unified Settings Modal */}
+                    {showSettings && (
+                        <SettingsModal
+                            user={user}
+                            careCircle={careCircle}
+                            onClose={() => setShowSettings(false)}
+                            onSignOut={onSignOut}
+                        />
+                    )}
 
-                        {isSenior ? (
-                            <SeniorView
-                                tasks={tasks}
-                                toggleTask={handleToggleTask}
-                                updateStatus={handleCheckIn}
-                                addSymptom={handleAddSymptom}
-                                statusLastUpdated={settings?.lastUpdated}
-                                onSendPing={() => handleSendPing(seniorName, 'relative')}
-                                weeklyAnswers={weeklyAnswers}
-                                onWeeklyAnswer={handleWeeklyAnswer}
-                                // onset="helpExchange" // Placeholder to simplify diff, not needed in TSX
-                                members={members}
-                                memberStatuses={memberStatuses}
-                                currentUserId={user?.uid}
-                                relativeStatuses={relativeStatuses}
-                                userName={seniorName}
-                                relativeName={relativeName}
-                                careCircleId={careCircle?.id}
-                                symptomLogs={symptoms}
-                                onAddTask={handleAddTaskFromRelative}
-                            />
+                    <div className="h-full relative z-10">
+                        {/* LivingBackground for circadian atmosphere (Living Design 🏠) */}
+                        {FEATURES.livingDesign ? (
+                            <LivingBackground>
+                                <div className="h-full overflow-y-auto">
+                                    {/* Ping Notification from Firestore */}
+                                    {latestPing && (
+                                        <PingNotification
+                                            ping={latestPing}
+                                            onDismiss={dismissPing}
+                                        />
+                                    )}
+
+                                    {isSenior ? (
+                                        <SeniorView />
+                                    ) : (
+                                        <RelativeView />
+                                    )}
+                                    {/* Photo notification badge */}
+                                    {latestPhoto && (
+                                        <div className="absolute bottom-24 left-4 right-4 z-40 flex justify-center">
+                                            <PhotoNotificationBadge
+                                                photo={latestPhoto}
+                                                onClick={() => setShowPhotoViewer(true)}
+                                            />
+                                        </div>
+                                    )}
+                                </div>
+                            </LivingBackground>
                         ) : (
-                            <RelativeView
-                                tasks={tasks}
-                                profile={profile}
-                                lastCheckIn={lastCheckIn}
-                                symptomLogs={symptoms}
-                                onAddTask={handleAddTaskFromRelative}
-                                myStatus={myStatus}
-                                onMyStatusChange={setMyStatus}
-                                memberStatuses={memberStatuses}
-                                currentUserId={user?.uid}
-                                onSendPing={() => handleSendPing(relativeName, 'senior')}
-                                weeklyAnswers={weeklyAnswers}
-                                onWeeklyAnswer={handleWeeklyAnswer}
-                                // onset="helpExchange"
-                                onOpenSettings={() => setShowPrivacySettings(true)}
-                                userName={relativeName}
-                                seniorName={seniorName}
-                                careCircleId={careCircle?.id}
-                            />
-                        )}
-
-                        {/* Photo notification badge */}
-                        {latestPhoto && (
-                            <div className="absolute bottom-24 left-4 right-4 z-40 flex justify-center">
-                                <PhotoNotificationBadge
-                                    photo={latestPhoto}
-                                    onClick={() => setShowPhotoViewer(true)}
-                                />
+                            /* Fallback: Static gradient when Living Design is disabled */
+                            <div className="h-full bg-gradient-to-b from-sky-100 via-sky-50 to-stone-100">
+                                <div className="h-full overflow-y-auto">
+                                    {latestPing && (
+                                        <PingNotification
+                                            ping={latestPing}
+                                            onDismiss={dismissPing}
+                                        />
+                                    )}
+                                    {isSenior ? (
+                                        <SeniorView />
+                                    ) : (
+                                        <RelativeView />
+                                    )}
+                                    {latestPhoto && (
+                                        <div className="absolute bottom-24 left-4 right-4 z-40 flex justify-center">
+                                            <PhotoNotificationBadge
+                                                photo={latestPhoto}
+                                                onClick={() => setShowPhotoViewer(true)}
+                                            />
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         )}
+
+                        {/* Global Bottom Navigation */}
+                        <BottomNavigation
+                            activeTab={activeTab}
+                            onTabChange={setActiveTab}
+                        />
                     </div>
 
                     {/* Photo upload modal */}
@@ -901,6 +574,8 @@ export default function TrygAppCore({
                     {/* Photo viewer modal */}
                     {showPhotoViewer && latestPhoto && (
                         <PhotoViewerModal
+                            isOpen={showPhotoViewer}
+                            onClose={() => setShowPhotoViewer(false)}
                             photo={latestPhoto}
                             onDelete={async (id, path) => {
                                 await deletePhoto(id, path);
@@ -914,6 +589,8 @@ export default function TrygAppCore({
 
                     {/* PWA Update Toast */}
                     <UpdateToast />
+
+
 
                     {/* Home indicator */}
                     <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 w-32 h-1.5 bg-black/20 rounded-full z-50"></div>
@@ -936,6 +613,8 @@ import { CircleSetup } from './components/CircleSetup';
 import { ConsentModal } from './components/ConsentModal';
 import TrygAppCore from './AppCore';
 import { FEATURES } from './config/features';
+import { LivingBackground } from './components/ui/LivingBackground';
+import { ThemeProvider } from './contexts/ThemeContext';
 
 // Main app wrapper with Firebase integration
 export default function AppWithAuth() {
@@ -1035,7 +714,7 @@ function FirebaseApp() {
 
     // Not authenticated - show auth screen
     if (!user) {
-        return (
+        const screen = (
             <AuthScreen
                 onAuth={handleAuth}
                 onResetPassword={resetPassword}
@@ -1043,6 +722,12 @@ function FirebaseApp() {
                 loading={authLoading}
             />
         );
+        // Wrap in Living Design if enabled
+        return FEATURES.livingDesign ? (
+            <ThemeProvider>
+                <LivingBackground>{screen}</LivingBackground>
+            </ThemeProvider>
+        ) : screen;
     }
 
     // Authenticated but no consent given - show consent modal
@@ -1176,9 +861,8 @@ function LoadingScreen({ message = 'Indlæser...' }: LoadingScreenProps) {
 ```
 ---
 
-## File: tryg-app\src\components\animations\index.jsx
-```jsx
-// @ts-check
+## File: tryg-app\src\components\animations\index.tsx
+```tsx
 /**
  * Animation Components
  * 
@@ -1186,7 +870,8 @@ function LoadingScreen({ message = 'Indlæser...' }: LoadingScreenProps) {
  * Provides consistent animations across the app.
  */
 
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { ReactNode } from 'react';
+import { motion, AnimatePresence, Variants } from 'framer-motion';
 
 // ============================================================================
 // ANIMATION VARIANTS
@@ -1195,7 +880,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 /**
  * Slide out to the right when completed
  */
-export const slideOutRight = {
+export const slideOutRight: Variants = {
     initial: { opacity: 1, x: 0 },
     animate: { opacity: 1, x: 0 },
     exit: { opacity: 0, x: 100, transition: { duration: 0.3 } }
@@ -1204,7 +889,7 @@ export const slideOutRight = {
 /**
  * Fade in from bottom (for modals)
  */
-export const slideUpFade = {
+export const slideUpFade: Variants = {
     initial: { opacity: 0, y: 50 },
     animate: { opacity: 1, y: 0, transition: { duration: 0.3, ease: 'easeOut' } },
     exit: { opacity: 0, y: 50, transition: { duration: 0.2 } }
@@ -1213,7 +898,7 @@ export const slideUpFade = {
 /**
  * Simple fade
  */
-export const fade = {
+export const fade: Variants = {
     initial: { opacity: 0 },
     animate: { opacity: 1, transition: { duration: 0.2 } },
     exit: { opacity: 0, transition: { duration: 0.15 } }
@@ -1222,7 +907,7 @@ export const fade = {
 /**
  * Scale in with spring (for success states)
  */
-export const popIn = {
+export const popIn: Variants = {
     initial: { opacity: 0, scale: 0.8 },
     animate: { opacity: 1, scale: 1, transition: { type: 'spring', stiffness: 300, damping: 20 } },
     exit: { opacity: 0, scale: 0.8, transition: { duration: 0.15 } }
@@ -1231,7 +916,7 @@ export const popIn = {
 /**
  * Stagger children (for lists)
  */
-export const staggerContainer = {
+export const staggerContainer: Variants = {
     animate: {
         transition: {
             staggerChildren: 0.05
@@ -1239,7 +924,7 @@ export const staggerContainer = {
     }
 };
 
-export const staggerItem = {
+export const staggerItem: Variants = {
     initial: { opacity: 0, y: 10 },
     animate: { opacity: 1, y: 0 }
 };
@@ -1248,10 +933,15 @@ export const staggerItem = {
 // WRAPPER COMPONENTS
 // ============================================================================
 
+interface AnimatedListProps {
+    children: ReactNode;
+    className?: string;
+}
+
 /**
  * Animated list container - staggers child animations
  */
-export const AnimatedList = ({ children, className = '' }) => (
+export const AnimatedList: React.FC<AnimatedListProps> = ({ children, className = '' }) => (
     <motion.div
         className={className}
         variants={staggerContainer}
@@ -1262,10 +952,16 @@ export const AnimatedList = ({ children, className = '' }) => (
     </motion.div>
 );
 
+interface AnimatedItemProps {
+    children: ReactNode;
+    className?: string;
+    layoutId?: string;
+}
+
 /**
  * Animated list item - for items within AnimatedList
  */
-export const AnimatedItem = ({ children, className = '', layoutId }) => (
+export const AnimatedItem: React.FC<AnimatedItemProps> = ({ children, className = '', layoutId }) => (
     <motion.div
         className={className}
         variants={staggerItem}
@@ -1276,11 +972,19 @@ export const AnimatedItem = ({ children, className = '', layoutId }) => (
     </motion.div>
 );
 
+interface AnimatedTaskCardProps {
+    children: ReactNode;
+    taskId: string;
+    isCompleted: boolean;
+    onAnimationComplete?: () => void;
+    className?: string;
+}
+
 /**
  * Task card with completion animation
  * Slides out to the right when completed
  */
-export const AnimatedTaskCard = ({
+export const AnimatedTaskCard: React.FC<AnimatedTaskCardProps> = ({
     children,
     taskId,
     isCompleted,
@@ -1311,10 +1015,17 @@ export const AnimatedTaskCard = ({
     </motion.div>
 );
 
+interface AnimatedModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    children: ReactNode;
+    className?: string;
+}
+
 /**
  * Modal wrapper with slide-up animation
  */
-export const AnimatedModal = ({ isOpen, onClose, children, className = '' }) => (
+export const AnimatedModal: React.FC<AnimatedModalProps> = ({ isOpen, onClose, children, className = '' }) => (
     <AnimatePresence>
         {isOpen && (
             <>
@@ -1341,10 +1052,14 @@ export const AnimatedModal = ({ isOpen, onClose, children, className = '' }) => 
     </AnimatePresence>
 );
 
+interface AnimatedCheckmarkProps {
+    show: boolean;
+}
+
 /**
  * Success checkmark animation
  */
-export const AnimatedCheckmark = ({ show }) => (
+export const AnimatedCheckmark: React.FC<AnimatedCheckmarkProps> = ({ show }) => (
     <AnimatePresence>
         {show && (
             <motion.div
@@ -1370,7 +1085,8 @@ export { AnimatePresence } from 'framer-motion';
 // Handles login, signup, and role selection (senior vs relative)
 
 import React, { useState } from 'react';
-import { Heart, User, Users, Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { Heart, User, Users, Mail, Lock, Eye, EyeOff, ChevronRight } from 'lucide-react';
+import { FEATURES } from '../config/features';
 
 export interface AuthScreenProps {
     onAuth: (type: 'login' | 'signup' | 'google', data: any) => void;
@@ -1379,8 +1095,43 @@ export interface AuthScreenProps {
     loading?: boolean;
 }
 
+// User Card Component for Living Design 🏠
+interface UserCardProps {
+    emoji: string;
+    title: string;
+    subtitle: string;
+    color: string;
+    onClick: () => void;
+}
+
+const UserCard: React.FC<UserCardProps> = ({ emoji, title, subtitle, color, onClick }) => (
+    <button
+        onClick={onClick}
+        className={`
+            w-full p-5 rounded-3xl mb-3 flex items-center gap-5 
+            bg-white/60 backdrop-blur-sm border-2 border-white/50 
+            hover:bg-white hover:border-stone-200 hover:scale-[1.02]
+            active:scale-[0.98] transition-all duration-300 group shadow-sm
+        `}
+    >
+        <div className={`w-14 h-14 rounded-full flex items-center justify-center text-2xl shadow-sm ${color}`}>
+            {emoji}
+        </div>
+        <div className="flex-1 text-left">
+            <h3 className="text-lg font-bold text-stone-800 group-hover:text-black transition-colors">{title}</h3>
+            <p className="text-sm text-stone-500 font-medium">{subtitle}</p>
+        </div>
+        <div className="w-9 h-9 rounded-full flex items-center justify-center bg-stone-100 text-stone-300 group-hover:bg-teal-50 group-hover:text-teal-500 transition-all">
+            <ChevronRight size={18} />
+        </div>
+    </button>
+);
+
 export const AuthScreen: React.FC<AuthScreenProps> = ({ onAuth, onResetPassword, error, loading }) => {
-    const [mode, setMode] = useState<'login' | 'signup' | 'role'>('login'); // 'login', 'signup', 'role'
+    // Start with 'welcome' when Living Design is enabled
+    const [mode, setMode] = useState<'welcome' | 'login' | 'signup' | 'role'>(
+        FEATURES.livingDesign ? 'welcome' : 'login'
+    );
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [displayName, setDisplayName] = useState('');
@@ -1388,6 +1139,15 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onAuth, onResetPassword,
     const [selectedRole, setSelectedRole] = useState<'senior' | 'relative' | null>(null);
     const [resetSent, setResetSent] = useState(false);
     const [resetLoading, setResetLoading] = useState(false);
+
+    // Time-aware greeting for Living Design 🏠
+    const getTimeGreeting = () => {
+        const hour = new Date().getHours();
+        if (hour < 5) return 'Godnat';
+        if (hour < 10) return 'Godmorgen';
+        if (hour < 18) return 'Goddag';
+        return 'Godaften';
+    };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -1425,228 +1185,283 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onAuth, onResetPassword,
         }
     };
 
+    // Living Design: Use transparent background (LivingBackground provides gradient)
+    const containerBg = FEATURES.livingDesign
+        ? 'min-h-screen flex flex-col items-center justify-center p-4'
+        : 'min-h-screen bg-gradient-to-br from-teal-50 to-indigo-50 flex items-center justify-center p-4';
+
+    const cardClass = FEATURES.livingDesign
+        ? 'glass-panel p-8 w-full max-w-md'
+        : 'bg-white rounded-3xl shadow-2xl p-8 w-full max-w-md';
+
     return (
-        <div className="min-h-screen bg-gradient-to-br from-teal-50 to-indigo-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-3xl shadow-2xl p-8 w-full max-w-md">
-
-                {/* Logo/Header */}
-                <div className="text-center mb-8">
-                    <div className="inline-flex items-center justify-center w-20 h-20 bg-teal-100 rounded-full mb-4">
-                        <Heart className="w-10 h-10 text-teal-600" />
-                    </div>
-                    <h1 className="text-3xl font-bold text-stone-800">Tryg</h1>
-                    <p className="text-stone-500 mt-2">Forbind med din familie</p>
+        <div className={containerBg}>
+            {/* Living Design: Velkommen hjem greeting - theme-aware text for dark mode */}
+            {FEATURES.livingDesign && (
+                <div className="text-center mb-6 w-full max-w-md">
+                    <p className="text-xs font-bold uppercase tracking-widest opacity-80 mb-1 theme-text-muted">
+                        {getTimeGreeting()}
+                    </p>
+                    <h1 className="text-3xl font-bold tracking-tight theme-text">
+                        Velkommen hjem.
+                    </h1>
                 </div>
+            )}
 
-                {/* Role Selection */}
-                {mode === 'role' && (
-                    <div className="space-y-4">
-                        <h2 className="text-xl font-semibold text-stone-800 text-center mb-6">
-                            Hvem er du?
-                        </h2>
+            {/* Living Design: User Selector Cards 🏠 */}
+            {mode === 'welcome' && FEATURES.livingDesign && (
+                <div className="w-full max-w-sm">
+                    <UserCard
+                        emoji="👴"
+                        title="Min Hverdag"
+                        subtitle="Jeg bor her"
+                        color="bg-teal-100 text-teal-800"
+                        onClick={() => setMode('login')}
+                    />
+                    <UserCard
+                        emoji="👩‍💼"
+                        title="Familie"
+                        subtitle="Jeg holder øje"
+                        color="bg-indigo-100 text-indigo-800"
+                        onClick={() => setMode('login')}
+                    />
 
-                        <button
-                            onClick={() => handleRoleSelect('senior')}
-                            className="w-full p-6 rounded-2xl border-2 border-stone-200 hover:border-teal-400 transition-all flex items-center gap-4"
-                        >
-                            <div className="w-14 h-14 bg-teal-100 rounded-xl flex items-center justify-center">
-                                <User className="w-7 h-7 text-teal-600" />
-                            </div>
-                            <div className="text-left">
-                                <h3 className="font-bold text-lg text-stone-800">Jeg er den ældre</h3>
-                                <p className="text-stone-500 text-sm">Jeg vil tracke mine opgaver</p>
-                            </div>
-                        </button>
-
-                        <button
-                            onClick={() => handleRoleSelect('relative')}
-                            className="w-full p-6 rounded-2xl border-2 border-stone-200 hover:border-indigo-400 transition-all flex items-center gap-4"
-                        >
-                            <div className="w-14 h-14 bg-indigo-100 rounded-xl flex items-center justify-center">
-                                <Users className="w-7 h-7 text-indigo-600" />
-                            </div>
-                            <div className="text-left">
-                                <h3 className="font-bold text-lg text-stone-800">Jeg er pårørende</h3>
-                                <p className="text-stone-500 text-sm">Jeg vil følge med i min families trivsel</p>
-                            </div>
-                        </button>
-
-                        <button
-                            onClick={() => setMode('login')}
-                            className="w-full text-center text-stone-500 text-sm mt-4 hover:text-stone-700"
-                        >
-                            Har du allerede en konto? Log ind
-                        </button>
+                    <div className="mt-10 text-center">
+                        <p className="text-xs font-bold theme-text-muted uppercase tracking-widest mb-2">
+                            Tryghed for hele familien
+                        </p>
+                        <div className="flex justify-center gap-2 opacity-50">
+                            <div className="w-2 h-2 rounded-full bg-current" />
+                            <div className="w-2 h-2 rounded-full bg-current opacity-60" />
+                            <div className="w-2 h-2 rounded-full bg-current opacity-60" />
+                        </div>
                     </div>
-                )}
+                </div>
+            )}
 
-                {/* Login / Signup Form */}
-                {(mode === 'login' || mode === 'signup') && (
-                    <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Standard Auth Form (shown when not in 'welcome' mode or Living Design disabled) */}
+            {mode !== 'welcome' && (
+                <div className={cardClass}>
 
-                        {/* Role indicator for signup */}
-                        {mode === 'signup' && selectedRole && (
-                            <div className={`text-center py-2 px-4 rounded-full text-sm font-medium mb-4 ${selectedRole === 'senior'
-                                ? 'bg-teal-100 text-teal-700'
-                                : 'bg-indigo-100 text-indigo-700'
-                                }`}>
-                                {selectedRole === 'senior' ? '👤 Senior konto' : '👥 Pårørende konto'}
-                            </div>
-                        )}
+                    {/* Logo/Header */}
+                    <div className="text-center mb-8">
+                        <div className="inline-flex items-center justify-center w-20 h-20 bg-teal-100 rounded-full mb-4">
+                            <Heart className="w-10 h-10 text-teal-600" />
+                        </div>
+                        <h1 className="text-3xl font-bold text-stone-800">Tryg</h1>
+                        <p className="text-stone-500 mt-2">Forbind med din familie</p>
+                    </div>
 
-                        {/* Display name (signup only) */}
-                        {mode === 'signup' && (
+                    {/* Role Selection */}
+                    {mode === 'role' && (
+                        <div className="space-y-4">
+                            <h2 className="text-xl font-semibold text-stone-800 text-center mb-6">
+                                Hvem er du?
+                            </h2>
+
+                            <button
+                                onClick={() => handleRoleSelect('senior')}
+                                className="w-full p-6 rounded-2xl border-2 border-stone-200 hover:border-teal-400 transition-all flex items-center gap-4"
+                            >
+                                <div className="w-14 h-14 bg-teal-100 rounded-xl flex items-center justify-center">
+                                    <User className="w-7 h-7 text-teal-600" />
+                                </div>
+                                <div className="text-left">
+                                    <h3 className="font-bold text-lg text-stone-800">Jeg er den ældre</h3>
+                                    <p className="text-stone-500 text-sm">Jeg vil tracke mine opgaver</p>
+                                </div>
+                            </button>
+
+                            <button
+                                onClick={() => handleRoleSelect('relative')}
+                                className="w-full p-6 rounded-2xl border-2 border-stone-200 hover:border-indigo-400 transition-all flex items-center gap-4"
+                            >
+                                <div className="w-14 h-14 bg-indigo-100 rounded-xl flex items-center justify-center">
+                                    <Users className="w-7 h-7 text-indigo-600" />
+                                </div>
+                                <div className="text-left">
+                                    <h3 className="font-bold text-lg text-stone-800">Jeg er pårørende</h3>
+                                    <p className="text-stone-500 text-sm">Jeg vil følge med i min families trivsel</p>
+                                </div>
+                            </button>
+
+                            <button
+                                onClick={() => setMode('login')}
+                                className="w-full text-center text-stone-500 text-sm mt-4 hover:text-stone-700"
+                            >
+                                Har du allerede en konto? Log ind
+                            </button>
+                        </div>
+                    )}
+
+                    {/* Login / Signup Form */}
+                    {(mode === 'login' || mode === 'signup') && (
+                        <form onSubmit={handleSubmit} className="space-y-4">
+
+                            {/* Role indicator for signup */}
+                            {mode === 'signup' && selectedRole && (
+                                <div className={`text-center py-2 px-4 rounded-full text-sm font-medium mb-4 ${selectedRole === 'senior'
+                                    ? 'bg-teal-100 text-teal-700'
+                                    : 'bg-indigo-100 text-indigo-700'
+                                    }`}>
+                                    {selectedRole === 'senior' ? '👤 Senior konto' : '👥 Pårørende konto'}
+                                </div>
+                            )}
+
+                            {/* Display name (signup only) */}
+                            {mode === 'signup' && (
+                                <div>
+                                    <label className="block text-sm font-medium text-stone-600 mb-1">Dit navn</label>
+                                    <div className="relative">
+                                        <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-400" />
+                                        <input
+                                            type="text"
+                                            value={displayName}
+                                            onChange={(e) => setDisplayName(e.target.value)}
+                                            placeholder="F.eks. Birthe Jensen"
+                                            className="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-stone-200 focus:border-teal-400 focus:outline-none transition-colors"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Email */}
                             <div>
-                                <label className="block text-sm font-medium text-stone-600 mb-1">Dit navn</label>
+                                <label className="block text-sm font-medium text-stone-600 mb-1">Email</label>
                                 <div className="relative">
-                                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-400" />
+                                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-400" />
                                     <input
-                                        type="text"
-                                        value={displayName}
-                                        onChange={(e) => setDisplayName(e.target.value)}
-                                        placeholder="F.eks. Birthe Jensen"
+                                        type="email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        placeholder="din@email.dk"
                                         className="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-stone-200 focus:border-teal-400 focus:outline-none transition-colors"
                                         required
                                     />
                                 </div>
                             </div>
-                        )}
 
-                        {/* Email */}
-                        <div>
-                            <label className="block text-sm font-medium text-stone-600 mb-1">Email</label>
-                            <div className="relative">
-                                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-400" />
-                                <input
-                                    type="email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    placeholder="din@email.dk"
-                                    className="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-stone-200 focus:border-teal-400 focus:outline-none transition-colors"
-                                    required
-                                />
+                            {/* Password */}
+                            <div>
+                                <label className="block text-sm font-medium text-stone-600 mb-1">Adgangskode</label>
+                                <div className="relative">
+                                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-400" />
+                                    <input
+                                        type={showPassword ? 'text' : 'password'}
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        placeholder="••••••••"
+                                        className="w-full pl-10 pr-12 py-3 rounded-xl border-2 border-stone-200 focus:border-teal-400 focus:outline-none transition-colors"
+                                        required
+                                        minLength={6}
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600"
+                                    >
+                                        {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                    </button>
+                                </div>
                             </div>
-                        </div>
 
-                        {/* Password */}
-                        <div>
-                            <label className="block text-sm font-medium text-stone-600 mb-1">Adgangskode</label>
-                            <div className="relative">
-                                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-400" />
-                                <input
-                                    type={showPassword ? 'text' : 'password'}
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    placeholder="••••••••"
-                                    className="w-full pl-10 pr-12 py-3 rounded-xl border-2 border-stone-200 focus:border-teal-400 focus:outline-none transition-colors"
-                                    required
-                                    minLength={6}
-                                />
+                            {/* Error message */}
+                            {error && (
+                                <div className="bg-red-50 text-red-600 p-3 rounded-xl text-sm">
+                                    {error}
+                                </div>
+                            )}
+
+                            {/* Reset password success message */}
+                            {resetSent && (
+                                <div className="bg-green-50 text-green-700 p-3 rounded-xl text-sm">
+                                    📧 Vi har sendt en email til {email}. Tjek din indbakke (og spam) for at nulstille din adgangskode.
+                                </div>
+                            )}
+
+                            {/* Forgot password link (login mode only) */}
+                            {mode === 'login' && (
                                 <button
                                     type="button"
-                                    onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600"
+                                    onClick={handleForgotPassword}
+                                    disabled={!email || resetLoading}
+                                    className="text-sm text-teal-600 hover:underline disabled:text-stone-400 disabled:no-underline"
                                 >
-                                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                    {resetLoading ? 'Sender...' : 'Glemt adgangskode?'}
                                 </button>
-                            </div>
-                        </div>
+                            )}
 
-                        {/* Error message */}
-                        {error && (
-                            <div className="bg-red-50 text-red-600 p-3 rounded-xl text-sm">
-                                {error}
-                            </div>
-                        )}
+                            {/* Submit button */}
+                            <button
+                                type="submit"
+                                disabled={loading}
+                                className="w-full bg-teal-600 text-white py-3 rounded-xl font-bold hover:bg-teal-700 transition-colors disabled:opacity-50"
+                            >
+                                {loading ? 'Vent...' : mode === 'login' ? 'Log ind' : 'Opret konto'}
+                            </button>
 
-                        {/* Reset password success message */}
-                        {resetSent && (
-                            <div className="bg-green-50 text-green-700 p-3 rounded-xl text-sm">
-                                📧 Vi har sendt en email til {email}. Tjek din indbakke (og spam) for at nulstille din adgangskode.
+                            {/* Divider */}
+                            <div className="flex items-center gap-4 my-4">
+                                <div className="flex-1 h-px bg-stone-200" />
+                                <span className="text-stone-400 text-sm">eller</span>
+                                <div className="flex-1 h-px bg-stone-200" />
                             </div>
-                        )}
 
-                        {/* Forgot password link (login mode only) */}
-                        {mode === 'login' && (
+                            {/* Google sign in */}
                             <button
                                 type="button"
-                                onClick={handleForgotPassword}
-                                disabled={!email || resetLoading}
-                                className="text-sm text-teal-600 hover:underline disabled:text-stone-400 disabled:no-underline"
+                                onClick={handleGoogleSignIn}
+                                disabled={loading}
+                                className="w-full bg-white border-2 border-stone-200 py-3 rounded-xl font-medium text-stone-700 hover:bg-stone-50 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
                             >
-                                {resetLoading ? 'Sender...' : 'Glemt adgangskode?'}
+                                <svg className="w-5 h-5" viewBox="0 0 24 24">
+                                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+                                </svg>
+                                Log ind med Google
                             </button>
-                        )}
 
-                        {/* Submit button */}
-                        <button
-                            type="submit"
-                            disabled={loading}
-                            className="w-full bg-teal-600 text-white py-3 rounded-xl font-bold hover:bg-teal-700 transition-colors disabled:opacity-50"
-                        >
-                            {loading ? 'Vent...' : mode === 'login' ? 'Log ind' : 'Opret konto'}
-                        </button>
+                            {/* Toggle mode */}
+                            <p className="text-center text-stone-500 text-sm mt-4">
+                                {mode === 'login' ? (
+                                    <>
+                                        Ny bruger?{' '}
+                                        <button
+                                            type="button"
+                                            onClick={() => setMode('role')}
+                                            className="text-teal-600 font-medium hover:underline"
+                                        >
+                                            Opret konto
+                                        </button>
+                                    </>
+                                ) : (
+                                    <>
+                                        Har du allerede en konto?{' '}
+                                        <button
+                                            type="button"
+                                            onClick={() => setMode('login')}
+                                            className="text-teal-600 font-medium hover:underline"
+                                        >
+                                            Log ind
+                                        </button>
+                                    </>
+                                )}
+                            </p>
+                        </form>
+                    )}
 
-                        {/* Divider */}
-                        <div className="flex items-center gap-4 my-4">
-                            <div className="flex-1 h-px bg-stone-200" />
-                            <span className="text-stone-400 text-sm">eller</span>
-                            <div className="flex-1 h-px bg-stone-200" />
-                        </div>
-
-                        {/* Google sign in */}
-                        <button
-                            type="button"
-                            onClick={handleGoogleSignIn}
-                            disabled={loading}
-                            className="w-full bg-white border-2 border-stone-200 py-3 rounded-xl font-medium text-stone-700 hover:bg-stone-50 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
-                        >
-                            <svg className="w-5 h-5" viewBox="0 0 24 24">
-                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-                                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-                            </svg>
-                            Log ind med Google
-                        </button>
-
-                        {/* Toggle mode */}
-                        <p className="text-center text-stone-500 text-sm mt-4">
-                            {mode === 'login' ? (
-                                <>
-                                    Ny bruger?{' '}
-                                    <button
-                                        type="button"
-                                        onClick={() => setMode('role')}
-                                        className="text-teal-600 font-medium hover:underline"
-                                    >
-                                        Opret konto
-                                    </button>
-                                </>
-                            ) : (
-                                <>
-                                    Har du allerede en konto?{' '}
-                                    <button
-                                        type="button"
-                                        onClick={() => setMode('login')}
-                                        className="text-teal-600 font-medium hover:underline"
-                                    >
-                                        Log ind
-                                    </button>
-                                </>
-                            )}
-                        </p>
-                    </form>
-                )}
-
-                {/* Privacy link */}
-                <p className="text-center text-stone-400 text-xs mt-6">
-                    Ved at fortsætte accepterer du vores{' '}
-                    <a href="/privacy-policy.html" className="underline hover:text-stone-600">
-                        privatlivspolitik
-                    </a>
-                </p>
-            </div>
+                    {/* Privacy link */}
+                    <p className="text-center text-stone-400 text-xs mt-6">
+                        Ved at fortsætte accepterer du vores{' '}
+                        <a href="/privacy-policy.html" className="underline hover:text-stone-600">
+                            privatlivspolitik
+                        </a>
+                    </p>
+                </div>
+            )}
         </div>
     );
 };
@@ -1658,16 +1473,71 @@ export default AuthScreen;
 
 ## File: tryg-app\src\components\BottomNavigation.tsx
 ```tsx
-
 import React from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
 import { Heart, Users, FileText, Gamepad2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { cn } from '../lib/utils';
+
+/**
+ * Navigation tab variants using CVA
+ */
+const tabVariants = cva(
+    "flex flex-col items-center gap-1 transition-colors",
+    {
+        variants: {
+            state: {
+                active: "",
+                inactive: "text-stone-400 hover:text-stone-600",
+            },
+            color: {
+                teal: "text-teal-600",
+                indigo: "text-indigo-600",
+                purple: "text-purple-600",
+                stone: "text-stone-400",
+            },
+        },
+        defaultVariants: {
+            state: "inactive",
+            color: "stone",
+        },
+    }
+);
+
+import { AppTab } from '../types';
 
 export interface BottomNavigationProps {
-    activeTab: 'daily' | 'family' | 'spil';
-    onTabChange: (tab: 'daily' | 'family' | 'spil') => void;
-    onViewReport?: () => void;
-    onShowReport?: () => void; // Alias for backwards compatibility
+    activeTab: AppTab;
+    onTabChange: (tab: AppTab) => void;
+    onViewReport?: () => void; // Keep for now, but will likely be removed
+    onShowReport?: () => void;
 }
+
+interface NavTabProps extends VariantProps<typeof tabVariants> {
+    icon: React.ReactNode;
+    label: string;
+    onClick: () => void;
+    isActive: boolean;
+    activeColor: 'teal' | 'indigo' | 'purple';
+    fillClass?: string;
+}
+
+const NavTab: React.FC<NavTabProps> = ({ icon, label, onClick, isActive, activeColor, fillClass }) => (
+    <button
+        onClick={onClick}
+        className={cn(
+            tabVariants({
+                state: isActive ? 'active' : 'inactive',
+                color: isActive ? activeColor : 'stone'
+            })
+        )}
+    >
+        <div className={cn("w-6 h-6", isActive && fillClass)}>
+            {icon}
+        </div>
+        <span className="text-xs font-bold">{label}</span>
+    </button>
+);
 
 /**
  * Unified Bottom Navigation for Senior and Relative Views
@@ -1675,59 +1545,48 @@ export interface BottomNavigationProps {
 export const BottomNavigation: React.FC<BottomNavigationProps> = ({
     activeTab,
     onTabChange,
-    onViewReport,
-    onShowReport // Alias for backwards compatibility
 }) => {
-    // Support both prop names for backwards compatibility
-    const handleReport = onViewReport || onShowReport;
+    const { t } = useTranslation();
 
     return (
-        <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-stone-200 px-6 py-3 pb-6 safe-area-bottom z-40 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
-            <div className="flex justify-between items-center max-w-sm mx-auto">
-                {/* Min dag */}
-                <button
+        <div className="sticky bottom-0 left-0 right-0 theme-card border-t border-stone-200 px-2 py-2 pb-5 z-40">
+            <div className="flex justify-around items-center max-w-sm mx-auto">
+                <NavTab
+                    icon={<Heart className={cn("w-6 h-6", activeTab === 'daily' && "fill-teal-100")} />}
+                    label={t('bottom_nav_daily')}
                     onClick={() => onTabChange('daily')}
-                    className={`flex flex - col items - center gap - 1 transition - colors ${activeTab === 'daily' ? 'text-teal-600' : 'text-stone-400 hover:text-stone-600'
-                        } `}
-                >
-                    <Heart className={`w - 6 h - 6 ${activeTab === 'daily' ? 'fill-teal-100' : ''} `} />
-                    <span className="text-xs font-bold">Min dag</span>
-                </button>
+                    isActive={activeTab === 'daily'}
+                    activeColor="teal"
+                />
 
-                {/* Familie */}
-                <button
+                <NavTab
+                    icon={<Users className={cn("w-6 h-6", activeTab === 'family' && "fill-indigo-100")} />}
+                    label={t('bottom_nav_family')}
                     onClick={() => onTabChange('family')}
-                    className={`flex flex - col items - center gap - 1 transition - colors ${activeTab === 'family' ? 'text-indigo-600' : 'text-stone-400 hover:text-stone-600'
-                        } `}
-                >
-                    <Users className={`w - 6 h - 6 ${activeTab === 'family' ? 'fill-indigo-100' : ''} `} />
-                    <span className="text-xs font-bold">Familie</span>
-                </button>
+                    isActive={activeTab === 'family'}
+                    activeColor="indigo"
+                />
 
-                {/* Rapport */}
-                <button
-                    onClick={handleReport}
-                    className="flex flex-col items-center gap-1 text-stone-400 hover:text-stone-600 transition-colors"
-                >
-                    <FileText className="w-6 h-6" />
-                    <span className="text-xs font-bold">Rapport</span>
-                </button>
+                <NavTab
+                    icon={<FileText className={cn("w-6 h-6", activeTab === 'health' && "fill-sky-100")} />}
+                    label={t('bottom_nav_report')} // User can rename this in i18n later if they want "Health"
+                    onClick={() => onTabChange('health')}
+                    isActive={activeTab === 'health'}
+                    activeColor="indigo" // Or another color variant if added
+                />
 
-                {/* Spil */}
-                <button
+                <NavTab
+                    icon={<Gamepad2 className={cn("w-6 h-6", activeTab === 'spil' && "fill-purple-100")} />}
+                    label={t('bottom_nav_spil')}
                     onClick={() => onTabChange('spil')}
-                    className={`flex flex - col items - center gap - 1 transition - colors ${activeTab === 'spil' ? 'text-purple-600' : 'text-stone-400 hover:text-stone-600'
-                        } `}
-                >
-                    <Gamepad2 className={`w - 6 h - 6 ${activeTab === 'spil' ? 'fill-purple-100' : ''} `} />
-                    <span className="text-xs font-bold">Spil</span>
-                </button>
+                    isActive={activeTab === 'spil'}
+                    activeColor="purple"
+                />
             </div>
         </div>
     );
 };
 
-// Backwards compatibility alias
 export const RelativeBottomNavigation = BottomNavigation;
 
 export default BottomNavigation;
@@ -1746,8 +1605,8 @@ import { Users, Plus, Key, Copy, Check, ArrowRight, Loader2 } from 'lucide-react
 export interface CircleSetupProps {
     userRole?: 'senior' | 'relative';
     userName?: string;
-    onCreateCircle: (userName: string) => Promise<string>;
-    onJoinCircle: (code: string, userName: string) => Promise<void>;
+    onCreateCircle: (userName: string) => Promise<string | undefined>;
+    onJoinCircle: (code: string, userName: string) => Promise<string | undefined | void>;
     loading?: boolean;
     error?: string | null;
 }
@@ -1762,7 +1621,7 @@ export const CircleSetup: React.FC<CircleSetupProps> = ({ userRole, userName, on
         setStep('creating');
         try {
             const code = await onCreateCircle(userName || '');
-            setCreatedCode(code);
+            setCreatedCode(code ?? null);
             setStep('created');
         } catch (err) {
             setStep('initial');
@@ -2100,9 +1959,10 @@ export default ConsentModal;
 ```tsx
 import React, { useState } from 'react';
 import {
-    Plus, Pill, Clock, Activity, ChevronDown, ChevronUp, CheckCircle,
-    AlertCircle, Heart, HandHeart, X
+    Plus, Pill, Clock, Activity, ChevronDown, ChevronUp,
+    AlertCircle, HandHeart, X
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Button } from './ui/Button';
 import { SymptomSummary } from '../features/symptoms';
 import { StatusSelector, STATUS_OPTIONS } from '../features/familyPresence';
@@ -2112,65 +1972,42 @@ import { RELATIVE_OFFERS, RELATIVE_REQUESTS } from '../features/helpExchange';
 import { useHelpExchangeMatch } from '../features/helpExchange';
 import { useHelpExchange } from '../features/helpExchange';
 import { useCareCircleContext } from '../contexts/CareCircleContext';
-import { Member, CareCircleContextValue } from '../types';
-import { Task } from '../features/tasks/useTasks';
-import { SymptomLog } from '../features/symptoms/useSymptoms';
+import { MemoriesGallery } from '../features/memories/MemoriesGallery';
 
 export interface CoordinationTabProps {
-    seniorName?: string;
-    userName?: string;
-    myStatus?: string;
-    onMyStatusChange?: (status: string) => void;
-    memberStatuses?: Member[];
-    currentUserId?: string;
-    openTasks?: Task[];
-    completedTasks?: Task[];
-    symptomLogs?: SymptomLog[];
     onAddTask?: () => void;
     onViewReport?: () => void;
     onMatchAction?: (match: any) => void;
     onDismissMatch?: (matchId: string) => void;
     dismissedMatchIds?: Set<string>;
-    careCircleId?: string;
 }
 
-// Coordination Tab - practical management focused
-// Shows: Family presence, Your status, HelpExchange (bidirectional), tasks, symptom details
-// Uses CareCircleContext for shared data (props as optional overrides)
 export const CoordinationTab: React.FC<CoordinationTabProps> = ({
-    seniorName: propSeniorName,
-    userName: propUserName,
-    myStatus = 'home',
-    onMyStatusChange,
-    memberStatuses: propMemberStatuses,
-    currentUserId: propCurrentUserId,
-    // HelpExchange props removed
-    openTasks = [],
-    completedTasks = [],
-    symptomLogs = [],
     onAddTask,
     onViewReport,
     onMatchAction,
     onDismissMatch,
-    dismissedMatchIds = new Set(),
-    careCircleId: propCareCircleId
+    dismissedMatchIds = new Set()
 }) => {
-    // Get from context, use props as override
-    const context = useCareCircleContext() as CareCircleContextValue;
-    const seniorName = propSeniorName ?? context.seniorName ?? 'Senior';
-    const userName = propUserName ?? context.userName ?? 'Pårørende';
-    const memberStatuses = propMemberStatuses ?? context.memberStatuses ?? [];
-    const currentUserId = propCurrentUserId ?? context.currentUserId;
-    const careCircleId = propCareCircleId ?? context.careCircleId;
+    const { t } = useTranslation();
+    const {
+        seniorName,
+        userName,
+        memberStatuses = [],
+        currentUserId,
+        careCircleId,
+        myStatus = 'home',
+        setMyStatus: onMyStatusChange,
+        tasks = [],
+        symptoms: symptomLogs = []
+    } = useCareCircleContext();
 
     const [showStatusPicker, setShowStatusPicker] = useState(false);
     const [showOpenTasks, setShowOpenTasks] = useState(true);
-    const [showCompleted, setShowCompleted] = useState(false);
     const [showSymptoms, setShowSymptoms] = useState(true);
     const [showOfferPicker, setShowOfferPicker] = useState(false);
     const [showRequestPicker, setShowRequestPicker] = useState(false);
 
-    // Fetch HelpExchange data directly
     const {
         helpOffers: allOffersFetched,
         helpRequests: allRequestsFetched,
@@ -2180,37 +2017,19 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
         removeRequest
     } = useHelpExchange(careCircleId, currentUserId, 'relative', userName);
 
-    // Filter offers/requests by role
-    // Senior's items
     const helpOffers = allOffersFetched.filter((o: any) => o.createdByRole === 'senior');
     const helpRequests = allRequestsFetched.filter((r: any) => r.createdByRole === 'senior');
-    // Relative's items
     const relativeOffers = allOffersFetched.filter((o: any) => o.createdByRole === 'relative');
     const relativeRequests = allRequestsFetched.filter((r: any) => r.createdByRole === 'relative');
-
-    // Map handlers
-    const onAddRelativeOffer = addOffer;
-    const onRemoveRelativeOffer = removeOffer;
-    const onAddRelativeRequest = addRequest;
-    const onRemoveRelativeRequest = removeRequest;
-
-    console.debug('🤝 [CoordinationTab] Help Data:', {
-        offers: helpOffers.length,
-        requests: helpRequests.length,
-        relOffers: relativeOffers.length,
-        relRequests: relativeRequests.length
-    });
 
     const currentStatusInfo = STATUS_OPTIONS.find(s => s.id === myStatus) || STATUS_OPTIONS[0];
     const StatusIcon = currentStatusInfo.icon;
 
-    // Split relative entries into "mine" vs "other relatives"
-    const myRelativeOffers = relativeOffers.filter((o: any) => o.createdByUid === currentUserId);
-    const myRelativeRequests = relativeRequests.filter((r: any) => r.createdByUid === currentUserId);
     const otherRelativeOffers = relativeOffers.filter((o: any) => o.createdByUid !== currentUserId);
     const otherRelativeRequests = relativeRequests.filter((r: any) => r.createdByUid !== currentUserId);
+    const myRelativeOffers = relativeOffers.filter((o: any) => o.createdByUid === currentUserId);
+    const myRelativeRequests = relativeRequests.filter((r: any) => r.createdByUid === currentUserId);
 
-    // Combine all offers and requests for match detection (using local filtered vars)
     const allOffers = [
         ...helpOffers.map((o: any) => ({ ...o, createdByRole: 'senior' })),
         ...relativeOffers.map((o: any) => ({ ...o, createdByRole: 'relative' }))
@@ -2220,14 +2039,12 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
         ...relativeRequests.map((r: any) => ({ ...r, createdByRole: 'relative' }))
     ];
 
-    // Detect matches
-    const { topMatch, hasMatches, matches } = useHelpExchangeMatch({
+    const { topMatch } = useHelpExchangeMatch({
         offers: allOffers,
         requests: allRequests,
         familyStatus: myStatus
     });
 
-    // Generate a unique ID for a match (based on offer and request IDs)
     const getMatchId = (match: any) => {
         if (!match) return null;
         const offerId = match.offer?.docId || match.offer?.id || 'none';
@@ -2235,16 +2052,16 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
         return `${offerId}-${requestId}`;
     };
 
-    // Filter out dismissed matches
     const filteredTopMatch = topMatch && !dismissedMatchIds.has(getMatchId(topMatch)!) ? topMatch : null;
     const hasActiveMatches = filteredTopMatch !== null;
 
+    const openTasks = tasks.filter(t => !t.completed);
+
     return (
-        <div className="space-y-3">
-            {/* Your Status - compact inline for tech-savvy relatives */}
+        <div className="space-y-3 tab-content">
             <div className="bg-indigo-600 rounded-xl px-3 py-2 text-white shadow-sm">
                 <div className="flex items-center justify-between gap-2">
-                    <span className="text-xs text-indigo-200 font-medium">Din status:</span>
+                    <span className="text-xs text-indigo-200 font-medium">{t('din_status')}:</span>
                     {showStatusPicker ? (
                         <div className="flex-1">
                             <StatusSelector
@@ -2262,14 +2079,13 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
                             className="flex items-center gap-2 bg-indigo-500/50 hover:bg-indigo-500 rounded-lg px-2 py-1 transition-colors"
                         >
                             <StatusIcon className="w-4 h-4" />
-                            <span className="font-medium text-sm">{currentStatusInfo.label}</span>
+                            <span className="font-medium text-sm">{t(`status_${currentStatusInfo.id}`)}</span>
                             <span className="text-indigo-300 text-xs">▼</span>
                         </button>
                     )}
                 </div>
             </div>
 
-            {/* Match Celebration Banner */}
             {hasActiveMatches && filteredTopMatch && (
                 <MatchBanner
                     match={filteredTopMatch}
@@ -2283,34 +2099,31 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
                 />
             )}
 
-            {/* Family Presence - "Familien Nu" */}
             {memberStatuses.length > 0 && (
                 <FamilyPresence
                     memberStatuses={memberStatuses}
-                    currentUserId={currentUserId}
+                    currentUserId={currentUserId ?? ''}
                     seniorName={seniorName}
                 />
             )}
 
-            {/* Bidirectional Help Exchange */}
             <div className="bg-stone-50 border-2 border-stone-100 rounded-xl p-4 space-y-4">
                 <h3 className="font-bold text-stone-700 flex items-center gap-2">
                     <HandHeart className="w-5 h-5 text-teal-600" />
-                    Familie-udveksling
+                    {t('coordination_title')}
                 </h3>
 
-                {/* OTHER RELATIVES' offers/requests - show what other family members have added */}
                 {(otherRelativeOffers.length > 0 || otherRelativeRequests.length > 0) && (
                     <div className="bg-indigo-50 rounded-xl p-3 border border-indigo-100">
-                        <p className="text-xs font-bold text-indigo-600 uppercase tracking-wide mb-2">Fra andre pårørende:</p>
+                        <p className="text-xs font-bold text-indigo-600 uppercase tracking-wide mb-2">{t('others_offers')}</p>
                         <div className="flex flex-wrap gap-2">
                             {otherRelativeOffers.map((offer: any, i: number) => (
-                                <span key={`oro-${i}`} className="text-sm bg-indigo-100 text-indigo-700 px-3 py-1.5 rounded-full" title={`Fra: ${offer.createdByName}`}>
+                                <span key={`oro-${i}`} className="text-sm bg-indigo-100 text-indigo-700 px-3 py-1.5 rounded-full">
                                     💚 {offer.label} <span className="text-indigo-400 text-xs">({offer.createdByName})</span>
                                 </span>
                             ))}
                             {otherRelativeRequests.map((req: any, i: number) => (
-                                <span key={`orr-${i}`} className="text-sm bg-purple-100 text-purple-700 px-3 py-1.5 rounded-full" title={`Fra: ${req.createdByName}`}>
+                                <span key={`orr-${i}`} className="text-sm bg-purple-100 text-purple-700 px-3 py-1.5 rounded-full">
                                     💜 {req.label} <span className="text-purple-400 text-xs">({req.createdByName})</span>
                                 </span>
                             ))}
@@ -2318,18 +2131,17 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
                     </div>
                 )}
 
-                {/* Senior's offers/requests - show with creator name */}
                 {(helpOffers.length > 0 || helpRequests.length > 0) && (
                     <div className="space-y-2">
-                        <p className="text-xs font-bold text-stone-500 uppercase">Fra {seniorName}:</p>
+                        <p className="text-xs font-bold text-stone-500 uppercase">{t('from_senior_name', { name: seniorName })}</p>
                         <div className="flex flex-wrap gap-2">
                             {helpOffers.map((offer: any, i: number) => (
-                                <span key={`so-${i}`} className="text-sm bg-teal-100 text-teal-700 px-3 py-1.5 rounded-full" title={`Fra: ${offer.createdByName || seniorName}`}>
+                                <span key={`so-${i}`} className="text-sm bg-teal-100 text-teal-700 px-3 py-1.5 rounded-full">
                                     💚 {offer.label}
                                 </span>
                             ))}
                             {helpRequests.map((req: any, i: number) => (
-                                <span key={`sr-${i}`} className="text-sm bg-indigo-100 text-indigo-700 px-3 py-1.5 rounded-full" title={`Fra: ${req.createdByName || seniorName}`}>
+                                <span key={`sr-${i}`} className="text-sm bg-indigo-100 text-indigo-700 px-3 py-1.5 rounded-full">
                                     💜 {req.label}
                                 </span>
                             ))}
@@ -2337,33 +2149,22 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
                     </div>
                 )}
 
-                {/* Your offers */}
                 <div className="space-y-2">
-                    <p className="text-xs font-bold text-stone-500 uppercase">Du tilbyder:</p>
+                    <p className="text-xs font-bold text-stone-500 uppercase">{t('you_offer')}</p>
                     <div className="flex flex-wrap gap-2">
                         {myRelativeOffers.map((offer: any, i: number) => (
-                            <span
-                                key={`ro-${i}`}
-                                className="text-sm bg-teal-500 text-white px-3 py-1.5 rounded-full flex items-center gap-1"
-                            >
+                            <span key={`ro-${i}`} className="text-sm bg-teal-500 text-white px-3 py-1.5 rounded-full flex items-center gap-1">
                                 {offer.emoji || '✨'} {offer.label}
-                                <button
-                                    onClick={() => onRemoveRelativeOffer?.(offer.docId)}
-                                    className="ml-1 hover:bg-teal-600 rounded-full p-0.5"
-                                >
+                                <button onClick={() => removeOffer?.(offer.docId)} className="ml-1 hover:bg-teal-600 rounded-full p-0.5">
                                     <X className="w-3 h-3" />
                                 </button>
                             </span>
                         ))}
-                        <button
-                            onClick={() => setShowOfferPicker(!showOfferPicker)}
-                            className="text-sm bg-teal-50 text-teal-600 px-3 py-1.5 rounded-full border-2 border-dashed border-teal-200 hover:bg-teal-100 transition-colors"
-                        >
-                            + Tilbyd noget
+                        <button onClick={() => setShowOfferPicker(!showOfferPicker)} className="text-sm bg-teal-50 text-teal-600 px-3 py-1.5 rounded-full border-2 border-dashed border-teal-200 hover:bg-teal-100 transition-colors">
+                            + {t('add_offer')}
                         </button>
                     </div>
 
-                    {/* Offer picker */}
                     {showOfferPicker && (
                         <div className="bg-white rounded-xl p-3 border border-stone-200 space-y-2">
                             <p className="text-xs text-stone-500">Vælg hvad du kan tilbyde:</p>
@@ -2372,7 +2173,7 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
                                     <button
                                         key={offer.id}
                                         onClick={() => {
-                                            onAddRelativeOffer?.(offer);
+                                            addOffer?.(offer);
                                             setShowOfferPicker(false);
                                         }}
                                         className="text-sm bg-stone-100 hover:bg-teal-100 px-3 py-1.5 rounded-full transition-colors"
@@ -2385,33 +2186,22 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
                     )}
                 </div>
 
-                {/* Your requests */}
                 <div className="space-y-2">
-                    <p className="text-xs font-bold text-stone-500 uppercase">Du ønsker:</p>
+                    <p className="text-xs font-bold text-stone-500 uppercase">{t('you_request')}</p>
                     <div className="flex flex-wrap gap-2">
                         {myRelativeRequests.map((req: any, i: number) => (
-                            <span
-                                key={`rr-${i}`}
-                                className="text-sm bg-indigo-500 text-white px-3 py-1.5 rounded-full flex items-center gap-1"
-                            >
+                            <span key={`rr-${i}`} className="text-sm bg-indigo-500 text-white px-3 py-1.5 rounded-full flex items-center gap-1">
                                 {req.emoji || '💜'} {req.label}
-                                <button
-                                    onClick={() => onRemoveRelativeRequest?.(req.docId)}
-                                    className="ml-1 hover:bg-indigo-600 rounded-full p-0.5"
-                                >
+                                <button onClick={() => removeRequest?.(req.docId)} className="ml-1 hover:bg-indigo-600 rounded-full p-0.5">
                                     <X className="w-3 h-3" />
                                 </button>
                             </span>
                         ))}
-                        <button
-                            onClick={() => setShowRequestPicker(!showRequestPicker)}
-                            className="text-sm bg-indigo-50 text-indigo-600 px-3 py-1.5 rounded-full border-2 border-dashed border-indigo-200 hover:bg-indigo-100 transition-colors"
-                        >
-                            + Bed om noget
+                        <button onClick={() => setShowRequestPicker(!showRequestPicker)} className="text-sm bg-indigo-50 text-indigo-600 px-3 py-1.5 rounded-full border-2 border-dashed border-indigo-200 hover:bg-indigo-100 transition-colors">
+                            + {t('add_request')}
                         </button>
                     </div>
 
-                    {/* Request picker */}
                     {showRequestPicker && (
                         <div className="bg-white rounded-xl p-3 border border-stone-200 space-y-2">
                             <p className="text-xs text-stone-500">Hvad kunne du bruge hjælp til?</p>
@@ -2420,7 +2210,7 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
                                     <button
                                         key={request.id}
                                         onClick={() => {
-                                            onAddRelativeRequest?.(request);
+                                            addRequest?.(request);
                                             setShowRequestPicker(false);
                                         }}
                                         className="text-sm bg-stone-100 hover:bg-indigo-100 px-3 py-1.5 rounded-full transition-colors"
@@ -2434,7 +2224,11 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
                 </div>
             </div>
 
-            {/* Symptoms - Collapsible (today's symptoms only in header) */}
+            {/* Family Heirloom - Livsbog */}
+            {careCircleId && (
+                <MemoriesGallery circleId={careCircleId} />
+            )}
+
             {(() => {
                 const todaySymptoms = symptomLogs.filter(s => {
                     const date = s.loggedAt?.toDate ? s.loggedAt.toDate() : new Date(s.loggedAt);
@@ -2448,7 +2242,7 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
                         >
                             <span className="flex items-center gap-2">
                                 <AlertCircle className="w-4 h-4 text-orange-500" />
-                                Symptomer i dag ({todaySymptoms.length})
+                                {t('symptoms_today')} ({todaySymptoms.length})
                             </span>
                             {showSymptoms ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                         </button>
@@ -2459,14 +2253,13 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
                 );
             })()}
 
-            {/* Open Tasks - Collapsible */}
             {openTasks.length > 0 && (
                 <div>
                     <button
                         onClick={() => setShowOpenTasks(!showOpenTasks)}
                         className="w-full flex items-center justify-between text-sm font-bold text-stone-500 uppercase tracking-wider mb-3 pl-1"
                     >
-                        <span>Åbne opgaver ({openTasks.length})</span>
+                        <span>{t('open_tasks_count', { count: openTasks.length })}</span>
                         {showOpenTasks ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                     </button>
                     {showOpenTasks && (
@@ -2489,50 +2282,10 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
                 </div>
             )}
 
-            {/* Completed Tasks - DISABLED for now (uncomment to re-enable) */}
-            {false && completedTasks.length > 0 && (
-                <div>
-                    <button
-                        onClick={() => setShowCompleted(!showCompleted)}
-                        className="w-full flex items-center justify-between p-4 bg-teal-50 rounded-2xl border-2 border-teal-100 hover:bg-teal-100 transition-colors mb-3"
-                    >
-                        <div className="flex items-center gap-3">
-                            <CheckCircle className="w-6 h-6 text-teal-600" />
-                            <span className="font-bold text-teal-800">Udførte opgaver ({completedTasks.length})</span>
-                        </div>
-                        {showCompleted ? <ChevronUp className="w-5 h-5 text-teal-600" /> : <ChevronDown className="w-5 h-5 text-teal-600" />}
-                    </button>
-
-                    {showCompleted && (
-                        <div className="bg-white rounded-2xl shadow-sm border-2 border-stone-100 overflow-hidden">
-                            {completedTasks.map((task, idx) => (
-                                <div key={task.id} className={`p-4 flex items-center gap-4 ${idx !== completedTasks.length - 1 ? 'border-b border-stone-100' : ''}`}>
-                                    <div className="p-2.5 rounded-xl bg-teal-100 text-teal-600">
-                                        {task.type === 'medication' ? <Pill className="w-5 h-5" /> :
-                                            task.type === 'appointment' ? <Clock className="w-5 h-5" /> :
-                                                <Activity className="w-5 h-5" />}
-                                    </div>
-                                    <div className="flex-1">
-                                        <p className="text-sm font-semibold text-stone-500 line-through">{task.title}</p>
-                                        <p className="text-xs text-stone-400">{task.description}</p>
-                                    </div>
-                                    <span className="text-[10px] text-teal-600 font-bold bg-teal-50 px-2 py-0.5 rounded-full border border-teal-200">UDFØRT</span>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                </div>
-            )}
-
-            {/* Add Task Button */}
-            <Button
-                variant="outline"
-                className="w-full h-auto py-4 bg-white"
-                onClick={onAddTask}
-            >
+            <Button variant="outline" className="w-full h-auto py-4 bg-white" onClick={onAddTask}>
                 <div className="flex items-center gap-2">
                     <Plus className="w-5 h-5" />
-                    <span>Tilføj påmindelse til {seniorName}</span>
+                    <span>{t('add_reminder_name', { name: seniorName })}</span>
                 </div>
             </Button>
         </div>
@@ -2574,7 +2327,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
         console.error('App Error:', error, errorInfo);
 
         // Send to Sentry for production monitoring
-        Sentry.captureException(error, { extra: errorInfo });
+        Sentry.captureException(error, { contexts: { react: { componentStack: errorInfo.componentStack } } });
     }
 
     handleRetry = () => {
@@ -2628,267 +2381,6 @@ export default ErrorBoundary;
 ```
 ---
 
-## File: tryg-app\src\components\HealthReport.tsx
-```tsx
-import React, { useState, useMemo } from 'react';
-import { ChevronDown, ChevronUp, AlertCircle } from 'lucide-react';
-import { Modal } from './ui/Modal';
-import { SYMPTOMS_LIST } from '../data/constants';
-// Import types
-import { SymptomLog } from '../features/symptoms/useSymptoms';
-import { Task } from '../features/tasks/useTasks';
-
-export interface HealthReportProps {
-    isOpen: boolean;
-    onClose: () => void;
-    symptomLogs?: SymptomLog[];
-    tasks?: Task[];
-    title?: string;
-}
-
-// Health Report Component - Shows symptoms and medicine compliance
-// Used by both SeniorView and RelativeView
-export const HealthReport: React.FC<HealthReportProps> = ({
-    isOpen,
-    onClose,
-    symptomLogs = [],
-    tasks = [],
-    title = "Rapport til Lægen"
-}) => {
-    const [expandedDates, setExpandedDates] = useState<Record<string, boolean>>(() => {
-        // Today's date key for default expansion
-        const today = new Date().toLocaleDateString('da-DK', { weekday: 'short', day: 'numeric', month: 'short' });
-        return { [today]: true };
-    });
-    const [filterDate, setFilterDate] = useState<string | null>(null); // null = show all
-
-    // Calculate completion rate
-    const completionRate = useMemo(() => {
-        if (tasks.length === 0) return 100;
-        return Math.round((tasks.filter(t => t.completed).length / tasks.length) * 100);
-    }, [tasks]);
-
-    // Group symptoms by date
-    const groupedSymptoms = useMemo(() => {
-        const grouped: Record<string, (SymptomLog & { dateObj: Date })[]> = {};
-        symptomLogs.forEach(log => {
-            const date = log.loggedAt?.toDate ? log.loggedAt.toDate() : new Date(log.loggedAt);
-            const dateKey = date.toLocaleDateString('da-DK', { weekday: 'short', day: 'numeric', month: 'short' });
-            if (!grouped[dateKey]) grouped[dateKey] = [];
-            grouped[dateKey].push({ ...log, dateObj: date });
-        });
-        return grouped;
-    }, [symptomLogs]);
-
-    // Chart data - 14 days
-    const chartData = useMemo(() => {
-        const days = Array(14).fill(null).map((_, i) => {
-            const d = new Date();
-            d.setDate(d.getDate() - (13 - i));
-            return {
-                date: d,
-                dateKey: d.toLocaleDateString('da-DK', { weekday: 'short', day: 'numeric', month: 'short' }),
-                count: 0
-            };
-        });
-
-        symptomLogs.forEach(log => {
-            const date = log.loggedAt?.toDate ? log.loggedAt.toDate() : new Date(log.loggedAt);
-            const daysAgo = Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24));
-            if (daysAgo >= 0 && daysAgo < 14) {
-                days[13 - daysAgo].count++;
-            }
-        });
-
-        return days;
-    }, [symptomLogs]);
-
-    const maxCount = Math.max(...chartData.map(d => d.count), 1);
-
-    // Filter symptoms based on chart selection
-    const displayedSymptoms = useMemo(() => {
-        if (!filterDate) return groupedSymptoms;
-        return { [filterDate]: groupedSymptoms[filterDate] || [] };
-    }, [groupedSymptoms, filterDate]);
-
-    // Summary stats
-    const totalSymptoms = symptomLogs.length;
-    const symptomCounts: Record<string, number> = {};
-    symptomLogs.forEach(log => {
-        const label = log.label || 'Unknown';
-        symptomCounts[label] = (symptomCounts[label] || 0) + 1;
-    });
-    const mostCommon = Object.entries(symptomCounts).sort((a, b) => b[1] - a[1])[0];
-
-    const toggleDate = (dateKey: string) => {
-        setExpandedDates(prev => ({
-            ...prev,
-            [dateKey]: !prev[dateKey]
-        }));
-    };
-
-    const handleChartClick = (dateKey: string) => {
-        if (filterDate === dateKey) {
-            setFilterDate(null); // Clear filter
-        } else {
-            setFilterDate(dateKey);
-            // Also expand that date
-            setExpandedDates(prev => ({ ...prev, [dateKey]: true }));
-        }
-    };
-
-    return (
-        <Modal isOpen={isOpen} onClose={onClose} title={title}>
-            <div className="space-y-6">
-                {/* Summary Stats */}
-                {totalSymptoms > 0 && (
-                    <div className="grid grid-cols-2 gap-3">
-                        <div className="bg-orange-50 rounded-xl p-3 border border-orange-100">
-                            <p className="text-2xl font-bold text-orange-600">{totalSymptoms}</p>
-                            <p className="text-xs text-orange-500">Symptomer (14 dage)</p>
-                        </div>
-                        {mostCommon && (
-                            <div className="bg-purple-50 rounded-xl p-3 border border-purple-100">
-                                <p className="text-lg font-bold text-purple-600 truncate">{mostCommon[0]}</p>
-                                <p className="text-xs text-purple-500">Mest hyppige ({mostCommon[1]}x)</p>
-                            </div>
-                        )}
-                    </div>
-                )}
-
-                {/* Clickable Chart */}
-                <div className="p-4 bg-orange-50 rounded-xl border border-orange-200">
-                    <div className="flex items-center justify-between mb-2">
-                        <h4 className="font-bold text-slate-800">Symptom-oversigt (14 dage)</h4>
-                        {filterDate && (
-                            <button
-                                onClick={() => setFilterDate(null)}
-                                className="text-xs text-orange-600 font-medium hover:underline"
-                            >
-                                Vis alle
-                            </button>
-                        )}
-                    </div>
-                    <p className="text-xs text-slate-500 mb-3">Tryk på en søjle for at filtrere</p>
-                    <div className="flex items-end gap-1 h-24 pb-2">
-                        {chartData.map((day, i) => (
-                            <button
-                                key={i}
-                                onClick={() => day.count > 0 && handleChartClick(day.dateKey)}
-                                className={`flex-1 flex flex-col items-center gap-1 transition-all ${filterDate === day.dateKey ? 'scale-110' : ''
-                                    } ${day.count > 0 ? 'cursor-pointer' : 'cursor-default'}`}
-                            >
-                                {day.count > 0 && (
-                                    <span className={`text-[10px] font-bold ${filterDate === day.dateKey ? 'text-orange-800' : 'text-orange-600'
-                                        }`}>{day.count}</span>
-                                )}
-                                <div
-                                    className={`w-full rounded-t-sm transition-all ${day.count > 0
-                                        ? filterDate === day.dateKey
-                                            ? 'bg-orange-600'
-                                            : 'bg-orange-400 hover:bg-orange-500'
-                                        : 'bg-slate-200'
-                                        }`}
-                                    style={{ height: `${Math.max((day.count / maxCount) * 60, 4)}px` }}
-                                />
-                            </button>
-                        ))}
-                    </div>
-                    <div className="flex justify-between text-xs text-slate-400">
-                        <span>-14 dage</span><span>I dag</span>
-                    </div>
-                </div>
-
-                {/* Medicine compliance with percentage labels */}
-                <div className="p-4 bg-slate-50 rounded-xl border border-slate-200">
-                    <h4 className="font-bold text-slate-800 mb-2">Overholdelse af medicin (7 dage)</h4>
-                    <div className="flex items-end gap-2 h-28 pb-2">
-                        {[80, 90, 100, 85, 95, 100, completionRate].map((h, i) => (
-                            <div key={i} className="flex-1 flex flex-col items-center gap-1">
-                                <span className="text-[10px] font-bold text-indigo-600">{h}%</span>
-                                <div
-                                    className="w-full bg-indigo-500 rounded-t-sm opacity-80 hover:opacity-100 transition-opacity"
-                                    style={{ height: `${h * 0.6}px` }}
-                                />
-                            </div>
-                        ))}
-                    </div>
-                    <div className="flex justify-between text-xs text-slate-400">
-                        <span>-7 dage</span><span>I dag</span>
-                    </div>
-                </div>
-
-                {/* Symptom Log - Accordion by Date */}
-                <div>
-                    <h4 className="font-bold text-slate-800 mb-3">
-                        Symptom Log {filterDate ? `(${filterDate})` : '(sidste 14 dage)'}
-                    </h4>
-                    {Object.keys(displayedSymptoms).length === 0 ? (
-                        <p className="text-slate-500 text-sm italic">Ingen symptomer registreret.</p>
-                    ) : (
-                        <div className="space-y-2">
-                            {Object.entries(displayedSymptoms).map(([dateStr, logs]) => (
-                                <div key={dateStr} className="border rounded-xl overflow-hidden">
-                                    {/* Accordion Header */}
-                                    <button
-                                        onClick={() => toggleDate(dateStr)}
-                                        className="w-full flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100 transition-colors"
-                                    >
-                                        <span className="font-bold text-slate-700">{dateStr}</span>
-                                        <div className="flex items-center gap-2">
-                                            <span className="text-xs text-slate-500">{logs?.length || 0} symptomer</span>
-                                            {expandedDates[dateStr] ? (
-                                                <ChevronUp className="w-4 h-4 text-slate-400" />
-                                            ) : (
-                                                <ChevronDown className="w-4 h-4 text-slate-400" />
-                                            )}
-                                        </div>
-                                    </button>
-
-                                    {/* Accordion Content */}
-                                    {expandedDates[dateStr] && logs && (
-                                        <ul className="divide-y border-t">
-                                            {logs.map((log, i) => {
-                                                const symptomDef = SYMPTOMS_LIST.find(s => s.id === log.id) || { icon: AlertCircle, label: 'Ukendt' };
-                                                const SymptomIcon = symptomDef.icon || AlertCircle;
-                                                const timeStr = log.dateObj.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' });
-
-
-                                                return (
-                                                    <li key={i} className="flex flex-col gap-1 text-sm p-3 bg-white">
-                                                        <div className="flex items-center gap-3">
-                                                            <SymptomIcon className="w-5 h-5 text-slate-400" />
-                                                            <span className="font-medium text-slate-700">{log.label}</span>
-                                                            <span className="text-slate-400 ml-auto">{timeStr}</span>
-                                                        </div>
-                                                        {log.bodyLocation && (
-                                                            <div className="ml-8 text-xs text-slate-500 space-y-1">
-                                                                <div>📍 Lokation: <span className="font-medium">{log.bodyLocation.emoji} {log.bodyLocation.label}</span></div>
-                                                                {log.bodyLocation.severity && (
-                                                                    <div>📊 Intensitet: <span className="font-medium">{log.bodyLocation.severity.emoji} {log.bodyLocation.severity.label}</span></div>
-                                                                )}
-                                                            </div>
-                                                        )}
-                                                    </li>
-                                                );
-                                            })}
-                                        </ul>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                </div>
-            </div>
-        </Modal>
-    );
-};
-
-export default HealthReport;
-
-```
----
-
 ## File: tryg-app\src\components\InstallPrompt.tsx
 ```tsx
 // @ts-check
@@ -2900,7 +2392,7 @@ export default HealthReport;
  * experience by guiding seniors to "Add to Home Screen".
  */
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { X, Share } from 'lucide-react';
 
 /**
@@ -2908,7 +2400,7 @@ import { X, Share } from 'lucide-react';
  */
 const useIOSInstallPrompt = () => {
     const [shouldShow, setShouldShow] = useState(false);
-    const [dismissed, setDismissed] = useState(false);
+    const [_dismissed, setDismissed] = useState(false);
 
     useEffect(() => {
         // Check if iOS device
@@ -3003,8 +2495,69 @@ export default InstallPrompt;
 ```
 ---
 
-## File: tryg-app\src\components\layouts\RelativeViewLayout.jsx
-```jsx
+## File: tryg-app\src\components\LanguageSwitcher.tsx
+```tsx
+import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useAuth } from '../hooks/useAuth';
+
+export const LanguageSwitcher = () => {
+    const { i18n } = useTranslation();
+    const { userProfile, updateLanguagePreference } = useAuth();
+
+    const languages = [
+        { code: 'da', label: '🇩🇰 Dansk' },
+        { code: 'tr', label: '🇹🇷 Türkçe' },
+        { code: 'bs', label: '🇧🇦 Bosanski' }
+    ];
+
+    // Sync i18n state with user profile on load
+    useEffect(() => {
+        if (userProfile?.languagePreference && i18n.language !== userProfile.languagePreference) {
+            i18n.changeLanguage(userProfile.languagePreference);
+        }
+    }, [userProfile?.languagePreference, i18n]);
+
+    const handleLanguageChange = async (code: string) => {
+        await i18n.changeLanguage(code);
+        if (updateLanguagePreference) {
+            await updateLanguagePreference(code);
+        }
+    };
+
+    return (
+        <div className="flex flex-col gap-2 p-4 bg-stone-50 rounded-2xl border border-stone-100 shadow-sm">
+            <div className="flex gap-2">
+                {languages.map((lang) => (
+                    <button
+                        key={lang.code}
+                        onClick={() => handleLanguageChange(lang.code)}
+                        className={`
+                            flex-1 py-3 px-2 rounded-xl text-sm font-bold transition-all duration-200
+                            ${i18n.language === lang.code
+                                ? 'bg-white shadow-md text-teal-700 border border-teal-100 scale-[1.02]'
+                                : 'text-stone-400 hover:bg-stone-100 hover:text-stone-600'}
+                        `}
+                    >
+                        <span
+                            className="text-2xl block mb-1"
+                            style={{ fontFamily: '"Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif' }}
+                        >
+                            {lang.label.split(' ')[0]}
+                        </span>
+                        <span className="block text-[10px] sm:text-xs tracking-tight">{lang.label.split(' ')[1]}</span>
+                    </button>
+                ))}
+            </div>
+        </div>
+    );
+};
+
+```
+---
+
+## File: tryg-app\src\components\layouts\RelativeViewLayout.tsx
+```tsx
 /**
  * RelativeViewLayout - Dumb layout shell for the Relative dashboard
  * 
@@ -3012,9 +2565,17 @@ export default InstallPrompt;
  * Uses "slot" pattern for composability.
  */
 
-import React from 'react';
+import React, { ReactNode } from 'react';
 
-export const RelativeViewLayout = ({
+interface RelativeViewLayoutProps {
+    header?: ReactNode;
+    content: ReactNode;
+    footer?: ReactNode;
+    modals?: ReactNode;
+    backgroundClass?: string;
+}
+
+export const RelativeViewLayout: React.FC<RelativeViewLayoutProps> = ({
     header,
     content,
     footer,
@@ -3043,196 +2604,13 @@ export default RelativeViewLayout;
 ```
 ---
 
-## File: tryg-app\src\components\PeaceOfMindTab.tsx
-```tsx
-import React from 'react';
-import { Heart, Clock, Pill, CheckCircle, AlertCircle, MessageCircle } from 'lucide-react';
-import { StatusCard } from '../features/familyPresence';
-import { ThinkingOfYouIconButton } from '../features/thinkingOfYou';
-import { ProgressRing } from '../features/tasks';
-import { useCareCircleContext } from '../contexts/CareCircleContext';
-import { getDailyBriefing } from '../utils/briefing';
-import { Member, CareCircleContextValue } from '../types';
-import { Task } from '../features/tasks/useTasks';
-import { SymptomLog } from '../features/symptoms/useSymptoms';
-
-export interface PeaceOfMindTabProps {
-    seniorName?: string;
-    lastCheckIn?: any;
-    tasks?: Task[];
-    symptomCount?: number;
-    symptoms?: SymptomLog[];
-    onSendPing?: () => void;
-    onViewSymptoms?: () => void;
-    recentActivity?: any[];
-}
-
-// Peace of Mind Tab - emotional reassurance focused
-// Shows: "Alt er vel" hero with Gates progress, quick glance stats, connection history
-// Uses CareCircleContext for shared data (props as optional overrides)
-export const PeaceOfMindTab: React.FC<PeaceOfMindTabProps> = ({
-    seniorName: propSeniorName,
-    lastCheckIn,
-    tasks = [],
-    symptomCount = 0,
-    symptoms = [],
-    onSendPing,
-    onViewSymptoms,
-    recentActivity = []
-}) => {
-    // Get from context, use props as override
-    const context = useCareCircleContext() as CareCircleContextValue;
-    const seniorName = propSeniorName ?? context.seniorName ?? 'Senior';
-
-    // Calculate completion rate from tasks
-    const totalTasks = tasks.length;
-    const completedTasks = tasks.filter(t => t.completed).length;
-    const completionRate = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 100;
-
-    // Determine peace of mind status
-    const getPeaceOfMindStatus = () => {
-        // Check for overdue tasks
-        const currentHour = new Date().getHours();
-        const morningTasks = tasks.filter(t => t.period === 'morgen');
-        const morningComplete = morningTasks.every(t => t.completed);
-        const afternoonTasks = tasks.filter(t => t.period === 'eftermiddag');
-        const afternoonComplete = afternoonTasks.every(t => t.completed);
-
-        // If morning is past and tasks incomplete, show warning
-        if (currentHour >= 12 && morningTasks.length > 0 && !morningComplete) {
-            return {
-                label: 'Morgen mangler',
-                sublabel: 'Ikke alle morgenopgaver er udført',
-                color: 'from-orange-500 to-orange-600',
-                icon: AlertCircle,
-                urgent: true
-            };
-        }
-
-        // If afternoon is past and tasks incomplete
-        if (currentHour >= 18 && afternoonTasks.length > 0 && !afternoonComplete) {
-            return {
-                label: 'Eftermiddag mangler',
-                sublabel: 'Ikke alle eftermiddagsopgaver er udført',
-                color: 'from-amber-500 to-amber-600',
-                icon: AlertCircle,
-                urgent: true
-            };
-        }
-
-        if (completionRate >= 80) {
-            return {
-                label: 'Alt er vel ✨',
-                sublabel: `${seniorName} har det godt`,
-                color: 'from-teal-500 to-teal-600',
-                icon: CheckCircle,
-                urgent: false
-            };
-        }
-        if (completionRate >= 50) {
-            return {
-                label: 'God dag',
-                sublabel: 'Dagen skrider fremad',
-                color: 'from-teal-500 to-teal-600',
-                icon: CheckCircle,
-                urgent: false
-            };
-        }
-        return {
-            label: 'Tjek ind',
-            sublabel: 'Der er opgaver at følge op på',
-            color: 'from-amber-500 to-amber-600',
-            icon: Clock,
-            urgent: false
-        };
-    };
-
-    const status = getPeaceOfMindStatus();
-    const StatusIcon = status.icon;
-
-    // Get period-specific stats for quick glance
-    const getMedicineStatus = () => {
-        const medTasks = tasks.filter(t => t.title?.toLowerCase().includes('medicin') || t.title?.toLowerCase().includes('pille'));
-        if (medTasks.length === 0) return { text: 'Ingen planlagt', color: 'text-stone-500' };
-        const completed = medTasks.filter(t => t.completed).length;
-        const total = medTasks.length;
-        if (completed === total) return { text: 'Alle taget ✓', color: 'text-green-600' };
-        return { text: `${completed}/${total} taget`, color: completed > 0 ? 'text-amber-600' : 'text-red-600' };
-    };
-
-    const medicineStatus = getMedicineStatus();
-
-    return (
-        <div className="space-y-4">
-            {/* HERO: Peace of Mind Card with Atmospheric Background details */}
-            <StatusCard
-                mode="senior"
-                name={seniorName}
-                timestamp={lastCheckIn}
-                completionRate={completionRate}
-                tasks={tasks}
-                symptomCount={symptomCount}
-                onViewSymptoms={onViewSymptoms}
-            />
-            {/* Thinking of You - moved outside card if needed or keep inside? SeniorStatusCard doesn't have it built-in. */}
-            {/* Adding ThinkingOfYouIconButton below the card or integrate into a separate actions row if preferred. */}
-            <div className="flex justify-end -mt-2 mb-2">
-                <ThinkingOfYouIconButton onSendPing={onSendPing} />
-            </div>
-
-            {/* SMART SUMMARY - Natural Language Briefing */}
-            {(() => {
-                const briefing = getDailyBriefing({ tasks, symptoms, seniorName, lastCheckIn });
-                return (
-                    <div className={`p-4 rounded-xl border-2 ${briefing.type === 'success' ? 'bg-green-50 border-green-200' :
-                        briefing.type === 'warning' ? 'bg-amber-50 border-amber-200' :
-                            'bg-stone-50 border-stone-200'
-                        }`}>
-                        <div className="flex items-start gap-3">
-                            <span className="text-2xl">{briefing.emoji}</span>
-                            <div className="flex-1">
-                                <p className={`font-medium ${briefing.type === 'success' ? 'text-green-800' :
-                                    briefing.type === 'warning' ? 'text-amber-800' :
-                                        'text-stone-700'
-                                    }`}>
-                                    {briefing.message}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                );
-            })()}
-
-            {/* Connection History - DISABLED for now (uncomment to re-enable) */}
-            {false && recentActivity.length > 0 && (
-                <div className="bg-stone-50 rounded-xl p-4">
-                    <h3 className="text-xs font-bold text-stone-500 uppercase tracking-wider mb-3">Seneste aktivitet</h3>
-                    <div className="space-y-2">
-                        {recentActivity.slice(0, 5).map((activity, i) => (
-                            <div key={i} className="flex items-center gap-2 text-sm text-stone-600">
-                                <span className="text-stone-400">{activity.time}</span>
-                                <span>{activity.emoji}</span>
-                                <span>{activity.text}</span>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            )}
-        </div>
-    );
-};
-
-export default PeaceOfMindTab;
-
-```
----
-
 ## File: tryg-app\src\components\PrivacySettings.tsx
 ```tsx
 // Privacy Settings Screen - GDPR data export, deletion, and pause controls
 // Accessible from app settings
 
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     Shield,
     Download,
@@ -3245,12 +2623,11 @@ import {
     Loader2,
     X
 } from 'lucide-react';
-import { collection, getDocs, deleteDoc, doc, writeBatch } from 'firebase/firestore';
+import { collection, getDocs, doc, writeBatch } from 'firebase/firestore';
 import { deleteUser } from 'firebase/auth';
 import { db, auth } from '../config/firebase';
 import { CareCircle } from '../types';
-import { Task } from '../features/tasks/useTasks';
-import { SymptomLog } from '../features/symptoms/useSymptoms';
+import { Task, SymptomLog } from '../types';
 
 export interface PrivacySettingsProps {
     user: any; // User from firebase/auth
@@ -3267,6 +2644,7 @@ export const PrivacySettings: React.FC<PrivacySettingsProps> = ({
     onPauseChange,
     isPaused = false
 }) => {
+    const { t } = useTranslation();
     const [exporting, setExporting] = useState(false);
     const [exported, setExported] = useState(false);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -3328,7 +2706,7 @@ export const PrivacySettings: React.FC<PrivacySettingsProps> = ({
             setTimeout(() => setExported(false), 3000);
         } catch (err) {
             console.error('Export error:', err);
-            alert('Der opstod en fejl ved eksport af data');
+            alert(t('privacy_export_error'));
         } finally {
             setExporting(false);
         }
@@ -3392,9 +2770,9 @@ export const PrivacySettings: React.FC<PrivacySettingsProps> = ({
         } catch (err: any) {
             console.error('Delete error:', err);
             if (err.code === 'auth/requires-recent-login') {
-                setDeleteError('Du skal logge ind igen for at slette din konto. Log ud og log ind igen.');
+                setDeleteError(t('privacy_error_relogin'));
             } else {
-                setDeleteError('Der opstod en fejl. Prøv igen senere.');
+                setDeleteError(t('privacy_error_generic'));
             }
             setDeleting(false);
         }
@@ -3410,7 +2788,7 @@ export const PrivacySettings: React.FC<PrivacySettingsProps> = ({
                         <div className="w-10 h-10 bg-teal-100 rounded-xl flex items-center justify-center">
                             <Shield className="w-5 h-5 text-teal-600" />
                         </div>
-                        <h2 className="text-xl font-bold text-stone-800">Privatliv & Data</h2>
+                        <h2 className="text-xl font-bold text-stone-800">{t('privacy_title')}</h2>
                     </div>
                     <button
                         onClick={onClose}
@@ -3432,9 +2810,9 @@ export const PrivacySettings: React.FC<PrivacySettingsProps> = ({
                                     <Play className="w-6 h-6 text-teal-600" />
                                 )}
                                 <div>
-                                    <h3 className="font-bold text-stone-800">Pause deling</h3>
+                                    <h3 className="font-bold text-stone-800">{t('privacy_pause_sharing')}</h3>
                                     <p className="text-sm text-stone-500">
-                                        {isPaused ? 'Din familie kan ikke se dine aktiviteter' : 'Din familie kan se dine aktiviteter'}
+                                        {isPaused ? t('privacy_pause_on') : t('privacy_pause_off')}
                                     </p>
                                 </div>
                             </div>
@@ -3464,8 +2842,8 @@ export const PrivacySettings: React.FC<PrivacySettingsProps> = ({
                                 <Download className="w-6 h-6 text-teal-600" />
                             )}
                             <div className="text-left">
-                                <h3 className="font-bold text-stone-800">Download mine data</h3>
-                                <p className="text-sm text-stone-500">Få en kopi af alle dine data</p>
+                                <h3 className="font-bold text-stone-800">{t('privacy_download_data')}</h3>
+                                <p className="text-sm text-stone-500">{t('privacy_download_desc')}</p>
                             </div>
                         </div>
                         <ChevronRight className="w-5 h-5 text-stone-400" />
@@ -3480,8 +2858,8 @@ export const PrivacySettings: React.FC<PrivacySettingsProps> = ({
                             <div className="flex items-center gap-3">
                                 <Trash2 className="w-6 h-6 text-red-600" />
                                 <div className="text-left">
-                                    <h3 className="font-bold text-red-800">Slet min konto</h3>
-                                    <p className="text-sm text-red-600">Sletter alle dine data permanent</p>
+                                    <h3 className="font-bold text-red-800">{t('privacy_delete_account')}</h3>
+                                    <p className="text-sm text-red-600">{t('privacy_delete_desc')}</p>
                                 </div>
                             </div>
                             <ChevronRight className="w-5 h-5 text-red-400" />
@@ -3490,11 +2868,10 @@ export const PrivacySettings: React.FC<PrivacySettingsProps> = ({
                         <div className="bg-red-50 rounded-2xl p-4 border-2 border-red-200">
                             <div className="flex items-center gap-2 mb-3">
                                 <AlertTriangle className="w-6 h-6 text-red-600" />
-                                <h3 className="font-bold text-red-800">Er du sikker?</h3>
+                                <h3 className="font-bold text-red-800">{t('privacy_confirm_title')}</h3>
                             </div>
                             <p className="text-sm text-red-700 mb-4">
-                                Dette vil permanent slette alle dine data, inklusiv opgaver, symptomer, og din konto.
-                                Dette kan ikke fortrydes.
+                                {t('privacy_confirm_desc')}
                             </p>
 
                             {deleteError && (
@@ -3508,7 +2885,7 @@ export const PrivacySettings: React.FC<PrivacySettingsProps> = ({
                                     onClick={() => setShowDeleteConfirm(false)}
                                     className="flex-1 py-2 bg-white text-stone-700 rounded-xl font-medium hover:bg-stone-100"
                                 >
-                                    Annuller
+                                    {t('privacy_cancel')}
                                 </button>
                                 <button
                                     onClick={handleDeleteAccount}
@@ -3518,10 +2895,10 @@ export const PrivacySettings: React.FC<PrivacySettingsProps> = ({
                                     {deleting ? (
                                         <>
                                             <Loader2 className="w-4 h-4 animate-spin" />
-                                            Sletter...
+                                            {t('privacy_deleting')}
                                         </>
                                     ) : (
-                                        'Ja, slet alt'
+                                        t('privacy_confirm_delete')
                                     )}
                                 </button>
                             </div>
@@ -3531,13 +2908,13 @@ export const PrivacySettings: React.FC<PrivacySettingsProps> = ({
                     {/* Info section */}
                     <div className="text-center pt-4">
                         <p className="text-xs text-stone-400">
-                            Dine data opbevares i EU (Frankfurt) og er krypteret.
+                            {t('privacy_info_storage')}
                         </p>
                         <a
                             href="/privacy-policy.html"
                             className="text-xs text-teal-600 hover:underline"
                         >
-                            Læs vores fulde privatlivspolitik
+                            {t('privacy_policy_link')}
                         </a>
                     </div>
                 </div>
@@ -3551,78 +2928,57 @@ export default PrivacySettings;
 ```
 ---
 
-## File: tryg-app\src\components\RelativeView.tsx
+## File: tryg-app\src\components\relative\modals\RelativeModals.tsx
 ```tsx
-import React, { useState, useMemo } from 'react';
-import { Settings } from 'lucide-react';
-import { Modal } from './ui/Modal';
-import { Button } from './ui/Button';
-import { WeeklyQuestionWidget, WeeklyQuestionModal } from '../features/weeklyQuestion';
-import { RelativeBottomNavigation } from './BottomNavigation';
-import { PeaceOfMindTab } from './PeaceOfMindTab';
-import { CoordinationTab } from './CoordinationTab';
-import { MatchCelebration } from '../features/helpExchange';
-import { TimePickerModal } from '../features/tasks';
-import { Spillehjoernet } from '../features/wordGame';
-import { FEATURES } from '../config/features';
-import { SYMPTOMS_LIST } from '../data/constants';
-import { AlertCircle } from 'lucide-react';
-import { Avatar } from './ui/Avatar';
-import { Task } from '../features/tasks/useTasks';
-import { SymptomLog } from '../features/symptoms/useSymptoms';
+import React, { useState } from 'react';
+import { Modal } from '../../ui/Modal';
+import { Button } from '../../ui/Button';
+import { WeeklyQuestionModal } from '../../../features/weeklyQuestion';
+import { MatchCelebration } from '../../../features/helpExchange';
+import { TimePickerModal } from '../../../features/tasks';
+import { useTranslation } from 'react-i18next';
+import { useCareCircleContext } from '../../../contexts/CareCircleContext';
 
-export interface RelativeViewProps {
-    tasks: Task[];
-    profile: any; // UserProfile
-    lastCheckIn?: any;
-    symptomLogs: SymptomLog[];
-    onAddTask: (task: Partial<Task>) => void;
-    myStatus?: string;
-    onMyStatusChange?: (status: string) => void;
-    memberStatuses?: any[];
-    currentUserId?: string | null;
-    onSendPing: (type: string) => void;
-    weeklyAnswers: any[];
-    onWeeklyAnswer: (answer: string) => void;
-    onOpenSettings: () => void;
-    userName?: string;
-    seniorName?: string;
-    careCircleId?: string | null;
+interface RelativeModalsProps {
+    showAddModal: boolean;
+    setShowAddModal: (show: boolean) => void;
+    showWeeklyModal: boolean;
+    setShowWeeklyModal: (show: boolean) => void;
+    activeMatch: any | null;
+    setActiveMatch: (match: any | null) => void;
+    showTimePicker: boolean;
+    setShowTimePicker: (show: boolean) => void;
+    onDismissMatch: (matchId: string) => void;
 }
 
-export const RelativeView: React.FC<RelativeViewProps> = ({
-    tasks, profile, lastCheckIn, symptomLogs, onAddTask,
-    myStatus = 'home', onMyStatusChange,
-    memberStatuses = [], currentUserId = null,
-    onSendPing, weeklyAnswers, onWeeklyAnswer,
-    // HelpExchange props removed
-    onOpenSettings, userName = 'Pårørende', seniorName = 'Mor', careCircleId = null
+export const RelativeModals: React.FC<RelativeModalsProps> = ({
+    showAddModal,
+    setShowAddModal,
+    showWeeklyModal,
+    setShowWeeklyModal,
+    activeMatch,
+    setActiveMatch,
+    showTimePicker,
+    setShowTimePicker,
+    onDismissMatch
 }) => {
-    const [showAddModal, setShowAddModal] = useState(false);
-    const [showReport, setShowReport] = useState(false);
-    const [showWeeklyModal, setShowWeeklyModal] = useState(false);
+    const { t } = useTranslation();
+    const {
+        seniorName,
+        userName,
+        addTask,
+        weeklyAnswers,
+        addWeeklyAnswer,
+        toggleLike,
+        addReply,
+        currentUserId
+    } = useCareCircleContext();
+
     const [newTaskTitle, setNewTaskTitle] = useState('');
-    const [newTaskPeriod, setNewTaskPeriod] = useState('morgen'); // Period selector for new tasks
-    const [activeTab, setActiveTab] = useState<'daily' | 'family' | 'spil'>('daily'); // 'daily' = Peace of Mind, 'family' = Coordination, 'spil' = Gaming
-    const [activeMatch, setActiveMatch] = useState<any | null>(null); // 
-    const [pendingAction, setPendingAction] = useState<any | null>(null); // Stores action info for time picker
-    const [showTimePicker, setShowTimePicker] = useState(false);
-    const [dismissedMatchIds, setDismissedMatchIds] = useState(new Set()); // Track dismissed matches
+    const [newTaskPeriod, setNewTaskPeriod] = useState('morgen');
+    const [newTaskRecurring, setNewTaskRecurring] = useState(false);
+    const [pendingAction, setPendingAction] = useState<any | null>(null);
 
-    const openTasks = tasks.filter(t => !t.completed);
-    const completedTasksList = tasks.filter(t => t.completed);
-
-    const completionRate = tasks.length > 0
-        ? Math.round((tasks.filter(t => t.completed).length / tasks.length) * 100)
-        : 0;
-
-    // Count today's symptoms
-    const todaySymptomCount = symptomLogs.filter(s => {
-        const date = (s.loggedAt as any)?.toDate ? (s.loggedAt as any).toDate() : new Date(s.loggedAt as any);
-        return date.toDateString() === new Date().toDateString();
-    }).length;
-
-    // Period to time mapping
     const PERIOD_TIMES: Record<string, string> = {
         morgen: '08:00',
         frokost: '12:00',
@@ -3632,169 +2988,44 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
 
     const handleAddTask = () => {
         if (!newTaskTitle.trim()) return;
-        onAddTask({
+        addTask({
             title: newTaskTitle.trim(),
             time: PERIOD_TIMES[newTaskPeriod],
             type: 'appointment',
             description: `Tilføjet af ${userName}`,
-            period: newTaskPeriod
+            period: newTaskPeriod,
+            recurring: newTaskRecurring
         });
         setNewTaskTitle('');
         setNewTaskPeriod('morgen');
+        setNewTaskRecurring(false);
         setShowAddModal(false);
     };
 
-    // Generate activity feed from tasks and symptoms
-    const recentActivity = useMemo(() => {
-        const activities: any[] = [];
-
-        // Add completed tasks
-        tasks.filter(t => t.completed && t.completedAt).forEach(t => {
-            activities.push({
-                type: 'task',
-                timestamp: (t.completedAt as any)?.toDate ? (t.completedAt as any).toDate() : new Date(t.completedAt as any),
-                text: `Udført: ${t.title}`,
-                emoji: '✅'
-            });
-        });
-
-        // Add symptoms
-        symptomLogs.forEach(s => {
-            activities.push({
-                type: 'symptom',
-                timestamp: (s.loggedAt as any)?.toDate ? (s.loggedAt as any).toDate() : new Date(s.loggedAt as any),
-                text: `Symptom: ${s.label || s.type || 'Ukendt'}`,
-                emoji: '🩺'
-            });
-        });
-
-        // Sort by time (newest first)
-        return activities
-            .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
-            .slice(0, 5)
-            .map(a => ({
-                ...a,
-                time: a.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-            }));
-    }, [tasks, symptomLogs]);
-
     return (
-        <div className="flex flex-col h-full bg-stone-50 relative overflow-hidden">
-            {/* Header - COMPACT */}
-            <header className="px-4 py-2 bg-white shadow-sm rounded-b-3xl z-10 shrink-0">
-                <div className="flex justify-between items-center">
-                    <div className="flex items-center gap-2">
-                        <Avatar
-                            id={(userName.includes('Fatima') || userName === 'Test User') ? 'fatima' : userName === 'Brad' ? 'brad' : 'louise'}
-                            size="md"
-                            className="bg-indigo-50"
-                        />
-                        <span className="font-semibold text-stone-700 text-sm">Hej, {userName}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                        {/* Weekly Question widget */}
-                        {FEATURES.weeklyQuestion && (
-                            <WeeklyQuestionWidget
-                                answers={weeklyAnswers}
-                                userName={userName}
-                                hasUnread={true}
-                                onClick={() => setShowWeeklyModal(true)}
-                            />
-                        )}
-                        <button
-                            onClick={onOpenSettings}
-                            className="p-2 rounded-full hover:bg-stone-100 transition-colors"
-                            aria-label="Indstillinger"
-                        >
-                            <Settings className="w-5 h-5 text-stone-500" />
-                        </button>
-                    </div>
-                </div>
-            </header>
-
-            {/* Main Content - Tab based */}
-            <main className="flex-1 p-4 overflow-y-auto pb-28">
-                {/* ===== DAILY TAB ===== */}
-                {activeTab === 'daily' && (
-                    <PeaceOfMindTab
-                        seniorName={seniorName}
-                        lastCheckIn={lastCheckIn}
-                        tasks={tasks}
-                        symptomCount={todaySymptomCount}
-                        onSendPing={onSendPing}
-                        onViewSymptoms={() => setActiveTab('family')}
-                        recentActivity={recentActivity}
-                    />
-                )}
-
-                {/* ===== FAMILY TAB ===== */}
-                {activeTab === 'family' && (
-                    <CoordinationTab
-                        seniorName={seniorName}
-                        userName={userName}
-                        myStatus={myStatus}
-                        onMyStatusChange={onMyStatusChange}
-                        memberStatuses={memberStatuses}
-                        currentUserId={currentUserId}
-                        // HelpExchange props removed - now fetched internally
-                        openTasks={openTasks}
-                        completedTasks={completedTasksList}
-                        symptomLogs={symptomLogs}
-                        onAddTask={() => setShowAddModal(true)}
-                        onViewReport={() => setShowReport(true)}
-                        onMatchAction={(match) => setActiveMatch(match)}
-                        onDismissMatch={(matchId) => {
-                            setDismissedMatchIds(prev => new Set([...prev, matchId]));
-                        }}
-                        dismissedMatchIds={dismissedMatchIds}
-                        careCircleId={careCircleId}
-                    />
-                )}
-
-                {/* ===== SPIL TAB ===== */}
-                {activeTab === 'spil' && (
-                    <>
-                        {FEATURES.spillehjoernet && (
-                            <Spillehjoernet
-                                circleId={careCircleId || undefined}
-                                userId={currentUserId || undefined}
-                                displayName={userName}
-                            />
-                        )}
-                    </>
-                )}
-            </main>
-
-            {/* Bottom Navigation */}
-            <RelativeBottomNavigation
-                activeTab={activeTab}
-                onTabChange={setActiveTab}
-                onShowReport={() => setShowReport(true)}
-            />
-
+        <>
             {/* Add Task Modal */}
-            <Modal isOpen={showAddModal} onClose={() => setShowAddModal(false)} title="Ny påmindelse">
+            <Modal isOpen={showAddModal} onClose={() => setShowAddModal(false)} title={t('new_reminder')}>
                 <div className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-1">Titel</label>
+                        <label className="block text-sm font-medium text-slate-700 mb-1">{t('title_label')}</label>
                         <input
                             type="text"
-                            className="w-full p-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none"
-                            placeholder="F.eks. Lægebesøg"
+                            className="w-full p-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-sans"
+                            placeholder={t('reminder_placeholder')}
                             value={newTaskTitle}
                             onChange={(e) => setNewTaskTitle(e.target.value)}
                         />
                     </div>
 
-                    {/* Period Selector */}
                     <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-1">Hvornår?</label>
+                        <label className="block text-sm font-medium text-slate-700 mb-1">{t('when_question')}</label>
                         <div className="grid grid-cols-2 gap-2">
                             {[
-                                { id: 'morgen', label: 'Morgen', time: '8-11', emoji: '☀️' },
-                                { id: 'frokost', label: 'Frokost', time: '12-13', emoji: '🍽️' },
-                                { id: 'eftermiddag', label: 'Eftermiddag', time: '14-17', emoji: '🌤️' },
-                                { id: 'aften', label: 'Aften', time: '18-21', emoji: '🌙' }
+                                { id: 'morgen', label: t('morning'), time: '08-11', emoji: '🌅' },
+                                { id: 'frokost', label: t('lunch'), time: '12-13', emoji: '☀️' },
+                                { id: 'eftermiddag', label: t('afternoon'), time: '14-17', emoji: '☕' },
+                                { id: 'aften', label: t('evening'), time: '18-21', emoji: '🌙' }
                             ].map(period => (
                                 <button
                                     key={period.id}
@@ -3812,150 +3043,23 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
                         </div>
                     </div>
 
+                    <div className="flex items-center gap-3 p-4 bg-indigo-50 rounded-xl border-2 border-indigo-100">
+                        <input
+                            type="checkbox"
+                            id="recurring-relative"
+                            checked={newTaskRecurring}
+                            onChange={(e) => setNewTaskRecurring(e.target.checked)}
+                            className="w-6 h-6 rounded-md border-indigo-300 text-indigo-600 focus:ring-indigo-500"
+                        />
+                        <label htmlFor="recurring-relative" className="flex-1 font-medium text-indigo-700 cursor-pointer">
+                            {t('recurring')}
+                        </label>
+                    </div>
+
                     <div className="p-3 bg-blue-50 text-blue-800 text-sm rounded-xl">
-                        Denne påmindelse vil straks dukke op på {seniorName}s skærm.
+                        {t('reminder_notice', { name: seniorName })}
                     </div>
-                    <Button className="w-full" onClick={handleAddTask}>Tilføj</Button>
-                </div>
-            </Modal>
-
-            {/* Doctor Report Modal */}
-            <Modal isOpen={showReport} onClose={() => setShowReport(false)} title="Rapport til Lægen">
-                <div className="space-y-6">
-                    {/* Summary Stats */}
-                    {(() => {
-                        const totalSymptoms = symptomLogs.length;
-                        const symptomCounts: Record<string, number> = {};
-                        symptomLogs.forEach(log => {
-                            symptomCounts[log.label] = (symptomCounts[log.label] || 0) + 1;
-                        });
-                        const mostCommon = Object.entries(symptomCounts).sort((a, b) => b[1] - a[1])[0];
-
-                        return totalSymptoms > 0 && (
-                            <div className="grid grid-cols-2 gap-3">
-                                <div className="bg-orange-50 rounded-xl p-3 border border-orange-100">
-                                    <p className="text-2xl font-bold text-orange-600">{totalSymptoms}</p>
-                                    <p className="text-xs text-orange-500">Symptomer (14 dage)</p>
-                                </div>
-                                {mostCommon && (
-                                    <div className="bg-purple-50 rounded-xl p-3 border border-purple-100">
-                                        <p className="text-lg font-bold text-purple-600 truncate">{mostCommon[0]}</p>
-                                        <p className="text-xs text-purple-500">Mest hyppige ({mostCommon[1]}x)</p>
-                                    </div>
-                                )}
-                            </div>
-                        );
-                    })()}
-
-                    {/* 14-day symptom overview chart with counts */}
-                    <div className="p-4 bg-orange-50 rounded-xl border border-orange-200">
-                        <h4 className="font-bold text-slate-800 mb-2">Symptom-oversigt (14 dage)</h4>
-                        <div className="flex items-end gap-1 h-24 pb-2">
-                            {(() => {
-                                const days = Array(14).fill(0);
-                                symptomLogs.forEach(log => {
-                                    const date = (log.loggedAt as any)?.toDate ? (log.loggedAt as any).toDate() : new Date(log.loggedAt as any);
-                                    const daysAgo = Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24));
-                                    if (daysAgo >= 0 && daysAgo < 14) {
-                                        days[13 - daysAgo]++;
-                                    }
-                                });
-                                const max = Math.max(...days, 1);
-                                return days.map((count, i) => (
-                                    <div key={i} className="flex-1 flex flex-col items-center gap-1">
-                                        {count > 0 && (
-                                            <span className="text-[10px] font-bold text-orange-600">{count}</span>
-                                        )}
-                                        <div
-                                            className={`w-full rounded-t-sm transition-opacity ${count > 0 ? 'bg-orange-400 hover:bg-orange-500' : 'bg-slate-200'}`}
-                                            style={{ height: `${Math.max((count / max) * 60, 4)}px` }}
-                                            title={`${count} symptomer`}
-                                        />
-                                    </div>
-                                ));
-                            })()}
-                        </div>
-                        <div className="flex justify-between text-xs text-slate-400">
-                            <span>-14 dage</span><span>I dag</span>
-                        </div>
-                    </div>
-
-                    {/* Medicine compliance with percentage labels */}
-                    <div className="p-4 bg-slate-50 rounded-xl border border-slate-200">
-                        <h4 className="font-bold text-slate-800 mb-2">Overholdelse af medicin (7 dage)</h4>
-                        <div className="flex items-end gap-2 h-28 pb-2">
-                            {[80, 90, 100, 85, 95, 100, completionRate].map((h, i) => (
-                                <div key={i} className="flex-1 flex flex-col items-center gap-1">
-                                    <span className="text-[10px] font-bold text-indigo-600">{h}%</span>
-                                    <div
-                                        className="w-full bg-indigo-500 rounded-t-sm opacity-80 hover:opacity-100 transition-opacity"
-                                        style={{ height: `${h * 0.6}px` }}
-                                    />
-                                </div>
-                            ))}
-                        </div>
-                        <div className="flex justify-between text-xs text-slate-400">
-                            <span>-7 dage</span><span>I dag</span>
-                        </div>
-                    </div>
-
-                    {/* Symptom Log - Grouped by Date */}
-                    <div>
-                        <h4 className="font-bold text-slate-800 mb-3">Symptom Log (sidste 14 dage)</h4>
-                        {symptomLogs.length === 0 ? (
-                            <p className="text-slate-500 text-sm italic">Ingen symptomer registreret.</p>
-                        ) : (
-                            (() => {
-                                // Group symptoms by date
-                                const grouped: Record<string, any[]> = {};
-                                symptomLogs.forEach(log => {
-                                    const date = (log.loggedAt as any)?.toDate ? (log.loggedAt as any).toDate() : new Date(log.loggedAt as any);
-                                    const dateKey = date.toLocaleDateString('da-DK', { weekday: 'short', day: 'numeric', month: 'short' });
-                                    if (!grouped[dateKey]) grouped[dateKey] = [];
-                                    grouped[dateKey].push({ ...log, dateObj: date });
-                                });
-
-                                return (
-                                    <div className="space-y-4">
-                                        {Object.entries(grouped).map(([dateStr, logs]) => (
-                                            <div key={dateStr}>
-                                                <div className="flex items-center gap-2 mb-2">
-                                                    <div className="h-px flex-1 bg-slate-200" />
-                                                    <span className="text-xs font-bold text-slate-500 uppercase">{dateStr}</span>
-                                                    <div className="h-px flex-1 bg-slate-200" />
-                                                </div>
-                                                <ul className="space-y-2">
-                                                    {logs.map((log, i) => {
-                                                        const symptomDef = SYMPTOMS_LIST.find(s => s.id === log.id) || {} as any;
-                                                        const SymptomIcon = symptomDef.icon || AlertCircle;
-                                                        const timeStr = log.dateObj.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' });
-
-                                                        return (
-                                                            <li key={i} className="flex flex-col gap-1 text-sm p-3 bg-white border rounded-lg">
-                                                                <div className="flex items-center gap-3">
-                                                                    <SymptomIcon className="w-5 h-5 text-slate-400" />
-                                                                    <span className="font-medium text-slate-700">{log.label}</span>
-                                                                    <span className="text-slate-400 ml-auto">{timeStr}</span>
-                                                                </div>
-                                                                {log.bodyLocation && (
-                                                                    <div className="ml-8 text-xs text-slate-500 space-y-1">
-                                                                        <div>📍 Lokation: <span className="font-medium">{log.bodyLocation.emoji} {log.bodyLocation.label}</span></div>
-                                                                        {log.bodyLocation.severity && (
-                                                                            <div>📊 Intensitet: <span className="font-medium">{log.bodyLocation.severity.emoji} {log.bodyLocation.severity.label}</span></div>
-                                                                        )}
-                                                                    </div>
-                                                                )}
-                                                            </li>
-                                                        );
-                                                    })}
-                                                </ul>
-                                            </div>
-                                        ))}
-                                    </div>
-                                );
-                            })()
-                        )}
-                    </div>
+                    <Button className="w-full" onClick={handleAddTask}>{t('add_button')}</Button>
                 </div>
             </Modal>
 
@@ -3964,8 +3068,11 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
                 isOpen={showWeeklyModal}
                 onClose={() => setShowWeeklyModal(false)}
                 answers={weeklyAnswers}
-                onAnswer={onWeeklyAnswer}
+                onAnswer={(answer) => addWeeklyAnswer(answer.text || '')}
                 userName={userName}
+                onToggleLike={toggleLike}
+                onReply={addReply}
+                currentUserId={currentUserId || undefined}
             />
 
             {/* Match Celebration Modal */}
@@ -3975,36 +3082,34 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
                     seniorName={seniorName}
                     onDismiss={() => setActiveMatch(null)}
                     onAction={(action) => {
-                        // Store action info and open time picker
                         const { celebration } = activeMatch;
                         let taskTitle = '';
 
                         switch (action) {
                             case 'call':
-                                taskTitle = `📞 Ring til ${seniorName}`;
+                                taskTitle = t('match_task_call_relative', { name: seniorName });
                                 break;
                             case 'plan-visit':
-                                taskTitle = `☕ Besøg hos ${seniorName}`;
+                                taskTitle = t('match_task_visit_relative', { name: seniorName });
                                 break;
                             case 'plan-meal':
-                                taskTitle = `🍳 Lav mad med ${seniorName}`;
+                                taskTitle = t('match_task_meal', { name: seniorName });
                                 break;
                             case 'plan-transport':
-                                taskTitle = `🚗 Kør ${seniorName}`;
+                                taskTitle = t('match_task_transport_relative', { name: seniorName });
                                 break;
                             case 'plan-garden':
-                                taskTitle = `🌿 Havearbejde med ${seniorName}`;
+                                taskTitle = t('match_task_garden', { name: seniorName });
                                 break;
                             default:
-                                taskTitle = celebration?.title || `Opgave med ${seniorName}`;
+                                taskTitle = celebration?.title || t('match_task_default', { name: seniorName });
                         }
 
-                        // Store pending action and show time picker
                         setPendingAction({
                             title: taskTitle,
                             action: action,
                             celebration: celebration,
-                            matchToDissmiss: activeMatch // Store match for dismissal
+                            matchToDissmiss: activeMatch
                         });
                         setActiveMatch(null);
                         setShowTimePicker(true);
@@ -4019,34 +3124,132 @@ export const RelativeView: React.FC<RelativeViewProps> = ({
                     setShowTimePicker(false);
                     setPendingAction(null);
                 }}
-                title="Hvornår?"
-                actionLabel={pendingAction?.title || 'Opret opgave'}
+                title={t('when_question')}
+                actionLabel={pendingAction?.title || t('create_task_label')}
                 seniorName={seniorName}
-                onConfirm={({ time, label, period }) => {
-                    if (onAddTask && pendingAction) {
-                        onAddTask({
+                onConfirm={({ time, period }) => {
+                    if (addTask && pendingAction) {
+                        addTask({
                             title: pendingAction.title,
                             time: time,
-                            period: period || 'morgen', // Include period for proper sorting
+                            period: period || 'morgen',
                             type: 'appointment',
                             description: `Tilføjet af ${userName}`,
                             createdByRole: 'relative'
                         });
 
-                        // Dismiss the match so it doesn't reappear
                         if (pendingAction.matchToDissmiss) {
                             const match = pendingAction.matchToDissmiss;
                             const offerId = match.offer?.docId || match.offer?.id || 'none';
                             const requestId = match.request?.docId || match.request?.id || 'none';
                             const matchId = `${offerId}-${requestId}`;
-                            setDismissedMatchIds(prev => new Set([...prev, matchId]));
+                            onDismissMatch(matchId);
                         }
-
-                        // Show confirmation to user
-                        alert(`✅ Opgave oprettet: ${pendingAction.title} kl. ${time}`);
                     }
                     setShowTimePicker(false);
                     setPendingAction(null);
+                }}
+            />
+        </>
+    );
+};
+
+```
+---
+
+## File: tryg-app\src\components\RelativeView.tsx
+```tsx
+import React, { useState } from 'react';
+import { WeeklyQuestionWidget } from '../features/weeklyQuestion';
+import { ThinkingOfYouIconButton } from '../features/thinkingOfYou';
+import { AmbientTab } from './shared/AmbientTab';
+import { CoordinationTab } from './CoordinationTab';
+import { HealthTab } from './shared/HealthTab';
+import { SpilTab } from './shared/SpilTab';
+import { RelativeModals } from './relative/modals/RelativeModals';
+import { FEATURES } from '../config/features';
+import { Avatar } from './ui/Avatar';
+import { useTranslation } from 'react-i18next';
+import { useCareCircleContext } from '../contexts/CareCircleContext';
+
+export const RelativeView: React.FC = () => {
+    const { t } = useTranslation();
+    const {
+        userName,
+        weeklyAnswers,
+        sendPing,
+        activeTab,
+        setActiveTab
+    } = useCareCircleContext();
+
+    const [showAddModal, setShowAddModal] = useState(false);
+    const [showWeeklyModal, setShowWeeklyModal] = useState(false);
+    const [activeMatch, setActiveMatch] = useState<any | null>(null);
+    const [showTimePicker, setShowTimePicker] = useState(false);
+    const [dismissedMatchIds, setDismissedMatchIds] = useState<Set<string>>(new Set());
+
+    return (
+        <div className="flex flex-col h-full bg-transparent relative pt-10">
+            {/* Header - COMPACT */}
+            <header className="px-4 py-2 theme-header shadow-sm rounded-b-3xl z-10 shrink-0">
+                <div className="flex justify-between items-center">
+                    <div className="flex items-center gap-2">
+                        <Avatar
+                            id={(userName.includes('Fatima') || userName === 'Test User') ? 'fatima' : userName === 'Brad' ? 'brad' : 'louise'}
+                            size="md"
+                            className="bg-indigo-50"
+                        />
+                        <span className="font-semibold theme-text text-sm whitespace-nowrap overflow-hidden text-ellipsis max-w-[120px]">
+                            {t('greeting_relative', { name: userName })}
+                        </span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                        {FEATURES.weeklyQuestion && (
+                            <WeeklyQuestionWidget
+                                answers={weeklyAnswers}
+                                userName={userName}
+                                hasUnread={true}
+                                onClick={() => setShowWeeklyModal(true)}
+                            />
+                        )}
+                        <ThinkingOfYouIconButton onSendPing={() => sendPing('senior')} />
+                    </div>
+                </div>
+            </header>
+
+            {/* Main Content - Tab based */}
+            <main className="flex-1 p-4 overflow-y-auto pb-28">
+                {activeTab === 'daily' && <AmbientTab role="relative" />}
+
+                {activeTab === 'family' && (
+                    <CoordinationTab
+                        onAddTask={() => setShowAddModal(true)}
+                        onViewReport={() => setActiveTab('health')}
+                        onMatchAction={(match) => setActiveMatch(match)}
+                        onDismissMatch={(matchId) => {
+                            setDismissedMatchIds(prev => new Set([...prev, matchId]));
+                        }}
+                        dismissedMatchIds={dismissedMatchIds}
+                    />
+                )}
+
+                {activeTab === 'health' && <HealthTab />}
+
+                {activeTab === 'spil' && <SpilTab />}
+            </main>
+
+            {/* Centralized Relative Modals */}
+            <RelativeModals
+                showAddModal={showAddModal}
+                setShowAddModal={setShowAddModal}
+                showWeeklyModal={showWeeklyModal}
+                setShowWeeklyModal={setShowWeeklyModal}
+                activeMatch={activeMatch}
+                setActiveMatch={setActiveMatch}
+                showTimePicker={showTimePicker}
+                setShowTimePicker={setShowTimePicker}
+                onDismissMatch={(matchId) => {
+                    setDismissedMatchIds(prev => new Set([...prev, matchId]));
                 }}
             />
         </div>
@@ -4058,91 +3261,31 @@ export default RelativeView;
 ```
 ---
 
-## File: tryg-app\src\components\SeniorView.tsx
+## File: tryg-app\src\components\senior\FamilyTab.tsx
 ```tsx
-import React, { useState } from 'react';
-import {
-    CheckCircle,
-    Phone,
-    Heart,
-    Pill,
-    Activity,
-    Sun,
-    Moon,
-    Clock,
-    Coffee,
-    Image as ImageIcon,
-    ChevronDown,
-    ChevronUp,
-    Plus
-} from 'lucide-react';
-import { Avatar } from './ui/Avatar';
-import { Button } from './ui/Button';
-import { Modal } from './ui/Modal';
-import { StatusList } from '../features/familyPresence';
-import { FamilyPresence } from '../features/familyPresence';
-import { ThinkingOfYouButton } from '../features/thinkingOfYou';
-import { BodyPainSelector } from '../features/symptoms';
-import { MemoryTrigger } from '../features/weeklyQuestion';
-import { WeeklyQuestionWidget, WeeklyQuestionModal } from '../features/weeklyQuestion';
-import { HelpExchange } from '../features/helpExchange';
-import { BottomNavigation } from './BottomNavigation';
-import { SYMPTOMS_LIST } from '../data/constants';
-import { FEATURES } from '../config/features';
-import { useHelpExchangeMatch } from '../features/helpExchange';
-import { useHelpExchange } from '../features/helpExchange';
-import { MatchCelebration, MatchBanner } from '../features/helpExchange';
-import { InlineGatesIndicator } from '../features/tasks';
-import { Spillehjoernet } from '../features/wordGame';
-import { HealthReport } from './HealthReport';
-import { playMatchSound } from '../utils/sounds';
-import { Task } from '../features/tasks/useTasks';
-import { SymptomLog } from '../features/symptoms/useSymptoms';
-import { Member } from '../types';
+import { useCareCircleContext } from '../../contexts/CareCircleContext';
+import { CoffeeToggle } from '../../features/coffee';
+import { ThinkingOfYouButton } from '../../features/thinkingOfYou';
+import { FamilyPresence, StatusList } from '../../features/familyPresence';
+import { MemoryTrigger } from '../../features/weeklyQuestion';
+import { HelpExchange } from '../../features/helpExchange';
+import { FEATURES } from '../../config/features';
+import { useHelpExchange } from '../../features/helpExchange';
 
-export interface SeniorViewProps {
-    tasks: Task[];
-    toggleTask: (id: string) => void;
-    updateStatus: (status: string) => void;
-    addSymptom: (symptom: any) => void;
-    statusLastUpdated?: any;
-    onSendPing: (type: string) => void;
-    weeklyAnswers: any[];
-    onWeeklyAnswer: (answer: string) => void;
-    members?: Member[];
-    memberStatuses?: any[];
-    currentUserId?: string | null;
-    relativeStatuses?: any[];
-    userName?: string;
-    relativeName?: string;
-    careCircleId?: string | null;
-    symptomLogs?: SymptomLog[];
-    onAddTask?: (task: Partial<Task>) => void;
-}
+export const FamilyTab: React.FC = () => {
 
-export const SeniorView: React.FC<SeniorViewProps> = ({
-    tasks, toggleTask, updateStatus, addSymptom, statusLastUpdated, onSendPing,
-    weeklyAnswers, onWeeklyAnswer,
-    // HelpExchange props removed
-    members = [], memberStatuses = [], currentUserId = null, relativeStatuses = [],
-    userName = 'Senior', relativeName = 'Familie', careCircleId = null, symptomLogs = [], onAddTask
-}) => {
-    const [showCallModal, setShowCallModal] = useState(false);
-    const [showSymptomModal, setShowSymptomModal] = useState(false);
-    const [showWeeklyModal, setShowWeeklyModal] = useState(false);
-    const [showCompletedTasks, setShowCompletedTasks] = useState(false);
-    const [showHealthReport, setShowHealthReport] = useState(false);
-    const [showAddTaskModal, setShowAddTaskModal] = useState(false);
-    const [rewardMinimized, setRewardMinimized] = useState(true);
-    const [newTaskTitle, setNewTaskTitle] = useState('');
-    const [newTaskPeriod, setNewTaskPeriod] = useState('morgen');
-    const [activePeriod, setActivePeriod] = useState<string | null>('morgen');
-    const [activeTab, setActiveTab] = useState<'daily' | 'family' | 'spil'>('daily'); // 'daily', 'family', or 'spil'
-    const [activeMatch, setActiveMatch] = useState<any | null>(null); // For match celebration modal
-    const [dismissedMatchIds, setDismissedMatchIds] = useState(new Set()); // Track dismissed matches
-    const [hideReward, setHideReward] = useState(false); // Hide medicine reward for session
+    const {
+        userName,
+        careCircleId,
+        currentUserId,
+        memberStatuses,
+        members,
+        relativeStatuses,
 
-    // Fetch HelpExchange data directly
+        sendPing
+    } = useCareCircleContext();
+
+    // Fetch HelpExchange data directly in the tab
     const {
         helpOffers: allOffersFetched,
         helpRequests: allRequestsFetched,
@@ -4153,480 +3296,165 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
     } = useHelpExchange(careCircleId, currentUserId, 'senior', userName);
 
     // Filter offers/requests by role
-    // Senior's items
     const helpOffers = allOffersFetched.filter((o: any) => o.createdByRole === 'senior');
     const helpRequests = allRequestsFetched.filter((r: any) => r.createdByRole === 'senior');
-    // Relative's items
     const relativeOffers = allOffersFetched.filter((o: any) => o.createdByRole === 'relative');
     const relativeRequests = allRequestsFetched.filter((r: any) => r.createdByRole === 'relative');
 
-    // Map handlers
-    const onHelpOffer = addOffer;
-    const onHelpRequest = addRequest;
-    const onRemoveOffer = removeOffer;
-    const onRemoveRequest = removeRequest;
+    return (
+        <div className="tab-content animate-fade-in space-y-4">
+            {/* Spontan Kaffe Signal */}
+            <CoffeeToggle />
 
-    /*
-    console.debug('👴 [SeniorView] Help Data:', {
-        offers: helpOffers.length,
-        requests: helpRequests.length,
-        relOffers: relativeOffers.length,
-        relRequests: relativeRequests.length
-    });
-    */
+            {/* Thinking of You */}
+            {FEATURES.thinkingOfYou && (
+                <ThinkingOfYouButton
+                    onSendPing={() => sendPing('relative')}
+                    fromName={userName}
+                />
+            )}
 
-    // Combine all offers/requests for match detection (using local filtered vars)
-    const allOffers = [
-        ...helpOffers.map((o: any) => ({ ...o, createdByRole: 'senior' })),
-        ...relativeOffers.map((o: any) => ({ ...o, createdByRole: 'relative' }))
-    ];
-    const allRequests = [
-        ...helpRequests.map((r: any) => ({ ...r, createdByRole: 'senior' })),
-        ...relativeRequests.map((r: any) => ({ ...r, createdByRole: 'relative' }))
-    ];
+            {/* Family Presence */}
+            {memberStatuses.length > 0 && (
+                <FamilyPresence
+                    memberStatuses={memberStatuses as any}
+                    currentUserId={currentUserId || ''}
+                    seniorName={userName}
+                />
+            )}
 
-    const { match, dismissMatch, hasMatches, topMatch } = useHelpExchangeMatch({
-        offers: allOffers,
-        requests: allRequests,
-        familyStatus: null, // Senior view doesn't track their own status
-        memberStatuses
-    });
+            {/* Legacy Family Status List */}
+            {FEATURES.familyStatusCard && memberStatuses.length === 0 && (
+                <StatusList
+                    members={members}
+                    relativeStatuses={relativeStatuses}
+                    lastUpdated={null} // statusLastUpdated was passed before, but it was just 'null' in AppCore call mostly
+                />
+            )}
 
-    // Two-step symptom flow: symptom type → body location (for pain)
+            {/* Memory Trigger */}
+            {FEATURES.memoryTriggers && <MemoryTrigger />}
+
+            {/* Help Exchange */}
+            {FEATURES.helpExchange && (
+                <HelpExchange
+                    onOffer={addOffer}
+                    onRequest={addRequest}
+                    onRemoveOffer={removeOffer}
+                    onRemoveRequest={removeRequest}
+                    activeOffers={helpOffers}
+                    activeRequests={helpRequests}
+                    relativeOffers={relativeOffers}
+                    relativeRequests={relativeRequests}
+                    seniorName={userName}
+                />
+            )}
+        </div>
+    );
+};
+
+```
+---
+
+## File: tryg-app\src\components\senior\modals\SeniorModals.tsx
+```tsx
+import React, { useState } from 'react';
+import { Phone } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { Modal } from '../../ui/Modal';
+import { Button } from '../../ui/Button';
+import { BodyPainSelector } from '../../../features/symptoms';
+import { SYMPTOMS_LIST } from '../../../data/constants';
+import { WeeklyQuestionModal } from '../../../features/weeklyQuestion';
+import { MatchCelebration } from '../../../features/helpExchange';
+import { useCareCircleContext } from '../../../contexts/CareCircleContext';
+
+interface SeniorModalsProps {
+    showCallModal: boolean;
+    setShowCallModal: (show: boolean) => void;
+    showSymptomModal: boolean;
+    setShowSymptomModal: (show: boolean) => void;
+    showWeeklyModal: boolean;
+    setShowWeeklyModal: (show: boolean) => void;
+    showAddTaskModal: boolean;
+    setShowAddTaskModal: (show: boolean) => void;
+    activeMatch: any | null;
+    setActiveMatch: (match: any | null) => void;
+}
+
+export const SeniorModals: React.FC<SeniorModalsProps> = ({
+    showCallModal,
+    setShowCallModal,
+    showSymptomModal,
+    setShowSymptomModal,
+    showWeeklyModal,
+    setShowWeeklyModal,
+    showAddTaskModal,
+    setShowAddTaskModal,
+    activeMatch,
+    setActiveMatch
+}) => {
+    const { t } = useTranslation();
+    const {
+        userName,
+        relativeName,
+        currentUserId,
+        addSymptom,
+        addTask,
+        weeklyAnswers,
+        addWeeklyAnswer,
+        toggleLike,
+        addReply
+    } = useCareCircleContext();
+
+    // Symptom flow state
     const [selectedSymptom, setSelectedSymptom] = useState<any | null>(null);
     const [showBodySelector, setShowBodySelector] = useState(false);
 
-    // Reward Logic - unlock photo when ALL MEDICINE is complete (not all tasks)
-    const medicineTasks = tasks.filter(t =>
-        t.title?.toLowerCase().includes('medicin') ||
-        t.title?.toLowerCase().includes('pille') ||
-        t.type === 'medication'
-    );
-    const completedMedicine = medicineTasks.filter(t => t.completed).length;
-    const allMedicineComplete = medicineTasks.length > 0 && medicineTasks.length === completedMedicine;
+    // Add Task state
+    const [newTaskTitle, setNewTaskTitle] = useState('');
+    const [newTaskPeriod, setNewTaskPeriod] = useState('morgen');
+    const [newTaskRecurring, setNewTaskRecurring] = useState(false);
 
-    // For general stats
-    // const totalTasks = tasks.length;
-    const completedTasks = tasks.filter(t => t.completed).length;
+    const handleAddSymptom = (symptom: any) => {
+        addSymptom(symptom);
+        setShowSymptomModal(false);
+        setSelectedSymptom(null);
+        setShowBodySelector(false);
+    };
 
-    // Dynamic greeting based on time
-    const hour = new Date().getHours();
-    const greeting = hour < 12 ? 'Godmorgen' : hour < 18 ? 'Goddag' : 'Godaften';
-
-    // Get current date in Danish format
-    const dateOptions: Intl.DateTimeFormatOptions = { weekday: 'long', day: 'numeric', month: 'long' };
-    const dateString = new Date().toLocaleDateString('da-DK', dateOptions);
-
-    // Render task section by period (only incomplete, NON-MEDICINE tasks)
-    const renderTaskSection = (periodTitle: string, periodKey: string, icon: React.ReactNode) => {
-        const periodTasks = tasks.filter(t =>
-            t.period === periodKey &&
-            !t.completed &&
-            !(t.title?.toLowerCase().includes('medicin') || t.title?.toLowerCase().includes('pille') || t.type === 'medication')
-        );
-        if (periodTasks.length === 0) return null;
-
-        const isActive = activePeriod === periodKey;
-
-        return (
-            <div className={`transition-all duration-500 ${isActive ? 'opacity-100' : 'opacity-50 grayscale'}`}>
-                <div
-                    className="flex items-center gap-2 mb-4 cursor-pointer"
-                    onClick={() => setActivePeriod(activePeriod === periodKey ? null : periodKey)}
-                >
-                    {icon}
-                    <h2 className="text-xl font-bold text-stone-800">{periodTitle}</h2>
-                    {!isActive && <span className="text-sm text-stone-400">(Tryk for at se)</span>}
-                </div>
-
-                {isActive && (
-                    <div className="space-y-4 mb-8">
-                        {periodTasks.map(task => (
-                            <div
-                                key={task.id}
-                                onClick={() => toggleTask(task.id)}
-                                className={`
-                                    relative p-4 rounded-2xl border-2 transition-all duration-300 cursor-pointer
-                                    ${task.completed
-                                        ? 'bg-stone-100 border-stone-200'
-                                        : 'bg-white border-stone-200 shadow-sm hover:border-teal-400'
-                                    }
-                                `}
-                            >
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-4">
-                                        {/* Pictogram Container */}
-                                        <div className={`
-                                            w-16 h-16 rounded-2xl flex items-center justify-center shadow-inner
-                                            ${task.completed ? 'bg-stone-200 text-stone-400' : 'bg-blue-50 text-blue-600'}
-                                        `}>
-                                            {task.type === 'medication' && <Pill className="w-8 h-8" />}
-                                            {task.type === 'hydration' && <Activity className="w-8 h-8" />}
-                                            {task.type === 'activity' && <Sun className="w-8 h-8" />}
-                                            {task.type === 'appointment' && <Clock className="w-8 h-8" />}
-                                        </div>
-
-                                        <div>
-                                            <div className="flex items-center gap-2 flex-wrap">
-                                                <h3 className={`text-xl font-bold ${task.completed ? 'text-stone-500 line-through' : 'text-stone-800'}`}>
-                                                    {task.title}
-                                                </h3>
-                                                {/* Social Attribution Stamp */}
-                                                {task.createdByRole === 'relative' && task.createdByName && (
-                                                    <span className="inline-flex items-center gap-1 bg-indigo-50 px-2 py-0.5 rounded-lg">
-                                                        <Heart className="w-3 h-3 text-indigo-500 fill-indigo-200" />
-                                                        <span className="text-[10px] text-indigo-700 font-medium">Fra {task.createdByName}</span>
-                                                    </span>
-                                                )}
-                                            </div>
-                                            <p className="text-stone-500 font-medium">{task.time}</p>
-                                        </div>
-                                    </div>
-
-                                    {/* Checkbox */}
-                                    <div className={`
-                                        w-12 h-12 rounded-full border-4 flex items-center justify-center transition-colors
-                                        ${task.completed ? 'bg-teal-500 border-teal-500' : 'border-stone-200 bg-white'}
-                                    `}>
-                                        {task.completed && <CheckCircle className="text-white w-8 h-8" />}
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </div>
-        );
+    const handleAddTask = () => {
+        if (newTaskTitle.trim()) {
+            addTask({
+                title: newTaskTitle.trim(),
+                period: newTaskPeriod,
+                type: 'activity',
+                recurring: newTaskRecurring
+            });
+            setNewTaskTitle('');
+            setNewTaskPeriod('morgen');
+            setNewTaskRecurring(false);
+            setShowAddTaskModal(false);
+        }
     };
 
     return (
-        <div className="flex flex-col h-full bg-stone-50 relative overflow-hidden">
-            {/* Header - COMPACT */}
-            <header className="px-4 py-2 bg-white shadow-sm rounded-b-3xl z-10 shrink-0">
-                <div className="flex justify-between items-center">
-                    <div className="flex items-center gap-3">
-                        <Avatar id="senior" size="md" />
-                        <h1 className="text-xl font-bold text-stone-800">{greeting}, {userName}</h1>
+        <>
+            {/* Call Modal */}
+            {showCallModal && (
+                <div className="absolute inset-0 bg-black/50 flex items-center justify-center p-4 z-[100]">
+                    <div className="bg-white rounded-3xl p-8 w-full max-w-sm text-center animate-slide-up">
+                        <div className="w-20 h-20 bg-rose-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <Phone className="w-10 h-10 text-rose-600" />
+                        </div>
+                        <h3 className="text-2xl font-bold theme-text mb-2">{t('calling')}</h3>
+                        <p className="theme-text-muted mb-8">{t('calling_to', { name: relativeName })}</p>
+                        <Button variant="danger" onClick={() => setShowCallModal(false)}>{t('end_call')}</Button>
                     </div>
-                    {/* Swap sun for Weekly Question widget on Family tab */}
-                    {FEATURES.weeklyQuestion && activeTab === 'family' ? (
-                        <WeeklyQuestionWidget
-                            answers={weeklyAnswers}
-                            userName={userName}
-                            hasUnread={true}
-                            onClick={() => setShowWeeklyModal(true)}
-                        />
-                    ) : (
-                        <div className="bg-amber-100 p-1.5 rounded-full animate-sun-pulse">
-                            <Sun className="text-amber-500 w-6 h-6" />
-                        </div>
-                    )}
                 </div>
-                <div className="flex items-center gap-2 text-sm">
-                    <span className="text-stone-500 capitalize">{dateString}</span>
-                    <InlineGatesIndicator tasks={tasks} className="ml-2 scale-90 origin-left" />
-                </div>
-            </header>
+            )}
 
-            {/* Main Content - Scrollable with padding for bottom nav */}
-            <main className="flex-1 overflow-y-auto p-4 space-y-4 pb-24">
-
-                {/* Match Celebration Banner - Shows when there's a help exchange match */}
-                {hasMatches && topMatch && (() => {
-                    // Generate match ID for filtering
-                    const offerId = topMatch.offer?.docId || topMatch.offer?.id || 'none';
-                    const requestId = topMatch.request?.docId || topMatch.request?.id || 'none';
-                    const matchId = `${offerId}-${requestId}`;
-
-                    if (dismissedMatchIds.has(matchId)) return null;
-
-                    return (
-                        <MatchBanner
-                            match={topMatch}
-                            onClick={() => {
-                                playMatchSound();
-                                setActiveMatch(topMatch);
-                            }}
-                            onDismiss={() => {
-                                setDismissedMatchIds(prev => new Set([...prev, matchId]));
-                            }}
-                        />
-                    );
-                })()}
-
-                {/* ===== DAILY TAB ===== */}
-                {activeTab === 'daily' && (
-                    <>
-                        {/* Reward Card (Behavioral Hook) - Clickable to minimize, can be hidden */}
-                        {allMedicineComplete && !hideReward && (
-                            rewardMinimized ? (
-                                <div className="relative w-full rounded-xl p-3 mb-4 bg-indigo-100 border-2 border-indigo-200 flex items-center justify-between">
-                                    <button
-                                        onClick={() => setRewardMinimized(false)}
-                                        className="flex-1 flex items-center gap-2 hover:opacity-80 transition-opacity"
-                                    >
-                                        <ImageIcon className="w-5 h-5 text-indigo-600" />
-                                        <div>
-                                            <span className="font-bold text-indigo-700">Dagens Billede</span>
-                                            <p className="text-xs text-indigo-500">Fra familien med kærlighed ❤️</p>
-                                        </div>
-                                    </button>
-                                    <div className="flex items-center gap-2">
-                                        <span className="text-xs text-indigo-400">Tryk for at vise</span>
-                                        <button
-                                            onClick={() => setHideReward(true)}
-                                            className="p-1 rounded-full hover:bg-indigo-200 text-indigo-400 hover:text-indigo-600"
-                                            title="Skjul"
-                                        >
-                                            ✕
-                                        </button>
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className="relative w-full rounded-3xl p-6 mb-6 bg-indigo-600 border-2 border-indigo-600 text-white animate-fade-in">
-                                    <button
-                                        onClick={() => setHideReward(true)}
-                                        className="absolute top-2 right-2 p-1 rounded-full bg-indigo-500 hover:bg-indigo-400 text-indigo-200 hover:text-white text-sm"
-                                        title="Skjul"
-                                    >
-                                        ✕
-                                    </button>
-                                    <button
-                                        onClick={() => setRewardMinimized(true)}
-                                        className="w-full text-center"
-                                    >
-                                        <div className="flex items-center justify-center gap-2 mb-2">
-                                            <ImageIcon className="w-6 h-6 text-indigo-200" />
-                                            <span className="font-bold text-indigo-100 uppercase tracking-widest text-sm">Dagens Billede</span>
-                                        </div>
-                                        <div className="w-full h-48 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-xl mb-3 overflow-hidden shadow-lg transform rotate-2 hover:rotate-0 transition-transform duration-500">
-                                            {/* Daily nature photo - same image all day using date as seed */}
-                                            <img
-                                                src={`https://picsum.photos/seed/${new Date().toISOString().split('T')[0]}/600/400`}
-                                                alt="Dagens billede"
-                                                className="w-full h-full object-cover"
-                                            />
-                                        </div>
-                                        <p className="font-bold text-lg">Medicin taget! ❤️</p>
-                                        <p className="text-indigo-200 text-sm">Tryk for at minimere</p>
-                                    </button>
-                                </div>
-                            )
-                        )}
-
-                        {/* MEDICINE SECTION - Separate from tasks, with tick marks */}
-                        {medicineTasks.length > 0 && !allMedicineComplete && (
-                            <div className="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-2xl p-4 mb-6 border-2 border-purple-100">
-                                <div className="flex items-center gap-2 mb-3">
-                                    <Pill className="w-6 h-6 text-purple-600" />
-                                    <h2 className="text-lg font-bold text-purple-800">Medicin</h2>
-                                    <span className="text-sm text-purple-500 ml-auto">
-                                        {completedMedicine}/{medicineTasks.length} taget
-                                    </span>
-                                </div>
-                                <div className="space-y-2">
-                                    {medicineTasks.map(med => (
-                                        <button
-                                            key={med.id}
-                                            onClick={() => toggleTask(med.id)}
-                                            className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all ${med.completed
-                                                ? 'bg-purple-100 border-2 border-purple-200'
-                                                : 'bg-white border-2 border-purple-100 hover:border-purple-300'
-                                                }`}
-                                        >
-                                            <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-colors ${med.completed
-                                                ? 'bg-purple-500 border-purple-500'
-                                                : 'border-purple-300 bg-white'
-                                                }`}>
-                                                {med.completed && <CheckCircle className="w-5 h-5 text-white" />}
-                                            </div>
-                                            <span className={`font-medium ${med.completed ? 'text-purple-500 line-through' : 'text-purple-800'
-                                                }`}>
-                                                {med.title}
-                                            </span>
-                                            <span className="text-purple-400 text-sm ml-auto">{med.time}</span>
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Medicine Complete Collapsed State */}
-                        {medicineTasks.length > 0 && allMedicineComplete && (
-                            <div className="bg-gradient-to-r from-green-50 to-teal-50 rounded-xl p-3 mb-4 border border-green-200 flex items-center gap-3">
-                                <div className="bg-green-500 rounded-full p-1.5">
-                                    <CheckCircle className="w-4 h-4 text-white" />
-                                </div>
-                                <span className="text-green-700 font-medium">Medicin taget ✓</span>
-                            </div>
-                        )}
-
-                        {/* Check-in Status */}
-                        <div className="bg-white rounded-3xl p-6 shadow-sm border-2 border-teal-100 mb-8">
-                            <h2 className="text-xl font-semibold text-stone-800 mb-4">Hvordan har du det?</h2>
-                            <div className="grid grid-cols-2 gap-4">
-                                <Button
-                                    variant="primary"
-                                    size="large"
-                                    className="w-full min-h-32 py-4"
-                                    onClick={() => updateStatus('checked-in')}
-                                >
-                                    <div className="flex flex-col items-center gap-2 text-center">
-                                        <CheckCircle className="w-10 h-10 shrink-0" />
-                                        <span className="text-sm leading-tight">Jeg har det godt</span>
-                                    </div>
-                                </Button>
-
-                                <Button
-                                    variant="secondary"
-                                    size="large"
-                                    className="w-full min-h-32 py-4 bg-orange-50 text-orange-800 border-2 border-orange-100 hover:bg-orange-100"
-                                    onClick={() => setShowSymptomModal(true)}
-                                >
-                                    <div className="flex flex-col items-center gap-2 text-center">
-                                        <Heart className="w-10 h-10 text-orange-500 shrink-0" />
-                                        <span className="text-sm leading-tight">Jeg har ondt</span>
-                                    </div>
-                                </Button>
-                            </div>
-                        </div>
-
-                        {/* Contextual Task Lists */}
-                        {renderTaskSection('Morgen (Kl. 8-11)', 'morgen', <Coffee className="w-6 h-6 text-stone-600" />)}
-                        <div className="h-px bg-stone-200 my-4" />
-                        {renderTaskSection('Frokost (Kl. 12-13)', 'frokost', <Sun className="w-6 h-6 text-stone-600" />)}
-                        <div className="h-px bg-stone-200 my-4" />
-                        {renderTaskSection('Eftermiddag (Kl. 14-17)', 'eftermiddag', <Moon className="w-6 h-6 text-stone-600" />)}
-                        <div className="h-px bg-stone-200 my-4" />
-                        {renderTaskSection('Aften (Kl. 18-21)', 'aften', <Moon className="w-6 h-6 text-stone-600" />)}
-
-                        {/* Add Own Task Button */}
-                        <button
-                            onClick={() => setShowAddTaskModal(true)}
-                            className="w-full flex items-center justify-center gap-2 p-4 mt-4 bg-white border-2 border-dashed border-teal-300 rounded-2xl text-teal-600 font-medium hover:bg-teal-50 hover:border-teal-400 transition-colors"
-                        >
-                            <Plus className="w-5 h-5" />
-                            <span>Tilføj egen opgave</span>
-                        </button>
-
-                        {/* Completed Tasks - DISABLED for now (uncomment to re-enable) */}
-                        {false && completedTasks > 0 && (
-                            <div className="mt-6">
-                                <button
-                                    onClick={() => setShowCompletedTasks(!showCompletedTasks)}
-                                    className="w-full flex items-center justify-between p-4 bg-teal-50 rounded-2xl border-2 border-teal-100 hover:bg-teal-100 transition-colors"
-                                >
-                                    <div className="flex items-center gap-3">
-                                        <CheckCircle className="w-6 h-6 text-teal-600" />
-                                        <span className="font-bold text-teal-800">Udførte opgaver ({completedTasks})</span>
-                                    </div>
-                                    {showCompletedTasks ? (
-                                        <ChevronUp className="w-5 h-5 text-teal-600" />
-                                    ) : (
-                                        <ChevronDown className="w-5 h-5 text-teal-600" />
-                                    )}
-                                </button>
-
-                                {showCompletedTasks && (
-                                    <div className="mt-3 space-y-3">
-                                        {tasks.filter(t => t.completed).map(task => (
-                                            <div
-                                                key={task.id}
-                                                onClick={() => toggleTask(task.id)}
-                                                className="p-4 rounded-2xl bg-stone-100 border-2 border-stone-200 cursor-pointer hover:border-stone-300 transition-colors"
-                                            >
-                                                <div className="flex items-center justify-between">
-                                                    <div className="flex items-center gap-4">
-                                                        <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-stone-200 text-stone-400">
-                                                            {task.type === 'medication' && <Pill className="w-6 h-6" />}
-                                                            {task.type === 'hydration' && <Activity className="w-6 h-6" />}
-                                                            {task.type === 'activity' && <Sun className="w-6 h-6" />}
-                                                            {task.type === 'appointment' && <Clock className="w-6 h-6" />}
-                                                        </div>
-                                                        <div>
-                                                            <h3 className="text-lg font-bold text-stone-500 line-through">{task.title}</h3>
-                                                            <p className="text-stone-400 text-sm">{task.time}</p>
-                                                        </div>
-                                                    </div>
-                                                    <div className="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center">
-                                                        <CheckCircle className="text-white w-6 h-6" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
-                        )}
-                    </>
-                )}
-
-                {/* ===== FAMILY TAB ===== */}
-                {(!FEATURES.tabbedLayout || activeTab === 'family') && (
-                    <>
-                        {/* Thinking of You - MOVED TO TOP */}
-                        {FEATURES.thinkingOfYou && (
-                            <ThinkingOfYouButton onSendPing={onSendPing} fromName={userName} />
-                        )}
-
-                        {/* Family Presence - "Familien Nu" for bidirectional visibility */}
-                        {memberStatuses.length > 0 && (
-                            <FamilyPresence
-                                memberStatuses={memberStatuses}
-                                currentUserId={currentUserId}
-                                seniorName={userName}
-                            />
-                        )}
-
-                        {/* Legacy Family Status List - fallback if no memberStatuses */}
-                        {FEATURES.familyStatusCard && memberStatuses.length === 0 && (
-                            <StatusList
-                                members={members}
-                                relativeStatuses={relativeStatuses}
-                                lastUpdated={statusLastUpdated}
-                            />
-                        )}
-
-                        {/* Weekly Question now in header - removed from here */}
-
-                        {/* Memory Trigger - toggle with FEATURES.memoryTriggers */}
-                        {FEATURES.memoryTriggers && <MemoryTrigger />}
-
-                        {/* Dignity-Preserving Help Exchange - toggle with FEATURES.helpExchange */}
-                        {FEATURES.helpExchange && (
-                            <HelpExchange
-                                onOffer={onHelpOffer}
-                                onRequest={onHelpRequest}
-                                onRemoveOffer={onRemoveOffer}
-                                onRemoveRequest={onRemoveRequest}
-                                activeOffers={helpOffers}
-                                activeRequests={helpRequests}
-                                relativeOffers={relativeOffers}
-                                relativeRequests={relativeRequests}
-                                seniorName={userName}
-                            />
-                        )}
-
-                    </>
-                )}
-
-                {/* ===== SPIL TAB ===== */}
-                {activeTab === 'spil' && (
-                    <>
-                        {/* Spillehjørnet - Gaming Corner */}
-                        {FEATURES.spillehjoernet && (
-                            <Spillehjoernet
-                                circleId={careCircleId || undefined}
-                                userId={currentUserId || undefined}
-                                displayName={userName}
-                            />
-                        )}
-                    </>
-                )}
-
-            </main>
-
-            {/* Symptom Modal - Two-step flow for pain */}
+            {/* Symptom Modal */}
             <Modal
                 isOpen={showSymptomModal}
                 onClose={() => {
@@ -4634,20 +3462,15 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                     setSelectedSymptom(null);
                     setShowBodySelector(false);
                 }}
-                title={showBodySelector ? "Hvor gør det ondt?" : "Hvordan har du det?"}
+                title={showBodySelector ? t('where_does_it_hurt') : t('how_do_you_feel')}
             >
                 {showBodySelector ? (
-                    // Step 2: Body location selector (for Smerter)
                     <BodyPainSelector
                         onSelectLocation={(bodyLocation) => {
-                            // Add symptom with body location
-                            addSymptom({
+                            handleAddSymptom({
                                 ...selectedSymptom,
-                                bodyLocation: bodyLocation
+                                bodyLocation
                             });
-                            setShowSymptomModal(false);
-                            setSelectedSymptom(null);
-                            setShowBodySelector(false);
                         }}
                         onBack={() => {
                             setShowBodySelector(false);
@@ -4655,20 +3478,16 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                         }}
                     />
                 ) : (
-                    // Step 1: Symptom type selector
                     <div className="grid grid-cols-2 gap-4">
                         {SYMPTOMS_LIST.map(sym => (
                             <button
                                 key={sym.id}
                                 onClick={() => {
-                                    // If it's pain (smerter), show body location picker
                                     if (sym.id === 'pain') {
                                         setSelectedSymptom(sym);
                                         setShowBodySelector(true);
                                     } else {
-                                        // For other symptoms, add directly
-                                        addSymptom(sym);
-                                        setShowSymptomModal(false);
+                                        handleAddSymptom(sym);
                                     }
                                 }}
                                 className={`
@@ -4685,103 +3504,41 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                 )}
             </Modal>
 
-
-
-            {/* Bottom Navigation */}
-            <BottomNavigation
-                activeTab={activeTab}
-                onTabChange={setActiveTab}
-                onViewReport={() => setShowHealthReport(true)}
-            />
-
-            {/* Call Modal */}
-            {
-                showCallModal && (
-                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-                        <div className="bg-white rounded-3xl p-8 w-full max-w-sm text-center animate-slide-up">
-                            <div className="w-20 h-20 bg-rose-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <Phone className="w-10 h-10 text-rose-600" />
-                            </div>
-                            <h3 className="text-2xl font-bold text-stone-800 mb-2">Ringer op...</h3>
-                            <p className="text-stone-500 mb-8">Ringer til {relativeName}</p>
-                            <Button variant="danger" onClick={() => setShowCallModal(false)}>Afslut opkald</Button>
-                        </div>
-                    </div>
-                )
-            }
-
             {/* Weekly Question Modal */}
             <WeeklyQuestionModal
                 isOpen={showWeeklyModal}
                 onClose={() => setShowWeeklyModal(false)}
                 answers={weeklyAnswers}
-                onAnswer={onWeeklyAnswer}
+                onAnswer={(answerObj: any) => addWeeklyAnswer(answerObj.answer)}
                 userName={userName}
-            />
-            {/* Match Celebration Modal - full screen confetti! */}
-            {/* Match Celebration Modal - full screen confetti! */}
-            {match && (
-                <MatchCelebration
-                    match={match}
-                    onDismiss={dismissMatch}
-                    onAction={(action) => {
-                        console.log('Senior action:', action);
-                        if (action === 'plan-visit' || action === 'contact') {
-                            // Create an appointment task automatically
-                            const matchName = match.relativeName || 'Pårørende'; // Fallback
-                            const taskTitle = action === 'plan-visit'
-                                ? `Besøg af ${matchName}`
-                                : `Ring til ${matchName}`;
-
-                            if (onAddTask) {
-                                onAddTask({
-                                    title: taskTitle,
-                                    period: 'eftermiddag', // Default to afternoon
-                                    type: 'appointment',
-                                    createdByRole: 'senior', // Self-created via match
-                                    createdByName: userName
-                                });
-                            }
-
-                            // Close match modal
-                            dismissMatch();
-                        }
-                    }}
-                />
-            )}
-
-            {/* Health Report Modal */}
-            <HealthReport
-                isOpen={showHealthReport}
-                onClose={() => setShowHealthReport(false)}
-                symptomLogs={symptomLogs}
-                tasks={tasks}
+                currentUserId={currentUserId || undefined}
+                onToggleLike={toggleLike}
+                onReply={addReply}
             />
 
             {/* Add Task Modal */}
-            <Modal isOpen={showAddTaskModal} onClose={() => setShowAddTaskModal(false)} title="Tilføj egen opgave">
+            <Modal isOpen={showAddTaskModal} onClose={() => setShowAddTaskModal(false)} title={t('add_own_task')}>
                 <div className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-1">Hvad skal gøres?</label>
+                        <label className="block text-sm font-medium text-slate-700 mb-1">{t('what_needs_done')}</label>
                         <input
                             type="text"
                             value={newTaskTitle}
                             onChange={(e) => setNewTaskTitle(e.target.value)}
-                            placeholder="F.eks. Ring til lægen"
+                            placeholder={t('example_call_doctor')}
                             className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-teal-500 focus:outline-none text-lg"
                             autoFocus
                         />
                     </div>
 
-                    {/* Period Selector */}
                     <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-2">Hvornår?</label>
+                        <label className="block text-sm font-medium text-slate-700 mb-2">{t('when_question')}</label>
                         <div className="grid grid-cols-2 gap-2">
                             {[
-                                { key: 'morgen', label: 'Morgen', time: 'Kl. 8-11', icon: '☀️' },
-                                { key: 'frokost', label: 'Frokost', time: 'Kl. 12-13', icon: '🍽️' },
-                                { key: 'eftermiddag', label: 'Eftermiddag', time: 'Kl. 14-17', icon: '🌤️' },
-                                { key: 'aften', label: 'Aften', time: 'Kl. 18-21', icon: '🌙' }
+                                { key: 'morgen', labelKey: 'time_period_morning', icon: '☀️' },
+                                { key: 'frokost', labelKey: 'time_period_lunch', icon: '🍽️' },
+                                { key: 'eftermiddag', labelKey: 'time_period_afternoon', icon: '🌤️' },
+                                { key: 'aften', labelKey: 'time_period_evening', icon: '🌙' }
                             ].map(period => (
                                 <button
                                     key={period.key}
@@ -4793,37 +3550,34 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                                 >
                                     <div className="flex items-center gap-2">
                                         <span className="text-lg">{period.icon}</span>
-                                        <div>
-                                            <p className={`font-medium ${newTaskPeriod === period.key ? 'text-teal-700' : 'text-slate-700'}`}>
-                                                {period.label}
-                                            </p>
-                                            <p className="text-xs text-slate-400">{period.time}</p>
-                                        </div>
+                                        <span className={`font-medium ${newTaskPeriod === period.key ? 'text-teal-700' : 'text-slate-700'}`}>
+                                            {t(period.labelKey)}
+                                        </span>
                                     </div>
                                 </button>
                             ))}
                         </div>
                     </div>
 
+                    <div className="flex items-center gap-3 p-4 bg-slate-50 rounded-xl border-2 border-slate-100">
+                        <input
+                            type="checkbox"
+                            toggle-id="recurring"
+                            checked={newTaskRecurring}
+                            onChange={(e) => setNewTaskRecurring(e.target.checked)}
+                            className="w-6 h-6 rounded-md border-slate-300 text-teal-600 focus:ring-teal-500"
+                        />
+                        <label className="flex-1 font-medium text-slate-700 cursor-pointer" onClick={() => setNewTaskRecurring(!newTaskRecurring)}>
+                            {t('make_daily')}
+                        </label>
+                    </div>
+
                     <Button
-                        onClick={() => {
-                            if (newTaskTitle.trim()) {
-                                if (onAddTask) {
-                                    onAddTask({
-                                        title: newTaskTitle.trim(),
-                                        period: newTaskPeriod,
-                                        type: 'activity'
-                                    });
-                                }
-                                setNewTaskTitle('');
-                                setNewTaskPeriod('morgen');
-                                setShowAddTaskModal(false);
-                            }
-                        }}
+                        onClick={handleAddTask}
                         className="w-full"
                         disabled={!newTaskTitle.trim()}
                     >
-                        Tilføj opgave
+                        {t('add_task_button')}
                     </Button>
                 </div>
             </Modal>
@@ -4835,58 +3589,958 @@ export const SeniorView: React.FC<SeniorViewProps> = ({
                     seniorName={userName}
                     onDismiss={() => setActiveMatch(null)}
                     onAction={(action) => {
-                        // Create task based on action type
-                        const { celebration } = activeMatch;
+                        // Action handling logic moved from SeniorView
                         let taskTitle = '';
-
                         switch (action) {
-                            case 'call':
-                                taskTitle = `📞 Ring med ${relativeName}`;
-                                break;
-                            case 'plan-visit':
-                                taskTitle = `☕ Besøg fra ${relativeName}`;
-                                break;
-                            case 'plan-meal':
-                                taskTitle = `🍳 Lav mad med ${relativeName}`;
-                                break;
-                            case 'plan-transport':
-                                taskTitle = `🚗 Tur med ${relativeName}`;
-                                break;
-                            case 'plan-garden':
-                                taskTitle = `🌿 Havearbejde med ${relativeName}`;
-                                break;
-                            default:
-                                taskTitle = celebration?.title || `Aktivitet med ${relativeName}`;
+                            case 'call': taskTitle = t('match_task_call', { name: relativeName }); break;
+                            case 'plan-visit': taskTitle = t('match_task_visit', { name: relativeName }); break;
+                            case 'plan-meal': taskTitle = t('match_task_meal', { name: relativeName }); break;
+                            default: taskTitle = activeMatch.celebration?.title || t('match_task_default', { name: relativeName });
                         }
-
-                        // Create the task
-                        if (onAddTask && taskTitle) {
-                            onAddTask({
-                                title: taskTitle,
-                                time: '10:00',
-                                period: 'morgen',
-                                type: 'appointment',
-                                createdByRole: 'senior', // Self-created via match
-                                createdByName: userName
-                            });
-
-                            // Dismiss the match so it doesn't reappear
-                            const offerId = activeMatch.offer?.docId || activeMatch.offer?.id || 'none';
-                            const requestId = activeMatch.request?.docId || activeMatch.request?.id || 'none';
-                            const matchId = `${offerId}-${requestId}`;
-                            setDismissedMatchIds(prev => new Set([...prev, matchId]));
-
-                            alert(`✅ Opgave oprettet: ${taskTitle}`);
-                        }
+                        addTask({
+                            title: taskTitle,
+                            period: 'eftermiddag',
+                            type: 'appointment'
+                        });
                         setActiveMatch(null);
                     }}
                 />
             )}
-        </div >
+        </>
+    );
+};
+
+```
+---
+
+## File: tryg-app\src\components\SeniorView.tsx
+```tsx
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Avatar } from './ui/Avatar';
+import { WeeklyQuestionWidget } from '../features/weeklyQuestion';
+import { MatchBanner } from '../features/helpExchange';
+import { InlineGatesIndicator } from '../features/tasks';
+import { playMatchSound } from '../utils/sounds';
+import { useHelpExchangeMatch } from '../features/helpExchange';
+import { useHelpExchange } from '../features/helpExchange';
+import { FEATURES } from '../config/features';
+import { useCareCircleContext } from '../contexts/CareCircleContext';
+
+import { AmbientTab } from './shared/AmbientTab';
+import { FamilyTab } from './senior/FamilyTab';
+import { SpilTab } from './shared/SpilTab';
+import { HealthTab } from './shared/HealthTab';
+import { SeniorModals } from './senior/modals/SeniorModals';
+
+export const SeniorView: React.FC = () => {
+    const { t, i18n } = useTranslation();
+    const {
+        tasks,
+        userName,
+        activeTab,
+        weeklyAnswers,
+        careCircleId,
+        currentUserId,
+        memberStatuses
+    } = useCareCircleContext();
+
+    // Modal Visibility State
+    const [showCallModal, setShowCallModal] = useState(false);
+    const [showSymptomModal, setShowSymptomModal] = useState(false);
+    const [showWeeklyModal, setShowWeeklyModal] = useState(false);
+    const [showAddTaskModal, setShowAddTaskModal] = useState(false);
+    const [activeMatch, setActiveMatch] = useState<any | null>(null);
+    const [dismissedMatchIds, setDismissedMatchIds] = useState(new Set());
+
+    // Help Exchange & Match Logic (Kept here for Banner orchestration)
+    const { helpOffers: allOffers, helpRequests: allRequests } = useHelpExchange(careCircleId, currentUserId, 'senior', userName);
+    const { hasMatches, topMatch } = useHelpExchangeMatch({
+        offers: allOffers,
+        requests: allRequests,
+        familyStatus: null,
+        memberStatuses
+    });
+
+    // Greeting & Date logic
+    const hour = new Date().getHours();
+    const [greeting] = useState(() => {
+        const period = hour < 12 ? 'morning' : hour < 18 ? 'afternoon' : 'evening';
+        const randomId = Math.floor(Math.random() * 3);
+        const key = randomId === 0 ? `greeting_${period}` : `greeting_${period}_${randomId}`;
+        return t(key);
+    });
+
+    const localeId = i18n.language === 'da' ? 'da-DK' : i18n.language === 'tr' ? 'tr-TR' : i18n.language === 'bs' ? 'bs-BA' : 'da-DK';
+    const dateString = new Date().toLocaleDateString(localeId, { weekday: 'long', day: 'numeric', month: 'long' });
+
+    return (
+        <div className="flex flex-col h-full bg-transparent relative pt-10">
+            {/* Header */}
+            <header className="px-4 py-2 theme-header shadow-sm rounded-b-3xl z-10 shrink-0">
+                <div className="flex justify-between items-center">
+                    <div className="flex items-center gap-3">
+                        <Avatar id="senior" size="md" />
+                        <div onClick={() => setShowCallModal(true)} className="cursor-pointer">
+                            <h1 className="text-xl font-bold theme-text leading-tight">{greeting}</h1>
+                            <p className="text-sm theme-text-muted">{userName}</p>
+                        </div>
+                    </div>
+                    {FEATURES.weeklyQuestion && activeTab === 'family' && (
+                        <WeeklyQuestionWidget
+                            answers={weeklyAnswers}
+                            userName={userName}
+                            hasUnread={true}
+                            onClick={() => setShowWeeklyModal(true)}
+                        />
+                    )}
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                    <span className="theme-text-muted capitalize">{dateString}</span>
+                    <InlineGatesIndicator tasks={tasks} className="ml-2 scale-90 origin-left" />
+                </div>
+            </header>
+
+            {/* Main Content */}
+            <main className="flex-1 overflow-y-auto p-4 space-y-4 pb-24">
+                {hasMatches && topMatch && !dismissedMatchIds.has(`${topMatch.offer?.id || 'o'}-${topMatch.request?.id || 'r'}`) && (
+                    <MatchBanner
+                        match={topMatch}
+                        onClick={() => {
+                            playMatchSound();
+                            setActiveMatch(topMatch);
+                        }}
+                        onDismiss={() => {
+                            const mId = `${topMatch.offer?.id || 'o'}-${topMatch.request?.id || 'r'}`;
+                            setDismissedMatchIds(prev => new Set([...prev, mId]));
+                        }}
+                    />
+                )}
+
+                {activeTab === 'daily' && <AmbientTab role="senior" onOpenSymptomModal={() => setShowSymptomModal(true)} onOpenAddTaskModal={() => setShowAddTaskModal(true)} />}
+                {activeTab === 'family' && <FamilyTab />}
+                {activeTab === 'health' && <HealthTab />}
+                {activeTab === 'spil' && <SpilTab />}
+            </main>
+
+            <SeniorModals
+                showCallModal={showCallModal}
+                setShowCallModal={setShowCallModal}
+                showSymptomModal={showSymptomModal}
+                setShowSymptomModal={setShowSymptomModal}
+                showWeeklyModal={showWeeklyModal}
+                setShowWeeklyModal={setShowWeeklyModal}
+                showAddTaskModal={showAddTaskModal}
+                setShowAddTaskModal={setShowAddTaskModal}
+                activeMatch={activeMatch}
+                setActiveMatch={setActiveMatch}
+            />
+        </div>
     );
 };
 
 export default SeniorView;
+
+```
+---
+
+## File: tryg-app\src\components\SettingsModal.tsx
+```tsx
+import React, { useState } from 'react';
+import { X, Lock, Shield, Trash2, Download, Globe, LogOut, Sun, Moon, Zap } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { useTheme } from '../contexts/ThemeContext';
+import { LanguageSwitcher } from './LanguageSwitcher';
+
+export interface SettingsModalProps {
+    user: any;
+    careCircle: any;
+    onClose: () => void;
+    onSignOut: () => Promise<void>;
+}
+
+export const SettingsModal: React.FC<SettingsModalProps> = ({
+    user,
+    careCircle,
+    onClose,
+    onSignOut
+}) => {
+    const { t } = useTranslation();
+    const { mode, setMode } = useTheme();
+    const [activeTab, setActiveTab] = useState<'general' | 'privacy'>('general');
+
+
+    return (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4">
+            <div className="theme-card w-full sm:max-w-md h-[90vh] sm:h-auto sm:max-h-[85vh] sm:rounded-[2.5rem] flex flex-col overflow-hidden shadow-2xl theme-aware-border">
+                {/* Header */}
+                <div className="px-6 py-6 border-b border-stone-100 flex justify-between items-center bg-stone-50/50">
+                    <div>
+                        <h2 className="text-xl font-bold text-stone-800">{t('settings')}</h2>
+                        <p className="text-xs text-stone-500 font-medium">{user?.email}</p>
+                    </div>
+                    <button
+                        onClick={onClose}
+                        className="p-2 hover:bg-stone-200 rounded-full transition-colors"
+                    >
+                        <X className="w-6 h-6 text-stone-500" />
+                    </button>
+                </div>
+
+                {/* Tabs */}
+                <div className="flex px-6 border-b border-stone-100">
+                    <button
+                        onClick={() => setActiveTab('general')}
+                        className={`flex-1 py-4 text-sm font-bold transition-all border-b-2 ${activeTab === 'general'
+                            ? 'border-teal-500 text-teal-700'
+                            : 'border-transparent text-stone-400 hover:text-stone-600'
+                            }`}
+                    >
+                        {t('general')}
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('privacy')}
+                        className={`flex-1 py-4 text-sm font-bold transition-all border-b-2 ${activeTab === 'privacy'
+                            ? 'border-teal-500 text-teal-700'
+                            : 'border-transparent text-stone-400 hover:text-stone-600'
+                            }`}
+                    >
+                        {t('privacy_data')}
+                    </button>
+                </div>
+
+                {/* Content */}
+                <div className="flex-1 overflow-y-auto p-6 space-y-8">
+                    {activeTab === 'general' ? (
+                        <>
+                            {/* Theme Selection */}
+                            <section className="space-y-4">
+                                <div className="flex items-center gap-2 text-stone-600 mb-1">
+                                    <Zap className="w-4 h-4" />
+                                    <h3 className="text-sm font-bold uppercase tracking-wider">{t('theme')}</h3>
+                                </div>
+                                <div className="flex bg-stone-100 p-1 rounded-2xl">
+                                    {[
+                                        { id: 'auto', label: t('theme_auto'), icon: Sun },
+                                        { id: 'light', label: t('theme_light'), icon: Sun },
+                                        { id: 'dark', label: t('theme_dark'), icon: Moon }
+                                    ].map((m) => (
+                                        <button
+                                            key={m.id}
+                                            onClick={() => setMode(m.id as any)}
+                                            className={`flex-1 flex items-center justify-center gap-2 py-3 px-2 rounded-xl text-xs font-bold transition-all ${mode === m.id
+                                                ? 'bg-white text-teal-700 shadow-sm'
+                                                : 'text-stone-500 hover:text-stone-700'
+                                                }`}
+                                        >
+                                            <m.icon className={`w-3.5 h-3.5 ${mode === m.id ? 'text-teal-500' : 'text-stone-400'}`} />
+                                            {m.label}
+                                        </button>
+                                    ))}
+                                </div>
+                            </section>
+
+                            {/* Language Selection */}
+                            <section className="space-y-3">
+                                <div className="flex items-center gap-2 text-stone-600 mb-1">
+                                    <Globe className="w-4 h-4" />
+                                    <h3 className="text-sm font-bold uppercase tracking-wider">{t('language_selection')}</h3>
+                                </div>
+                                <LanguageSwitcher />
+                            </section>
+
+                            {/* Sign Out */}
+                            <section className="pt-4">
+                                <button
+                                    onClick={onSignOut}
+                                    className="w-full flex items-center justify-center gap-2 p-4 text-red-500 font-bold bg-red-50 hover:bg-red-100 rounded-2xl transition-colors"
+                                >
+                                    <LogOut className="w-5 h-5" />
+                                    {t('sign_out')}
+                                </button>
+                            </section>
+                        </>
+                    ) : (
+                        // Simplified Privacy view (reusing logic from PrivacySettings)
+                        <div className="space-y-6">
+                            <div className="flex items-center gap-3 p-4 bg-orange-50 border border-orange-100 rounded-2xl">
+                                <Shield className="w-6 h-6 text-orange-500" />
+                                <p className="text-xs text-orange-800 leading-relaxed font-medium">
+                                    {t('privacy_notice', 'Dine data gemmes sikkert og deles kun med din lukkede familie-cirkel.')}
+                                </p>
+                            </div>
+
+                            <div className="space-y-3">
+                                <h4 className="text-xs font-bold text-stone-400 uppercase tracking-wider">{t('data_management', 'Data Management')}</h4>
+                                <button className="w-full flex items-center justify-between p-4 bg-stone-50 hover:bg-stone-100 rounded-2xl transition-colors text-sm font-medium">
+                                    <div className="flex items-center gap-3">
+                                        <Download className="w-5 h-5 text-stone-500" />
+                                        <span>{t('export_my_data', 'Eksporter mine data')}</span>
+                                    </div>
+                                </button>
+                                <button className="w-full flex items-center justify-between p-4 bg-stone-50 hover:bg-red-50 hover:text-red-600 rounded-2xl transition-colors text-sm font-medium text-stone-600">
+                                    <div className="flex items-center gap-3">
+                                        <Trash2 className="w-5 h-5" />
+                                        <span>{t('delete_my_account', 'Slet min konto')}</span>
+                                    </div>
+                                </button>
+                            </div>
+
+                            <div className="p-4 bg-stone-50 rounded-2xl">
+                                <div className="flex items-center gap-2 mb-2 text-stone-500">
+                                    <Lock className="w-4 h-4" />
+                                    <span className="text-xs font-bold uppercase tracking-wider">{t('security', 'Sikkerhed')}</span>
+                                </div>
+                                <p className="text-[10px] text-stone-400 uppercase font-bold tracking-tight">Care Circle ID</p>
+                                <p className="text-xs font-mono text-stone-500 truncate">{careCircle?.id}</p>
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                {/* Footer safe area */}
+                <div className="h-8 sm:h-0" />
+            </div>
+        </div>
+    );
+};
+
+export default SettingsModal;
+
+```
+---
+
+## File: tryg-app\src\components\shared\AmbientTab.tsx
+```tsx
+import React, { useState } from 'react';
+import {
+    Pill,
+    Sun,
+    Moon,
+    Coffee,
+    Image as ImageIcon,
+    Plus,
+    CheckCircle
+} from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { useCareCircleContext } from '../../contexts/CareCircleContext';
+import { LiquidList, LiquidItem } from '../ui/LiquidView';
+import { TaskCard } from '../../features/tasks/TaskCard';
+import { playCompletionSound } from '../../utils/sounds';
+import { FEATURES } from '../../config/features';
+import { CoffeeInviteCard } from '../../features/coffee';
+import { AmbientHero, BriefingStory, ActivityTimeline } from '../../features/ambient';
+
+export interface AmbientTabProps {
+    role: 'senior' | 'relative';
+    onOpenSymptomModal?: () => void;
+    onOpenAddTaskModal?: () => void;
+}
+
+/**
+ * AmbientTab - The unified "Daily" (Senior) and "Peace of Mind" (Relative) tab.
+ * Uses role-aware rendering to switch between interactive (Senior) and ambient (Relative) modes.
+ * Strengthens the Mirror Protocol by ensuring both roles see reflections of the same data.
+ */
+export const AmbientTab: React.FC<AmbientTabProps> = ({
+    role,
+    onOpenSymptomModal,
+    onOpenAddTaskModal
+}) => {
+    const { t } = useTranslation();
+    const {
+        tasks = [],
+        toggleTask,
+        recordCheckIn
+    } = useCareCircleContext();
+
+    const [rewardMinimized, setRewardMinimized] = useState(true);
+    const [hideReward, setHideReward] = useState(false);
+    const [activePeriod, setActivePeriod] = useState<string | null>('morgen');
+
+    // Medicine logic (Senior only)
+    const medicineTasks = tasks.filter(t =>
+        t.title?.toLowerCase().includes('medicin') ||
+        t.title?.toLowerCase().includes('pille') ||
+        t.title?.toLowerCase().includes('lac') ||
+        t.type === 'medication'
+    );
+    const completedMedicineCount = medicineTasks.filter(t => t.completed).length;
+    const allMedicineComplete = medicineTasks.length > 0 && medicineTasks.length === completedMedicineCount;
+
+    const handleToggleTask = async (id: string) => {
+        const task = tasks.find(t => t.id === id);
+        const willBeCompleted = task && !task.completed;
+        await toggleTask(id);
+        if (willBeCompleted && FEATURES.completionSounds) {
+            playCompletionSound();
+        }
+    };
+
+    const handleCheckIn = async () => {
+        await recordCheckIn();
+    };
+
+    // Senior task section renderer
+    const renderTaskSection = (periodTitle: string, periodKey: string, icon: React.ReactNode) => {
+        const periodTasks = tasks.filter(t =>
+            t.period === periodKey &&
+            !t.completed &&
+            !(t.title?.toLowerCase().includes('medicin') || t.title?.toLowerCase().includes('pille') || t.title?.toLowerCase().includes('lac') || t.type === 'medication')
+        );
+        if (periodTasks.length === 0) return null;
+
+        const isActive = activePeriod === periodKey;
+
+        return (
+            <div className={`transition-all duration-500 ${isActive ? 'opacity-100' : 'opacity-50 grayscale'}`}>
+                <div
+                    className="flex items-center gap-2 mb-4 cursor-pointer"
+                    onClick={() => setActivePeriod(activePeriod === periodKey ? null : periodKey)}
+                >
+                    {icon}
+                    <h2 className="text-xl font-bold theme-text">{periodTitle}</h2>
+                    {!isActive && <span className="text-sm theme-text-muted">{t('press_to_see')}</span>}
+                </div>
+
+                {isActive && (
+                    <LiquidList className="space-y-4 mb-8">
+                        {periodTasks.map(task => (
+                            <LiquidItem key={task.id} id={task.id}>
+                                <TaskCard
+                                    task={task}
+                                    onToggle={() => handleToggleTask(task.id)}
+                                />
+                            </LiquidItem>
+                        ))}
+                    </LiquidList>
+                )}
+            </div>
+        );
+    };
+
+    // ========== RELATIVE MODE ==========
+    if (role === 'relative') {
+        return (
+            <div className="space-y-6 tab-content">
+                {/* Coffee Signal */}
+                <CoffeeInviteCard />
+
+                {/* Hero: Ambient Dashboard Rings */}
+                <AmbientHero role="relative" />
+
+                {/* Smart Briefing */}
+                <BriefingStory />
+
+                {/* Activity Timeline */}
+                <ActivityTimeline role="relative" />
+            </div>
+        );
+    }
+
+    // ========== SENIOR MODE ==========
+    return (
+        <div className="tab-content animate-fade-in">
+            {/* Reward Card (Photo unlock on all medicine complete) */}
+            {allMedicineComplete && !hideReward && (
+                rewardMinimized ? (
+                    <div className="relative w-full rounded-xl p-3 mb-4 bg-indigo-100 border-2 border-indigo-200 flex items-center justify-between">
+                        <button
+                            onClick={() => setRewardMinimized(false)}
+                            className="flex-1 flex items-center gap-2 hover:opacity-80 transition-opacity"
+                        >
+                            <ImageIcon className="w-5 h-5 text-indigo-600" />
+                            <div>
+                                <span className="font-bold text-indigo-700">{t('daily_photo_title')}</span>
+                                <p className="text-xs text-indigo-500">{t('daily_photo_subtitle')}</p>
+                            </div>
+                        </button>
+                        <div className="flex items-center gap-2">
+                            <span className="text-xs text-indigo-400">{t('press_to_show')}</span>
+                            <button
+                                onClick={() => setHideReward(true)}
+                                className="p-1 rounded-full hover:bg-indigo-200 text-indigo-400 hover:text-indigo-600"
+                                title={t('hide')}
+                            >
+                                ✕
+                            </button>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="relative w-full rounded-3xl p-6 mb-6 bg-indigo-600 border-2 border-indigo-600 text-white animate-fade-in">
+                        <button
+                            onClick={() => setHideReward(true)}
+                            className="absolute top-2 right-2 p-1 rounded-full bg-indigo-500 hover:bg-indigo-400 text-indigo-200 hover:text-white text-sm"
+                            title={t('hide')}
+                        >
+                            ✕
+                        </button>
+                        <button
+                            onClick={() => setRewardMinimized(true)}
+                            className="w-full text-center"
+                        >
+                            <div className="flex items-center justify-center gap-2 mb-2">
+                                <ImageIcon className="w-6 h-6 text-indigo-200" />
+                                <span className="font-bold text-indigo-100 uppercase tracking-widest text-sm">{t('daily_photo_title')}</span>
+                            </div>
+                            <div className="w-full h-48 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-xl mb-3 overflow-hidden shadow-lg transform rotate-2 hover:rotate-0 transition-transform duration-500">
+                                <img
+                                    src={`https://picsum.photos/seed/${new Date().toISOString().split('T')[0]}/600/400`}
+                                    alt="Dagens billede"
+                                    className="w-full h-full object-cover"
+                                />
+                            </div>
+                            <p className="font-bold text-lg">{t('medication_taken')}</p>
+                            <p className="text-indigo-200 text-sm">{t('press_to_minimize')}</p>
+                        </button>
+                    </div>
+                )
+            )}
+
+            {/* Medicine Section */}
+            {medicineTasks.length > 0 && !allMedicineComplete && (
+                <div className="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-2xl p-4 mb-6 border-2 border-purple-100">
+                    <div className="flex items-center gap-2 mb-3">
+                        <Pill className="w-6 h-6 text-purple-600" />
+                        <h2 className="text-lg font-bold text-purple-800">{t('medication_title')}</h2>
+                        <span className="text-sm text-purple-500 ml-auto">
+                            {completedMedicineCount}/{medicineTasks.length} {t('taken')}
+                        </span>
+                    </div>
+                    <div className="space-y-2">
+                        {medicineTasks.filter(m => !m.completed).map(med => (
+                            <button
+                                key={med.id}
+                                onClick={() => handleToggleTask(med.id)}
+                                className="w-full flex items-center gap-3 p-3 rounded-xl transition-all bg-white border-2 border-purple-100 hover:border-purple-300"
+                            >
+                                <div className="w-8 h-8 rounded-full border-2 border-purple-300 bg-white flex items-center justify-center transition-colors">
+                                </div>
+                                <span className="font-medium text-purple-800">
+                                    {med.title}
+                                </span>
+                                <span className="text-purple-400 text-sm ml-auto">{med.time}</span>
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            {/* Medicine Complete Badge */}
+            {medicineTasks.length > 0 && allMedicineComplete && (
+                <div className="bg-gradient-to-r from-green-50 to-teal-50 rounded-xl p-3 mb-4 border border-green-200 flex items-center gap-3">
+                    <div className="bg-green-500 rounded-full p-1.5">
+                        <CheckCircle className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="text-green-700 font-medium">{t('medication_taken_check')}</span>
+                </div>
+            )}
+
+            {/* Hero: Check-in Buttons */}
+            <AmbientHero
+                role="senior"
+                onCheckIn={handleCheckIn}
+                onOpenSymptomModal={onOpenSymptomModal}
+            />
+
+            {/* Contextual Task Lists */}
+            {renderTaskSection(t('time_period_morning_full'), 'morgen', <Coffee className="w-6 h-6 theme-text-muted" />)}
+            <div className="h-px bg-current opacity-10 my-4" />
+            {renderTaskSection(t('time_period_lunch_full'), 'frokost', <Sun className="w-6 h-6 theme-text-muted" />)}
+            <div className="h-px bg-current opacity-10 my-4" />
+            {renderTaskSection(t('time_period_afternoon_full'), 'eftermiddag', <Moon className="w-6 h-6 theme-text-muted" />)}
+            <div className="h-px bg-current opacity-10 my-4" />
+            {renderTaskSection(t('time_period_evening_full'), 'aften', <Moon className="w-6 h-6 theme-text-muted" />)}
+
+            {/* Add Own Task Button */}
+            <button
+                onClick={onOpenAddTaskModal}
+                className="w-full flex items-center justify-center gap-2 p-4 mt-4 bg-white border-2 border-dashed border-teal-300 rounded-2xl text-teal-600 font-medium hover:bg-teal-50 hover:border-teal-400 transition-colors"
+            >
+                <Plus className="w-5 h-5" />
+                <span>{t('add_own_task')}</span>
+            </button>
+        </div>
+    );
+};
+
+export default AmbientTab;
+
+```
+---
+
+## File: tryg-app\src\components\shared\HealthTab.tsx
+```tsx
+import React, { useState, useMemo } from 'react';
+import { ChevronDown, ChevronUp, AlertCircle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { useCareCircleContext } from '../../contexts/CareCircleContext';
+import { SYMPTOMS_LIST } from '../../data/constants';
+
+export const HealthTab: React.FC = () => {
+    const { t } = useTranslation();
+    const {
+        symptoms: symptomLogs = []
+    } = useCareCircleContext();
+
+    const [expandedDates, setExpandedDates] = useState<Record<string, boolean>>(() => {
+        const today = new Date().toLocaleDateString('da-DK', { weekday: 'short', day: 'numeric', month: 'short' });
+        return { [today]: true };
+    });
+    const [filterDate, setFilterDate] = useState<string | null>(null);
+
+
+    // Group symptoms by date
+    const groupedSymptoms = useMemo<Record<string, any[]>>(() => {
+        const grouped: Record<string, any[]> = {};
+        symptomLogs.forEach(log => {
+            const date = log.loggedAt?.toDate ? log.loggedAt.toDate() : new Date(log.loggedAt);
+            const dateKey = date.toLocaleDateString('da-DK', { weekday: 'short', day: 'numeric', month: 'short' });
+            if (!grouped[dateKey]) grouped[dateKey] = [];
+            grouped[dateKey].push({ ...log, dateObj: date });
+        });
+        return grouped;
+    }, [symptomLogs]);
+
+    // Chart data - 14 days
+    const chartData = useMemo(() => {
+        const days = Array(14).fill(null).map((_, i) => {
+            const d = new Date();
+            d.setDate(d.getDate() - (13 - i));
+            return {
+                date: d,
+                dateKey: d.toLocaleDateString('da-DK', { weekday: 'short', day: 'numeric', month: 'short' }),
+                count: 0
+            };
+        });
+
+        symptomLogs.forEach(log => {
+            const date = log.loggedAt?.toDate ? log.loggedAt.toDate() : new Date(log.loggedAt);
+            const daysAgo = Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24));
+            if (daysAgo >= 0 && daysAgo < 14) {
+                days[13 - daysAgo].count++;
+            }
+        });
+
+        return days;
+    }, [symptomLogs]);
+
+    const maxCount = Math.max(...chartData.map(d => d.count), 1);
+
+    const displayedSymptoms = useMemo<Record<string, any[]>>(() => {
+        if (!filterDate) return groupedSymptoms;
+        return { [filterDate]: groupedSymptoms[filterDate] || [] };
+    }, [groupedSymptoms, filterDate]);
+
+    const totalSymptoms = symptomLogs.length;
+    const symptomCounts: Record<string, number> = {};
+    symptomLogs.forEach(log => {
+        const label = log.label || 'Unknown';
+        symptomCounts[label] = (symptomCounts[label] || 0) + 1;
+    });
+    const mostCommon = Object.entries(symptomCounts).sort((a, b) => b[1] - a[1])[0];
+
+    const toggleDate = (dateKey: string) => {
+        setExpandedDates(prev => ({
+            ...prev,
+            [dateKey]: !prev[dateKey]
+        }));
+    };
+
+    const handleChartClick = (dateKey: string) => {
+        if (filterDate === dateKey) {
+            setFilterDate(null);
+        } else {
+            setFilterDate(dateKey);
+            setExpandedDates(prev => ({ ...prev, [dateKey]: true }));
+        }
+    };
+
+    return (
+        <div className="tab-content animate-fade-in p-4 space-y-6">
+            <h2 className="text-2xl font-bold theme-text mb-2">{t('health_title')}</h2>
+
+            {/* Summary Stats */}
+            {totalSymptoms > 0 && (
+                <div className="grid grid-cols-2 gap-3">
+                    <div className="theme-card-secondary rounded-xl p-3 border border-orange-100">
+                        <p className="text-2xl font-bold text-orange-600">{totalSymptoms}</p>
+                        <p className="text-xs text-orange-500">Symptomer (14 dage)</p>
+                    </div>
+                    {mostCommon && (
+                        <div className="theme-card-secondary rounded-xl p-3 border border-purple-100">
+                            <p className="text-lg font-bold text-purple-600 truncate">{mostCommon[0]}</p>
+                            <p className="text-xs text-purple-500">Mest hyppige ({mostCommon[1]}x)</p>
+                        </div>
+                    )}
+                </div>
+            )}
+
+            {/* Clickable Chart */}
+            <div className="p-4 theme-card-secondary rounded-xl border border-orange-200">
+                <div className="flex items-center justify-between mb-2">
+                    <h4 className="font-bold theme-text">Symptom-oversigt (14 dage)</h4>
+                    {filterDate && (
+                        <button
+                            onClick={() => setFilterDate(null)}
+                            className="text-xs text-orange-600 font-medium hover:underline"
+                        >
+                            {t('view_all')}
+                        </button>
+                    )}
+                </div>
+                <p className="text-xs text-slate-500 mb-3">{t('chart_filter_hint')}</p>
+                <div className="flex items-end gap-1 h-24 pb-2">
+                    {chartData.map((day, i) => (
+                        <button
+                            key={i}
+                            onClick={() => day.count > 0 && handleChartClick(day.dateKey)}
+                            className={`flex-1 flex flex-col items-center gap-1 transition-all ${filterDate === day.dateKey ? 'scale-110' : ''} ${day.count > 0 ? 'cursor-pointer' : 'cursor-default'}`}
+                        >
+                            {day.count > 0 && (
+                                <span className={`text-[10px] font-bold ${filterDate === day.dateKey ? 'text-orange-800' : 'text-orange-600'}`}>{day.count}</span>
+                            )}
+                            <div
+                                className={`w-full rounded-t-sm transition-all ${day.count > 0
+                                    ? filterDate === day.dateKey
+                                        ? 'bg-orange-600'
+                                        : 'bg-orange-400 hover:bg-orange-500'
+                                    : 'bg-slate-200'
+                                    }`}
+                                style={{ height: `${Math.max((day.count / maxCount) * 60, 4)}px` }}
+                            />
+                        </button>
+                    ))}
+                </div>
+                <div className="flex justify-between text-[10px] text-stone-400 font-bold px-2">
+                    <span>{t('time_days_ago_short', { count: 14 })}</span><span>{t('today')}</span>
+                </div>
+            </div>
+
+            {/* Steps Trend */}
+            <div className="bg-stone-50 rounded-2xl p-4 border border-stone-100">
+                <div className="flex justify-between items-center mb-4">
+                    <h4 className="text-sm font-bold text-stone-600 uppercase tracking-wider">{t('health_steps')}</h4>
+                    <span className="text-teal-600 font-black">6.420 {t('steps_avg')}</span>
+                </div>
+                <div className="h-16 flex items-end gap-1 mb-2">
+                    {[35, 45, 30, 65, 85, 40, 55].map((h, i) => (
+                        <div
+                            key={i}
+                            className="flex-1 bg-teal-200 rounded-t-sm"
+                            style={{ height: `${h}%` }}
+                        ></div>
+                    ))}
+                </div>
+                <div className="flex justify-between text-[10px] text-stone-400 font-bold px-2">
+                    <span>{t('time_days_ago_short', { count: 7 })}</span><span>{t('today')}</span>
+                </div>
+            </div>
+
+            {/* Symptom Log */}
+            <div>
+                <h4 className="font-bold theme-text mb-3">
+                    {t('symptom_log_title')} {filterDate ? `(${filterDate})` : t('symptom_log_last_14_days')}
+                </h4>
+                {Object.keys(displayedSymptoms).length === 0 ? (
+                    <p className="text-slate-500 text-sm italic">{t('no_symptoms_recorded')}</p>
+                ) : (
+                    <div className="space-y-2">
+                        {Object.entries(displayedSymptoms).map(([dateStr, logs]) => (
+                            <div key={dateStr} className="border rounded-xl overflow-hidden shadow-sm">
+                                <button
+                                    onClick={() => toggleDate(dateStr)}
+                                    className="w-full flex items-center justify-between p-3 theme-card-secondary hover:bg-slate-100 transition-colors"
+                                >
+                                    <span className="font-bold theme-text">{dateStr}</span>
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-xs text-slate-500">{logs?.length || 0} {t('symptoms_count_label')}</span>
+                                        {expandedDates[dateStr] ? (
+                                            <ChevronUp className="w-4 h-4 text-slate-400" />
+                                        ) : (
+                                            <ChevronDown className="w-4 h-4 text-slate-400" />
+                                        )}
+                                    </div>
+                                </button>
+
+                                {expandedDates[dateStr] && logs && (
+                                    <ul className="divide-y border-t bg-white">
+                                        {logs.map((log: any, i: number) => {
+                                            const symptomDef = SYMPTOMS_LIST.find(s => s.id === log.id) || { icon: AlertCircle, label: t('unknown') };
+                                            const SymptomIcon = symptomDef.icon || AlertCircle;
+                                            const timeStr = log.dateObj.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' });
+
+                                            return (
+                                                <li key={i} className="flex flex-col gap-1 text-sm p-3">
+                                                    <div className="flex items-center gap-3">
+                                                        <SymptomIcon className="w-5 h-5 text-slate-400" />
+                                                        <span className="font-medium theme-text">{log.label}</span>
+                                                        <span className="text-slate-400 ml-auto">{timeStr}</span>
+                                                    </div>
+                                                    {log.bodyLocation && (
+                                                        <div className="ml-8 text-xs text-slate-500 space-y-1">
+                                                            <div>📍 {t('location_prefix')}: <span className="font-medium">{log.bodyLocation.emoji} {log.bodyLocation.label}</span></div>
+                                                            {log.bodyLocation.severity && (
+                                                                <div>📊 {t('intensity_prefix')}: <span className="font-medium">{log.bodyLocation.severity.emoji} {log.bodyLocation.severity.label}</span></div>
+                                                            )}
+                                                        </div>
+                                                    )}
+                                                </li>
+                                            );
+                                        })}
+                                    </ul>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};
+
+```
+---
+
+## File: tryg-app\src\components\shared\SpilTab.tsx
+```tsx
+import React from 'react';
+import { useCareCircleContext } from '../../contexts/CareCircleContext';
+import { Spillehjoernet } from '../../features/wordGame';
+import { FEATURES } from '../../config/features';
+
+export const SpilTab: React.FC = () => {
+    const { careCircleId, currentUserId, userName, userRole } = useCareCircleContext();
+
+    if (!FEATURES.spillehjoernet) return null;
+
+    return (
+        <div className="tab-content animate-fade-in">
+            <Spillehjoernet
+                circleId={careCircleId || ''}
+                userId={currentUserId || ''}
+                displayName={userName || (userRole === 'senior' ? 'Senior' : 'Pårørende')}
+            />
+        </div>
+    );
+};
+
+```
+---
+
+## File: tryg-app\src\components\ShareModal.tsx
+```tsx
+import React from 'react';
+import { X, Copy, Users, Shield } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { Button } from './ui/Button';
+import { FamilyConstellation } from '../features/familyPresence';
+
+export interface ShareModalProps {
+    members: any[];
+    inviteCode: string | null;
+    onGetInviteCode: () => Promise<void>;
+    onClose: () => void;
+    seniorName: string;
+    currentUserId?: string;
+}
+
+export const ShareModal: React.FC<ShareModalProps> = ({
+    members,
+    inviteCode,
+    onGetInviteCode,
+    onClose,
+    seniorName,
+    currentUserId
+}) => {
+    const { t } = useTranslation();
+
+    const copyToClipboard = (text: string) => {
+        navigator.clipboard.writeText(text);
+        // Could add a toast here
+    };
+
+    return (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4">
+            <div className="bg-white w-full sm:max-w-md h-[80vh] sm:h-auto sm:max-h-[85vh] sm:rounded-[2.5rem] flex flex-col overflow-hidden shadow-2xl animate-slide-up">
+                {/* Header */}
+                <div className="px-6 py-6 border-b border-stone-100 flex justify-between items-center bg-stone-50/50">
+                    <div>
+                        <h2 className="text-xl font-bold text-stone-800">{t('family_circle')}</h2>
+                    </div>
+                    <button
+                        onClick={onClose}
+                        className="p-2 hover:bg-stone-200 rounded-full transition-colors"
+                    >
+                        <X className="w-6 h-6 text-stone-500" />
+                    </button>
+                </div>
+
+                {/* Content */}
+                <div className="flex-1 overflow-y-auto p-6 space-y-8">
+                    {/* Invite Code Section */}
+                    <section className="space-y-4">
+                        <div className="flex items-center gap-2 text-stone-600">
+                            <Shield className="w-4 h-4" />
+                            <h3 className="text-sm font-bold uppercase tracking-wider">{t('invite_code')}</h3>
+                        </div>
+
+                        <div className="bg-stone-50 rounded-2xl p-6 border-2 border-dashed border-stone-200 text-center relative group">
+                            {inviteCode ? (
+                                <>
+                                    <p className="text-3xl font-mono font-bold tracking-[0.2em] text-stone-800 mb-2">{inviteCode}</p>
+                                    <Button
+                                        variant="secondary"
+                                        size="small"
+                                        className="mx-auto flex items-center gap-2"
+                                        onClick={() => copyToClipboard(inviteCode)}
+                                    >
+                                        <Copy className="w-4 h-4" />
+                                        {t('copy', 'Kopier')}
+                                    </Button>
+                                </>
+                            ) : (
+                                <Button
+                                    variant="primary"
+                                    className="w-full"
+                                    onClick={onGetInviteCode}
+                                >
+                                    {t('show_invite_code')}
+                                </Button>
+                            )}
+                        </div>
+                        <p className="text-xs text-stone-400 text-center leading-relaxed">
+                            {t('invite_notice', 'Del denne kode med familiemedlemmer, du ønsker at invitere til din Care Circle.')}
+                        </p>
+                    </section>
+
+                    {/* Family Constellation Section */}
+                    <section className="space-y-4">
+                        <div className="flex items-center gap-2 text-stone-600">
+                            <Users className="w-4 h-4" />
+                            <h3 className="text-sm font-bold uppercase tracking-wider">{t('family_heart')}</h3>
+                        </div>
+
+                        <div className="bg-stone-50 rounded-3xl p-4 border border-stone-100 flex justify-center">
+                            <div className="scale-90 sm:scale-100 origin-center py-4">
+                                <FamilyConstellation
+                                    members={members as any}
+                                    centerMemberName={seniorName}
+                                    currentUserId={currentUserId}
+                                />
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                {/* Footer safe area */}
+                <div className="h-8 sm:h-6" />
+            </div>
+        </div>
+    );
+};
+
+export default ShareModal;
 
 ```
 ---
@@ -4945,49 +4599,65 @@ export default TabNavigation;
 
 ## File: tryg-app\src\components\ui\Avatar.tsx
 ```tsx
+/// <reference types="vite/client" />
 import React from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '../../lib/utils';
+
+/**
+ * Avatar size variants using CVA
+ */
+const avatarVariants = cva(
+    "rounded-full overflow-hidden bg-stone-100",
+    {
+        variants: {
+            size: {
+                sm: "w-8 h-8",
+                md: "w-12 h-12",
+                lg: "w-16 h-16",
+                xl: "w-24 h-24",
+            },
+        },
+        defaultVariants: {
+            size: "md",
+        },
+    }
+);
 
 type AvatarId = 'louise' | 'fatima' | 'brad' | 'bearded' | 'senior' | 'home' | 'work' | 'car' | 'coffee' | 'moon' | string;
-type AvatarSize = 'sm' | 'md' | 'lg' | 'xl';
 
-interface AvatarProps {
+interface AvatarProps extends VariantProps<typeof avatarVariants> {
     id: AvatarId;
     className?: string;
-    size?: AvatarSize;
 }
+
+// Map IDs to image filenames
+const IMAGE_MAP: Record<string, string> = {
+    'louise': 'louise.png',
+    'fatima': 'fatima.png',
+    'brad': 'brad.png',
+    'bearded': 'brad.png',
+    'senior': 'brad.png',
+    'home': 'home.png',
+    'work': 'work.png',
+    'car': 'car.png',
+    'coffee': 'coffee.png',
+    'moon': 'moon.png'
+};
 
 /**
  * Avatar Component
- * 
  * Renders avatars and status icons using individual image files.
- * Much simpler and more reliable than CSS sprites.
  */
-export const Avatar: React.FC<AvatarProps> = ({ id, className = '', size = 'md' }) => {
-    // Map IDs to image filenames
-    const IMAGE_MAP: Record<string, string> = {
-        'louise': 'louise.png',
-        'fatima': 'fatima.png',
-        'brad': 'brad.png',
-        'bearded': 'brad.png',  // Brad is the senior/bearded guy
-        'senior': 'brad.png',   // Alias
-        'home': 'home.png',
-        'work': 'work.png',
-        'car': 'car.png',
-        'coffee': 'coffee.png',
-        'moon': 'moon.png'
-    };
-
-    const SIZE_CLASSES: Record<AvatarSize, string> = {
-        'sm': 'w-8 h-8',
-        'md': 'w-12 h-12',
-        'lg': 'w-16 h-16',
-        'xl': 'w-24 h-24'
-    };
-
-    // If ID not found, return fallback
+export const Avatar: React.FC<AvatarProps> = ({ id, className, size }) => {
+    // Fallback for unknown IDs
     if (!IMAGE_MAP[id]) {
         return (
-            <div className={`${SIZE_CLASSES[size]} rounded-full bg-stone-200 flex items-center justify-center font-bold text-stone-500 uppercase ${className}`}>
+            <div className={cn(
+                avatarVariants({ size }),
+                "bg-stone-200 flex items-center justify-center font-bold text-stone-500 uppercase",
+                className
+            )}>
                 {id ? id.charAt(0) : '?'}
             </div>
         );
@@ -4996,7 +4666,7 @@ export const Avatar: React.FC<AvatarProps> = ({ id, className = '', size = 'md' 
     const imagePath = `${import.meta.env.BASE_URL}assets/avatars/${IMAGE_MAP[id]}`;
 
     return (
-        <div className={`${SIZE_CLASSES[size]} rounded-full overflow-hidden bg-stone-100 ${className}`}>
+        <div className={cn(avatarVariants({ size }), className)}>
             <img
                 src={imagePath}
                 alt={id}
@@ -5006,6 +4676,7 @@ export const Avatar: React.FC<AvatarProps> = ({ id, className = '', size = 'md' 
     );
 };
 
+export { avatarVariants };
 export default Avatar;
 
 ```
@@ -5014,50 +4685,67 @@ export default Avatar;
 ## File: tryg-app\src\components\ui\Button.tsx
 ```tsx
 import React, { ButtonHTMLAttributes } from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '../../lib/utils';
 
-type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'outline' | 'ghost' | 'locked';
-type ButtonSize = 'small' | 'normal' | 'large' | 'xl';
+/**
+ * Button variants using CVA for type-safe, maintainable styling
+ */
+const buttonVariants = cva(
+    // Base styles (always applied)
+    "rounded-2xl font-semibold transition-all duration-200 flex items-center justify-center relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500",
+    {
+        variants: {
+            variant: {
+                primary: "bg-teal-600 text-white shadow-lg shadow-teal-200 hover:bg-teal-700 active:scale-95",
+                secondary: "bg-stone-100 text-stone-800 hover:bg-stone-200",
+                danger: "bg-rose-100 text-rose-700 hover:bg-rose-200 border-2 border-rose-200",
+                outline: "border-2 border-teal-600 text-teal-700 hover:bg-teal-50",
+                ghost: "bg-transparent text-stone-500 hover:text-stone-800",
+                locked: "bg-stone-200 text-stone-400 cursor-not-allowed",
+            },
+            size: {
+                small: "py-2 px-4 text-sm",
+                normal: "py-3 px-6 text-base",
+                large: "py-6 px-8 text-xl h-24",
+                xl: "py-8 px-8 text-2xl h-32",
+            },
+        },
+        defaultVariants: {
+            variant: "primary",
+            size: "normal",
+        },
+    }
+);
 
-const variants: Record<ButtonVariant, string> = {
-    primary: "bg-teal-600 text-white shadow-lg shadow-teal-200 hover:bg-teal-700 active:scale-95",
-    secondary: "bg-stone-100 text-stone-800 hover:bg-stone-200",
-    danger: "bg-rose-100 text-rose-700 hover:bg-rose-200 border-2 border-rose-200",
-    outline: "border-2 border-teal-600 text-teal-700 hover:bg-teal-50",
-    ghost: "bg-transparent text-stone-500 hover:text-stone-800",
-    locked: "bg-stone-200 text-stone-400 cursor-not-allowed"
-};
-
-const sizes: Record<ButtonSize, string> = {
-    small: "py-2 px-4 text-sm",
-    normal: "py-3 px-6 text-base",
-    large: "py-6 px-8 text-xl h-24",
-    xl: "py-8 px-8 text-2xl h-32"
-};
-
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-    variant?: ButtonVariant;
-    size?: ButtonSize;
+export interface ButtonProps
+    extends ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
     'aria-label'?: string;
 }
 
 export const Button: React.FC<ButtonProps> = ({
     children,
     onClick,
-    variant = 'primary',
-    className = '',
-    size = 'normal',
+    variant,
+    size,
+    className,
     disabled = false,
     'aria-label': ariaLabel,
     ...props
 }) => {
-    const baseStyle = "rounded-2xl font-semibold transition-all duration-200 flex items-center justify-center relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500";
-
     return (
         <button
             onClick={onClick}
             disabled={disabled}
             aria-label={ariaLabel}
-            className={`${baseStyle} ${disabled ? variants.locked : variants[variant]} ${sizes[size]} ${className}`}
+            className={cn(
+                buttonVariants({
+                    variant: disabled ? 'locked' : variant,
+                    size
+                }),
+                className
+            )}
             {...props}
         >
             {children}
@@ -5065,7 +4753,154 @@ export const Button: React.FC<ButtonProps> = ({
     );
 };
 
+// Export variants for external use (e.g., link styled as button)
+export { buttonVariants };
+
 export default Button;
+
+```
+---
+
+## File: tryg-app\src\components\ui\LiquidView.tsx
+```tsx
+
+import { motion, AnimatePresence, Transition } from 'framer-motion';
+import { useAuth } from '../../hooks/useAuth';
+
+// Define the two "Dialects" of motion
+const TRANSITIONS: Record<string, Transition> = {
+    senior: { duration: 0.6, ease: [0.22, 1, 0.36, 1] }, // Slow, smooth "ease out"
+    relative: { type: "spring", stiffness: 400, damping: 30 } // Bouncy, fast spring
+};
+
+const VARIANTS = {
+    initial: { opacity: 0, scale: 0.96, y: 10 },
+    animate: { opacity: 1, scale: 1, y: 0 },
+    exit: { opacity: 0, scale: 0.96, y: -10 }
+};
+
+/**
+ * A wrapper that animates items in a list (Tasks, Cards, etc.)
+ * Adjusts speed based on the logged-in user's role.
+ */
+export const LiquidItem = ({ children, className = '', id }: { children: React.ReactNode, className?: string, id?: string | number }) => {
+    const { userProfile } = useAuth();
+    const role = userProfile?.role || 'relative';
+
+    return (
+        <motion.div
+            layout
+            variants={VARIANTS}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            transition={TRANSITIONS[role as keyof typeof TRANSITIONS] || TRANSITIONS.relative} // <--- The magic switch
+            className={className}
+            key={id}
+        >
+            {children}
+        </motion.div>
+    );
+};
+
+export const LiquidList = ({ children, className = '' }: { children: React.ReactNode, className?: string }) => (
+    <motion.div layout className={className}>
+        <AnimatePresence mode="popLayout" initial={false}>
+            {children}
+        </AnimatePresence>
+    </motion.div>
+);
+
+```
+---
+
+## File: tryg-app\src\components\ui\LivingBackground.tsx
+```tsx
+import { useTheme } from '../../contexts/ThemeContext';
+import React, { useMemo } from 'react';
+
+/**
+ * LivingBackground 2.0 - Ambient circadian atmosphere
+ * Uses subtle animated SVG blobs and time-aware gradients
+ * NOW respects isDark for manual dark mode toggle
+ */
+export const LivingBackground: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    const { circadianTheme, isDark } = useTheme();
+
+    const theme = useMemo(() => {
+        // If user explicitly set dark mode, OR it's evening/night, use dark themes
+        if (isDark) {
+            // Dark mode: use night-like colors regardless of actual time
+            return {
+                gradient: 'bg-gradient-to-br from-indigo-950 via-slate-900 to-slate-950',
+                blob1: 'fill-indigo-500/10',
+                blob2: 'fill-slate-700/20'
+            };
+        }
+
+        // Light mode: use circadian time-based gradients
+        switch (circadianTheme) {
+            case 'morning':
+                return {
+                    gradient: 'bg-gradient-to-br from-teal-50 via-white to-stone-50',
+                    blob1: 'fill-teal-200/40',
+                    blob2: 'fill-sky-100/30'
+                };
+            case 'day':
+                return {
+                    gradient: 'bg-gradient-to-br from-amber-50 via-white to-orange-50/40',
+                    blob1: 'fill-amber-200/20',
+                    blob2: 'fill-orange-100/30'
+                };
+            case 'evening':
+                // Evening is NOW darker (deep indigo twilight)
+                return {
+                    gradient: 'bg-gradient-to-br from-indigo-200 via-slate-200 to-stone-300',
+                    blob1: 'fill-indigo-300/30',
+                    blob2: 'fill-slate-400/20'
+                };
+            case 'night':
+                return {
+                    gradient: 'bg-gradient-to-br from-indigo-950 via-slate-900 to-slate-950',
+                    blob1: 'fill-indigo-500/10',
+                    blob2: 'fill-slate-700/20'
+                };
+            default:
+                return {
+                    gradient: 'bg-stone-50',
+                    blob1: 'fill-teal-200/30',
+                    blob2: 'fill-amber-100/20'
+                };
+        }
+    }, [circadianTheme, isDark]);
+
+    return (
+        <div className={`h-full w-full transition-all duration-[3000ms] ease-in-out relative ${theme.gradient}`}>
+            {/* Ambient Background Blobs - Increased visibility & soft blur */}
+            <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden blur-3xl opacity-80">
+                <svg viewBox="0 0 100 100" className="absolute -top-10 -left-10 w-96 h-96 transition-colors duration-[3000ms]">
+                    <path
+                        className={`${theme.blob1} animate-breathe`}
+                        d="M33,-47.1C43.3,-40.3,52.5,-30.9,57.1,-19.5C61.7,-8,61.7,5.5,57.9,18C54,30.5,46.3,42,35.3,49.8C24.3,57.6,10.1,61.7,-3.4,66.4C-16.9,71.1,-29.7,76.4,-40.7,71.7C-51.7,67,-61,52.3,-66.2,37.3C-71.4,22.3,-72.6,7,-67.7,-5.7C-62.8,-18.3,-51.8,-28.3,-40.3,-35.1C-28.8,-41.8,-16.8,-45.3,-4.2,-39.5C8.3,-33.7,19.9,-18.6,33,-47.1Z"
+                        transform="translate(50 50)"
+                    />
+                </svg>
+                <svg viewBox="0 0 100 100" className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] transition-colors duration-[3000ms]">
+                    <path
+                        className={`${theme.blob2} animate-glow-loop`}
+                        d="M45.5,-63.3C58.3,-55.8,67.6,-41.2,71.2,-26C74.8,-10.8,72.7,4.9,67.8,20.1C62.9,35.3,55.1,50.1,42.7,58.8C30.3,67.6,13.2,70.2,-4,75.7C-21.2,81.1,-38.5,89.4,-51.7,85.2C-64.9,81,-74,64.2,-78.3,47.1C-82.6,30,-82,12.5,-77.7,-3.7C-73.4,-19.9,-65.4,-34.8,-53.8,-42.6C-42.2,-50.3,-27,-51,-13.3,-55.7C0.4,-60.4,14.6,-69,30.3,-70.8C46.1,-72.6,63.3,-67.6,45.5,-63.3Z"
+                        transform="translate(50 50)"
+                    />
+                </svg>
+            </div>
+
+            {/* Content Container */}
+            <div className="relative z-10 h-full">
+                {children}
+            </div>
+        </div>
+    );
+};
 
 ```
 ---
@@ -5074,28 +4909,37 @@ export default Button;
 ```tsx
 import React, { ReactNode } from 'react';
 import { X } from 'lucide-react';
+import { cn } from '../../lib/utils';
 
 interface ModalProps {
     isOpen: boolean;
     onClose: () => void;
     title: string;
     children: ReactNode;
+    className?: string;
 }
 
-export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
+export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, className }) => {
     if (!isOpen) return null;
 
     return (
         <div className="absolute inset-0 bg-black/60 z-50 flex items-end sm:items-center justify-center animate-fade-in p-0 sm:p-4">
-            <div className="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl animate-slide-up max-h-[90vh] overflow-y-auto flex flex-col">
+            <div className={cn(
+                "theme-card w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl animate-slide-up max-h-[90vh] overflow-y-auto flex flex-col",
+                className
+            )}>
                 <div className="flex justify-between items-center mb-6 shrink-0">
-                    <h3 className="text-xl font-bold text-stone-800">{title}</h3>
+                    <h3 className="text-xl font-bold theme-text">{title}</h3>
                     <button
                         onClick={onClose}
-                        className="p-2 bg-stone-100 rounded-full hover:bg-stone-200 transition-colors focus:outline-none focus:ring-2 focus:ring-stone-400"
+                        className={cn(
+                            "p-2 bg-stone-100 rounded-full hover:bg-stone-200 transition-colors",
+                            "focus:outline-none focus:ring-2 focus:ring-stone-400",
+                            "theme-dark:bg-slate-700 theme-dark:hover:bg-slate-600"
+                        )}
                         aria-label="Luk"
                     >
-                        <X className="w-6 h-6 text-stone-600" />
+                        <X className="w-6 h-6 theme-text-muted" />
                     </button>
                 </div>
                 {children}
@@ -5113,8 +4957,8 @@ export default Modal;
 ```tsx
 import React from 'react';
 
-type PictogramSheet = '1' | '2';
-type PictogramPosition = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+export type PictogramSheet = '1' | '2';
+export type PictogramPosition = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
 
 interface PictogramProps {
     sheet: PictogramSheet;
@@ -5378,14 +5222,15 @@ export default UpdateToast;
 ```
 ---
 
-## File: tryg-app\src\config\features.js
-```js
+## File: tryg-app\src\config\features.ts
+```ts
 // Feature flags for toggling features on/off
 // Set to false to temporarily disable a feature
 
 export const FEATURES = {
     // Layout
     tabbedLayout: true,        // Use tabs instead of scrolling (experimental)
+    livingDesign: true,        // 🏠 New "Velkommen Hjem" aesthetic (set false to fallback)
 
     // Phase 5: Emotional Connection
     weeklyQuestion: true,      // Weekly Question of the Week card
@@ -5417,7 +5262,7 @@ export const FEATURES = {
 };
 
 // Helper to check if feature is enabled
-export const isFeatureEnabled = (featureName) => {
+export const isFeatureEnabled = (featureName: keyof typeof FEATURES): boolean => {
     return FEATURES[featureName] ?? true;
 };
 
@@ -5426,17 +5271,16 @@ export default FEATURES;
 ```
 ---
 
-## File: tryg-app\src\config\firebase.js
-```js
+## File: tryg-app\src\config\firebase.ts
+```ts
 // Firebase configuration for Tryg App
 // Values loaded from environment variables (.env.local for dev, GitHub Secrets for prod)
 // See .env.example for required variables
 
 import { initializeApp } from 'firebase/app';
-import { getAuth, connectAuthEmulator } from 'firebase/auth';
+import { getAuth } from 'firebase/auth';
 import {
     getFirestore,
-    connectFirestoreEmulator,
     enableIndexedDbPersistence
 } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
@@ -5481,108 +5325,183 @@ export default app;
 ```
 ---
 
-## File: tryg-app\src\contexts\CareCircleContext.jsx
-```jsx
-// @ts-check
-/**
- * CareCircleContext
- * 
- * Provides shared care circle data to all components without prop drilling.
- * Use `useCareCircleContext()` to access data like careCircleId, memberStatuses, etc.
- */
-
+## File: tryg-app\src\contexts\CareCircleContext.tsx
+```tsx
 import { createContext, useContext } from 'react';
-import '../types'; // Import types for JSDoc
+import { CareCircleContextValue } from '../types';
 
-// Create the context with default values
-const CareCircleContext = createContext({
-    // Circle info
+export const CareCircleContext = createContext<CareCircleContextValue>({
     careCircleId: null,
     seniorId: null,
     seniorName: 'Senior',
-
-    // Current user info
     currentUserId: null,
     userRole: null,
-    userName: '',
-
-    // Member statuses (for FamilyPresence, etc.)
+    userName: 'Bruger',
+    relativeName: 'Pårørende',
     memberStatuses: [],
+    members: [],
     relativeStatuses: [],
     seniorStatus: null,
-    myStatus: null,
-    setMyStatus: () => { },
+    myStatus: 'home',
+    setMyStatus: async () => { },
+    activeTab: 'daily',
+    setActiveTab: () => { },
+    tasks: [],
+    toggleTask: () => { },
+    addTask: () => { },
+    symptoms: [],
+    addSymptom: async () => undefined,
+    weeklyAnswers: [],
+    addWeeklyAnswer: async () => undefined,
+    toggleLike: async () => { },
+    addReply: async () => { },
+    latestPing: null,
+    sendPing: async () => undefined,
+    dismissPing: () => { },
+    lastCheckIn: null,
+    recordCheckIn: async () => undefined,
 });
 
 /**
  * Hook to access CareCircle context
- * @returns {Object} Care circle data and functions
- * @throws {Error} If used outside of CareCircleProvider
  */
-export function useCareCircleContext() {
+export const useCareCircleContext = () => {
     const context = useContext(CareCircleContext);
     if (!context) {
         throw new Error('useCareCircleContext must be used within a CareCircleProvider');
     }
     return context;
-}
+};
 
 /**
- * Provider component that wraps the app and provides care circle data
+ * Provider component that wraps the app and provides circle state
  */
-export function CareCircleProvider({
-    children,
-    careCircleId,
-    seniorId,
-    seniorName,
-    currentUserId,
-    userRole,
-    userName,
-    memberStatuses = [],
-    relativeStatuses = [],
-    seniorStatus = null,
-    myStatus = null,
-    setMyStatus = () => { },
-}) {
-    const value = {
-        careCircleId,
-        seniorId,
-        seniorName,
-        currentUserId,
-        userRole,
-        userName,
-        memberStatuses,
-        relativeStatuses,
-        seniorStatus,
-        myStatus,
-        setMyStatus,
-    };
-
-    return (
-        <CareCircleContext.Provider value={value}>
-            {children}
-        </CareCircleContext.Provider>
-    );
-}
-
-export default CareCircleContext;
+export const CareCircleProvider = CareCircleContext.Provider;
 
 ```
 ---
 
-## File: tryg-app\src\data\constants.js
-```js
+## File: tryg-app\src\contexts\ThemeContext.tsx
+```tsx
+import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
+
+type ThemeMode = 'auto' | 'light' | 'dark';
+type CircadianTheme = 'morning' | 'day' | 'evening' | 'night';
+
+interface ThemeContextType {
+    mode: ThemeMode;
+    circadianTheme: CircadianTheme;
+    setMode: (mode: ThemeMode) => void;
+    isDark: boolean;
+}
+
+const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+
+export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    // Load persisted mode or default to auto
+    const [mode, setModeState] = useState<ThemeMode>(() => {
+        const saved = localStorage.getItem('theme-mode');
+        return (saved as ThemeMode) || 'auto';
+    });
+
+    const [circadianTheme, setCircadianTheme] = useState<CircadianTheme>('day');
+
+    // Update circadian theme based on time
+    useEffect(() => {
+        const updateTheme = () => {
+            const hour = new Date().getHours();
+            if (hour >= 6 && hour < 11) setCircadianTheme('morning');
+            else if (hour >= 11 && hour < 17) setCircadianTheme('day');
+            else if (hour >= 17 && hour < 22) setCircadianTheme('evening');
+            else setCircadianTheme('night');
+        };
+
+        updateTheme();
+        const timer = setInterval(updateTheme, 60000); // Check every minute
+        return () => clearInterval(timer);
+    }, []);
+
+    // Persist mode changes
+    const setMode = (newMode: ThemeMode) => {
+        setModeState(newMode);
+        localStorage.setItem('theme-mode', newMode);
+    };
+
+    // Determine if we should be in dark mode
+    const isDark = useMemo(() => {
+        if (mode === 'dark') return true;
+        if (mode === 'light') return false;
+        // AUTO: Dark in evening and night
+        return circadianTheme === 'evening' || circadianTheme === 'night';
+    }, [mode, circadianTheme]);
+
+    // Apply theme class to body
+    useEffect(() => {
+        const body = document.body;
+        if (isDark) {
+            body.classList.add('theme-dark');
+        } else {
+            body.classList.remove('theme-dark');
+        }
+    }, [isDark]);
+
+    const value = useMemo(() => ({
+        mode,
+        circadianTheme,
+        setMode,
+        isDark
+    }), [mode, circadianTheme, isDark]);
+
+    return (
+        <ThemeContext.Provider value={value}>
+            {children}
+        </ThemeContext.Provider>
+    );
+};
+
+export const useTheme = () => {
+    const context = useContext(ThemeContext);
+    if (!context) {
+        throw new Error('useTheme must be used within a ThemeProvider');
+    }
+    return context;
+};
+
+```
+---
+
+## File: tryg-app\src\data\constants.ts
+```ts
 import { Zap, Brain, Frown, Thermometer, Moon, Droplets, Utensils } from 'lucide-react';
 
 // Initial tasks grouped by time of day (Habit Stacking)
 export const INITIAL_TASKS = [
-    { id: 1, title: 'Morgenpiller', type: 'medication', time: '08:00', period: 'morgen', completed: false, description: 'Hjertemedicin (2 piller)' },
-    { id: 2, title: 'Drik vand', type: 'hydration', time: '10:00', period: 'morgen', completed: false, description: 'Et stort glas' },
-    { id: 3, title: 'Frokostmedicin', type: 'medication', time: '12:00', period: 'frokost', completed: false, description: 'Vitaminer' },
-    { id: 4, title: 'Gåtur', type: 'activity', time: '14:00', period: 'eftermiddag', completed: false, description: '15 min i haven' },
+    { id: '1', title: 'Morgenpiller', type: 'medication', time: '08:00', period: 'morgen', completed: false, description: 'Hjertemedicin (2 piller)' },
+    { id: '2', title: 'Drik vand', type: 'hydration', time: '10:00', period: 'morgen', completed: false, description: 'Et stort glas' },
+    { id: '3', title: 'Frokostmedicin', type: 'medication', time: '12:00', period: 'frokost', completed: false, description: 'Vitaminer' },
+    { id: '4', title: 'Gåtur', type: 'activity', time: '14:00', period: 'eftermiddag', completed: false, description: '15 min i haven' },
 ];
 
-// Symptom options with icons and colors
+// Symptom type definition
+export interface SymptomOption {
+    id: string;
+    label: string;
+    icon: typeof Zap;
+    color: string;
+}
+
+// Localized symptoms list - returns translated labels
+export const getSymptomsList = (t: (key: string) => string): SymptomOption[] => [
+    { id: 'pain', label: t('symptom_pain'), icon: Zap, color: 'bg-red-100 text-red-600' },
+    { id: 'dizzy', label: t('symptom_dizzy'), icon: Brain, color: 'bg-purple-100 text-purple-600' },
+    { id: 'nausea', label: t('symptom_nausea'), icon: Frown, color: 'bg-orange-100 text-orange-600' },
+    { id: 'fever', label: t('symptom_fever'), icon: Thermometer, color: 'bg-amber-100 text-amber-600' },
+    { id: 'sleep', label: t('symptom_sleep'), icon: Moon, color: 'bg-indigo-100 text-indigo-600' },
+    { id: 'sweats', label: t('symptom_sweats'), icon: Droplets, color: 'bg-sky-100 text-sky-600' },
+    { id: 'appetite', label: t('symptom_appetite'), icon: Utensils, color: 'bg-emerald-100 text-emerald-600' },
+];
+
+// Symptom options with icons and colors (Danish fallback for backwards compatibility)
 export const SYMPTOMS_LIST = [
     { id: 'pain', label: 'Smerter', icon: Zap, color: 'bg-red-100 text-red-600' },
     { id: 'dizzy', label: 'Svimmel', icon: Brain, color: 'bg-purple-100 text-purple-600' },
@@ -5595,7 +5514,7 @@ export const SYMPTOMS_LIST = [
 
 // Senior profile defaults
 export const SENIOR_PROFILE = {
-    name: 'Birthe Jensen',
+    name: 'Bozana Cosic',
     age: 78,
     status: 'active',
     lastActive: new Date().toISOString(),
@@ -5605,8 +5524,8 @@ export const SENIOR_PROFILE = {
 ```
 ---
 
-## File: tryg-app\src\data\wordGameData.js
-```js
+## File: tryg-app\src\data\wordGameData.ts
+```ts
 // Word Game Data - CHALLENGING Danish words with definitions for "Word of the Day" game
 // Each word has a correct meaning and a plausible wrong answer
 
@@ -5973,7 +5892,7 @@ export function getTodaysWords(date = new Date()) {
     const seed = parseInt(dateStr, 10);
 
     // Simple seeded random using the date
-    const seededRandom = (i) => {
+    const seededRandom = (i: number): number => {
         const x = Math.sin(seed + i) * 10000;
         return x - Math.floor(x);
     };
@@ -5991,7 +5910,7 @@ export function getTodaysWords(date = new Date()) {
 /**
  * Shuffle answers for a word (returns [option1, option2] in random order)
  */
-export function shuffleAnswers(word, seed = 0) {
+export function shuffleAnswers(word: { id: string; correctAnswer: string; wrongAnswer: string }, seed = 0) {
     const x = Math.sin(seed + word.id.charCodeAt(0)) * 10000;
     const random = x - Math.floor(x);
 
@@ -6012,74 +5931,1526 @@ export default { WORD_LIST, getTodaysWords, shuffleAnswers };
 ```
 ---
 
+## File: tryg-app\src\data\wordGameData_bs.ts
+```ts
+// Word Game Data - Bosnian words with definitions for "Word of the Day" game
+// Each word has a correct meaning and a plausible wrong answer
+
+export const WORD_LIST_BS = [
+    {
+        id: 'sevdah',
+        word: 'Sevdah',
+        correctAnswer: 'Osjećaj duboke čežnje i melanholije',
+        wrongAnswer: 'Tradicionalni bosanski ples',
+        category: 'emocije'
+    },
+    {
+        id: 'merak',
+        word: 'Merak',
+        correctAnswer: 'Uživanje i zadovoljstvo u nečemu',
+        wrongAnswer: 'Vrsta tradicionalne hrane',
+        category: 'emocije'
+    },
+    {
+        id: 'ćeif',
+        word: 'Ćeif',
+        correctAnswer: 'Dobro raspoloženje i uživanje',
+        wrongAnswer: 'Vrsta kafe',
+        category: 'emocije'
+    },
+    {
+        id: 'dert',
+        word: 'Dert',
+        correctAnswer: 'Tuga ili briga koja tišti srce',
+        wrongAnswer: 'Vrsta zemljišta',
+        category: 'emocije'
+    },
+    {
+        id: 'kahva',
+        word: 'Kahva',
+        correctAnswer: 'Bosanska kafa pripremljena u džezvi',
+        wrongAnswer: 'Hladni napitak od voća',
+        category: 'hrana'
+    },
+    {
+        id: 'avlija',
+        word: 'Avlija',
+        correctAnswer: 'Dvorište oko kuće',
+        wrongAnswer: 'Udaljena planina',
+        category: 'prostor'
+    },
+    {
+        id: 'mahala',
+        word: 'Mahala',
+        correctAnswer: 'Komšiluk ili gradska četvrt',
+        wrongAnswer: 'Velika rijeka',
+        category: 'prostor'
+    },
+    {
+        id: 'čaršija',
+        word: 'Čaršija',
+        correctAnswer: 'Stari trgovački centar grada',
+        wrongAnswer: 'Vrsta sladoleda',
+        category: 'prostor'
+    },
+    {
+        id: 'hajat',
+        word: 'Hajat',
+        correctAnswer: 'Natkriveni hodnik ispred kuće',
+        wrongAnswer: 'Vrsta cvijeta',
+        category: 'arhitektura'
+    },
+    {
+        id: 'pendžer',
+        word: 'Pendžer',
+        correctAnswer: 'Prozor',
+        wrongAnswer: 'Vrsta ptice',
+        category: 'arhitektura'
+    },
+    {
+        id: 'ašik',
+        word: 'Ašik',
+        correctAnswer: 'Zaljubljena osoba',
+        wrongAnswer: 'Vrsta drveta',
+        category: 'ljubav'
+    },
+    {
+        id: 'dilber',
+        word: 'Dilber',
+        correctAnswer: 'Lijepa djevojka',
+        wrongAnswer: 'Vrsta tkanine',
+        category: 'ljubav'
+    },
+    {
+        id: 'ćemer',
+        word: 'Ćemer',
+        correctAnswer: 'Pojas ili dio mostovske konstrukcije',
+        wrongAnswer: 'Vrsta kolača',
+        category: 'predmeti'
+    },
+    {
+        id: 'dimije',
+        word: 'Dimije',
+        correctAnswer: 'Tradicionalne široke hlače',
+        wrongAnswer: 'Vrsta sira',
+        category: 'odjeća'
+    },
+    {
+        id: 'feredža',
+        word: 'Feredža',
+        correctAnswer: 'Tradicionalni ženski kaput',
+        wrongAnswer: 'Vrsta plesa',
+        category: 'odjeća'
+    },
+    {
+        id: 'ćilim',
+        word: 'Ćilim',
+        correctAnswer: 'Ručno tkani tepih',
+        wrongAnswer: 'Vrsta začina',
+        category: 'predmeti'
+    },
+    {
+        id: 'džamija',
+        word: 'Džamija',
+        correctAnswer: 'Muslimanski hram za molitvu',
+        wrongAnswer: 'Vrsta pekarske robe',
+        category: 'religija'
+    },
+    {
+        id: 'sofra',
+        word: 'Sofra',
+        correctAnswer: 'Niski okrugli stol za jelo',
+        wrongAnswer: 'Vrsta povrća',
+        category: 'namještaj'
+    },
+    {
+        id: 'šehit',
+        word: 'Šehit',
+        correctAnswer: 'Osoba koja je poginula braneći domovinu',
+        wrongAnswer: 'Vrsta instrumenta',
+        category: 'povijest'
+    },
+    {
+        id: 'inšallah',
+        word: 'Inšallah',
+        correctAnswer: 'Ako Bog da',
+        wrongAnswer: 'Vrsta pozdrava',
+        category: 'izrazi'
+    },
+    {
+        id: 'esselamu',
+        word: 'Merhaba',
+        correctAnswer: 'Pozdrav, dobrodošlica',
+        wrongAnswer: 'Vrsta slastice',
+        category: 'izrazi'
+    },
+    {
+        id: 'komšija',
+        word: 'Komšija',
+        correctAnswer: 'Susjed',
+        wrongAnswer: 'Vrsta kolača',
+        category: 'ljudi'
+    },
+    {
+        id: 'raja',
+        word: 'Raja',
+        correctAnswer: 'Prijatelji, ekipa',
+        wrongAnswer: 'Historijski porez',
+        category: 'ljudi'
+    },
+    {
+        id: 'ćorava',
+        word: 'Sokak',
+        correctAnswer: 'Uska ulica u starom dijelu grada',
+        wrongAnswer: 'Vrsta voća',
+        category: 'prostor'
+    },
+    {
+        id: 'bunar',
+        word: 'Bunar',
+        correctAnswer: 'Izvor vode iskopan u zemlji',
+        wrongAnswer: 'Vrsta ribe',
+        category: 'prostor'
+    },
+    {
+        id: 'turbé',
+        word: 'Turbé',
+        correctAnswer: 'Grobnica značajne osobe',
+        wrongAnswer: 'Vrsta šešira',
+        category: 'arhitektura'
+    },
+    {
+        id: 'mangala',
+        word: 'Mangala',
+        correctAnswer: 'Mali roštilj za ćumur',
+        wrongAnswer: 'Vrsta voća',
+        category: 'predmeti'
+    },
+    {
+        id: 'ibrik',
+        word: 'Ibrik',
+        correctAnswer: 'Posuda za vodu ili kafu',
+        wrongAnswer: 'Vrsta ptice',
+        category: 'predmeti'
+    },
+    {
+        id: 'šeher',
+        word: 'Šeher',
+        correctAnswer: 'Grad',
+        wrongAnswer: 'Vrsta hrane',
+        category: 'prostor'
+    },
+    {
+        id: 'pazar',
+        word: 'Pazar',
+        correctAnswer: 'Tržnica ili dan za kupovinu',
+        wrongAnswer: 'Vrsta plesa',
+        category: 'trgovina'
+    }
+];
+
+/**
+ * Get today's 5 words - same for all users based on date
+ * Uses date as seed to ensure consistency across family
+ */
+export function getTodaysWordsBS(date = new Date()) {
+    const dateStr = date.toISOString().split('T')[0].replace(/-/g, '');
+    const seed = parseInt(dateStr, 10);
+
+    const seededRandom = (i: number) => {
+        const x = Math.sin(seed + i) * 10000;
+        return x - Math.floor(x);
+    };
+
+    const shuffled = [...WORD_LIST_BS]
+        .map((word, i) => ({ word, sort: seededRandom(i) }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ word }) => word);
+
+    return shuffled.slice(0, 5);
+}
+
+/**
+ * Shuffle answers for a word (returns [option1, option2] in random order)
+ */
+export function shuffleAnswersBS(word: typeof WORD_LIST_BS[0], seed = 0) {
+    const x = Math.sin(seed + word.id.charCodeAt(0)) * 10000;
+    const random = x - Math.floor(x);
+
+    if (random > 0.5) {
+        return [
+            { text: word.correctAnswer, isCorrect: true },
+            { text: word.wrongAnswer, isCorrect: false }
+        ];
+    } else {
+        return [
+            { text: word.wrongAnswer, isCorrect: false },
+            { text: word.correctAnswer, isCorrect: true }
+        ];
+    }
+}
+
+export default { WORD_LIST_BS, getTodaysWordsBS, shuffleAnswersBS };
+
+```
+---
+
+## File: tryg-app\src\data\wordGameData_tr.ts
+```ts
+// Word Game Data - Turkish words with definitions for "Word of the Day" game
+// Each word has a correct meaning and a plausible wrong answer
+
+export const WORD_LIST_TR = [
+    {
+        id: 'keyif',
+        word: 'Keyif',
+        correctAnswer: 'Rahat ve huzurlu bir şekilde zaman geçirmek',
+        wrongAnswer: 'Bir tür kahve',
+        category: 'duygular'
+    },
+    {
+        id: 'hüzün',
+        word: 'Hüzün',
+        correctAnswer: 'Derin bir üzüntü ve melankoli hissi',
+        wrongAnswer: 'Bir tür müzik aleti',
+        category: 'duygular'
+    },
+    {
+        id: 'gönül',
+        word: 'Gönül',
+        correctAnswer: 'Kalp, duygusal merkez',
+        wrongAnswer: 'Bir tür çiçek',
+        category: 'duygular'
+    },
+    {
+        id: 'hasret',
+        word: 'Hasret',
+        correctAnswer: 'Birini veya bir şeyi çok özlemek',
+        wrongAnswer: 'Bir tür yemek',
+        category: 'duygular'
+    },
+    {
+        id: 'sılasever',
+        word: 'Gurbet',
+        correctAnswer: 'Memleketten uzakta yaşamak',
+        wrongAnswer: 'Bir tür dans',
+        category: 'duygular'
+    },
+    {
+        id: 'misafirpervane',
+        word: 'Misafirperverlik',
+        correctAnswer: 'Konuklara cömertçe davranma geleneği',
+        wrongAnswer: 'Bir tür festival',
+        category: 'gelenek'
+    },
+    {
+        id: 'konak',
+        word: 'Konak',
+        correctAnswer: 'Büyük ve tarihi ev',
+        wrongAnswer: 'Bir tür balık',
+        category: 'mimari'
+    },
+    {
+        id: 'çeşme',
+        word: 'Çeşme',
+        correctAnswer: 'Su akan kaynağa veya yapıya',
+        wrongAnswer: 'Bir tür meyve',
+        category: 'mimari'
+    },
+    {
+        id: 'hamam',
+        word: 'Hamam',
+        correctAnswer: 'Geleneksel Türk banyosu',
+        wrongAnswer: 'Bir tür spor',
+        category: 'gelenek'
+    },
+    {
+        id: 'cami',
+        word: 'Cami',
+        correctAnswer: 'Müslümanların ibadet ettiği yer',
+        wrongAnswer: 'Bir tür cam eşya',
+        category: 'din'
+    },
+    {
+        id: 'muhabbet',
+        word: 'Muhabbet',
+        correctAnswer: 'Samimi ve keyifli sohbet',
+        wrongAnswer: 'Bir tür kuş',
+        category: 'iletişim'
+    },
+    {
+        id: 'komşu',
+        word: 'Komşu',
+        correctAnswer: 'Yanınızda oturan kişi',
+        wrongAnswer: 'Bir tür ağaç',
+        category: 'insanlar'
+    },
+    {
+        id: 'aşık',
+        word: 'Aşık',
+        correctAnswer: 'Derin sevgi duyan kişi',
+        wrongAnswer: 'Bir tür taş',
+        category: 'aşk'
+    },
+    {
+        id: 'dilber',
+        word: 'Dilber',
+        correctAnswer: 'Çok güzel kadın',
+        wrongAnswer: 'Bir tür elbise',
+        category: 'aşk'
+    },
+    {
+        id: 'yaren',
+        word: 'Yaren',
+        correctAnswer: 'Yakın arkadaş, sırdaş',
+        wrongAnswer: 'Bir tür hayvan',
+        category: 'insanlar'
+    },
+    {
+        id: 'kısmet',
+        word: 'Kısmet',
+        correctAnswer: 'Kader, nasip',
+        wrongAnswer: 'Bir tür kumaş',
+        category: 'inanç'
+    },
+    {
+        id: 'nazar',
+        word: 'Nazar',
+        correctAnswer: 'Kötü bakış, göz değmesi',
+        wrongAnswer: 'Bir tür gözlük',
+        category: 'inanç'
+    },
+    {
+        id: 'maşallah',
+        word: 'Maşallah',
+        correctAnswer: 'Allah korusun, takdir ifadesi',
+        wrongAnswer: 'Bir tür tatlı',
+        category: 'ifadeler'
+    },
+    {
+        id: 'inşallah',
+        word: 'İnşallah',
+        correctAnswer: 'Allah izin verirse',
+        wrongAnswer: 'Bir tür selamlama',
+        category: 'ifadeler'
+    },
+    {
+        id: 'merhaba',
+        word: 'Merhaba',
+        correctAnswer: 'Hoş geldin anlamında selam',
+        wrongAnswer: 'Bir tür baharat',
+        category: 'ifadeler'
+    },
+    {
+        id: 'sofra',
+        word: 'Sofra',
+        correctAnswer: 'Yemek masası veya örtüsü',
+        wrongAnswer: 'Bir tür sebze',
+        category: 'ev'
+    },
+    {
+        id: 'kilim',
+        word: 'Kilim',
+        correctAnswer: 'El dokuması halı',
+        wrongAnswer: 'Bir tür baharat',
+        category: 'ev'
+    },
+    {
+        id: 'simit',
+        word: 'Simit',
+        correctAnswer: 'Susamlı halka ekmek',
+        wrongAnswer: 'Bir tür kumaş',
+        category: 'yemek'
+    },
+    {
+        id: 'lokum',
+        word: 'Lokum',
+        correctAnswer: 'Geleneksel şekerli tatlı',
+        wrongAnswer: 'Bir tür mobilya',
+        category: 'yemek'
+    },
+    {
+        id: 'baklava',
+        word: 'Baklava',
+        correctAnswer: 'İnce hamur ve fıstıkla yapılan tatlı',
+        wrongAnswer: 'Bir tür giysi',
+        category: 'yemek'
+    },
+    {
+        id: 'çay',
+        word: 'Çay',
+        correctAnswer: 'En sevilen Türk içeceği',
+        wrongAnswer: 'Bir tür ot',
+        category: 'içecek'
+    },
+    {
+        id: 'kahve',
+        word: 'Türk Kahvesi',
+        correctAnswer: 'Geleneksel yöntemle pişirilen koyu kahve',
+        wrongAnswer: 'Bir tür tatlı',
+        category: 'içecek'
+    },
+    {
+        id: 'memleket',
+        word: 'Memleket',
+        correctAnswer: 'Doğduğun yer, vatan',
+        wrongAnswer: 'Bir tür bitki',
+        category: 'yer'
+    },
+    {
+        id: 'pazar',
+        word: 'Pazar',
+        correctAnswer: 'Açık hava çarşısı veya hafta sonu günü',
+        wrongAnswer: 'Bir tür dans',
+        category: 'ticaret'
+    },
+    {
+        id: 'çarşı',
+        word: 'Çarşı',
+        correctAnswer: 'Alışveriş merkezi, pazar yeri',
+        wrongAnswer: 'Bir tür müzik',
+        category: 'ticaret'
+    }
+];
+
+/**
+ * Get today's 5 words - same for all users based on date
+ * Uses date as seed to ensure consistency across family
+ */
+export function getTodaysWordsTR(date = new Date()) {
+    const dateStr = date.toISOString().split('T')[0].replace(/-/g, '');
+    const seed = parseInt(dateStr, 10);
+
+    const seededRandom = (i: number) => {
+        const x = Math.sin(seed + i) * 10000;
+        return x - Math.floor(x);
+    };
+
+    const shuffled = [...WORD_LIST_TR]
+        .map((word, i) => ({ word, sort: seededRandom(i) }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ word }) => word);
+
+    return shuffled.slice(0, 5);
+}
+
+/**
+ * Shuffle answers for a word (returns [option1, option2] in random order)
+ */
+export function shuffleAnswersTR(word: typeof WORD_LIST_TR[0], seed = 0) {
+    const x = Math.sin(seed + word.id.charCodeAt(0)) * 10000;
+    const random = x - Math.floor(x);
+
+    if (random > 0.5) {
+        return [
+            { text: word.correctAnswer, isCorrect: true },
+            { text: word.wrongAnswer, isCorrect: false }
+        ];
+    } else {
+        return [
+            { text: word.wrongAnswer, isCorrect: false },
+            { text: word.correctAnswer, isCorrect: true }
+        ];
+    }
+}
+
+export default { WORD_LIST_TR, getTodaysWordsTR, shuffleAnswersTR };
+
+```
+---
+
+## File: tryg-app\src\features\ambient\ActivityTimeline.tsx
+```tsx
+import React, { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useCareCircleContext } from '../../contexts/CareCircleContext';
+
+export interface ActivityTimelineProps {
+    role: 'senior' | 'relative';
+    maxItems?: number;
+    className?: string;
+}
+
+interface ActivityItem {
+    type: 'task' | 'symptom';
+    timestamp: Date;
+    text: string;
+    emoji: string;
+    time: string;
+}
+
+/**
+ * ActivityTimeline - A unified activity feed for both roles.
+ * - Senior Mode: Shows completed tasks and logged symptoms (interactive context)
+ * - Relative Mode: Shows the same data as a read-only "connection history"
+ */
+export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
+    role,
+    maxItems = 5,
+    className = ''
+}) => {
+    const { t } = useTranslation();
+    const {
+        tasks = [],
+        symptoms = []
+    } = useCareCircleContext();
+
+    // Generate activity feed from tasks and symptoms
+    const recentActivity = useMemo<ActivityItem[]>(() => {
+        const activities: Omit<ActivityItem, 'time'>[] = [];
+
+        // Add completed tasks
+        tasks.filter(task => task.completed && task.completedAt).forEach(task => {
+            const timestamp = (task.completedAt as any)?.toDate
+                ? (task.completedAt as any).toDate()
+                : new Date(task.completedAt as any);
+            activities.push({
+                type: 'task',
+                timestamp,
+                text: `${t('task_completed')}: ${task.title}`,
+                emoji: '✅'
+            });
+        });
+
+        // Add symptoms
+        symptoms.forEach(symptom => {
+            const timestamp = (symptom.loggedAt as any)?.toDate
+                ? (symptom.loggedAt as any).toDate()
+                : new Date(symptom.loggedAt as any);
+            activities.push({
+                type: 'symptom',
+                timestamp,
+                text: `${t('symptom_log_item', { label: symptom.label || symptom.type || t('unknown') })}`,
+                emoji: '🩺'
+            });
+        });
+
+        // Sort by time (newest first) and limit
+        return activities
+            .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
+            .slice(0, maxItems)
+            .map(a => ({
+                ...a,
+                time: a.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            }));
+    }, [tasks, symptoms, maxItems, t]);
+
+    if (recentActivity.length === 0) {
+        return (
+            <div className={`bg-white/50 backdrop-blur-sm rounded-[1.5rem] p-6 border border-stone-100 shadow-sm ${className}`}>
+                <p className="text-sm text-stone-400 text-center">{t('no_activity_yet')}</p>
+            </div>
+        );
+    }
+
+    // Relative view uses a softer, more observational style
+    const containerClass = role === 'relative'
+        ? 'bg-white/50 backdrop-blur-sm rounded-[1.5rem] p-6 border border-stone-100 shadow-sm'
+        : 'bg-stone-50 rounded-2xl p-4 border border-stone-100';
+
+    return (
+        <div className={`${containerClass} ${className}`}>
+            <h3 className="text-xs font-black text-stone-400 uppercase tracking-[0.2em] mb-4">
+                {t('seneste_aktivitet') || 'Seneste aktivitet'}
+            </h3>
+            <div className="space-y-4">
+                {recentActivity.map((activity, i) => (
+                    <div key={i} className="flex items-center gap-3 text-sm text-stone-700">
+                        <span className="font-bold text-stone-300 w-12">{activity.time}</span>
+                        <span className="text-lg">{activity.emoji}</span>
+                        <span className="font-medium">{activity.text}</span>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
+
+export default ActivityTimeline;
+
+```
+---
+
+## File: tryg-app\src\features\ambient\AmbientHero.tsx
+```tsx
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { CheckCircle, Heart, Clock, Activity, AlertCircle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { useCareCircleContext } from '../../contexts/CareCircleContext';
+import { Button } from '../../components/ui/Button';
+import { Avatar } from '../../components/ui/Avatar';
+
+export interface AmbientHeroProps {
+    role: 'senior' | 'relative';
+    onCheckIn?: () => void;
+    onOpenSymptomModal?: () => void;
+}
+
+/**
+ * AmbientHero - The emotional centerpiece of the AmbientTab.
+ * - Senior Mode: Interactive check-in buttons ("I'm okay" / "I have pain")
+ * - Relative Mode: Ambient status visualization (rings, pulse, gradient)
+ *   → Bursts with celebratory animation when Senior checks in!
+ */
+export const AmbientHero: React.FC<AmbientHeroProps> = ({
+    role,
+    onCheckIn,
+    onOpenSymptomModal
+}) => {
+    const { t } = useTranslation();
+    const {
+        seniorName,
+        tasks = [],
+        symptoms = [],
+        lastCheckIn
+    } = useCareCircleContext();
+
+    // ========== BURST ANIMATION STATE (Relative Mode) ==========
+    const [isBursting, setIsBursting] = useState(false);
+    const prevCheckInRef = useRef<string | null>(null);
+
+    // Detect check-in changes and trigger burst animation
+    useEffect(() => {
+        if (role !== 'relative') return;
+
+        // If lastCheckIn changed to a new value
+        if (lastCheckIn && lastCheckIn !== prevCheckInRef.current) {
+            // Trigger celebratory burst!
+            setIsBursting(true);
+
+            // Reset after 3 seconds
+            const timer = setTimeout(() => setIsBursting(false), 3000);
+
+            prevCheckInRef.current = lastCheckIn;
+            return () => clearTimeout(timer);
+        }
+    }, [lastCheckIn, role]);
+
+    // Calculate today's symptom count
+    const todaySymptomCount = symptoms.filter(s => {
+        const date = (s.loggedAt as any)?.toDate ? (s.loggedAt as any).toDate() : new Date(s.loggedAt as any);
+        return date.toDateString() === new Date().toDateString();
+    }).length;
+
+    // Calculate completion rate
+    const totalTasks = tasks.length;
+    const completedTasks = tasks.filter(t => t.completed).length;
+    const completionRate = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 100;
+
+    // Derived status for Relative mode
+    const status = React.useMemo(() => {
+        if (todaySymptomCount > 0) return 'symptom';
+        if (completionRate < 50 && totalTasks > 0) return 'warning';
+        if (completionRate >= 80) return 'calm';
+        return 'neutral';
+    }, [todaySymptomCount, completionRate, totalTasks]);
+
+    // Theme mapping
+    const theme = React.useMemo(() => {
+        switch (status) {
+            case 'symptom':
+                return {
+                    gradient: 'from-rose-400 to-orange-500',
+                    blob: 'fill-rose-200/40',
+                    pulseScale: [1, 1.15, 1],
+                    label: t('dashboard_symptoms'),
+                    icon: AlertCircle,
+                    shadow: 'shadow-rose-200/50'
+                };
+            case 'warning':
+                return {
+                    gradient: 'from-amber-400 to-orange-400',
+                    blob: 'fill-amber-200/40',
+                    pulseScale: [1, 1.05, 1],
+                    label: t('dashboard_tasks_missing'),
+                    icon: Clock,
+                    shadow: 'shadow-amber-100/50'
+                };
+            case 'calm':
+                return {
+                    gradient: 'from-teal-400 to-emerald-500',
+                    blob: 'fill-teal-100/40',
+                    pulseScale: [1, 1.02, 1],
+                    label: t('peace_all_well'),
+                    icon: CheckCircle,
+                    shadow: 'shadow-teal-100/50'
+                };
+            default:
+                return {
+                    gradient: 'from-stone-400 to-stone-500',
+                    blob: 'fill-stone-200/40',
+                    pulseScale: [1, 1, 1],
+                    label: t('peace_good_day'),
+                    icon: Activity,
+                    shadow: 'shadow-stone-100/50'
+                };
+        }
+    }, [status, t]);
+
+    // ========== SENIOR MODE ==========
+    if (role === 'senior') {
+        return (
+            <div className="bg-white rounded-3xl p-6 shadow-sm border-2 border-teal-100 mb-8">
+                <h2 className="text-xl font-semibold theme-text mb-4">{t('pain_question')}</h2>
+                <div className="grid grid-cols-2 gap-4">
+                    <Button
+                        variant="primary"
+                        size="large"
+                        className="w-full min-h-32 py-4"
+                        onClick={onCheckIn}
+                    >
+                        <div className="flex flex-col items-center gap-2 text-center">
+                            <CheckCircle className="w-10 h-10 shrink-0" />
+                            <span className="text-sm leading-tight">{t('i_feel_good')}</span>
+                        </div>
+                    </Button>
+
+                    <Button
+                        variant="secondary"
+                        size="large"
+                        className="w-full min-h-32 py-4 bg-orange-50 text-orange-800 border-2 border-orange-100 hover:bg-orange-100"
+                        onClick={onOpenSymptomModal}
+                    >
+                        <div className="flex flex-col items-center gap-2 text-center">
+                            <Heart className="w-10 h-10 text-orange-500 shrink-0" />
+                            <span className="text-sm leading-tight">{t('i_feel_pain')}</span>
+                        </div>
+                    </Button>
+                </div>
+            </div>
+        );
+    }
+
+    // ========== RELATIVE MODE ==========
+    return (
+        <motion.div
+            layout
+            className={`
+                relative overflow-hidden rounded-[2rem] p-8 shadow-2xl border border-white/30
+                bg-gradient-to-br ${theme.gradient}
+                ${theme.shadow}
+            `}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+        >
+            {/* Ambient Background Blobs */}
+            <div className="absolute inset-0 z-0 overflow-hidden blur-3xl opacity-60">
+                <motion.svg
+                    viewBox="0 0 100 100"
+                    className="absolute -top-1/4 -left-1/4 w-full h-full"
+                    animate={{
+                        rotate: [0, 360],
+                        scale: [1, 1.2, 1]
+                    }}
+                    transition={{
+                        duration: 20,
+                        repeat: Infinity,
+                        ease: "linear"
+                    }}
+                >
+                    <path
+                        className={theme.blob}
+                        d="M33,-47.1C43.3,-40.3,52.5,-30.9,57.1,-19.5C61.7,-8,61.7,5.5,57.9,18C54,30.5,46.3,42,35.3,49.8C24.3,57.6,10.1,61.7,-3.4,66.4C-16.9,71.1,-29.7,76.4,-40.7,71.7C-51.7,67,-61,52.3,-66.2,37.3C-71.4,22.3,-72.6,7,-67.7,-5.7C-62.8,-18.3,-51.8,-28.3,-40.3,-35.1C-28.8,-41.8,-16.8,-45.3,-4.2,-39.5C8.3,-33.7,19.9,-18.6,33,-47.1Z"
+                        transform="translate(50 50)"
+                    />
+                </motion.svg>
+            </div>
+
+            {/* Content Layer */}
+            <div className="relative z-10 flex flex-col items-center text-center">
+
+                {/* Senior Presence Heartbeat - Bursts when check-in detected! */}
+                <div className="relative mb-6">
+                    <motion.div
+                        className="absolute inset-0 bg-white/40 rounded-full blur-xl"
+                        animate={{
+                            scale: isBursting ? [1, 1.5, 1, 1.3, 1] : theme.pulseScale,
+                            opacity: isBursting ? [0.5, 1, 0.5, 0.8, 0.3] : [0.3, 0.6, 0.3]
+                        }}
+                        transition={{
+                            duration: isBursting ? 0.6 : (status === 'calm' ? 4 : status === 'warning' ? 2 : 1.5),
+                            repeat: isBursting ? 5 : Infinity,
+                            ease: isBursting ? "easeOut" : "easeInOut"
+                        }}
+                    />
+                    <motion.div
+                        className="p-1.5 bg-white/20 rounded-full backdrop-blur-xl border border-white/40"
+                        whileHover={{ scale: 1.05 }}
+                    >
+                        <Avatar id="senior" size="xl" className="border-4 border-white shadow-xl" />
+                    </motion.div>
+                </div>
+
+                {/* Status Messaging */}
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        key={status}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.5 }}
+                        className="space-y-2"
+                    >
+                        <h2 className="text-3xl font-black text-white tracking-tight drop-shadow-md">
+                            {theme.label}
+                        </h2>
+                        <p className="text-white/80 font-medium text-lg drop-shadow-sm px-4">
+                            {status === 'calm'
+                                ? t('peace_sub_all_well', { name: seniorName })
+                                : status === 'symptom'
+                                    ? t('dashboard_symptoms_sub', { count: todaySymptomCount })
+                                    : t('dashboard_tasks_missing_sub')}
+                        </p>
+                    </motion.div>
+                </AnimatePresence>
+
+                {/* Secondary Info Pills */}
+                <div className="mt-8 flex gap-3">
+                    <div className="px-4 py-2 bg-white/20 backdrop-blur-md rounded-full border border-white/30 text-white text-xs font-bold uppercase tracking-widest shadow-lg">
+                        <Clock className="w-3 h-3 inline-block mr-1.5 -mt-0.5" />
+                        {typeof lastCheckIn === 'string' ? lastCheckIn : '-'}
+                    </div>
+                    <div className="px-4 py-2 bg-white/20 backdrop-blur-md rounded-full border border-white/30 text-white text-xs font-bold uppercase tracking-widest shadow-lg">
+                        <Activity className="w-3 h-3 inline-block mr-1.5 -mt-0.5" />
+                        {completionRate}% {t('taken')}
+                    </div>
+                </div>
+            </div>
+
+            {/* Subtle Texture Overlay */}
+            <div className="absolute inset-0 pointer-events-none opacity-[0.03] bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]" />
+        </motion.div>
+    );
+};
+
+export default AmbientHero;
+
+```
+---
+
+## File: tryg-app\src\features\ambient\BriefingStory.tsx
+```tsx
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { useCareCircleContext } from '../../contexts/CareCircleContext';
+import { getDailyBriefing } from '../../utils/briefing';
+
+export interface BriefingStoryProps {
+    className?: string;
+}
+
+/**
+ * BriefingStory - Natural language summary of the senior's day.
+ * Shared by both Senior and Relative roles in the AmbientTab.
+ * Uses the getDailyBriefing utility to generate an emotionally-aware message.
+ */
+export const BriefingStory: React.FC<BriefingStoryProps> = ({ className = '' }) => {
+    const { t } = useTranslation();
+    const {
+        tasks = [],
+        symptoms = [],
+        seniorName,
+        lastCheckIn
+    } = useCareCircleContext();
+
+    const briefing = getDailyBriefing({
+        tasks,
+        symptoms,
+        seniorName,
+        lastCheckIn,
+        t
+    });
+
+    return (
+        <div
+            className={`p-5 rounded-[1.5rem] border-2 shadow-sm transition-all duration-300 ${briefing.type === 'success'
+                    ? 'bg-emerald-50 border-emerald-100 shadow-emerald-50/50'
+                    : briefing.type === 'warning'
+                        ? 'bg-amber-50 border-amber-100 shadow-amber-50/50'
+                        : 'bg-stone-50 border-stone-200 shadow-stone-50/50'
+                } ${className}`}
+        >
+            <div className="flex items-start gap-4">
+                <span className="text-3xl filter drop-shadow-sm">{briefing.emoji}</span>
+                <div className="flex-1">
+                    <p
+                        className={`text-lg font-semibold leading-relaxed ${briefing.type === 'success'
+                                ? 'text-emerald-900'
+                                : briefing.type === 'warning'
+                                    ? 'text-amber-900'
+                                    : 'text-stone-800'
+                            }`}
+                    >
+                        {briefing.message}
+                    </p>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default BriefingStory;
+
+```
+---
+
+## File: tryg-app\src\features\ambient\index.ts
+```ts
+// Ambient Feature - Unified AmbientTab Components
+export { AmbientHero } from './AmbientHero';
+export { BriefingStory } from './BriefingStory';
+export { ActivityTimeline } from './ActivityTimeline';
+
+```
+---
+
+## File: tryg-app\src\features\coffee\CoffeeInviteCard.tsx
+```tsx
+import { Coffee } from 'lucide-react';
+import { Button } from '../../components/ui/Button';
+import { useCareCircleContext } from '../../contexts/CareCircleContext';
+import { usePings } from '../thinkingOfYou/usePings';
+import { useTranslation } from 'react-i18next';
+
+export const CoffeeInviteCard = () => {
+    const {
+        careCircleId,
+        currentUserId,
+        userName,
+        seniorStatus,
+        setMyStatus,
+        seniorName
+    } = useCareCircleContext();
+    const { t } = useTranslation();
+    const { sendPing } = usePings(careCircleId, currentUserId);
+
+    if (seniorStatus?.status !== 'coffee_ready') return null;
+
+    const handleAcceptInvite = async () => {
+        // Update relative's status to notify the circle they are coming
+        await setMyStatus('traveling');
+        // Send a response ping to the senior
+        await sendPing('senior', 'coffee_coming', t('coffee_coming_msg', { name: userName }));
+    };
+
+    return (
+        <div className="bg-gradient-to-r from-amber-500 to-orange-400 rounded-2xl p-1 shadow-xl animate-slide-in mb-4">
+            <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 flex items-center gap-4">
+                <div className="bg-amber-100 p-3 rounded-full">
+                    <Coffee className="w-8 h-8 text-amber-600 animate-wiggle" />
+                </div>
+                <div className="flex-1">
+                    <h3 className="font-bold text-lg text-amber-950">{t('coffee_invite_title', { name: seniorName })}</h3>
+                    <p className="text-amber-800/80 text-sm">{t('coffee_invite_sub')}</p>
+                </div>
+                <Button size="small" variant="primary" onClick={handleAcceptInvite}>
+                    {t('coffee_invite_accept')}
+                </Button>
+            </div>
+        </div>
+    );
+};
+
+export default CoffeeInviteCard;
+
+```
+---
+
+## File: tryg-app\src\features\coffee\CoffeeToggle.tsx
+```tsx
+import { Coffee } from 'lucide-react';
+import { useCareCircleContext } from '../../contexts/CareCircleContext';
+import { useTranslation } from 'react-i18next';
+import { usePings } from '../thinkingOfYou/usePings';
+
+/**
+ * Coffee availability toggle for seniors.
+ * Broadcasts "coffee_ready" status to relatives and sends a ping notification.
+ * Uses amber color palette intentionally to evoke coffee warmth.
+ * @returns {JSX.Element} Coffee toggle button component
+ */
+export const CoffeeToggle = () => {
+    const {
+        myStatus,
+        setMyStatus,
+        seniorStatus,
+        careCircleId,
+        currentUserId
+    } = useCareCircleContext();
+    const { t } = useTranslation();
+    const { sendPing } = usePings(careCircleId, currentUserId);
+
+    const isCoffeeTime = myStatus === 'coffee_ready';
+    const isCoffeeComing = myStatus === 'coffee_coming' || seniorStatus?.status === 'coffee_coming';
+
+    const toggleCoffee = async () => {
+        if (isCoffeeTime) {
+            // Turn it off (back to normal home)
+            await setMyStatus('home');
+        } else {
+            // Turn it on
+            await setMyStatus('coffee_ready');
+            // Send a ping to relatives
+            await sendPing('relative');
+        }
+    };
+
+    return (
+        <button
+            onClick={toggleCoffee}
+            className={`
+                relative w-full p-6 rounded-3xl transition-all duration-500 border-2
+                flex items-center justify-between overflow-hidden
+                ${isCoffeeTime
+                    ? 'bg-amber-100 border-amber-400 shadow-amber-200 shadow-lg scale-[1.02]'
+                    : 'bg-stone-50 border-stone-200 grayscale-[0.5]'
+                }
+                ${isCoffeeComing ? 'ring-4 ring-green-400' : ''}
+            `}
+        >
+            <div className="z-10 text-left">
+                <h3 className={`text-xl font-bold ${isCoffeeTime ? 'text-amber-900' : 'text-stone-500'}`}>
+                    {isCoffeeTime ? t('status_coffee_ready') : t('coffee_give_button')}
+                </h3>
+                <p className={`text-sm ${isCoffeeTime ? 'text-amber-800' : 'text-stone-400'}`}>
+                    {isCoffeeTime
+                        ? (isCoffeeComing ? t('coffee_coming_title') : t('coffee_ready_desc'))
+                        : t('coffee_off_desc')}
+                </p>
+            </div>
+
+            {/* The Icon */}
+            <div className={`
+                w-16 h-16 rounded-full flex items-center justify-center transition-all duration-500
+                ${isCoffeeTime ? 'bg-amber-500 text-white animate-bounce-slow' : 'bg-stone-200 text-stone-400'}
+            `}>
+                <Coffee size={32} />
+            </div>
+
+            {/* Background Steam Effect (CSS Decoration) */}
+            {isCoffeeTime && (
+                <div className="absolute inset-0 bg-amber-500/5 animate-pulse" />
+            )}
+        </button>
+    );
+};
+
+export default CoffeeToggle;
+
+```
+---
+
+## File: tryg-app\src\features\coffee\index.ts
+```ts
+export { CoffeeToggle } from './CoffeeToggle';
+export { CoffeeInviteCard } from './CoffeeInviteCard';
+
+```
+---
+
+## File: tryg-app\src\features\familyPresence\AmbientDashboard.tsx
+```tsx
+import React, { useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Clock, Activity, AlertCircle, CheckCircle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { Avatar } from '../../components/ui/Avatar';
+import { Task } from '../../types';
+
+export interface AmbientDashboardProps {
+    seniorName: string;
+    lastCheckIn?: any;
+    tasks: Task[];
+    symptomCount: number;
+    className?: string;
+}
+
+/**
+ * AmbientDashboard - A passive, atmospheric view of the senior's status.
+ * Communicates wellbeing through color, light, and motion instead of just data.
+ */
+export const AmbientDashboard: React.FC<AmbientDashboardProps> = ({
+    seniorName,
+    lastCheckIn,
+    tasks,
+    symptomCount,
+    className = ""
+}) => {
+    const { t } = useTranslation();
+
+    // Calculate completion rate
+    const totalTasks = tasks.length;
+    const completedTasks = tasks.filter(t => t.completed).length;
+    const completionRate = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 100;
+
+    // Derived Status state
+    const status = useMemo(() => {
+        if (symptomCount > 0) return 'symptom';
+        if (completionRate < 50 && totalTasks > 0) return 'warning';
+        if (completionRate >= 80) return 'calm';
+        return 'neutral';
+    }, [symptomCount, completionRate, totalTasks]);
+
+    // Theme mapping for the ambient feel
+    const theme = useMemo(() => {
+        switch (status) {
+            case 'symptom':
+                return {
+                    gradient: 'from-rose-400 to-orange-500',
+                    blob: 'fill-rose-200/40',
+                    pulseScale: [1, 1.15, 1],
+                    label: t('dashboard_symptoms'),
+                    icon: AlertCircle,
+                    shadow: 'shadow-rose-200/50'
+                };
+            case 'warning':
+                return {
+                    gradient: 'from-amber-400 to-orange-400',
+                    blob: 'fill-amber-200/40',
+                    pulseScale: [1, 1.05, 1],
+                    label: t('dashboard_tasks_missing'),
+                    icon: Clock,
+                    shadow: 'shadow-amber-100/50'
+                };
+            case 'calm':
+                return {
+                    gradient: 'from-teal-400 to-emerald-500',
+                    blob: 'fill-teal-100/40',
+                    pulseScale: [1, 1.02, 1],
+                    label: t('peace_all_well'),
+                    icon: CheckCircle,
+                    shadow: 'shadow-teal-100/50'
+                };
+            default:
+                return {
+                    gradient: 'from-stone-400 to-stone-500',
+                    blob: 'fill-stone-200/40',
+                    pulseScale: [1, 1, 1],
+                    label: t('peace_good_day'),
+                    icon: Activity,
+                    shadow: 'shadow-stone-100/50'
+                };
+        }
+    }, [status, t]);
+
+    return (
+        <motion.div
+            layout
+            className={`
+                relative overflow-hidden rounded-[2rem] p-8 shadow-2xl border border-white/30
+                bg-gradient-to-br ${theme.gradient}
+                ${theme.shadow} ${className}
+            `}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+        >
+            {/* Ambient Background Blobs */}
+            <div className="absolute inset-0 z-0 overflow-hidden blur-3xl opacity-60">
+                <motion.svg
+                    viewBox="0 0 100 100"
+                    className="absolute -top-1/4 -left-1/4 w-full h-full"
+                    animate={{
+                        rotate: [0, 360],
+                        scale: [1, 1.2, 1]
+                    }}
+                    transition={{
+                        duration: 20,
+                        repeat: Infinity,
+                        ease: "linear"
+                    }}
+                >
+                    <path
+                        className={theme.blob}
+                        d="M33,-47.1C43.3,-40.3,52.5,-30.9,57.1,-19.5C61.7,-8,61.7,5.5,57.9,18C54,30.5,46.3,42,35.3,49.8C24.3,57.6,10.1,61.7,-3.4,66.4C-16.9,71.1,-29.7,76.4,-40.7,71.7C-51.7,67,-61,52.3,-66.2,37.3C-71.4,22.3,-72.6,7,-67.7,-5.7C-62.8,-18.3,-51.8,-28.3,-40.3,-35.1C-28.8,-41.8,-16.8,-45.3,-4.2,-39.5C8.3,-33.7,19.9,-18.6,33,-47.1Z"
+                        transform="translate(50 50)"
+                    />
+                </motion.svg>
+            </div>
+
+            {/* Content Layer */}
+            <div className="relative z-10 flex flex-col items-center text-center">
+
+                {/* Senior Presence Heartbeat */}
+                <div className="relative mb-6">
+                    <motion.div
+                        className="absolute inset-0 bg-white/40 rounded-full blur-xl"
+                        animate={{
+                            scale: theme.pulseScale,
+                            opacity: [0.3, 0.6, 0.3]
+                        }}
+                        transition={{
+                            duration: status === 'calm' ? 4 : status === 'warning' ? 2 : 1.5,
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                        }}
+                    />
+                    <motion.div
+                        className="p-1.5 bg-white/20 rounded-full backdrop-blur-xl border border-white/40"
+                        whileHover={{ scale: 1.05 }}
+                    >
+                        <Avatar id="senior" size="xl" className="border-4 border-white shadow-xl" />
+                    </motion.div>
+                </div>
+
+                {/* Status Messaging */}
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        key={status}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.5 }}
+                        className="space-y-2"
+                    >
+                        <h2 className="text-3xl font-black text-white tracking-tight drop-shadow-md">
+                            {theme.label}
+                        </h2>
+                        <p className="text-white/80 font-medium text-lg drop-shadow-sm px-4">
+                            {status === 'calm'
+                                ? t('peace_sub_all_well', { name: seniorName })
+                                : status === 'symptom'
+                                    ? t('dashboard_symptoms_sub', { count: symptomCount })
+                                    : t('dashboard_tasks_missing_sub')}
+                        </p>
+                    </motion.div>
+                </AnimatePresence>
+
+                {/* Secondary Info Pill */}
+                <div className="mt-8 flex gap-3">
+                    <div className="px-4 py-2 bg-white/20 backdrop-blur-md rounded-full border border-white/30 text-white text-xs font-bold uppercase tracking-widest shadow-lg">
+                        <Clock className="w-3 h-3 inline-block mr-1.5 -mt-0.5" />
+                        {typeof lastCheckIn === 'string' ? lastCheckIn : '-'}
+                    </div>
+                    <div className="px-4 py-2 bg-white/20 backdrop-blur-md rounded-full border border-white/30 text-white text-xs font-bold uppercase tracking-widest shadow-lg">
+                        <Activity className="w-3 h-3 inline-block mr-1.5 -mt-0.5" />
+                        {completionRate}% {t('taken')}
+                    </div>
+                </div>
+            </div>
+
+            {/* Subtle Texture Overlay */}
+            <div className="absolute inset-0 pointer-events-none opacity-[0.03] bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]" />
+        </motion.div>
+    );
+};
+
+```
+---
+
+## File: tryg-app\src\features\familyPresence\FamilyConstellation.tsx
+```tsx
+import { useMemo } from 'react';
+import { Member } from '../../types';
+import { Avatar } from '../../components/ui/Avatar';
+import { SuperpowerBadge, Archetype } from './SuperpowerBadge';
+import { Heart } from 'lucide-react';
+import { cn } from '../../lib/utils';
+
+interface FamilyConstellationProps {
+    members: Member[];
+    centerMemberName: string;
+    currentUserId?: string;
+    onMemberClick?: (member: Member) => void;
+    onBadgeAction?: (action: 'call' | 'message', memberName: string) => void;
+}
+
+// Determine which ring based on accessLevel from Firestore
+const getOrbitLayer = (member: Member): 'inner' | 'outer' => {
+    if (member.accessLevel === 'admin' || member.accessLevel === 'caregiver') {
+        return 'inner';
+    }
+
+    const rel = member.relationship?.toLowerCase();
+    if (['son', 'daughter', 'husband', 'wife', 'spouse', 'sister', 'brother'].includes(rel || '')) {
+        return 'inner';
+    }
+
+    return 'outer';
+};
+
+const INNER_RADIUS = 110;
+const OUTER_RADIUS = 160;
+const CENTER_XY = 200;
+
+export const FamilyConstellation: React.FC<FamilyConstellationProps> = ({
+    members,
+    centerMemberName,
+    onMemberClick,
+    onBadgeAction
+}) => {
+    const relatives = useMemo(() => members.filter(m => m.role !== 'senior'), [members]);
+
+    const positionedMembers = useMemo(() => {
+        const innerRingMembers = relatives.filter(m => getOrbitLayer(m) === 'inner');
+        const outerRingMembers = relatives.filter(m => getOrbitLayer(m) === 'outer');
+
+        const calculatePos = (list: Member[], radius: number, offsetAngle: number = 0) => {
+            return list.map((member, index) => {
+                const count = list.length || 1;
+                const angle = (index / count) * 2 * Math.PI + offsetAngle;
+                return {
+                    ...member,
+                    x: CENTER_XY + radius * Math.cos(angle),
+                    y: CENTER_XY + radius * Math.sin(angle)
+                };
+            });
+        };
+
+        return [
+            ...calculatePos(innerRingMembers, INNER_RADIUS, 0),
+            ...calculatePos(outerRingMembers, OUTER_RADIUS, Math.PI / 4)
+        ];
+    }, [relatives]);
+
+    const getAvatarId = (name: string) => {
+        const lower = name?.toLowerCase() || '';
+        if (lower.includes('fatima') || lower === 'test user') return 'fatima';
+        if (lower === 'brad') return 'brad';
+        return 'louise';
+    };
+
+    // Default archetype based on name/relationship if not set in Firestore
+    const getArchetype = (member: Member): Archetype | undefined => {
+        if (member.archetype) return member.archetype as Archetype;
+
+        // Fallback defaults when Firestore doesn't have archetype
+        const name = member.displayName?.toLowerCase() || '';
+        if (name.includes('fatima')) return 'tech_wizard';
+        if (name.includes('louise')) return 'fixer';
+        if (name.includes('brad')) return 'cheerleader';
+
+        // Default based on orbit layer
+        return getOrbitLayer(member) === 'inner' ? 'listener' : 'driver';
+    };
+
+    return (
+        <div className="w-full aspect-square max-w-md mx-auto relative bg-slate-50/50 rounded-full border border-slate-100 shadow-inner">
+            <svg viewBox="0 0 400 400" className="w-full h-full pointer-events-none">
+                {/* Orbit Rings */}
+                <circle
+                    cx={CENTER_XY} cy={CENTER_XY} r={INNER_RADIUS}
+                    fill="none" stroke="#E2E8F0" strokeWidth="2" strokeDasharray="6 6"
+                />
+                <circle
+                    cx={CENTER_XY} cy={CENTER_XY} r={OUTER_RADIUS}
+                    fill="none" stroke="#E2E8F0" strokeWidth="2" strokeDasharray="4 4" opacity="0.6"
+                />
+
+                {/* Center Pulse Effect */}
+                <circle cx={CENTER_XY} cy={CENTER_XY} r="45" fill="url(#centerGradient)" opacity="0.1" className="animate-pulse" />
+                <defs>
+                    <radialGradient id="centerGradient">
+                        <stop offset="0%" stopColor="#6366f1" />
+                        <stop offset="100%" stopColor="transparent" />
+                    </radialGradient>
+                </defs>
+            </svg>
+
+            {/* Senior (Center) */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center pointer-events-auto">
+                <div className="relative">
+                    <Avatar id="senior" size="lg" className="border-4 border-white shadow-lg z-10" />
+                    <Heart className="absolute -top-2 -right-2 w-6 h-6 text-rose-500 fill-rose-500 animate-bounce" />
+                </div>
+                <span className="mt-1 text-xs font-bold text-slate-600 bg-white/80 px-2 rounded-full">{centerMemberName}</span>
+            </div>
+
+            {/* Relatives (Planets) */}
+            {positionedMembers.map((member) => (
+                <button
+                    key={member.docId || member.id}
+                    onClick={() => onMemberClick?.(member)}
+                    className={cn(
+                        "absolute w-12 h-12 -ml-6 -mt-6 rounded-full",
+                        "transition-transform hover:scale-110 active:scale-95",
+                        "pointer-events-auto group"
+                    )}
+                    style={{ left: member.x, top: member.y }}
+                    aria-label={`View ${member.displayName}`}
+                >
+                    {/* Avatar */}
+                    <Avatar
+                        id={getAvatarId(member.displayName)}
+                        size="md"
+                        className={cn(
+                            "border-2 shadow-md",
+                            getOrbitLayer(member) === 'inner' ? "border-indigo-200" : "border-amber-200"
+                        )}
+                    />
+
+                    {/* Superpower Badge - always show with fallback */}
+                    <div className="absolute -bottom-1 -right-1 z-20">
+                        <SuperpowerBadge
+                            archetype={getArchetype(member)!}
+                            memberName={member.displayName}
+                            onAction={onBadgeAction}
+                            size="sm"
+                        />
+                    </div>
+
+                    {/* Name Label (Hover Tooltip) */}
+                    <div className={cn(
+                        "absolute top-full left-1/2 -translate-x-1/2 mt-1",
+                        "opacity-0 group-hover:opacity-100 transition-opacity",
+                        "bg-white/90 px-2 py-0.5 rounded-md shadow-sm",
+                        "text-xs font-bold text-slate-700 whitespace-nowrap",
+                        "pointer-events-none z-30"
+                    )}>
+                        {member.displayName}
+                    </div>
+                </button>
+            ))}
+        </div>
+    );
+};
+
+export default FamilyConstellation;
+
+```
+---
+
 ## File: tryg-app\src\features\familyPresence\FamilyPresence.tsx
 ```tsx
-// FamilyPresence - "Familien Nu" section showing all family members' statuses
-// Reusable on both Connection (Min Dag) and Koordinering (Familie) tabs
-// Now uses CareCircleContext for shared data (props are optional overrides)
-
 import React from 'react';
-import { Users, Home, Briefcase, Car, Coffee, Moon, Heart } from 'lucide-react';
+import { Users } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 // @ts-ignore - Context not yet converted
 import { useCareCircleContext } from '../../contexts/CareCircleContext';
 import { Avatar } from '../../components/ui/Avatar';
 import { MemberStatus } from './useMemberStatus';
 
-// Status display configuration
-interface StatusConfigItem {
-    label: string;
-    icon: React.ElementType;
-    color: string;
-}
-
-const STATUS_CONFIG: Record<string, StatusConfigItem> = {
-    home: { label: 'Hjemme', icon: Home, color: 'text-green-600' },
-    work: { label: 'På arbejde', icon: Briefcase, color: 'text-indigo-600' },
-    traveling: { label: 'Undervejs', icon: Car, color: 'text-amber-600' },
-    available: { label: 'Har tid til en snak', icon: Coffee, color: 'text-teal-600' },
-    busy: { label: 'Optaget', icon: Moon, color: 'text-stone-500' },
-};
-
-// Senior status display (different from relatives)
-const SENIOR_STATUS: Record<string, StatusConfigItem> = {
-    good: { label: 'Har det godt', icon: Heart, color: 'text-green-600' },
-    default: { label: 'Aktiv', icon: Heart, color: 'text-stone-500' },
-};
-
 interface MemberStatusRowProps {
     name: string;
     status: string;
     role: string;
-    timestamp?: any; // Firestore timestamp or Date
+    timestamp?: any;
     isCurrentUser?: boolean;
 }
 
-/**
- * Compact status display row for a family member
- */
 const MemberStatusRow: React.FC<MemberStatusRowProps> = ({ name, status, role, timestamp, isCurrentUser = false }) => {
-    // Determine avatar ID based on name or role
+    const { t } = useTranslation();
     const avatarId = role === 'senior' ? 'senior' :
         (name.includes('Fatima') || name === 'Test User') ? 'fatima' :
             name === 'Brad' ? 'brad' : 'louise';
 
-    // Status mapping for sprite IDs
     const statusIdMapping: Record<string, string> = {
         'home': 'home',
         'work': 'work',
         'traveling': 'car',
         'available': 'coffee',
         'busy': 'moon',
-        'good': 'home', // Fallback for senior
+        'good': 'home',
         'default': 'home'
     };
 
     const statusIconId = statusIdMapping[status] || 'home';
     const config = role === 'senior'
-        ? (SENIOR_STATUS[status] || SENIOR_STATUS.default)
-        : (STATUS_CONFIG[status] || STATUS_CONFIG.home);
+        ? { label: t('peace_all_well'), color: 'text-green-600' }
+        : { label: t(`status_${status}`), color: 'text-stone-500' };
 
-    // Format timestamp
     let timeString = '';
     if (timestamp) {
         const date = (timestamp && typeof timestamp.toDate === 'function')
@@ -6087,7 +7458,7 @@ const MemberStatusRow: React.FC<MemberStatusRowProps> = ({ name, status, role, t
             : new Date(timestamp);
 
         const now = new Date();
-        const diffMs = now.getTime() - date.getTime(); // Use getTime() to ensure number arithmetic
+        const diffMs = now.getTime() - date.getTime();
         const diffMins = Math.floor(diffMs / 60000);
 
         if (diffMins < 60) {
@@ -6104,35 +7475,29 @@ const MemberStatusRow: React.FC<MemberStatusRowProps> = ({ name, status, role, t
             flex items-center justify-between p-3 rounded-xl transition-all
             ${isCurrentUser ? 'bg-indigo-50/50 border border-indigo-100/50' : 'hover:bg-stone-50 border border-transparent hover:border-stone-100'}
         `}>
-            {/* Left: Avatar + Info */}
             <div className="flex items-center gap-3">
-                <div className="relative">
+                {/* Avatar with connection glow when available */}
+                <div className={`relative ${status === 'available' ? 'animate-glow' : ''}`}>
                     <Avatar id={avatarId} size="md" className="shadow-sm border-2 border-white" />
-                    {/* Tiny status indicator dot */}
                     <div className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full border-2 border-white ${status === 'available' ? 'bg-teal-500' :
                         status === 'home' ? 'bg-green-500' :
                             status === 'work' ? 'bg-indigo-500' :
                                 status === 'traveling' ? 'bg-amber-500' : 'bg-stone-400'
                         }`} />
                 </div>
-
                 <div>
                     <span className={`text-sm font-bold block text-left ${isCurrentUser ? 'text-indigo-900' : 'text-stone-700'}`}>
-                        {name} {isCurrentUser && <span className="opacity-50 text-xs font-normal">(dig)</span>}
+                        {name} {isCurrentUser && <span className="opacity-50 text-xs font-normal">({t('you')})</span>}
                     </span>
                     <span className={`text-xs font-medium block text-left ${config.color || 'text-stone-500'}`}>
                         {config.label}
                     </span>
                 </div>
             </div>
-
-            {/* Right: Pictogram + Time */}
             <div className="flex flex-col items-end gap-1">
-                {/* Status Pictogram - Subtle glass feel */}
                 <div className="bg-stone-100/80 p-1.5 rounded-lg backdrop-blur-sm">
                     <Avatar id={statusIconId} size="sm" />
                 </div>
-
                 {timeString && (
                     <span className="text-[10px] font-medium text-stone-400 tabular-nums">
                         {timeString}
@@ -6150,43 +7515,38 @@ interface FamilyPresenceProps {
     compact?: boolean;
 }
 
-/**
- * Family Presence section - "Familien Nu"
- * Shows all family members' current statuses
- * 
- * Uses CareCircleContext for data, with props as optional overrides.
- */
 export const FamilyPresence: React.FC<FamilyPresenceProps> = ({
     memberStatuses: propsMembers,
     currentUserId: propsUserId,
     seniorName: propsSeniorName,
     compact = false
 }) => {
-    // Get from context, use props as override if provided
-    const context = useCareCircleContext();
-    const memberStatuses = propsMembers ?? context.memberStatuses ?? [];
-    const currentUserId = propsUserId ?? context.currentUserId;
-    const seniorName = propsSeniorName ?? context.seniorName ?? 'Far/Mor';
+    const { t } = useTranslation();
+    const context = useCareCircleContext() as any;
+    const memberStatuses = propsMembers ?? context?.memberStatuses ?? [];
+    const currentUserId = propsUserId ?? context?.currentUserId;
+    const seniorName = propsSeniorName ?? context?.seniorName ?? 'Far/Mor';
 
     if (memberStatuses.length === 0) {
         return (
             <div className={`bg-stone-50 rounded-xl ${compact ? 'p-3' : 'p-4'} border border-stone-200`}>
-                <p className="text-stone-400 text-sm text-center">Ingen familiemedlemmer endnu</p>
+                <p className="text-stone-400 text-sm text-center">{t('no_relatives')}</p>
             </div>
         );
     }
 
     return (
-        <div className={`bg-white rounded-2xl ${compact ? 'p-3' : 'p-4'} border border-stone-100 shadow-sm`}>
-            <div className="flex items-center gap-2 mb-3">
-                <div className="p-1.5 bg-indigo-50 rounded-lg">
-                    <Users className="w-4 h-4 text-indigo-600" />
+        <div className={`bg-white rounded-2xl ${compact ? 'p-3' : 'p-4'} border border-stone-100 shadow-sm overflow-hidden`}>
+            <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                    <div className="p-1.5 bg-indigo-50 rounded-lg">
+                        <Users className="w-4 h-4 text-indigo-600" />
+                    </div>
+                    <h4 className="text-xs font-bold text-stone-500 uppercase tracking-wide">
+                        {t('family_circle')}
+                    </h4>
                 </div>
-                <h4 className="text-xs font-bold text-stone-500 uppercase tracking-wide">
-                    Familien nu
-                </h4>
             </div>
-
             <div className="space-y-1">
                 {memberStatuses.map((member: MemberStatus, index: number) => (
                     <MemberStatusRow
@@ -6208,12 +7568,14 @@ export default FamilyPresence;
 ```
 ---
 
-## File: tryg-app\src\features\familyPresence\index.js
-```js
+## File: tryg-app\src\features\familyPresence\index.ts
+```ts
 // Family Presence Feature - Public API
 export { FamilyPresence } from './FamilyPresence';
 export { StatusCard, StatusSelector, StatusList, STATUS_OPTIONS } from './StatusCard';
 export { useMemberStatus } from './useMemberStatus';
+export { FamilyConstellation } from './FamilyConstellation';
+export { SuperpowerBadge, ArchetypeSelector, ARCHETYPE_CONFIG } from './SuperpowerBadge';
 
 ```
 ---
@@ -6224,8 +7586,8 @@ import React from 'react';
 import { Clock, Pill, Briefcase, Home, Car, Coffee, Moon } from 'lucide-react';
 import { InlineGatesIndicator } from '../tasks/ProgressRing';
 import { Avatar } from '../../components/ui/Avatar';
-import { Task } from '../tasks/useTasks';
-import { MemberStatus } from './useMemberStatus';
+import { Task, MemberStatus } from '../../types';
+import { useTranslation } from 'react-i18next';
 
 // ============================================================================
 // CONFIGURATION & CONSTANTS
@@ -6234,7 +7596,7 @@ import { MemberStatus } from './useMemberStatus';
 interface StatusOption {
     id: string;
     label: string;
-    icon: React.ElementType; // Icon component type
+    icon: React.ElementType;
     color: string;
 }
 
@@ -6262,12 +7624,12 @@ interface StatusSelectorProps {
 /**
  * Status selector for RELATIVE to set their status
  */
-export const StatusSelector: React.FC<StatusSelectorProps> = ({ currentStatus, onStatusChange, compact = false }) => {
+export const StatusSelector: React.FC<StatusSelectorProps> = ({ currentStatus, onStatusChange }) => {
+    const { t } = useTranslation();
     return (
         <div className="flex gap-2 justify-between">
             {STATUS_OPTIONS.map(status => {
                 const isActive = currentStatus === status.id;
-                // Map status ID to Avatar ID
                 const avatarId = ({
                     'work': 'work',
                     'home': 'home',
@@ -6287,7 +7649,7 @@ export const StatusSelector: React.FC<StatusSelectorProps> = ({ currentStatus, o
                                 : 'bg-white/50 hover:bg-white hover:shadow-sm border border-transparent hover:border-stone-200'
                             }
                         `}
-                        title={status.label}
+                        title={t(`status_${status.id}`)}
                     >
                         <Avatar
                             id={avatarId}
@@ -6300,7 +7662,7 @@ export const StatusSelector: React.FC<StatusSelectorProps> = ({ currentStatus, o
                             pointer-events-none transition-all duration-200 z-20
                             ${isActive ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0'}
                         `}>
-                            {status.label}
+                            {t(`status_${status.id}`)}
                         </div>
                     </button>
                 );
@@ -6310,14 +7672,14 @@ export const StatusSelector: React.FC<StatusSelectorProps> = ({ currentStatus, o
 };
 
 // ============================================================================
-// MAIN COMPONENT VARIABLES
+// MAIN COMPONENT
 // ============================================================================
 
 interface StatusCardProps {
     mode?: 'senior' | 'relative';
     name?: string;
     status?: string;
-    timestamp?: any; // Start as any to handle Firestore timestamp loosely, refine later
+    timestamp?: any;
     className?: string;
 
     // Senior specifics
@@ -6332,7 +7694,6 @@ interface StatusCardProps {
 
 /**
  * Unified Status Card Component
- * Renders appropriate card based on `mode`.
  */
 export const StatusCard: React.FC<StatusCardProps> = ({
     mode = 'relative',
@@ -6340,33 +7701,29 @@ export const StatusCard: React.FC<StatusCardProps> = ({
     status: statusId,
     timestamp,
     className = '',
-    // Senior specifics
     completionRate = 0,
     tasks = [],
     symptomCount = 0,
-    onViewSymptoms = null,
-    // Relative specifics
-    onStatusChange
+    onViewSymptoms = null
 }) => {
-    // -------------------------------------------------------------------------
-    // RENDER: SENIOR MODE (Dashboard Style)
-    // -------------------------------------------------------------------------
+    const { t } = useTranslation();
+
     if (mode === 'senior') {
         const getSeniorStatus = () => {
             if (!timestamp) return {
-                label: 'Venter på første tjek...',
+                label: t('waiting_first_check'),
                 theme: 'neutral',
                 bgPos: '50% 0%',
                 textColor: 'text-white'
             };
             if (completionRate >= 80 && symptomCount === 0) return {
-                label: 'Alt er vel',
+                label: t('peace_all_well'),
                 theme: 'calm',
                 bgPos: '0% 0%',
                 textColor: 'text-white'
             };
             if (completionRate >= 50) return {
-                label: 'God dag',
+                label: t('peace_good_day'),
                 theme: 'neutral',
                 bgPos: '50% 0%',
                 textColor: 'text-white'
@@ -6378,7 +7735,7 @@ export const StatusCard: React.FC<StatusCardProps> = ({
                 textColor: 'text-white'
             };
             return {
-                label: 'Tjek ind',
+                label: t('peace_check_in'),
                 theme: 'warm',
                 bgPos: '100% 0%',
                 textColor: 'text-white'
@@ -6394,6 +7751,7 @@ export const StatusCard: React.FC<StatusCardProps> = ({
                 className={`
                     relative overflow-hidden rounded-2xl shadow-lg border border-white/20 p-6 
                     transition-all duration-500 ease-in-out
+                    ${statusInfo.theme === 'calm' ? 'animate-breathe' : ''}
                     ${className}
                 `}
                 style={{
@@ -6413,7 +7771,7 @@ export const StatusCard: React.FC<StatusCardProps> = ({
                                 <h3 className="font-bold text-xl leading-tight drop-shadow-sm">{name}</h3>
                                 <div className="flex items-center gap-1.5 text-xs font-medium text-white/90 bg-black/10 px-2 py-0.5 rounded-full backdrop-blur-sm mt-1 w-fit">
                                     <Clock className="w-3 h-3" />
-                                    <span>Sidst: {typeof timestamp === 'string' ? timestamp : '-'}</span>
+                                    <span>{t('last_checked_in')}: {typeof timestamp === 'string' ? timestamp : '-'}</span>
                                 </div>
                             </div>
                         </div>
@@ -6434,8 +7792,8 @@ export const StatusCard: React.FC<StatusCardProps> = ({
                                 <Clock className="w-4 h-4 text-white" />
                             </div>
                             <div>
-                                <p className="text-[10px] text-white/70 uppercase font-bold tracking-wider">Tjekket ind</p>
-                                <p className="text-sm font-bold">{typeof timestamp === 'string' ? timestamp : 'Venter'}</p>
+                                <p className="text-[10px] text-white/70 uppercase font-bold tracking-wider">{t('peace_check_in')}</p>
+                                <p className="text-sm font-bold">{typeof timestamp === 'string' ? timestamp : t('peace_check_in')}</p>
                             </div>
                         </div>
 
@@ -6444,8 +7802,8 @@ export const StatusCard: React.FC<StatusCardProps> = ({
                                 <Pill className="w-4 h-4 text-white" />
                             </div>
                             <div>
-                                <p className="text-[10px] text-white/70 uppercase font-bold tracking-wider">Medicin</p>
-                                <p className="text-sm font-bold">{completionRate}% ordnet</p>
+                                <p className="text-[10px] text-white/70 uppercase font-bold tracking-wider">{t('medication_title')}</p>
+                                <p className="text-sm font-bold">{completionRate}% {t('taken')}</p>
                             </div>
                         </div>
                     </div>
@@ -6466,9 +7824,6 @@ export const StatusCard: React.FC<StatusCardProps> = ({
         );
     }
 
-    // -------------------------------------------------------------------------
-    // RENDER: RELATIVE MODE (List Item Style)
-    // -------------------------------------------------------------------------
     const statusObj = STATUS_OPTIONS.find(s => s.id === statusId) || STATUS_OPTIONS[0];
     const avatarId = ({
         'work': 'work',
@@ -6478,13 +7833,11 @@ export const StatusCard: React.FC<StatusCardProps> = ({
         'busy': 'moon'
     } as Record<string, string>)[statusId || ''] || 'home';
 
-    // Format timestamp if it's a Firestore object or Date
     let timeString = '-';
     if (timestamp) {
         if (typeof timestamp === 'string') {
             timeString = timestamp;
         } else {
-            // Check for Firestore Timestamp structure
             const date = (timestamp && typeof timestamp.toDate === 'function')
                 ? timestamp.toDate()
                 : new Date(timestamp);
@@ -6500,7 +7853,7 @@ export const StatusCard: React.FC<StatusCardProps> = ({
                     <h4 className="font-bold text-stone-800 text-sm">{name}</h4>
                     <div className="flex items-center gap-1.5 mt-0.5">
                         <span className="text-xs font-medium text-stone-500 bg-stone-100 px-2 py-0.5 rounded-full">
-                            {statusObj.label}
+                            {t(`status_${statusObj.id}`)}
                         </span>
                         <span className="text-[10px] text-stone-400">• {timeString}</span>
                     </div>
@@ -6513,13 +7866,9 @@ export const StatusCard: React.FC<StatusCardProps> = ({
     );
 };
 
-// ============================================================================
-// LIST LIST COMPONENT
-// ============================================================================
-
 interface StatusListProps {
-    members?: MemberStatus[]; // Using strict MemberStatus
-    relativeStatuses?: any[]; // Keep permissive for now
+    members?: MemberStatus[];
+    relativeStatuses?: any[];
     lastUpdated?: any;
     maxDisplay?: number;
 }
@@ -6530,13 +7879,13 @@ export const StatusList: React.FC<StatusListProps> = ({
     lastUpdated,
     maxDisplay = 3
 }) => {
-    // Filter to only relatives
+    const { t } = useTranslation();
     const relatives = members.filter(m => m.role === 'relative');
 
     if (relatives.length === 0 && relativeStatuses.length === 0) {
         return (
             <div className="bg-white rounded-2xl p-4 shadow-sm border-2 border-stone-100 mb-4">
-                <p className="text-stone-400 text-sm text-center">Ingen pårørende endnu</p>
+                <p className="text-stone-400 text-sm text-center">{t('no_relatives')}</p>
             </div>
         );
     }
@@ -6552,7 +7901,6 @@ export const StatusList: React.FC<StatusListProps> = ({
         <div className="space-y-2 mb-4">
             {displayedMembers.map((member, index) => (
                 <StatusCard
-                    mode="relative" // Use relative mode
                     key={member.docId || member.userId || index}
                     name={member.displayName || 'Pårørende'}
                     status={member.status}
@@ -6562,7 +7910,7 @@ export const StatusList: React.FC<StatusListProps> = ({
             {hiddenCount > 0 && (
                 <div className="text-center py-2">
                     <span className="text-sm text-stone-400">
-                        +{hiddenCount} {hiddenCount === 1 ? 'mere' : 'andre'}
+                        +{hiddenCount} {hiddenCount === 1 ? t('more') : t('others')}
                     </span>
                 </div>
             )}
@@ -6571,6 +7919,268 @@ export const StatusList: React.FC<StatusListProps> = ({
 };
 
 export default StatusCard;
+
+```
+---
+
+## File: tryg-app\src\features\familyPresence\SuperpowerBadge.tsx
+```tsx
+import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { Wifi, Ear, Wrench, Car, Star, Phone, MessageCircle, X } from 'lucide-react';
+import { cn } from '../../lib/utils';
+
+export type Archetype = 'tech_wizard' | 'listener' | 'fixer' | 'driver' | 'cheerleader';
+
+interface ArchetypeConfig {
+    id: Archetype;
+    icon: React.ElementType;
+    label: string;
+    description: string;
+    action: string;
+    color: string;
+}
+
+export const ARCHETYPE_CONFIG: Record<Archetype, ArchetypeConfig> = {
+    tech_wizard: {
+        id: 'tech_wizard',
+        icon: Wifi,
+        label: 'Teknik-Ekspert',
+        description: 'Ring når iPad driller eller WiFi ikke virker',
+        action: 'call',
+        color: 'bg-blue-600'
+    },
+    listener: {
+        id: 'listener',
+        icon: Ear,
+        label: 'Lytteren',
+        description: 'Ring for en god snak og lidt trøst',
+        action: 'call',
+        color: 'bg-purple-600'
+    },
+    fixer: {
+        id: 'fixer',
+        icon: Wrench,
+        label: 'Fikser-Typen',
+        description: 'Ring når noget skal repareres derhjemme',
+        action: 'call',
+        color: 'bg-orange-600'
+    },
+    driver: {
+        id: 'driver',
+        icon: Car,
+        label: 'Chaufføren',
+        description: 'Ring for en tur til lægen eller butikken',
+        action: 'call',
+        color: 'bg-green-600'
+    },
+    cheerleader: {
+        id: 'cheerleader',
+        icon: Star,
+        label: 'Heppen',
+        description: 'Del gode nyheder og få et stort smil',
+        action: 'message',
+        color: 'bg-amber-500'
+    }
+};
+
+/**
+ * Badge size variants using CVA
+ */
+const badgeVariants = cva(
+    "rounded-full flex items-center justify-center border-2 border-white shadow-md transition-transform hover:scale-110 active:scale-95",
+    {
+        variants: {
+            size: {
+                sm: "w-5 h-5",
+                md: "w-8 h-8",
+            },
+        },
+        defaultVariants: {
+            size: "sm",
+        },
+    }
+);
+
+const iconVariants = cva(
+    "text-white",
+    {
+        variants: {
+            size: {
+                sm: "w-3 h-3",
+                md: "w-5 h-5",
+            },
+        },
+        defaultVariants: {
+            size: "sm",
+        },
+    }
+);
+
+interface SuperpowerBadgeProps extends VariantProps<typeof badgeVariants> {
+    archetype: Archetype;
+    memberName: string;
+    onAction?: (action: 'call' | 'message', memberName: string) => void;
+    interactive?: boolean;
+}
+
+export const SuperpowerBadge: React.FC<SuperpowerBadgeProps> = ({
+    archetype,
+    memberName,
+    onAction,
+    size = 'sm',
+    interactive = true
+}) => {
+    const [showActionSheet, setShowActionSheet] = useState(false);
+    const config = ARCHETYPE_CONFIG[archetype];
+
+    if (!config) return null;
+
+    const Icon = config.icon;
+
+    const handleTap = () => {
+        if (!interactive) return;
+        setShowActionSheet(true);
+    };
+
+    const handleAction = (actionType: 'call' | 'message') => {
+        onAction?.(actionType, memberName);
+        setShowActionSheet(false);
+    };
+
+    return (
+        <>
+            {/* Badge Button */}
+            <button
+                onClick={handleTap}
+                className={cn(
+                    badgeVariants({ size }),
+                    config.color,
+                    interactive && "cursor-pointer"
+                )}
+                aria-label={`${memberName} - ${config.label}`}
+            >
+                <Icon className={cn(iconVariants({ size }))} />
+            </button>
+
+            {/* Action Sheet Modal - Portal to escape CSS transform context */}
+            {showActionSheet && createPortal(
+                <div
+                    className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center animate-fade-in"
+                    onClick={() => setShowActionSheet(false)}
+                >
+                    <div
+                        className="bg-white w-11/12 max-w-sm rounded-2xl p-6 shadow-2xl"
+                        onClick={e => e.stopPropagation()}
+                    >
+                        <div className="flex items-center justify-between mb-4">
+                            <div className="flex items-center gap-3">
+                                <div className={cn("w-12 h-12 rounded-full flex items-center justify-center", config.color)}>
+                                    <Icon className="w-6 h-6 text-white" />
+                                </div>
+                                <div>
+                                    <p className="font-bold text-lg text-slate-800">{memberName}</p>
+                                    <p className="text-sm text-slate-500">{config.label}</p>
+                                </div>
+                            </div>
+                            <button
+                                onClick={() => setShowActionSheet(false)}
+                                className="p-2 hover:bg-slate-100 rounded-full"
+                            >
+                                <X className="w-5 h-5 text-slate-400" />
+                            </button>
+                        </div>
+
+                        <p className="text-slate-600 mb-6">{config.description}</p>
+
+                        <div className="grid grid-cols-2 gap-3">
+                            <button
+                                onClick={() => handleAction('call')}
+                                className={cn(
+                                    "flex items-center justify-center gap-2 p-4",
+                                    "bg-green-500 text-white font-bold rounded-2xl",
+                                    "hover:bg-green-600 transition-colors"
+                                )}
+                            >
+                                <Phone className="w-5 h-5" />
+                                Ring op
+                            </button>
+                            <button
+                                onClick={() => handleAction('message')}
+                                className={cn(
+                                    "flex items-center justify-center gap-2 p-4",
+                                    "bg-indigo-500 text-white font-bold rounded-2xl",
+                                    "hover:bg-indigo-600 transition-colors"
+                                )}
+                            >
+                                <MessageCircle className="w-5 h-5" />
+                                Send besked
+                            </button>
+                        </div>
+                    </div>
+                </div>,
+                document.body
+            )}
+        </>
+    );
+};
+
+// Settings Panel for relatives to choose their archetype
+interface ArchetypeSelectorProps {
+    currentArchetype?: Archetype;
+    onSelect: (archetype: Archetype) => void;
+}
+
+export const ArchetypeSelector: React.FC<ArchetypeSelectorProps> = ({
+    currentArchetype,
+    onSelect
+}) => {
+    return (
+        <div className="space-y-3">
+            <h3 className="text-sm font-bold text-slate-500 uppercase tracking-wide">Vælg din superkraft</h3>
+            <p className="text-xs text-slate-400 mb-4">Hvordan kan du bedst hjælpe familien?</p>
+
+            <div className="grid grid-cols-1 gap-2">
+                {Object.values(ARCHETYPE_CONFIG).map((config) => {
+                    const Icon = config.icon;
+                    const isSelected = currentArchetype === config.id;
+
+                    return (
+                        <button
+                            key={config.id}
+                            onClick={() => onSelect(config.id)}
+                            className={cn(
+                                "flex items-center gap-3 p-4 rounded-xl border-2 transition-all text-left",
+                                isSelected
+                                    ? "border-indigo-500 bg-indigo-50"
+                                    : "border-slate-200 hover:border-slate-300 bg-white"
+                            )}
+                        >
+                            <div className={cn("w-10 h-10 rounded-full flex items-center justify-center shrink-0", config.color)}>
+                                <Icon className="w-5 h-5 text-white" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                                <p className={cn("font-bold", isSelected ? "text-indigo-700" : "text-slate-700")}>
+                                    {config.label}
+                                </p>
+                                <p className="text-xs text-slate-500 truncate">{config.description}</p>
+                            </div>
+                            {isSelected && (
+                                <div className="w-6 h-6 bg-indigo-500 rounded-full flex items-center justify-center">
+                                    <span className="text-white text-sm">✓</span>
+                                </div>
+                            )}
+                        </button>
+                    );
+                })}
+            </div>
+        </div>
+    );
+};
+
+export { badgeVariants };
+export default SuperpowerBadge;
 
 ```
 ---
@@ -6705,7 +8315,7 @@ export default useMemberStatus;
 // HelpExchange Match Pairs Configuration
 // Easy to extend - just add new entries to the arrays
 
-import { PictogramPosition, PictogramSheet } from '../../components/ui/Pictogram';
+import { PictogramPosition } from '../../components/ui/Pictogram';
 
 // Re-export this if needed elsewhere, but Pictogram defines them
 type SpriteConfig = {
@@ -6876,7 +8486,7 @@ import React, { useState } from 'react';
 import { HandHeart, X, Plus } from 'lucide-react';
 import { SENIOR_OFFERS, SENIOR_REQUESTS, ItemTemplate } from './config';
 import { Pictogram } from '../../components/ui/Pictogram';
-import { HelpOffer, HelpRequest } from './useHelpExchange';
+import { HelpOffer, HelpRequest } from '../../types';
 
 interface HelpExchangeProps {
     onOffer?: (item: ItemTemplate) => void;
@@ -6900,7 +8510,7 @@ export const HelpExchange: React.FC<HelpExchangeProps> = ({
     activeRequests = [],
     relativeOffers = [],
     relativeRequests = [],
-    seniorName = 'Senior'
+    seniorName: _seniorName = 'Senior'
 }) => {
     // Pure "Dumb" Component - relies on props
     const [showOfferPicker, setShowOfferPicker] = useState(false);
@@ -7080,8 +8690,8 @@ export default HelpExchange;
 ```
 ---
 
-## File: tryg-app\src\features\helpExchange\index.js
-```js
+## File: tryg-app\src\features\helpExchange\index.ts
+```ts
 // Help Exchange Feature - Public API
 // All exports from this feature should go through this file
 
@@ -7107,6 +8717,7 @@ import React, { useState, useEffect } from 'react';
 import { X, Sparkles } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { ActiveMatch } from './useHelpExchangeMatch';
+import { useTranslation } from 'react-i18next';
 
 interface MatchCelebrationProps {
     match: ActiveMatch | null;
@@ -7125,6 +8736,7 @@ export const MatchCelebration: React.FC<MatchCelebrationProps> = ({
     onAction,
     seniorName = 'Mor'
 }) => {
+    const { t } = useTranslation();
     const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
@@ -7214,7 +8826,7 @@ export const MatchCelebration: React.FC<MatchCelebrationProps> = ({
                     {isStatusMatch && (
                         <div className="flex items-center gap-2 text-teal-600 text-sm">
                             <span>🟢</span>
-                            <span>Status: Har tid nu</span>
+                            <span>{t('status_avail_now')}</span>
                         </div>
                     )}
                 </div>
@@ -7234,7 +8846,7 @@ export const MatchCelebration: React.FC<MatchCelebrationProps> = ({
                         onClick={handleDismiss}
                         className="w-full text-sm text-stone-500 hover:text-stone-700 py-2"
                     >
-                        Måske senere
+                        {t('maybe_later')}
                     </button>
                 </div>
             </div>
@@ -7308,29 +8920,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../../config/firebase';
 
-export interface HelpOffer {
-    docId: string;
-    id: string;
-    label: string;
-    emoji: string;
-    createdByUid?: string;
-    createdByRole?: string;
-    createdByName?: string;
-    createdAt?: any;
-    [key: string]: any;
-}
-
-export interface HelpRequest {
-    docId: string;
-    id: string;
-    label: string;
-    emoji: string;
-    createdByUid?: string;
-    createdByRole?: string;
-    createdByName?: string;
-    createdAt?: any;
-    [key: string]: any;
-}
+import { HelpOffer, HelpRequest } from '../../types';
 
 export function useHelpExchange(
     circleId: string | null,
@@ -7400,11 +8990,12 @@ export function useHelpExchange(
     // React components (icon) and their Symbol properties are NOT safe
     const SAFE_HELP_FIELDS = ['id', 'label', 'emoji'];
 
-    const sanitizeHelpData = (data: any) => {
-        const clean: any = {};
+    const sanitizeHelpData = (data: Partial<HelpOffer | HelpRequest>) => {
+        const clean: Record<string, any> = {};
         SAFE_HELP_FIELDS.forEach(key => {
-            if (data[key] !== undefined && typeof data[key] !== 'function' && typeof data[key] !== 'symbol') {
-                clean[key] = data[key];
+            const val = (data as any)[key];
+            if (val !== undefined && typeof val !== 'function' && typeof val !== 'symbol') {
+                clean[key] = val;
             }
         });
         return clean;
@@ -7503,7 +9094,7 @@ export default useHelpExchange;
 ```ts
 import { useMemo } from 'react';
 import { MATCH_PAIRS, STATUS_MATCHES, Celebration } from './config';
-import { HelpOffer, HelpRequest } from './useHelpExchange';
+import { HelpOffer, HelpRequest } from '../../types';
 import { MemberStatus } from '../familyPresence/useMemberStatus';
 
 interface MatchProps {
@@ -7600,8 +9191,418 @@ export default useHelpExchangeMatch;
 ```
 ---
 
-## File: tryg-app\src\features\photos\index.js
-```js
+## File: tryg-app\src\features\memories\AudioRecorder.tsx
+```tsx
+import React, { useState, useRef, useEffect } from 'react';
+import { Mic, Square, Play, Trash2, Check, AlertCircle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+
+interface AudioRecorderProps {
+    onRecordingComplete: (blob: Blob) => void;
+    onReset?: () => void;
+    placeholder?: string;
+    maxLengthSeconds?: number;
+}
+
+export const AudioRecorder: React.FC<AudioRecorderProps> = ({
+    onRecordingComplete,
+    onReset,
+    placeholder,
+    maxLengthSeconds = 300 // Default 5 minutes
+}) => {
+    const { t } = useTranslation();
+    const [isRecording, setIsRecording] = useState(false);
+    const [audioUrl, setAudioUrl] = useState<string | null>(null);
+    const [duration, setDuration] = useState(0);
+    const [error, setError] = useState<string | null>(null);
+
+    const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+    const chunksRef = useRef<Blob[]>([]);
+    const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+    useEffect(() => {
+        return () => {
+            if (timerRef.current) clearInterval(timerRef.current);
+            if (audioUrl) URL.revokeObjectURL(audioUrl);
+        };
+    }, [audioUrl]);
+
+    const startRecording = async () => {
+        try {
+            setError(null);
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+            // Check if MediaRecorder is supported
+            if (!window.MediaRecorder) {
+                setError(t('audio_recorder_not_supported'));
+                return;
+            }
+
+            mediaRecorderRef.current = new MediaRecorder(stream);
+            chunksRef.current = [];
+
+            mediaRecorderRef.current.ondataavailable = (e) => {
+                if (e.data.size > 0) chunksRef.current.push(e.data);
+            };
+
+            mediaRecorderRef.current.onstop = () => {
+                const blob = new Blob(chunksRef.current, { type: 'audio/webm' });
+                const url = URL.createObjectURL(blob);
+                setAudioUrl(url);
+                onRecordingComplete(blob);
+
+                // Stop all tracks to release the microphone
+                stream.getTracks().forEach(track => track.stop());
+            };
+
+            mediaRecorderRef.current.start();
+            setIsRecording(true);
+            setDuration(0);
+
+            // Timer for duration and max length
+            timerRef.current = setInterval(() => {
+                setDuration(prev => {
+                    if (prev >= maxLengthSeconds) {
+                        stopRecording();
+                        return prev;
+                    }
+                    return prev + 1;
+                });
+            }, 1000);
+
+        } catch (err: any) {
+            console.error('Recording error:', err);
+            if (err.name === 'NotAllowedError') {
+                setError(t('mic_permission_denied'));
+            } else {
+                setError(t('mic_access_error'));
+            }
+        }
+    };
+
+    const stopRecording = () => {
+        if (mediaRecorderRef.current && isRecording) {
+            mediaRecorderRef.current.stop();
+            setIsRecording(false);
+            if (timerRef.current) {
+                clearInterval(timerRef.current);
+                timerRef.current = null;
+            }
+        }
+    };
+
+    const handleReset = () => {
+        setAudioUrl(null);
+        setDuration(0);
+        setError(null);
+        if (onReset) onReset();
+    };
+
+    const formatDuration = (seconds: number) => {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${mins}:${secs.toString().padStart(2, '0')}`;
+    };
+
+    return (
+        <div className="flex flex-col items-center gap-4 p-6 bg-stone-50 rounded-3xl border-2 border-dashed border-stone-200 transition-all">
+            {error && (
+                <div className="flex items-center gap-2 text-rose-600 bg-rose-50 px-4 py-2 rounded-xl text-sm font-medium animate-fade-in">
+                    <AlertCircle className="w-4 h-4" />
+                    <span>{error}</span>
+                </div>
+            )}
+
+            {!audioUrl ? (
+                <div className="flex flex-col items-center gap-4">
+                    <button
+                        onClick={isRecording ? stopRecording : startRecording}
+                        className={`
+                            w-20 h-20 rounded-full flex items-center justify-center transition-all duration-300
+                            ${isRecording
+                                ? 'bg-rose-500 scale-110 shadow-[0_0_20px_rgba(244,63,94,0.4)] animate-pulse'
+                                : 'bg-teal-500 shadow-[0_10px_20px_rgba(20,184,166,0.3)] hover:scale-105 active:scale-95'
+                            }
+                        `}
+                        aria-label={isRecording ? t('stop_recording') : t('start_recording')}
+                    >
+                        {isRecording ? <Square className="text-white fill-white w-8 h-8" /> : <Mic className="text-white w-8 h-8" />}
+                    </button>
+
+                    <div className="text-center">
+                        <p className={`font-bold transition-colors ${isRecording ? 'text-rose-600' : 'text-stone-600'}`}>
+                            {isRecording ? t('recording_active') : placeholder || t('press_to_tell_story')}
+                        </p>
+                        {isRecording && (
+                            <p className="text-rose-400 font-mono text-xl mt-1">{formatDuration(duration)}</p>
+                        )}
+                    </div>
+                </div>
+            ) : (
+                <div className="w-full space-y-4 animate-fade-in">
+                    <div className="bg-white p-4 rounded-2xl shadow-sm border border-stone-100 flex items-center gap-4">
+                        <button
+                            onClick={() => new Audio(audioUrl).play()}
+                            className="w-12 h-12 bg-teal-100 flex items-center justify-center rounded-full hover:bg-teal-200 transition-colors group"
+                            aria-label={t('play_recording')}
+                        >
+                            <Play className="w-6 h-6 text-teal-700 fill-teal-700 group-hover:scale-110 transition-transform" />
+                        </button>
+
+                        <div className="flex-1 h-2 bg-stone-100 rounded-full overflow-hidden">
+                            <div className="h-full bg-teal-500 w-full opacity-30" />
+                        </div>
+
+                        <span className="text-sm font-mono text-stone-400">{formatDuration(duration)}</span>
+                    </div>
+
+                    <div className="flex gap-3">
+                        <button
+                            onClick={handleReset}
+                            className="flex-1 flex items-center justify-center gap-2 p-3 bg-stone-100 text-stone-600 font-bold rounded-2xl hover:bg-stone-200 transition-colors active:scale-95"
+                        >
+                            <Trash2 className="w-5 h-5" />
+                            {t('delete_and_retry')}
+                        </button>
+                        <div className="flex-[0.3] p-3 bg-teal-50 text-teal-600 flex items-center justify-center rounded-2xl">
+                            <Check className="w-6 h-6" />
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
+
+```
+---
+
+## File: tryg-app\src\features\memories\MemoriesGallery.tsx
+```tsx
+import React, { useState, useEffect } from 'react';
+import { collection, query, orderBy, onSnapshot, limit } from 'firebase/firestore';
+import { db } from '../../config/firebase';
+import { Mic, Play, Calendar, User, History } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+
+interface Memory {
+    id: string;
+    url: string;
+    type: 'audio' | 'photo' | 'video';
+    createdByName: string;
+    createdAt: any;
+    questionText?: string;
+    duration?: number;
+}
+
+interface MemoriesGalleryProps {
+    circleId: string;
+}
+
+export const MemoriesGallery: React.FC<MemoriesGalleryProps> = ({ circleId }) => {
+    const { t } = useTranslation();
+    const [memories, setMemories] = useState<Memory[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        if (!circleId) return;
+
+        const memoriesRef = collection(db, 'careCircles', circleId, 'memories');
+        const q = query(memoriesRef, orderBy('createdAt', 'desc'), limit(50));
+
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            const memoriesList = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            })) as Memory[];
+            setMemories(memoriesList);
+            setLoading(false);
+        });
+
+        return () => unsubscribe();
+    }, [circleId]);
+
+    const formatTime = (timestamp: any) => {
+        if (!timestamp) return '';
+        const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+        return date.toLocaleDateString(undefined, { day: 'numeric', month: 'short' });
+    };
+
+    if (loading) {
+        return (
+            <div className="flex justify-center py-10">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500" />
+            </div>
+        );
+    }
+
+    if (memories.length === 0) {
+        return (
+            <div className="bg-stone-50 rounded-2xl p-8 text-center border-2 border-dashed border-stone-200">
+                <History className="w-12 h-12 text-stone-300 mx-auto mb-3" />
+                <p className="text-stone-500 font-medium">{t('no_memories_yet')}</p>
+                <p className="text-xs text-stone-400 mt-1">{t('memories_will_appear_here')}</p>
+            </div>
+        );
+    }
+
+    return (
+        <div className="space-y-4">
+            <div className="flex items-center justify-between px-1">
+                <h3 className="font-bold text-stone-700 flex items-center gap-2">
+                    <History className="w-5 h-5 text-indigo-500" />
+                    {t('livsbog_title')}
+                </h3>
+                <span className="text-xs text-stone-400 font-medium bg-stone-100 px-2 py-1 rounded-full">
+                    {memories.length} {t('stories')}
+                </span>
+            </div>
+
+            <div className="grid gap-4">
+                {memories.map((memory) => (
+                    <div key={memory.id} className="bg-white rounded-2xl p-4 border border-stone-100 shadow-sm hover:shadow-md transition-shadow">
+                        <div className="flex items-start gap-4">
+                            <button
+                                onClick={() => new Audio(memory.url).play()}
+                                className="w-12 h-12 bg-indigo-50 flex items-center justify-center rounded-2xl text-indigo-600 hover:bg-indigo-100 transition-colors shrink-0"
+                            >
+                                <Play fill="currentColor" size={24} />
+                            </button>
+
+                            <div className="flex-1 min-w-0">
+                                <p className="font-bold text-stone-800 truncate">
+                                    {memory.questionText || t('untilted_memory')}
+                                </p>
+                                <div className="flex items-center gap-3 mt-1 text-xs text-stone-400">
+                                    <span className="flex items-center gap-1">
+                                        <User size={12} />
+                                        {memory.createdByName}
+                                    </span>
+                                    <span className="flex items-center gap-1">
+                                        <Calendar size={12} />
+                                        {formatTime(memory.createdAt)}
+                                    </span>
+                                    <span className="flex items-center gap-1">
+                                        <Mic size={12} />
+                                        {memory.type === 'audio' ? t('audio') : memory.type}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
+
+```
+---
+
+## File: tryg-app\src\features\memories\useMemories.ts
+```ts
+import { useState, useCallback } from 'react';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { storage, db } from '../../config/firebase';
+
+export interface MemoryMetadata {
+    title?: string;
+    description?: string;
+    type: 'audio' | 'photo' | 'video';
+    circleId: string;
+    createdByUid: string;
+    createdByName: string;
+    questionId?: string;
+    questionText?: string;
+    duration?: number;
+}
+
+export const useMemories = () => {
+    const [isUploading, setIsUploading] = useState(false);
+    const [uploadProgress, setUploadProgress] = useState(0);
+    const [error, setError] = useState<string | null>(null);
+
+    const uploadMemory = useCallback(async (blob: Blob, metadata: MemoryMetadata) => {
+        if (!metadata.circleId || !metadata.createdByUid) {
+            setError('Missing required metadata (circleId or uid)');
+            return null;
+        }
+
+        setIsUploading(true);
+        setUploadProgress(0);
+        setError(null);
+
+        try {
+            // 1. Generate unique file name
+            const timestamp = Date.now();
+            const extension = metadata.type === 'audio' ? 'webm' : 'jpg';
+            const fileName = `memories/${metadata.circleId}/${metadata.type}_${timestamp}.${extension}`;
+            const storageRef = ref(storage, fileName);
+
+            // 2. Upload to Firebase Storage
+            const uploadTask = uploadBytesResumable(storageRef, blob);
+
+            return new Promise<string | null>((resolve, reject) => {
+                uploadTask.on(
+                    'state_changed',
+                    (snapshot) => {
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        setUploadProgress(progress);
+                    },
+                    (err) => {
+                        console.error('Upload error:', err);
+                        setError(err.message);
+                        setIsUploading(false);
+                        reject(err);
+                    },
+                    async () => {
+                        try {
+                            // 3. Get Download URL
+                            const downloadUrl = await getDownloadURL(uploadTask.snapshot.ref);
+
+                            // 4. Save to Firestore
+                            const memoriesRef = collection(db, 'careCircles', metadata.circleId, 'memories');
+                            await addDoc(memoriesRef, {
+                                ...metadata,
+                                url: downloadUrl,
+                                storagePath: fileName,
+                                createdAt: serverTimestamp(),
+                            });
+
+                            setIsUploading(false);
+                            setUploadProgress(100);
+                            resolve(downloadUrl);
+                        } catch (err: any) {
+                            console.error('Firestore save error:', err);
+                            setError(err.message);
+                            setIsUploading(false);
+                            reject(err);
+                        }
+                    }
+                );
+            });
+        } catch (err: any) {
+            console.error('Memory upload error initiation:', err);
+            setError(err.message);
+            setIsUploading(false);
+            return null;
+        }
+    }, []);
+
+    return {
+        uploadMemory,
+        isUploading,
+        uploadProgress,
+        error
+    };
+};
+
+```
+---
+
+## File: tryg-app\src\features\photos\index.ts
+```ts
 // Photos Feature - Public API
 export { PhotoCaptureButton, PhotoUploadModal, PhotoViewerModal, PhotoNotificationBadge } from './PhotoShare';
 export { usePhotos } from './usePhotos';
@@ -7616,7 +9617,7 @@ export { usePhotos } from './usePhotos';
 
 import React, { useState, useRef } from 'react';
 import { Camera, Trash2, Loader2, Image as ImageIcon } from 'lucide-react';
-import { Photo } from './usePhotos';
+import { Photo } from '../../types';
 
 interface PhotoCaptureButtonProps {
     onCapture: (file: File) => void;
@@ -7683,15 +9684,17 @@ export const PhotoUploadModal: React.FC<PhotoUploadModalProps> = ({ isOpen }) =>
 };
 
 interface PhotoViewerModalProps {
+    isOpen: boolean;
+    onClose: () => void;
     photo: Photo | null;
-    onDelete: (id: string, storagePath: string) => Promise<void>;
+    onDelete: (id: string, storagePath?: string) => Promise<void>;
 }
 
 // Photo viewer modal (for recipient)
-export const PhotoViewerModal: React.FC<PhotoViewerModalProps> = ({ photo, onDelete }) => {
+export const PhotoViewerModal: React.FC<PhotoViewerModalProps> = ({ isOpen, onClose, photo, onDelete }) => {
     const [deleting, setDeleting] = useState(false);
 
-    if (!photo) return null;
+    if (!isOpen || !photo) return null;
 
     const handleDelete = async () => {
         setDeleting(true);
@@ -7723,6 +9726,14 @@ export const PhotoViewerModal: React.FC<PhotoViewerModalProps> = ({ photo, onDel
                             {formatDate(photo.uploadedAt)}
                         </p>
                     </div>
+                    <button
+                        onClick={onClose}
+                        className="p-2 text-white/70 hover:text-white transition-colors"
+                    >
+                        <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
                 </div>
             </div>
 
@@ -7813,8 +9824,7 @@ import {
     serverTimestamp,
     query,
     orderBy,
-    limit,
-    Timestamp
+    limit
 } from 'firebase/firestore';
 import {
     ref,
@@ -7825,16 +9835,7 @@ import {
 import { db, storage } from '../../config/firebase';
 import { resizeImage } from '../../utils/imageUtils';
 
-export interface Photo {
-    id: string;
-    imageUrl: string;
-    storagePath?: string;
-    fromUserId: string;
-    fromName: string;
-    uploadedAt: any; // Firestore Timestamp
-    viewedAt?: any; // Firestore Timestamp
-    [key: string]: any;
-}
+import { Photo } from '../../types';
 
 export function usePhotos(circleId: string | null, currentUserId: string | null) {
     const [photos, setPhotos] = useState<Photo[]>([]);
@@ -7987,6 +9988,7 @@ export default usePhotos;
 ```tsx
 import React, { useState } from 'react';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export interface SeverityLevel {
     id: 'mild' | 'moderate' | 'severe';
@@ -8003,6 +10005,27 @@ export interface BodyRegion {
 }
 
 // Body regions for pain mapping - ordered anatomically (top → bottom)
+// Returns localized labels using translation function
+export const getBodyRegions = (t: (key: string) => string): BodyRegion[] => [
+    { id: 'head', label: t('body_head'), emoji: '🧠' },
+    { id: 'neck', label: t('body_neck'), emoji: '🦴' },
+    { id: 'chest', label: t('body_chest'), emoji: '❤️' },
+    { id: 'back', label: t('body_back'), emoji: '🔙' },
+    { id: 'stomach', label: t('body_stomach'), emoji: '🤢' },
+    { id: 'leftArm', label: t('body_left_arm'), emoji: '💪' },
+    { id: 'rightArm', label: t('body_right_arm'), emoji: '💪' },
+    { id: 'leftLeg', label: t('body_left_leg'), emoji: '🦵' },
+    { id: 'rightLeg', label: t('body_right_leg'), emoji: '🦵' },
+];
+
+// Pain severity levels - simple 3-level scale (localized)
+export const getSeverityLevels = (t: (key: string) => string): SeverityLevel[] => [
+    { id: 'mild', label: t('severity_mild'), emoji: '🙂', color: 'bg-green-100 border-green-400 text-green-700' },
+    { id: 'moderate', label: t('severity_moderate'), emoji: '😐', color: 'bg-amber-100 border-amber-400 text-amber-700' },
+    { id: 'severe', label: t('severity_severe'), emoji: '😣', color: 'bg-rose-100 border-rose-400 text-rose-700' },
+];
+
+// Keep the old exports for backwards compatibility (Danish fallback)
 export const BODY_REGIONS: BodyRegion[] = [
     { id: 'head', label: 'Hoved', emoji: '🧠' },
     { id: 'neck', label: 'Nakke', emoji: '🦴' },
@@ -8015,7 +10038,6 @@ export const BODY_REGIONS: BodyRegion[] = [
     { id: 'rightLeg', label: 'Højre ben', emoji: '🦵' },
 ];
 
-// Pain severity levels - simple 3-level scale
 export const SEVERITY_LEVELS: SeverityLevel[] = [
     { id: 'mild', label: 'Lidt', emoji: '🙂', color: 'bg-green-100 border-green-400 text-green-700' },
     { id: 'moderate', label: 'Noget', emoji: '😐', color: 'bg-amber-100 border-amber-400 text-amber-700' },
@@ -8029,9 +10051,14 @@ interface BodyPainSelectorProps {
 
 // Two-step selector: body location → severity
 export const BodyPainSelector: React.FC<BodyPainSelectorProps> = ({ onSelectLocation, onBack }) => {
+    const { t } = useTranslation();
     const [step, setStep] = useState(1); // 1 = location, 2 = severity
     const [selectedLocation, setSelectedLocation] = useState<BodyRegion | null>(null);
     const [selectedSeverity, setSelectedSeverity] = useState<SeverityLevel | null>(null);
+
+    // Get localized regions and severity levels
+    const bodyRegions = getBodyRegions(t);
+    const severityLevels = getSeverityLevels(t);
 
     const handleLocationSelect = (region: BodyRegion) => {
         setSelectedLocation(region);
@@ -8068,11 +10095,11 @@ export const BodyPainSelector: React.FC<BodyPainSelectorProps> = ({ onSelectLoca
                 // Step 1: Body location selection
                 <>
                     <p className="text-lg text-center text-stone-600 mb-4">
-                        Hvor gør det ondt?
+                        {t('where_does_it_hurt')}
                     </p>
 
                     <div className="grid grid-cols-2 gap-3 mb-4">
-                        {BODY_REGIONS.map(region => (
+                        {bodyRegions.map(region => (
                             <button
                                 key={region.id}
                                 onClick={() => handleLocationSelect(region)}
@@ -8080,7 +10107,7 @@ export const BodyPainSelector: React.FC<BodyPainSelectorProps> = ({ onSelectLoca
                                     flex items-center gap-3 text-left
                                     bg-white border-stone-200 hover:border-rose-300 hover:bg-rose-50
                                     focus:outline-none focus:ring-2 focus:ring-rose-400 focus:ring-offset-2"
-                                aria-label={`Vælg ${region.label}`}
+                                aria-label={t('select_location', { label: region.label })}
                             >
                                 <span className="text-2xl">{region.emoji}</span>
                                 <span className="font-semibold text-stone-700">{region.label}</span>
@@ -8091,10 +10118,10 @@ export const BodyPainSelector: React.FC<BodyPainSelectorProps> = ({ onSelectLoca
                     <button
                         onClick={onBack}
                         className="w-full p-3 text-stone-500 text-sm hover:text-stone-700 focus:outline-none focus:ring-2 focus:ring-stone-300"
-                        aria-label="Gå tilbage til symptomvalg"
+                        aria-label={t('go_back_symptom_selection')}
                     >
                         <ChevronLeft className="w-4 h-4 inline mr-1" />
-                        Tilbage
+                        {t('back')}
                     </button>
                 </>
             ) : (
@@ -8103,12 +10130,12 @@ export const BodyPainSelector: React.FC<BodyPainSelectorProps> = ({ onSelectLoca
                     <div className="text-center mb-4">
                         <span className="text-3xl">{selectedLocation?.emoji}</span>
                         <p className="text-lg text-stone-600 mt-2">
-                            Hvor ondt gør det i <span className="font-bold text-rose-600">{selectedLocation?.label.toLowerCase()}</span>?
+                            {t('pain_how_much', { location: selectedLocation?.label.toLowerCase() })}
                         </p>
                     </div>
 
                     <div className="space-y-3 mb-4">
-                        {SEVERITY_LEVELS.map(level => (
+                        {severityLevels.map(level => (
                             <button
                                 key={level.id}
                                 onClick={() => handleSeveritySelect(level)}
@@ -8121,7 +10148,7 @@ export const BodyPainSelector: React.FC<BodyPainSelectorProps> = ({ onSelectLoca
                                         : 'bg-white border-stone-200 hover:bg-stone-50'
                                     }
                                 `}
-                                aria-label={`Smerte niveau: ${level.label}`}
+                                aria-label={t('pain_level_label', { level: level.label })}
                             >
                                 <span className="text-4xl">{level.emoji}</span>
                                 <span>{level.label}</span>
@@ -8136,9 +10163,9 @@ export const BodyPainSelector: React.FC<BodyPainSelectorProps> = ({ onSelectLoca
                             className="w-full p-4 bg-rose-500 text-white rounded-2xl font-bold text-lg 
                                 flex items-center justify-center gap-2 hover:bg-rose-600 
                                 transition-colors focus:outline-none focus:ring-2 focus:ring-rose-400 focus:ring-offset-2"
-                            aria-label="Bekræft symptomregistrering"
+                            aria-label={t('confirm')}
                         >
-                            Bekræft
+                            {t('confirm')}
                             <ChevronRight className="w-5 h-5" />
                         </button>
                     )}
@@ -8147,10 +10174,10 @@ export const BodyPainSelector: React.FC<BodyPainSelectorProps> = ({ onSelectLoca
                         onClick={handleBackToLocation}
                         className="w-full p-3 text-stone-500 text-sm hover:text-stone-700 
                             focus:outline-none focus:ring-2 focus:ring-stone-300"
-                        aria-label="Vælg et andet sted"
+                        aria-label={t('select_another_location')}
                     >
                         <ChevronLeft className="w-4 h-4 inline mr-1" />
-                        Vælg et andet sted
+                        {t('select_another_location')}
                     </button>
                 </>
             )}
@@ -8180,8 +10207,8 @@ export default BodyPainSelector;
 ```
 ---
 
-## File: tryg-app\src\features\symptoms\index.js
-```js
+## File: tryg-app\src\features\symptoms\index.ts
+```ts
 // Symptoms Feature - Public API
 export { BodyPainSelector } from './BodyPainSelector';
 export { SymptomSummary } from './SymptomSummary';
@@ -8194,8 +10221,8 @@ export { useSymptoms } from './useSymptoms';
 ```tsx
 import React, { useState, useMemo } from 'react';
 import { AlertCircle, ChevronDown, ChevronUp, TrendingUp, TrendingDown, Phone, Calendar } from 'lucide-react';
-import { SYMPTOMS_LIST } from '../../data/constants';
-import { SymptomLog } from './useSymptoms';
+import { useTranslation } from 'react-i18next';
+import { SymptomLog } from '../../types';
 
 interface TrendAnalysis {
     trend: 'none' | 'warning' | 'increasing' | 'decreasing' | 'stable';
@@ -8229,7 +10256,7 @@ const isWithinDays = (timestamp: any, days: number) => {
 };
 
 // Get trend analysis for symptoms
-const analyzeTrend = (symptoms: SymptomLog[]): TrendAnalysis => {
+const analyzeTrend = (symptoms: SymptomLog[], t: any): TrendAnalysis => {
     if (symptoms.length === 0) return { trend: 'none', message: null, cta: null };
 
     // Count symptoms by day for last 7 days
@@ -8247,30 +10274,30 @@ const analyzeTrend = (symptoms: SymptomLog[]): TrendAnalysis => {
     if (severeCount >= 2) {
         return {
             trend: 'warning',
-            message: `${severeCount} alvorlige symptomer denne uge`,
-            cta: { icon: Phone, text: 'Overvej at kontakte læge', action: 'call' }
+            message: t('severe_symptoms_count', { count: severeCount }),
+            cta: { icon: Phone, text: t('contact_doctor_cta'), action: 'call' }
         };
     }
 
     if (last3Days > prev4Days * 1.5 && last3Days >= 3) {
         return {
             trend: 'increasing',
-            message: 'Flere symptomer de seneste dage',
-            cta: { icon: Calendar, text: 'Book tid hos læge?', action: 'book' }
+            message: t('increasing_symptoms_msg'),
+            cta: { icon: Calendar, text: t('book_doctor_cta'), action: 'book' }
         };
     }
 
     if (last3Days < prev4Days * 0.5) {
         return {
             trend: 'decreasing',
-            message: 'Symptomerne aftager 👍',
+            message: t('decreasing_symptoms_msg'),
             cta: null
         };
     }
 
     return {
         trend: 'stable',
-        message: `${symptoms.length} symptomer denne uge`,
+        message: t('stable_symptoms_msg', { count: symptoms.length }),
         cta: null
     };
 };
@@ -8283,6 +10310,7 @@ interface SymptomSummaryProps {
 
 // Symptom Summary Card - shows today's symptoms with 7-day overview
 export const SymptomSummary: React.FC<SymptomSummaryProps> = ({ symptomLogs = [], onViewReport, hideTitle = false }) => {
+    const { t } = useTranslation();
     const [showOlder, setShowOlder] = useState(false);
 
     // Split symptoms
@@ -8294,7 +10322,7 @@ export const SymptomSummary: React.FC<SymptomSummaryProps> = ({ symptomLogs = []
 
     // Get trend analysis
     const weeklySymptoms = symptomLogs.filter(s => isWithinDays(s.loggedAt, 7));
-    const trend = useMemo(() => analyzeTrend(weeklySymptoms), [weeklySymptoms]);
+    const trend = useMemo(() => analyzeTrend(weeklySymptoms, t), [weeklySymptoms, t]);
 
     // Count symptoms by type for summary
     const symptomCounts = useMemo(() => {
@@ -8318,7 +10346,7 @@ export const SymptomSummary: React.FC<SymptomSummaryProps> = ({ symptomLogs = []
                     {!hideTitle && (
                         <h4 className="text-orange-800 font-bold flex items-center gap-2 mb-2">
                             <AlertCircle className="w-5 h-5" />
-                            Symptomer i dag ({todaySymptoms.length})
+                            {t('symptoms_today_count', { count: todaySymptoms.length })}
                         </h4>
                     )}
                     <div className="space-y-2">
@@ -8357,7 +10385,7 @@ export const SymptomSummary: React.FC<SymptomSummaryProps> = ({ symptomLogs = []
                             {trend.trend === 'stable' && <AlertCircle className="w-4 h-4" />}
                             {trend.trend === 'warning' && <AlertCircle className="w-4 h-4 text-red-500" />}
                             <span className="font-medium">
-                                {trend.message || `${weekSymptoms.length} symptomer denne uge`}
+                                {trend.message || t('symptoms_this_week', { count: weekSymptoms.length })}
                             </span>
                         </div>
                         {showOlder ? (
@@ -8435,7 +10463,7 @@ export const SymptomSummary: React.FC<SymptomSummaryProps> = ({ symptomLogs = []
                     onClick={onViewReport}
                     className="w-full text-center text-xs text-orange-500 hover:text-orange-700 transition-colors"
                 >
-                    Se fuld symptom-historik →
+                    {t('see_full_history')}
                 </button>
             )}
         </div>
@@ -8467,35 +10495,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../../config/firebase';
 
-export interface Severity {
-    id: 'mild' | 'moderate' | 'severe';
-    label: string;
-    emoji: string;
-    level: number;
-}
-
-export interface BodyLocation {
-    id: string;
-    label: string;
-    emoji: string;
-    severity?: Severity;
-}
-
-export interface SymptomLog {
-    id: string;
-    label?: string;
-    color?: string;
-    bodyLocation?: BodyLocation;
-    time: string;
-    date: string;
-    loggedAt?: any; // Firestore Timestamp
-    [key: string]: any;
-}
-
-export interface SymptomStats {
-    count: number;
-    lastOccurrence: string | null;
-}
+import { SymptomLog, SymptomStats } from '../../types';
 
 export function useSymptoms(circleId: string | null) {
     const [symptoms, setSymptoms] = useState<SymptomLog[]>([]);
@@ -8536,11 +10536,12 @@ export function useSymptoms(circleId: string | null) {
     // React components and their Symbol properties are NOT safe
     const SAFE_SYMPTOM_FIELDS = ['id', 'label', 'color', 'bodyLocation'];
 
-    const sanitizeSymptomData = (data: any) => {
-        const clean: any = {};
+    const sanitizeSymptomData = (data: Partial<SymptomLog>) => {
+        const clean: Record<string, any> = {};
         SAFE_SYMPTOM_FIELDS.forEach(key => {
-            if (data[key] !== undefined && typeof data[key] !== 'function' && typeof data[key] !== 'symbol') {
-                clean[key] = data[key];
+            const val = (data as any)[key];
+            if (val !== undefined && typeof val !== 'function' && typeof val !== 'symbol') {
+                clean[key] = val;
             }
         });
         return clean;
@@ -8626,8 +10627,8 @@ export default useSymptoms;
 ```
 ---
 
-## File: tryg-app\src\features\tasks\index.js
-```js
+## File: tryg-app\src\features\tasks\index.ts
+```ts
 // Tasks Feature - Public API
 export { ProgressRing, InlineGatesIndicator } from './ProgressRing';
 export { TimePickerModal } from './TimePickerModal';
@@ -8638,9 +10639,8 @@ export { useTasks } from './useTasks';
 
 ## File: tryg-app\src\features\tasks\ProgressRing.tsx
 ```tsx
-import React from 'react';
-// We assume Task is exported from useTasks. If not, we might need to view useTasks.ts, but standard practice is to export interfaces.
-import { Task } from './useTasks';
+import { Task } from '../../types';
+import { cn } from '../../lib/utils';
 
 /**
  * ProgressRing - A 3-segment ring showing daily progress with color-coded compliance
@@ -8776,8 +10776,15 @@ export const ProgressRing: React.FC<ProgressRingProps> = ({
 
     return (
         <div className={`relative inline-flex flex-col items-center ${className}`}>
-            {/* SVG Ring */}
-            <svg width={size} height={size} className="transform -rotate-90">
+            {/* SVG Ring with celebratory glow at 100% */}
+            <svg
+                width={size}
+                height={size}
+                className={cn(
+                    "transform -rotate-90 transition-all duration-1000",
+                    progressPercent === 100 && "drop-shadow-[0_0_8px_rgba(16,185,129,0.5)]"
+                )}
+            >
                 {/* Background ring */}
                 <circle
                     cx={size / 2}
@@ -8789,7 +10796,7 @@ export const ProgressRing: React.FC<ProgressRingProps> = ({
                 />
 
                 {/* Colored segments */}
-                {segments.map((seg, i) => (
+                {segments.map((seg) => (
                     <circle
                         key={seg.period}
                         cx={size / 2}
@@ -8838,7 +10845,7 @@ interface ProgressRingCompactProps {
 /**
  * Compact version for inline use
  */
-export const ProgressRingCompact: React.FC<ProgressRingCompactProps> = ({ tasks = [], size = 48 }) => {
+export const ProgressRingCompact: React.FC<ProgressRingCompactProps> = ({ tasks = [] }) => {
     const currentHour = new Date().getHours();
     const segments = (['morgen', 'eftermiddag', 'aften'] as Period[]).map(period =>
         getSegmentStatus(tasks, period, currentHour)
@@ -8846,7 +10853,6 @@ export const ProgressRingCompact: React.FC<ProgressRingCompactProps> = ({ tasks 
 
     const hasOverdue = segments.includes('overdue');
     const hasLate = segments.includes('late');
-    const allGood = !hasOverdue && !hasLate;
 
     const borderColor = hasOverdue ? 'border-red-400' : hasLate ? 'border-yellow-400' : 'border-green-400';
     const bgColor = hasOverdue ? 'bg-red-50' : hasLate ? 'bg-yellow-50' : 'bg-green-50';
@@ -8924,10 +10930,134 @@ export default ProgressRing;
 ```
 ---
 
+## File: tryg-app\src\features\tasks\TaskCard.tsx
+```tsx
+import { cva } from 'class-variance-authority';
+import { CheckCircle, Pill, Activity, Sun, Clock, Heart } from 'lucide-react';
+import { cn } from '../../lib/utils';
+import { Task } from '../../types';
+
+/**
+ * Task card container variants
+ */
+const cardVariants = cva(
+    "relative p-4 rounded-2xl border-2 transition-all duration-300 cursor-pointer",
+    {
+        variants: {
+            state: {
+                completed: "bg-stone-100 border-stone-200",
+                pending: "bg-white border-stone-200 shadow-sm hover:border-teal-400",
+            },
+        },
+        defaultVariants: {
+            state: "pending",
+        },
+    }
+);
+
+const iconContainerVariants = cva(
+    "w-16 h-16 rounded-2xl flex items-center justify-center shadow-inner",
+    {
+        variants: {
+            state: {
+                completed: "bg-stone-200 text-stone-400",
+                pending: "bg-blue-50 text-blue-600",
+            },
+        },
+        defaultVariants: {
+            state: "pending",
+        },
+    }
+);
+
+const checkboxVariants = cva(
+    "w-12 h-12 rounded-full border-4 flex items-center justify-center transition-colors",
+    {
+        variants: {
+            state: {
+                completed: "bg-teal-500 border-teal-500",
+                pending: "border-stone-200 bg-white",
+            },
+        },
+        defaultVariants: {
+            state: "pending",
+        },
+    }
+);
+
+interface TaskCardProps {
+    task: Task;
+    onToggle: () => void;
+}
+
+const TASK_ICONS: Record<string, React.ElementType> = {
+    medication: Pill,
+    hydration: Activity,
+    activity: Sun,
+    appointment: Clock,
+};
+
+export const TaskCard: React.FC<TaskCardProps> = ({ task, onToggle }) => {
+    const state = task.completed ? 'completed' : 'pending';
+    const Icon = TASK_ICONS[task.type || 'activity'] || Sun;
+
+    return (
+        <div
+            onClick={onToggle}
+            className={cn(cardVariants({ state }))}
+        >
+            <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                    {/* Pictogram Container */}
+                    <div className={cn(iconContainerVariants({ state }))}>
+                        <Icon className="w-8 h-8" />
+                    </div>
+
+                    <div>
+                        <div className="flex items-center gap-2 flex-wrap">
+                            <h3 className={cn(
+                                "text-xl font-bold",
+                                task.completed ? "text-stone-500 line-through" : "text-stone-800"
+                            )}>
+                                {task.title}
+                            </h3>
+                            {/* Social Attribution Stamp */}
+                            {task.createdByRole === 'relative' && task.createdByName && (
+                                <span className="inline-flex items-center gap-1 bg-indigo-50 px-2 py-0.5 rounded-lg">
+                                    <Heart className="w-3 h-3 text-indigo-500 fill-indigo-200" />
+                                    <span className="text-[10px] text-indigo-700 font-medium">Fra {task.createdByName}</span>
+                                </span>
+                            )}
+                        </div>
+                        <p className="text-stone-500 font-medium">{task.time}</p>
+                    </div>
+                </div>
+
+                {/* Checkbox with celebration animation */}
+                <div className={cn(
+                    checkboxVariants({ state }),
+                    task.completed && 'animate-celebrate relative'
+                )}>
+                    {task.completed && <CheckCircle className="text-white w-8 h-8" />}
+                    {/* Celebration ring burst */}
+                    {task.completed && (
+                        <span className="absolute inset-0 rounded-full border-2 border-teal-400 animate-ping opacity-75" />
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export { cardVariants, iconContainerVariants, checkboxVariants };
+
+```
+---
+
 ## File: tryg-app\src\features\tasks\TimePickerModal.tsx
 ```tsx
-import React, { useState } from 'react';
-import { X, Clock, Phone, Calendar } from 'lucide-react';
+import { useState } from 'react';
+import { X, Clock, Phone } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 
 interface TimeConfirmData {
@@ -9062,7 +11192,9 @@ import { useState, useEffect, useCallback } from 'react';
 import {
     collection,
     doc,
+    getDoc,
     setDoc,
+    updateDoc,
     deleteDoc,
     onSnapshot,
     serverTimestamp,
@@ -9072,17 +11204,7 @@ import {
 import { db } from '../../config/firebase';
 import { INITIAL_TASKS } from '../../data/constants';
 
-export interface Task {
-    id: string;
-    title: string;
-    period: string;
-    time: string;
-    emoji: string;
-    completed: boolean;
-    createdAt?: any;
-    completedAt?: any;
-    [key: string]: any; // Allow other props
-}
+import { Task } from '../../types';
 
 export function useTasks(circleId: string | null) {
     const [tasks, setTasks] = useState<Task[]>([]);
@@ -9123,6 +11245,61 @@ export function useTasks(circleId: string | null) {
 
         return () => unsubscribe();
     }, [circleId]);
+
+    // Check for daily reset on load
+    useEffect(() => {
+        if (circleId && tasks.length > 0) {
+            checkDailyReset(circleId, tasks);
+        }
+    }, [circleId, tasks.length > 0]);
+
+    const checkDailyReset = async (cId: string, currentTasks: Task[]) => {
+        try {
+            const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+            const circleRef = doc(db, 'careCircles', cId);
+            const circleDoc = await getDoc(circleRef);
+
+            if (circleDoc.exists()) {
+                const data = circleDoc.data();
+                if (data.lastResetDate !== today) {
+                    console.log('🌅 New day detected! Resetting daily tasks...');
+                    await performDailyReset(cId, currentTasks, today);
+                }
+            }
+        } catch (err) {
+            console.error('Error checking daily reset:', err);
+        }
+    };
+
+    const performDailyReset = async (cId: string, currentTasks: Task[], dateStr: string) => {
+        try {
+            // 1. Reset all recurring tasks
+            for (const task of currentTasks) {
+                // Medication tasks are recurring by default
+                const isMedication = task.type === 'medication' || task.title?.toLowerCase().includes('medicin');
+                const isRecurring = task.recurring || isMedication;
+
+                if (isRecurring) {
+                    const docId = task.id.startsWith('task_') ? task.id : `task_${task.id}`;
+                    await updateDoc(doc(db, 'careCircles', cId, 'tasks', docId), {
+                        completed: false,
+                        completedAt: null
+                    });
+                } else if (task.completed) {
+                    // Optional: Archive or delete old non-recurring tasks
+                    // For now, we'll just leave them or you could delete them if they are older than 24h
+                }
+            }
+
+            // 2. Update the reset date
+            await updateDoc(doc(db, 'careCircles', cId), {
+                lastResetDate: dateStr
+            });
+            console.log('✅ Daily reset complete for', dateStr);
+        } catch (err) {
+            console.error('Error performing daily reset:', err);
+        }
+    };
 
     // Initialize default tasks for new circles
     const initializeDefaultTasks = async (cId: string) => {
@@ -9181,6 +11358,7 @@ export function useTasks(circleId: string | null) {
                 ...newTask,
                 time: newTask.time || (newTask.period ? defaultTimes[newTask.period] : '12:00'),
                 completed: false,
+                recurring: newTask.recurring || false,
                 createdAt: serverTimestamp(),
                 completedAt: null,
             });
@@ -9242,8 +11420,8 @@ export default useTasks;
 ```
 ---
 
-## File: tryg-app\src\features\thinkingOfYou\index.js
-```js
+## File: tryg-app\src\features\thinkingOfYou\index.ts
+```ts
 // Thinking of You Feature - Public API
 export { ThinkingOfYouButton, ThinkingOfYouIconButton, PingNotification } from './ThinkingOfYou';
 export { usePings } from './usePings';
@@ -9255,57 +11433,89 @@ export { usePings } from './usePings';
 ```tsx
 import React, { useState, useEffect } from 'react';
 import { Heart, Sparkles } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 // @ts-ignore - sounds util not converted yet
 import { playPingSound } from '../../utils/sounds';
 import { Avatar } from '../../components/ui/Avatar';
-import { Ping } from './usePings';
+import { Ping } from '../../types';
 
-interface ThinkingOfYouButtonProps {
-    onSendPing?: () => void;
-    fromName?: string;
+interface FloatingHeart {
+    id: number;
+    x: number;
+    size: number;
+    duration: number;
 }
 
 // "Thinking of you" ping button - one-tap warmth without obligation
-export const ThinkingOfYouButton: React.FC<ThinkingOfYouButtonProps> = ({ onSendPing, fromName = 'Louise' }) => {
+export const ThinkingOfYouButton: React.FC<{ onSendPing?: () => void, fromName?: string }> = ({ onSendPing }) => {
     const [isSending, setIsSending] = useState(false);
+    const [floatingHearts, setFloatingHearts] = useState<FloatingHeart[]>([]);
 
     const handleSend = () => {
         setIsSending(true);
         playPingSound();
         onSendPing?.();
 
-        // Reset animation after 1.5s
-        setTimeout(() => setIsSending(false), 1500);
+        // Create 5 random floating hearts
+        const newHearts = Array.from({ length: 5 }).map((_, i) => ({
+            id: Date.now() + i,
+            x: Math.random() * 200 - 100, // Range -100 to 100
+            size: 15 + Math.random() * 15,
+            duration: 1.5 + Math.random() * 1.5
+        }));
+        setFloatingHearts(newHearts);
+
+        // Reset animation states
+        setTimeout(() => setIsSending(false), 2000);
+        setTimeout(() => setFloatingHearts([]), 3000);
     };
 
     return (
-        <button
-            onClick={handleSend}
-            disabled={isSending}
-            className={`
-                w-full p-4 rounded-2xl border-2 transition-all duration-300
-                flex items-center justify-center gap-3
-                ${isSending
-                    ? 'bg-pink-100 border-pink-300 scale-95'
-                    : 'bg-white border-pink-200 hover:border-pink-400 hover:bg-pink-50 active:scale-95'
-                }
-            `}
-        >
-            <div className={`
-                relative transition-transform duration-300
-                ${isSending ? 'scale-125' : ''}
-            `}>
-                <Heart
-                    className={`w-8 h-8 transition-all duration-300 ${isSending ? 'text-pink-500 fill-pink-500' : 'text-pink-400'}`}
-                />
-                {isSending && (
-                    <Sparkles className="absolute -top-1 -right-1 w-4 h-4 text-pink-400 animate-ping" />
-                )}
-            </div>
-            <span className={`font-semibold text-lg ${isSending ? 'text-pink-600' : 'text-pink-500'}`}>
-                {isSending ? 'Sendt! ❤️' : 'Tænker på dig'}
-            </span>
-        </button>
+        <div className="relative w-full">
+            <AnimatePresence>
+                {floatingHearts.map(heart => (
+                    <motion.div
+                        key={heart.id}
+                        initial={{ opacity: 0, y: 0, x: 0 }}
+                        animate={{ opacity: 1, y: -200, x: heart.x }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: heart.duration, ease: "easeOut" }}
+                        className="absolute left-1/2 top-0 pointer-events-none z-50"
+                        style={{ marginLeft: -15 }}
+                    >
+                        <Heart
+                            className="text-pink-400 fill-pink-400"
+                            size={heart.size}
+                        />
+                    </motion.div>
+                ))}
+            </AnimatePresence>
+
+            <button
+                onClick={handleSend}
+                disabled={isSending}
+                className={`
+                    w-full p-4 rounded-2xl border-2 transition-all duration-300
+                    flex items-center justify-center gap-3
+                    ${isSending
+                        ? 'bg-pink-100 border-pink-300 scale-95 shadow-inner'
+                        : 'bg-white border-pink-200 hover:border-pink-400 hover:bg-pink-50 active:scale-95 shadow-sm'
+                    }
+                `}
+            >
+                <div className={`relative ${isSending ? 'animate-celebrate' : ''}`}>
+                    <Heart
+                        className={`w-8 h-8 transition-all duration-300 ${isSending ? 'text-pink-500 fill-pink-500' : 'text-pink-400'}`}
+                    />
+                    {isSending && (
+                        <Sparkles className="absolute -top-1 -right-1 w-4 h-4 text-pink-400 animate-glow" />
+                    )}
+                </div>
+                <span className={`font-semibold text-xl ${isSending ? 'text-pink-600' : 'text-pink-500'}`}>
+                    {isSending ? 'Sendt! ❤️' : 'Tænker på dig'}
+                </span>
+            </button>
+        </div>
     );
 };
 
@@ -9387,8 +11597,12 @@ export const PingNotification: React.FC<PingNotificationProps> = ({ ping, onDism
                         <Avatar id={ping.fromName?.toLowerCase() || 'louise'} size="md" className="border-2 border-white/50" />
                     </div>
                     <div>
-                        <p className="font-bold">{ping.fromName} tænker på dig ❤️</p>
-                        <p className="text-pink-100 text-sm">{ping.time}</p>
+                        <p className="font-bold">
+                            {ping.message || `${ping.fromName} tænker på dig ❤️`}
+                        </p>
+                        <p className="text-pink-100 text-sm">
+                            {ping.sentAt?.toLocaleTimeString?.('da-DK', { hour: '2-digit', minute: '2-digit' })}
+                        </p>
                     </div>
                 </div>
             </div>
@@ -9416,19 +11630,11 @@ import {
     serverTimestamp,
     query,
     orderBy,
-    limit,
-    Timestamp
+    limit
 } from 'firebase/firestore';
 import { db } from '../../config/firebase';
 
-export interface Ping {
-    id: string;
-    fromName: string;
-    fromUserId: string;
-    toRole: 'senior' | 'relative';
-    sentAt: Date;
-    toUserId?: string;
-}
+import { Ping } from '../../types';
 
 export function usePings(circleId: string | null, currentUserId: string | null) {
     const [pings, setPings] = useState<Ping[]>([]);
@@ -9465,7 +11671,9 @@ export function usePings(circleId: string | null, currentUserId: string | null) 
                         fromUserId: data.fromUserId,
                         toRole: data.toRole as 'senior' | 'relative',
                         sentAt,
-                        toUserId: data.toUserId
+                        toUserId: data.toUserId,
+                        type: data.type,
+                        message: data.message
                     };
                 });
 
@@ -9498,18 +11706,19 @@ export function usePings(circleId: string | null, currentUserId: string | null) 
     }, [circleId, currentUserId]);
 
     // Send a ping
-    const sendPing = useCallback(async (fromName: string, fromUserId: string, toRole: 'senior' | 'relative') => {
-        if (!circleId) return;
+    const sendPing = useCallback(async (toView: 'senior' | 'relative', type: string = 'thinking_of_you', message: string = '') => {
+        if (!circleId || !currentUserId) return;
 
         const pingId = `ping_${Date.now()}`;
         const pingRef = doc(db, 'careCircles', circleId, 'pings', pingId);
 
         try {
             await setDoc(pingRef, {
-                fromName,
-                fromUserId,
-                toRole,
+                fromUserId: currentUserId,
+                toRole: toView,
                 sentAt: serverTimestamp(),
+                type,
+                message
             });
             return pingId;
         } catch (err: any) {
@@ -9539,8 +11748,8 @@ export default usePings;
 ```
 ---
 
-## File: tryg-app\src\features\weeklyQuestion\index.js
-```js
+## File: tryg-app\src\features\weeklyQuestion\index.ts
+```ts
 // Weekly Question Feature - Public API
 export { WeeklyQuestionCard, MemoryTrigger } from './WeeklyQuestion';
 export { WeeklyQuestionWidget, WeeklyQuestionModal } from './WeeklyQuestionWidget';
@@ -9564,19 +11773,14 @@ import {
     serverTimestamp,
     query,
     orderBy,
-    limit
+    limit,
+    updateDoc,
+    arrayUnion,
+    arrayRemove
 } from 'firebase/firestore';
 import { db } from '../../config/firebase';
 
-export interface WeeklyAnswer {
-    id: string;
-    questionId?: string;
-    text?: string;
-    userId?: string;
-    userName?: string;
-    answeredAt?: any; // Firestore Timestamp
-    [key: string]: any;
-}
+import { WeeklyAnswer, WeeklyReply } from '../../types';
 
 export function useWeeklyQuestions(circleId: string | null) {
     const [answers, setAnswers] = useState<WeeklyAnswer[]>([]);
@@ -9633,11 +11837,44 @@ export function useWeeklyQuestions(circleId: string | null) {
         }
     }, [circleId]);
 
+    // Toggle Like
+    const toggleLike = useCallback(async (answerId: string, userId: string, isLiked: boolean) => {
+        if (!circleId) return;
+        const answerRef = doc(db, 'careCircles', circleId, 'weeklyAnswers', answerId);
+        try {
+            await updateDoc(answerRef, {
+                likes: isLiked ? arrayRemove(userId) : arrayUnion(userId)
+            });
+        } catch (err) {
+            console.error('Error toggling like:', err);
+        }
+    }, [circleId]);
+
+    // Add Reply
+    const addReply = useCallback(async (answerId: string, reply: Omit<WeeklyReply, 'id'>) => {
+        if (!circleId) return;
+        const answerRef = doc(db, 'careCircles', circleId, 'weeklyAnswers', answerId);
+        const newReply: WeeklyReply = {
+            id: `reply_${Date.now()}`,
+            ...reply
+        };
+
+        try {
+            await updateDoc(answerRef, {
+                replies: arrayUnion(newReply)
+            });
+        } catch (err) {
+            console.error('Error adding reply:', err);
+        }
+    }, [circleId]);
+
     return {
         answers,
         loading,
         error,
         addAnswer,
+        toggleLike,
+        addReply
     };
 }
 
@@ -9650,18 +11887,12 @@ export default useWeeklyQuestions;
 ```tsx
 import React, { useState, useEffect } from 'react';
 import { MessageCircle, ChevronRight, Sparkles } from 'lucide-react';
-import { WeeklyAnswer } from './useWeeklyQuestions';
+import { WeeklyAnswer } from '../../types';
 
 // Weekly questions to rotate through
 export const WEEKLY_QUESTIONS = [
-    "Hvad var det bedste øjeblik denne uge?",
-    "Hvad glæder du dig til i denne uge?",
-    "Hvem tænker du på i dag?",
-    "Hvad har fået dig til at smile i dag?",
-    "Hvad er du taknemmelig for?",
-    "Hvad vil du gerne fortælle din familie?",
-    "Hvad har du lært denne uge?",
-    "Hvad savner du?",
+    "weekly_question_1",
+    "weekly_question_2"
 ];
 
 // Get week number of the year
@@ -9691,9 +11922,9 @@ export const WeeklyQuestionCard: React.FC<WeeklyQuestionCardProps> = ({ onAnswer
     const handleSubmit = () => {
         if (myAnswer.trim()) {
             onAnswer?.({
-                question,
-                answer: myAnswer.trim(),
-                timestamp: new Date().toISOString(),
+                questionId: question,
+                text: myAnswer.trim(),
+                userId: '', // Will be filled by handler
                 userName
             });
             setMyAnswer('');
@@ -9702,7 +11933,7 @@ export const WeeklyQuestionCard: React.FC<WeeklyQuestionCardProps> = ({ onAnswer
     };
 
     const hasAnsweredThisWeek = answers.some(a =>
-        a.question === question &&
+        a.questionId === question &&
         a.userName === userName
     );
 
@@ -9721,15 +11952,15 @@ export const WeeklyQuestionCard: React.FC<WeeklyQuestionCardProps> = ({ onAnswer
             {!isExpanded ? (
                 <>
                     {/* Show existing answers */}
-                    {answers.filter(a => a.question === question).length > 0 && (
+                    {answers.filter(a => a.questionId === question).length > 0 && (
                         <div className="space-y-2 mb-3">
                             {answers
-                                .filter(a => a.question === question)
+                                .filter(a => a.questionId === question)
                                 .slice(0, 3)
                                 .map((answer, i) => (
                                     <div key={i} className="bg-white/10 rounded-xl p-3">
                                         <p className="font-medium text-indigo-100">{answer.userName}:</p>
-                                        <p className="text-white/90 text-sm">{answer.answer}</p>
+                                        <p className="text-white/90 text-sm">{answer.text}</p>
                                     </div>
                                 ))}
                         </div>
@@ -9837,13 +12068,30 @@ export default WeeklyQuestionCard;
 
 ## File: tryg-app\src\features\weeklyQuestion\WeeklyQuestionWidget.tsx
 ```tsx
-// Compact Weekly Question widget for hero section
-// Shows notification badge when relative answers, opens modal on tap
-
 import React, { useState } from 'react';
-import { MessageCircle, X, ChevronRight, Sparkles } from 'lucide-react';
+import { MessageCircle, X, Check, Heart, MessageSquare, Send, Sparkles } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { WEEKLY_QUESTIONS, getWeekNumber } from './WeeklyQuestion';
-import { WeeklyAnswer } from './useWeeklyQuestions';
+import { WeeklyAnswer, WeeklyReply } from '../../types';
+import { AudioRecorder } from '../memories/AudioRecorder';
+import { Loader2, Mic, Play as PlayIcon } from 'lucide-react';
+
+// Simple time ago formatter (no external deps)
+const formatTimeAgo = (isoString: string, t: any) => {
+    if (!isoString) return '';
+    try {
+        const date = new Date(isoString);
+        const now = new Date();
+        const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+        if (diffInSeconds < 60) return t('just_now');
+        if (diffInSeconds < 3600) return t('minutes_ago', { count: Math.floor(diffInSeconds / 60) });
+        if (diffInSeconds < 86400) return t('hours_ago', { count: Math.floor(diffInSeconds / 3600) });
+        return t('days_ago_relative', { count: Math.floor(diffInSeconds / 86400) });
+    } catch (e) {
+        return '';
+    }
+};
 
 interface WeeklyQuestionWidgetProps {
     answers?: WeeklyAnswer[];
@@ -9854,16 +12102,17 @@ interface WeeklyQuestionWidgetProps {
 
 // Compact widget for header
 export const WeeklyQuestionWidget: React.FC<WeeklyQuestionWidgetProps> = ({ answers = [], userName, hasUnread = false, onClick }) => {
+    const { t } = useTranslation();
     const weekNumber = getWeekNumber();
-    const question = WEEKLY_QUESTIONS[weekNumber % WEEKLY_QUESTIONS.length];
-    const answersThisWeek = answers.filter(a => a.question === question);
+    const questionKey = WEEKLY_QUESTIONS[weekNumber % WEEKLY_QUESTIONS.length];
+    const answersThisWeek = answers.filter(a => a.questionId === questionKey);
     const unreadCount = hasUnread ? answersThisWeek.filter(a => a.userName !== userName).length : 0;
 
     return (
         <button
             onClick={onClick}
             className="relative bg-indigo-100 p-1.5 rounded-full hover:bg-indigo-200 transition-colors flex items-center justify-center shrink-0"
-            aria-label="Åbn ugens spørgsmål"
+            aria-label={t('open_weekly_question')}
             style={{ width: '36px', height: '36px' }}
         >
             <MessageCircle className="w-5 h-5 text-indigo-600" />
@@ -9882,27 +12131,89 @@ interface WeeklyQuestionModalProps {
     answers?: WeeklyAnswer[];
     onAnswer?: (answer: Omit<WeeklyAnswer, 'id'>) => void;
     userName: string;
+    currentUserId?: string;
+    onToggleLike?: (answerId: string, userId: string, isLiked: boolean) => void;
+    onReply?: (answerId: string, reply: Omit<WeeklyReply, 'id'>) => void;
 }
 
 // Full modal for answering and viewing
-export const WeeklyQuestionModal: React.FC<WeeklyQuestionModalProps> = ({ isOpen, onClose, answers = [], onAnswer, userName }) => {
+export const WeeklyQuestionModal: React.FC<WeeklyQuestionModalProps> = ({
+    isOpen,
+    onClose,
+    answers = [],
+    onAnswer,
+    userName,
+    currentUserId,
+    onToggleLike,
+    onReply
+}) => {
     const [myAnswer, setMyAnswer] = useState('');
+    const [replyText, setReplyText] = useState('');
+    const [replyingToId, setReplyingToId] = useState<string | null>(null);
+    const [answerType, setAnswerType] = useState<'text' | 'audio'>('text');
+    const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
+    const { t } = useTranslation();
+    const [isUploading] = useState(false); // Local state since audio upload isn't implemented yet
+
     const weekNumber = getWeekNumber();
-    const question = WEEKLY_QUESTIONS[weekNumber % WEEKLY_QUESTIONS.length];
+    const questionKey = WEEKLY_QUESTIONS[weekNumber % WEEKLY_QUESTIONS.length];
+    const question = t(questionKey);
 
-    const answersThisWeek = answers.filter(a => a.question === question);
+    // Filter answers for this week's question
+    const answersThisWeek = answers.filter(a => a.questionId === questionKey);
     const hasAnsweredThisWeek = answersThisWeek.some(a => a.userName === userName);
-    const otherAnswers = answersThisWeek.filter(a => a.userName !== userName);
 
-    const handleSubmit = () => {
-        if (myAnswer.trim()) {
+    // Sorting: Popularity (likes) -> Newest
+    const sortedAnswers = [...answersThisWeek].sort((a, b) => {
+        const likesA = a.likes?.length || 0;
+        const likesB = b.likes?.length || 0;
+        if (likesA !== likesB) return likesB - likesA; // Most likes first
+        // Fallback to time if available (newest first)
+        const timeA = a.answeredAt?.toMillis ? a.answeredAt.toMillis() : 0;
+        const timeB = b.answeredAt?.toMillis ? b.answeredAt.toMillis() : 0;
+        return timeB - timeA;
+    });
+
+    const handleSubmit = async () => {
+        if (answerType === 'text' && myAnswer.trim()) {
             onAnswer?.({
-                question,
-                answer: myAnswer.trim(),
-                timestamp: new Date().toISOString(),
+                questionId: questionKey,
+                text: myAnswer.trim(),
+                answeredAt: new Date(),
                 userName
             });
             setMyAnswer('');
+        } else if (answerType === 'audio' && audioBlob) {
+            // Audio submission logic will be handled here
+            onAnswer?.({
+                questionId: questionKey,
+                text: t('audio_answer_placeholder'),
+                answeredAt: new Date(),
+                userName
+            });
+            setAudioBlob(null);
+        }
+    };
+
+    const handleReplySubmit = (answerId: string) => {
+        if (!replyText.trim() || !currentUserId) return;
+
+        onReply?.(answerId, {
+            userId: currentUserId,
+            userName: userName,
+            text: replyText.trim(),
+            createdAt: new Date().toISOString()
+        });
+        setReplyText('');
+        setReplyingToId(null);
+    };
+
+    const toggleReplyInput = (answerId: string) => {
+        if (replyingToId === answerId) {
+            setReplyingToId(null);
+        } else {
+            setReplyingToId(answerId);
+            setReplyText('');
         }
     };
 
@@ -9920,7 +12231,7 @@ export const WeeklyQuestionModal: React.FC<WeeklyQuestionModalProps> = ({ isOpen
                         <div className="bg-indigo-100 p-2 rounded-full">
                             <MessageCircle className="w-5 h-5 text-indigo-600" />
                         </div>
-                        <span className="font-bold text-stone-800">Ugens spørgsmål</span>
+                        <span className="font-bold text-stone-800">{t('weekly_question_title')}</span>
                     </div>
                     <button onClick={onClose} className="p-2 hover:bg-stone-100 rounded-full">
                         <X className="w-6 h-6 text-stone-500" />
@@ -9928,55 +12239,183 @@ export const WeeklyQuestionModal: React.FC<WeeklyQuestionModalProps> = ({ isOpen
                 </div>
 
                 {/* Content */}
-                <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                <div className="flex-1 overflow-y-auto p-4 space-y-4 pb-20">
                     {/* Question */}
-                    <div className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl p-4 text-white">
-                        <p className="text-indigo-200 text-sm mb-1">Denne uges spørgsmål</p>
-                        <p className="text-lg font-bold">{question}</p>
+                    <div className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl p-6 text-white shadow-lg">
+                        <p className="text-indigo-200 text-sm mb-2 uppercase tracking-wide font-bold">{t('weekly_question_header')}</p>
+                        <p className="text-xl font-bold leading-relaxed">{question}</p>
                     </div>
 
-                    {/* Answer input */}
+                    {/* Answer input (only if not answered) */}
                     {!hasAnsweredThisWeek ? (
-                        <div className="space-y-3">
-                            <textarea
-                                value={myAnswer}
-                                onChange={(e) => setMyAnswer(e.target.value)}
-                                placeholder="Skriv dit svar her..."
-                                className="w-full p-3 rounded-xl border-2 border-stone-200 focus:border-indigo-400 focus:outline-none resize-none h-24"
-                            />
+                        <div className="space-y-4 animate-fade-in">
+                            {/* Toggle between text and audio */}
+                            <div className="flex bg-stone-100 p-1 rounded-2xl">
+                                <button
+                                    onClick={() => setAnswerType('text')}
+                                    className={`flex-1 py-3 rounded-xl font-bold transition-all ${answerType === 'text' ? 'bg-white shadow-sm text-indigo-600' : 'text-stone-500'}`}
+                                >
+                                    <div className="flex items-center justify-center gap-2">
+                                        <MessageSquare className="w-4 h-4" />
+                                        {t('text_answer')}
+                                    </div>
+                                </button>
+                                <button
+                                    onClick={() => setAnswerType('audio')}
+                                    className={`flex-1 py-3 rounded-xl font-bold transition-all ${answerType === 'audio' ? 'bg-white shadow-sm text-indigo-600' : 'text-stone-500'}`}
+                                >
+                                    <div className="flex items-center justify-center gap-2">
+                                        <Mic className="w-4 h-4" />
+                                        {t('audio_answer')}
+                                    </div>
+                                </button>
+                            </div>
+
+                            <div className="relative">
+                                {answerType === 'text' ? (
+                                    <textarea
+                                        value={myAnswer}
+                                        onChange={(e) => setMyAnswer(e.target.value)}
+                                        placeholder={t('write_answer_placeholder')}
+                                        className="w-full p-4 rounded-2xl border-2 border-stone-200 focus:border-indigo-400 focus:outline-none resize-none h-32 text-lg shadow-sm"
+                                    />
+                                ) : (
+                                    <AudioRecorder
+                                        onRecordingComplete={(blob) => setAudioBlob(blob)}
+                                        onReset={() => setAudioBlob(null)}
+                                        placeholder={t('tell_your_story_placeholder')}
+                                    />
+                                )}
+                            </div>
                             <button
                                 onClick={handleSubmit}
-                                disabled={!myAnswer.trim()}
-                                className="w-full p-3 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+                                disabled={answerType === 'text' ? !myAnswer.trim() : (!audioBlob || isUploading)}
+                                className="w-full p-4 bg-indigo-600 text-white font-bold rounded-2xl hover:bg-indigo-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 shadow-md active:scale-95 transform transition-transform"
                             >
-                                <Sparkles className="w-4 h-4" />
-                                Del dit svar
+                                {isUploading ? (
+                                    <Loader2 className="w-5 h-5 animate-spin" />
+                                ) : (
+                                    <Sparkles className="w-5 h-5" />
+                                )}
+                                {isUploading ? t('uploading') : t('share_your_answer')}
                             </button>
                         </div>
                     ) : (
-                        <div className="bg-green-50 border border-green-200 rounded-xl p-3 text-center">
-                            <p className="text-green-700 font-medium">✓ Du har svaret denne uge</p>
+                        <div className="bg-green-50 border border-green-200 rounded-xl p-3 text-center mb-4 flex items-center justify-center gap-2">
+                            <div className="bg-green-100 p-1 rounded-full">
+                                <Check className="w-4 h-4 text-green-700" />
+                            </div>
+                            <p className="text-green-700 font-medium">{t('thanks_for_answer')}</p>
                         </div>
                     )}
 
-                    {/* Other answers */}
-                    {otherAnswers.length > 0 && (
-                        <div className="space-y-3">
-                            <p className="text-stone-500 text-sm font-medium">Svar fra familien</p>
-                            {otherAnswers.map((answer, i) => (
-                                <div key={i} className="bg-stone-50 rounded-xl p-3 border border-stone-200">
-                                    <p className="font-medium text-stone-700">{answer.userName}</p>
-                                    <p className="text-stone-600">{answer.answer}</p>
-                                </div>
-                            ))}
-                        </div>
-                    )}
+                    {/* All Answers Feed */}
+                    <div className="space-y-4">
+                        {sortedAnswers.length > 0 ? (
+                            <>
+                                <p className="text-stone-500 text-sm font-bold ml-1 uppercase tracking-wide">{t('family_answers_count', { count: sortedAnswers.length })}</p>
+                                {sortedAnswers.map((answer) => {
+                                    const isLiked = currentUserId && answer.likes?.includes(currentUserId);
+                                    const likeCount = answer.likes?.length || 0;
+                                    const isReplying = replyingToId === answer.id;
 
-                    {otherAnswers.length === 0 && hasAnsweredThisWeek && (
-                        <p className="text-stone-400 text-center text-sm">
-                            Ingen andre har svaret endnu denne uge
-                        </p>
-                    )}
+                                    return (
+                                        <div key={answer.id} className="bg-white rounded-2xl p-4 border border-stone-200 shadow-sm transition-all hover:shadow-md">
+                                            {/* Answer Header */}
+                                            <div className="flex justify-between items-start mb-2">
+                                                <div>
+                                                    <p className="font-bold text-stone-800 text-lg">{answer.userName}</p>
+                                                    {answer.answeredAt && (
+                                                        <p className="text-xs text-stone-400">
+                                                            {formatTimeAgo(answer.answeredAt?.toDate?.()?.toISOString() || answer.answeredAt, t)}
+                                                        </p>
+                                                    )}
+                                                </div>
+                                                {/* Like Button */}
+                                                <button
+                                                    onClick={() => currentUserId && onToggleLike?.(answer.id, currentUserId, !!isLiked)}
+                                                    className={`flex items-center gap-1 px-3 py-1.5 rounded-full transition-colors ${isLiked
+                                                        ? 'bg-rose-50 text-rose-600'
+                                                        : 'bg-stone-50 text-stone-500 hover:bg-stone-100'
+                                                        }`}
+                                                >
+                                                    <Heart className={`w-4 h-4 ${isLiked ? 'fill-rose-500' : ''}`} />
+                                                    <span className="text-sm font-bold">{likeCount > 0 ? likeCount : ''}</span>
+                                                </button>
+                                            </div>
+
+                                            {/* Answer Text */}
+                                            {answer.audioUrl ? (
+                                                <div className="mb-4 bg-stone-50 p-3 rounded-xl border border-stone-100 flex items-center gap-3">
+                                                    <button
+                                                        onClick={() => new Audio(answer.audioUrl).play()}
+                                                        className="w-10 h-10 bg-indigo-100 flex items-center justify-center rounded-full text-indigo-600 hover:bg-indigo-200"
+                                                    >
+                                                        <PlayIcon size={20} fill="currentColor" />
+                                                    </button>
+                                                    <div className="flex-1 h-1 bg-stone-200 rounded-full" />
+                                                    <Mic size={16} className="text-stone-300" />
+                                                </div>
+                                            ) : (
+                                                <p className="text-stone-700 text-lg leading-relaxed mb-4">{answer.text}</p>
+                                            )}
+
+                                            {/* Action Bar */}
+                                            <div className="flex items-center gap-4 border-t border-stone-100 pt-3">
+                                                <button
+                                                    onClick={() => toggleReplyInput(answer.id)}
+                                                    className="flex items-center gap-2 text-stone-500 hover:text-indigo-600 transition-colors text-sm font-medium"
+                                                >
+                                                    <MessageSquare className="w-4 h-4" />
+                                                    {answer.replies?.length ? t('replies_count', { count: answer.replies.length }) : t('reply_verb')}
+                                                </button>
+                                            </div>
+
+                                            {/* Replies Section */}
+                                            {(isReplying || (answer.replies && answer.replies.length > 0)) && (
+                                                <div className="mt-3 pl-4 border-l-2 border-stone-100 space-y-3">
+                                                    {/* Existing Replies */}
+                                                    {answer.replies?.map((reply) => (
+                                                        <div key={reply.id} className="bg-stone-50 rounded-lg p-3 text-sm">
+                                                            <div className="flex justify-between items-baseline mb-1">
+                                                                <span className="font-bold text-stone-700">{reply.userName}</span>
+                                                                {/* <span className="text-xs text-stone-400">tid siden</span> */}
+                                                            </div>
+                                                            <p className="text-stone-600">{reply.text}</p>
+                                                        </div>
+                                                    ))}
+
+                                                    {/* Reply Input */}
+                                                    {isReplying && (
+                                                        <div className="flex gap-2 items-end animate-fade-in mt-2">
+                                                            <textarea
+                                                                value={replyText}
+                                                                onChange={(e) => setReplyText(e.target.value)}
+                                                                placeholder={t('write_reply_placeholder')}
+                                                                className="flex-1 bg-stone-50 border border-stone-200 rounded-xl p-2 text-sm focus:border-indigo-400 focus:outline-none resize-none h-20"
+                                                                autoFocus
+                                                            />
+                                                            <button
+                                                                onClick={() => handleReplySubmit(answer.id)}
+                                                                disabled={!replyText.trim()}
+                                                                className="p-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 disabled:opacity-50 shadow-sm"
+                                                            >
+                                                                <Send className="w-4 h-4" />
+                                                            </button>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            )}
+                                        </div>
+                                    );
+                                })}
+                            </>
+                        ) : (
+                            <div className="text-center py-8 text-stone-400">
+                                <p>{t('no_answers_yet')}</p>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>
@@ -9988,8 +12427,8 @@ export default WeeklyQuestionModal;
 ```
 ---
 
-## File: tryg-app\src\features\wordGame\index.js
-```js
+## File: tryg-app\src\features\wordGame\index.ts
+```ts
 // Word Game Feature - Public API
 // All exports from this feature should go through this file
 
@@ -10003,8 +12442,8 @@ export { useWordGame } from './useWordGame';
 
 ## File: tryg-app\src\features\wordGame\Leaderboard.tsx
 ```tsx
-import React from 'react';
 import { Crown, Medal, Award, Users } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { LeaderboardEntry } from './useWordGame';
 
 interface LeaderboardProps {
@@ -10014,12 +12453,13 @@ interface LeaderboardProps {
 
 // Leaderboard Component - Family rankings for word game
 export const Leaderboard: React.FC<LeaderboardProps> = ({ scores, currentUserId }) => {
+    const { t } = useTranslation();
     if (!scores || scores.length === 0) {
         return (
             <div className="bg-stone-50 rounded-xl p-4 text-center">
                 <Users className="w-8 h-8 text-stone-300 mx-auto mb-2" />
-                <p className="text-stone-400 text-sm">Ingen har spillet endnu i dag</p>
-                <p className="text-stone-300 text-xs">Vær den første!</p>
+                <p className="text-stone-400 text-sm">{t('no_one_played_today')}</p>
+                <p className="text-stone-300 text-xs">{t('be_the_first')}</p>
             </div>
         );
     }
@@ -10054,7 +12494,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ scores, currentUserId 
         <div className="bg-white rounded-2xl p-4 border-2 border-stone-100 shadow-sm">
             <h3 className="text-sm font-bold text-stone-500 uppercase tracking-wider mb-3 flex items-center gap-2">
                 <Crown className="w-4 h-4 text-amber-500" />
-                Dagens Rangliste
+                {t('todays_leaderboard')}
             </h3>
 
             <div className="space-y-2">
@@ -10077,7 +12517,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ scores, currentUserId 
                                     </span>
                                     {isMe && (
                                         <span className="text-[10px] bg-indigo-200 text-indigo-700 px-1.5 py-0.5 rounded-full font-bold">
-                                            DIG
+                                            {t('you_caps')}
                                         </span>
                                     )}
                                 </div>
@@ -10106,20 +12546,29 @@ export default Leaderboard;
 
 ## File: tryg-app\src\features\wordGame\Spillehjoernet.tsx
 ```tsx
-import React from 'react';
 import { Gamepad2 } from 'lucide-react';
 import { WordGame } from './WordGame';
 import { Leaderboard } from './Leaderboard';
 import { useWordGame } from './useWordGame';
+import { useTranslation } from 'react-i18next';
 
 interface SpillehjoernetProps {
-    circleId: string;
-    userId: string;
+    circleId?: string;
+    userId?: string;
     displayName: string;
 }
 
-// Spillehjørnet - Gaming Corner with Word of the Day
+/**
+ * Spillehjørnet - Gaming Corner with Word of the Day.
+ * Interactive word game with family leaderboard for daily engagement.
+ * @param {SpillehjoernetProps} props - Component props
+ * @param {string} props.circleId - Care circle identifier
+ * @param {string} props.userId - Current user's ID
+ * @param {string} props.displayName - User's display name for leaderboard
+ * @returns {JSX.Element} Gaming corner component
+ */
 export const Spillehjoernet: React.FC<SpillehjoernetProps> = ({ circleId, userId, displayName }) => {
+    const { t } = useTranslation();
     const {
         currentWord,
         currentWordIndex,
@@ -10129,7 +12578,7 @@ export const Spillehjoernet: React.FC<SpillehjoernetProps> = ({ circleId, userId
         loading,
         submitAnswer,
         leaderboard
-    } = useWordGame(circleId, userId, displayName);
+    } = useWordGame(circleId ?? null, userId ?? null, displayName);
 
     return (
         <div className="space-y-4">
@@ -10139,8 +12588,8 @@ export const Spillehjoernet: React.FC<SpillehjoernetProps> = ({ circleId, userId
                     <Gamepad2 className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                    <h2 className="font-bold text-stone-800 text-lg">Spillehjørnet</h2>
-                    <p className="text-xs text-stone-500">Dagens ordleg med familien</p>
+                    <h2 className="font-bold theme-text text-lg">{t('spillehjoernet_title')}</h2>
+                    <p className="text-xs theme-text-muted">{t('spillehjoernet_subtitle')}</p>
                 </div>
             </div>
 
@@ -10158,7 +12607,7 @@ export const Spillehjoernet: React.FC<SpillehjoernetProps> = ({ circleId, userId
             {/* Leaderboard */}
             <Leaderboard
                 scores={leaderboard}
-                currentUserId={userId}
+                currentUserId={userId ?? ''}
             />
         </div>
     );
@@ -10174,6 +12623,7 @@ export default Spillehjoernet;
 
 // Word Game Hook - manages game state and Firestore sync
 import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     collection,
     doc,
@@ -10185,15 +12635,18 @@ import {
 } from 'firebase/firestore';
 import { db } from '../../config/firebase';
 import { getTodaysWords, shuffleAnswers } from '../../data/wordGameData';
+import { getTodaysWordsBS, shuffleAnswersBS } from '../../data/wordGameData_bs';
+import { getTodaysWordsTR, shuffleAnswersTR } from '../../data/wordGameData_tr';
 
 // Get today's date key for localStorage
 const getTodayKey = () => new Date().toISOString().split('T')[0];
 
 export interface Word {
     id: string;
-    danish: string;
-    english: string;
-    options?: string[];
+    word: string;
+    correctAnswer: string;
+    wrongAnswer?: string;
+    options?: { text: string; isCorrect: boolean }[];
     [key: string]: any;
 }
 
@@ -10209,6 +12662,7 @@ export interface LeaderboardEntry {
 }
 
 export function useWordGame(circleId: string | null, userId: string | null, displayName: string | null) {
+    const { i18n } = useTranslation();
     const [currentWordIndex, setCurrentWordIndex] = useState<number>(0);
     const [score, setScore] = useState<number>(0);
     const [answers, setAnswers] = useState<Record<string, boolean>>({}); // { wordId: isCorrect }
@@ -10216,8 +12670,20 @@ export function useWordGame(circleId: string | null, userId: string | null, disp
     const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
-    // Get today's words (memoized, same for all family)
-    const todaysWords = useMemo(() => getTodaysWords(), []);
+    // Get locale-specific word functions
+    const { getWords, shuffle } = useMemo(() => {
+        switch (i18n.language) {
+            case 'bs':
+                return { getWords: getTodaysWordsBS, shuffle: shuffleAnswersBS };
+            case 'tr':
+                return { getWords: getTodaysWordsTR, shuffle: shuffleAnswersTR };
+            default:
+                return { getWords: getTodaysWords, shuffle: shuffleAnswers };
+        }
+    }, [i18n.language]);
+
+    // Get today's words (memoized, same for all family, locale-specific)
+    const todaysWords = useMemo(() => getWords(), [getWords]);
 
     // Current word with shuffled answers
     const currentWord = useMemo(() => {
@@ -10225,9 +12691,9 @@ export function useWordGame(circleId: string | null, userId: string | null, disp
         const word = todaysWords[currentWordIndex];
         return {
             ...word,
-            options: shuffleAnswers(word, currentWordIndex)
+            options: shuffle(word, currentWordIndex)
         };
-    }, [todaysWords, currentWordIndex]);
+    }, [todaysWords, currentWordIndex, shuffle]);
 
     // Load saved progress from localStorage on mount
     useEffect(() => {
@@ -10376,9 +12842,10 @@ export default useWordGame;
 
 ## File: tryg-app\src\features\wordGame\WordGame.tsx
 ```tsx
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { CheckCircle, XCircle, Trophy, Sparkles, ArrowRight } from 'lucide-react';
 import { Word } from './useWordGame';
+import { useTranslation } from 'react-i18next';
 
 interface WordGameProps {
     currentWord: Word | null;
@@ -10386,7 +12853,7 @@ interface WordGameProps {
     totalWords: number;
     score: number;
     isComplete: boolean;
-    onAnswer: (wordId: string, isCorrect: boolean) => Promise<void>;
+    onAnswer: (wordId: string, isCorrect: boolean) => Promise<void | { isCorrect: boolean; newScore: number; isComplete: boolean }>;
     loading: boolean;
 }
 
@@ -10406,6 +12873,7 @@ export const WordGame: React.FC<WordGameProps> = ({
     onAnswer,
     loading
 }) => {
+    const { t } = useTranslation();
     const [feedback, setFeedback] = useState<FeedbackState | null>(null);
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
@@ -10433,22 +12901,22 @@ export const WordGame: React.FC<WordGameProps> = ({
                 <div className="mb-4 -mt-2">
                     <img
                         src={`${baseUrl}assets/success_trophy.png`}
-                        alt="Succes Trophy"
+                        alt="Success Trophy"
                         className="w-full max-w-[200px] mx-auto object-contain animate-in zoom-in duration-500 drop-shadow-xl"
                     />
                 </div>
 
-                <h3 className="text-2xl font-bold mb-2 relative z-10">Dagens ord er klaret!</h3>
+                <h3 className="text-2xl font-bold mb-2 relative z-10">{t('word_game_complete')}</h3>
                 <div className="bg-white/20 rounded-xl p-4 mb-4 backdrop-blur-sm relative z-10">
                     <p className="text-4xl font-bold">{score}/{totalWords}</p>
-                    <p className="text-amber-100">rigtige svar</p>
+                    <p className="text-amber-100">{t('correct_answers')}</p>
                 </div>
                 <p className="text-amber-100 text-sm relative z-10">
                     {percentage >= 80
-                        ? 'Fantastisk! Du er en ordmester!'
+                        ? t('word_game_80_percent')
                         : percentage >= 60
-                            ? 'Godt gået! Du kender dine ord.'
-                            : 'Godt forsøgt! Prøv igen i morgen.'}
+                            ? t('word_game_60_percent')
+                            : t('word_game_below_60')}
                 </p>
             </div>
         );
@@ -10465,10 +12933,10 @@ export const WordGame: React.FC<WordGameProps> = ({
                     {feedback.isCorrect ? <CheckCircle className="w-12 h-12 mx-auto" /> : <XCircle className="w-12 h-12 mx-auto" />}
                 </div>
                 <h3 className="text-xl font-bold mb-2">
-                    {feedback.isCorrect ? 'Helt rigtigt! 🎉' : 'Ikke helt...'}
+                    {feedback.isCorrect ? t('answer_correct') : t('answer_wrong')}
                 </h3>
                 <p className="text-white/80 mb-4 text-sm">
-                    <span className="font-bold">{feedback.word}</span> betyder:
+                    <span className="font-bold">{feedback.word}</span> {t('word_means')}
                     <br />
                     "{feedback.correctAnswer}"
                 </p>
@@ -10479,7 +12947,7 @@ export const WordGame: React.FC<WordGameProps> = ({
                     }}
                     className="bg-white/20 hover:bg-white/30 px-6 py-3 rounded-xl font-bold flex items-center gap-2 mx-auto transition-colors"
                 >
-                    Næste ord <ArrowRight className="w-4 h-4" />
+                    {t('next_word')} <ArrowRight className="w-4 h-4" />
                 </button>
             </div>
         );
@@ -10509,10 +12977,10 @@ export const WordGame: React.FC<WordGameProps> = ({
             {/* Progress */}
             <div className="flex justify-between items-center mb-4">
                 <span className="text-xs font-bold text-stone-400 uppercase tracking-wide">
-                    Ord {currentWordIndex + 1} af {totalWords}
+                    {t('word_of', { current: currentWordIndex + 1, total: totalWords })}
                 </span>
                 <span className="text-xs font-bold text-teal-600 flex items-center gap-1">
-                    <Trophy className="w-3 h-3" /> {score} point
+                    <Trophy className="w-3 h-3" /> {score} {t('points')}
                 </span>
             </div>
 
@@ -10528,7 +12996,7 @@ export const WordGame: React.FC<WordGameProps> = ({
             <div className="text-center mb-5">
                 <div className="flex items-center justify-center gap-2 mb-1">
                     <Sparkles className="w-4 h-4 text-amber-500" />
-                    <span className="text-xs text-stone-400 uppercase tracking-wider">Hvad betyder</span>
+                    <span className="text-xs text-stone-400 uppercase tracking-wider">{t('what_does_mean')}</span>
                     <Sparkles className="w-4 h-4 text-amber-500" />
                 </div>
                 <h2 className="text-2xl font-bold text-stone-800">{currentWord?.word}</h2>
@@ -10536,7 +13004,7 @@ export const WordGame: React.FC<WordGameProps> = ({
 
             {/* Options */}
             <div className="space-y-3">
-                {currentWord?.options.map((option, i) => (
+                {currentWord?.options?.map((option, i) => (
                     <button
                         key={i}
                         onClick={() => handleAnswer(option, i)}
@@ -10753,6 +13221,21 @@ export function useAuth() {
         }
     }, [user]);
 
+    // Update language preference
+    const updateLanguagePreference = useCallback(async (lang: string) => {
+        if (!user) return;
+
+        try {
+            await setDoc(doc(db, 'users', user.uid), {
+                languagePreference: lang,
+            }, { merge: true });
+            setUserProfile(prev => prev ? ({ ...prev, languagePreference: lang }) : null);
+        } catch (err: any) {
+            setError(err.message);
+            throw err;
+        }
+    }, [user]);
+
     // Reset password
     const resetPassword = useCallback(async (email: string) => {
         setError(null);
@@ -10775,6 +13258,7 @@ export function useAuth() {
         signOut,
         updateRole,
         recordConsent,
+        updateLanguagePreference,
         resetPassword,
         isAuthenticated: !!user,
     };
@@ -10801,8 +13285,7 @@ import {
     where,
     onSnapshot,
     serverTimestamp,
-    deleteDoc,
-    DocumentSnapshot
+    deleteDoc
 } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { CareCircle, Member, UserProfile } from '../types';
@@ -10817,7 +13300,7 @@ const generateInviteCode = () => {
     return code;
 };
 
-export function useCareCircle(userId: string | undefined, userProfile: UserProfile | null) {
+export function useCareCircle(userId: string | undefined, _userProfile: UserProfile | null) {
     const [careCircle, setCareCircle] = useState<CareCircle | null>(null);
     const [members, setMembers] = useState<Member[]>([]);
     const [loading, setLoading] = useState(true);
@@ -11304,11 +13787,246 @@ export default useSettings;
 ```
 ---
 
+## File: tryg-app\src\i18n.ts
+```ts
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import LanguageDetector from 'i18next-browser-languagedetector';
+
+import da from './locales/da.json';
+import tr from './locales/tr.json';
+import bs from './locales/bs.json';
+
+i18n
+    .use(LanguageDetector)
+    .use(initReactI18next)
+    .init({
+        resources: {
+            da: { translation: da },
+            tr: { translation: tr },
+            bs: { translation: bs },
+        },
+        fallbackLng: 'da',
+        interpolation: {
+            escapeValue: false,
+        },
+        detection: {
+            order: ['querystring', 'cookie', 'localStorage', 'navigator', 'htmlTag'],
+            caches: ['localStorage', 'cookie'],
+        },
+    });
+
+export default i18n;
+
+```
+---
+
 ## File: tryg-app\src\index.css
 ```css
 @import "tailwindcss";
 
-/* Custom animations */
+/* ============================================
+   TRYG DESIGN SYSTEM - Hygge-Inspired Tokens
+   ============================================ */
+
+:root {
+  /* === Color Palette (Hygge-Inspired) === */
+
+  /* Primary - Warm Teal (not cold) */
+  --color-primary: 174 55% 38%;
+  --color-primary-light: 174 50% 92%;
+  --color-primary-dark: 174 60% 28%;
+
+  /* Warm Stone (not gray) */
+  --color-stone: 37 20% 95%;
+  --color-stone-medium: 37 15% 85%;
+  --color-stone-dark: 37 15% 45%;
+
+  /* Accent - Soft Gold (warmth) */
+  --color-accent: 43 80% 60%;
+  --color-accent-light: 43 75% 92%;
+
+  /* Success - Soft Green (not harsh) */
+  --color-success: 152 45% 50%;
+  --color-success-light: 152 40% 92%;
+
+  /* Warning - Warm Amber */
+  --color-warning: 38 92% 50%;
+  --color-warning-light: 38 85% 92%;
+
+  /* Alert - Warm Red (not alarming) */
+  --color-alert: 8 65% 55%;
+  --color-alert-light: 8 60% 92%;
+
+  /* === Spacing Scale === */
+  --space-xs: 0.25rem;
+  /* 4px */
+  --space-sm: 0.5rem;
+  /* 8px */
+  --space-md: 1rem;
+  /* 16px */
+  --space-lg: 1.5rem;
+  /* 24px */
+  --space-xl: 2rem;
+  /* 32px */
+  --space-2xl: 3rem;
+  /* 48px */
+
+  /* === Border Radius (Warm, not sharp) === */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* === Typography === */
+  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-size-xs: 0.75rem;
+  /* 12px */
+  --font-size-sm: 0.875rem;
+  /* 14px */
+  --font-size-base: 1rem;
+  /* 16px */
+  --font-size-lg: 1.125rem;
+  /* 18px - WCAG minimum */
+  --font-size-xl: 1.25rem;
+  /* 20px */
+  --font-size-2xl: 1.5rem;
+  /* 24px */
+  --font-size-3xl: 2rem;
+  /* 32px */
+
+  /* === Animation Timing === */
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+  --duration-slower: 800ms;
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  /* === Theme Tokens (Circadian Defaults) === */
+  --theme-bg: hsl(37 20% 95%);
+  --theme-text: hsl(200 10% 20%);
+  --theme-text-muted: hsl(200 10% 45%);
+  --theme-card-bg: white;
+  --theme-card-border: hsl(37 15% 90%);
+  --theme-nav-bg: rgba(255, 255, 255, 0.8);
+}
+
+/* === Dark Mode Tokens === */
+.theme-dark {
+  --theme-bg: hsl(220 30% 10%);
+  --theme-text: hsl(220 20% 95%);
+  --theme-text-muted: hsl(220 15% 75%);
+  --theme-card-bg: hsl(220 25% 15%);
+  --theme-card-border: hsl(220 20% 25%);
+  --theme-nav-bg: rgba(15, 23, 42, 0.8);
+}
+
+/* === Theme-Aware Utility Classes === */
+/* Use these instead of hardcoded bg-white/text-stone-800 for dark mode support */
+.theme-card {
+  background: var(--theme-card-bg);
+  color: var(--theme-text);
+  border-color: var(--theme-card-border);
+}
+
+.theme-header {
+  background: var(--theme-card-bg);
+  color: var(--theme-text);
+  border-color: var(--theme-card-border);
+}
+
+.theme-text {
+  color: var(--theme-text);
+}
+
+.theme-text-muted {
+  color: var(--theme-text-muted);
+}
+
+.theme-bg {
+  background: var(--theme-bg);
+}
+
+/* ============================================
+   MICRO-INTERACTION ANIMATIONS
+   ============================================ */
+
+/* === Breathing Pulse (Peace of Mind) === */
+@keyframes gentle-breathe {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.95;
+  }
+
+  50% {
+    transform: scale(1.015);
+    opacity: 1;
+  }
+}
+
+.animate-breathe {
+  animation: gentle-breathe 4s ease-in-out infinite;
+}
+
+/* === Connection Glow (Family Activity) === */
+@keyframes connection-glow {
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(13, 148, 136, 0.4);
+  }
+
+  50% {
+    box-shadow: 0 0 20px 8px rgba(13, 148, 136, 0.15);
+  }
+}
+
+.animate-glow {
+  animation: connection-glow 2s ease-in-out;
+}
+
+.animate-glow-loop {
+  animation: connection-glow 3s ease-in-out infinite;
+}
+
+/* === Task Celebration === */
+@keyframes celebrate-check {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+
+  50% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes celebrate-ring {
+  0% {
+    transform: scale(0.8);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+.animate-celebrate {
+  animation: celebrate-check 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+/* === Slide Up === */
 @keyframes slide-up {
   from {
     transform: translateY(100%);
@@ -11321,6 +14039,11 @@ export default useSettings;
   }
 }
 
+.animate-slide-up {
+  animation: slide-up 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* === Fade In === */
 @keyframes fade-in {
   from {
     opacity: 0;
@@ -11331,15 +14054,11 @@ export default useSettings;
   }
 }
 
-.animate-slide-up {
-  animation: slide-up 0.3s ease-out;
-}
-
 .animate-fade-in {
-  animation: fade-in 0.3s ease-out;
+  animation: fade-in 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Morning sun pulse - gentle warmth animation */
+/* === Sun Pulse (Morning) === */
 @keyframes sun-pulse {
 
   0%,
@@ -11358,25 +14077,1078 @@ export default useSettings;
   animation: sun-pulse 3s ease-in-out infinite;
 }
 
-/* Base styles */
+/* === Slow Bounce (Coffee feature) === */
+@keyframes bounce-slow {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.animate-bounce-slow {
+  animation: bounce-slow 2s ease-in-out infinite;
+}
+
+/* === Wiggle (Fun micro-interaction) === */
+@keyframes wiggle {
+
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(-5deg);
+  }
+
+  75% {
+    transform: rotate(5deg);
+  }
+}
+
+.animate-wiggle {
+  animation: wiggle 0.3s ease-in-out;
+}
+
+/* ============================================
+   PAGE TRANSITIONS
+   ============================================ */
+
+/* Tab content transition wrapper */
+.tab-content {
+  animation: tab-enter 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes tab-enter {
+  from {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Fade transition for view switching */
+.view-transition-enter {
+  animation: view-enter 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes view-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ============================================
+   COMPONENT UTILITIES
+   ============================================ */
+
+/* Card with warm rounded corners */
+.card-warm {
+  border-radius: var(--radius-lg);
+  background: var(--theme-card-bg);
+  border: 1px solid var(--theme-card-border);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 4px 12px rgba(0, 0, 0, 0.03);
+  color: var(--theme-text);
+  transition: background-color var(--duration-normal), border-color var(--duration-normal), color var(--duration-normal);
+}
+
+/* Glassmorphic panel for Living Design 🏠 */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+/* Gradient header (warm teal) */
+.header-gradient {
+  background: linear-gradient(180deg,
+      hsl(174 62% 35%) 0%,
+      hsl(174 55% 42%) 100%);
+}
+
+/* Peace of mind card gradient states */
+.peace-card-ok {
+  background: linear-gradient(135deg, hsl(152 45% 45%) 0%, hsl(174 50% 40%) 100%);
+}
+
+.peace-card-warning {
+  background: linear-gradient(135deg, hsl(38 80% 50%) 0%, hsl(25 75% 50%) 100%);
+}
+
+.peace-card-neutral {
+  background: linear-gradient(135deg, hsl(200 15% 50%) 0%, hsl(200 10% 55%) 100%);
+}
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
+
 body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: var(--font-family);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   height: 100dvh;
   width: 100vw;
-  overflow: hidden;
+  /* Removed: overflow: hidden - was blocking scroll! */
+  background-color: var(--theme-bg);
+  color: var(--theme-text);
+  line-height: 1.5;
+  transition: background-color var(--duration-slow), color var(--duration-slow);
 }
 
 #root {
   height: 100dvh;
   width: 100vw;
-  overflow: hidden;
+  /* Removed: overflow: hidden - was blocking scroll! */
 }
 
 /* Visible focus indicators for accessibility */
 *:focus-visible {
-  outline: 2px solid #0d9488;
+  outline: 2px solid hsl(174 55% 38%);
   outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Touch target minimum size for seniors (48x48) */
+.touch-target {
+  min-width: 48px;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Smooth scrolling */
+* {
+  scroll-behavior: smooth;
+}
+
+/* Selection color */
+::selection {
+  background-color: hsl(174 50% 85%);
+  color: hsl(174 60% 25%);
+}
+```
+---
+
+## File: tryg-app\src\lib\utils.ts
+```ts
+import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+/**
+ * Utility for merging Tailwind CSS classes safely.
+ * Combines clsx for conditional classes and tailwind-merge to handle conflicts.
+ * 
+ * @example
+ * cn("flex", isActive && "bg-blue-500", "p-4")
+ * cn(buttonVariants({ variant: "primary" }), className)
+ */
+export function cn(...inputs: ClassValue[]) {
+    return twMerge(clsx(inputs));
+}
+
+```
+---
+
+## File: tryg-app\src\locales\bs.json
+```json
+{
+    "settings": "Postavke",
+    "language_selection": "Izbor jezika",
+    "sign_out": "Odjavi se",
+    "family_circle": "Porodični krug",
+    "invite_code": "Pozivni kod",
+    "show_invite_code": "Prikaži pozivni kod",
+    "logged_in_as": "Prijavljeni kao",
+    "family_heart": "Porodično srce",
+    "medication_title": "Lijekovi",
+    "pain_question": "Kako se osjećate?",
+    "greeting_morning": "Dobro jutro",
+    "greeting_morning_1": "Dobro jutro – spremni za novi dan?",
+    "greeting_morning_2": "Dobro jutro, nadam se da ste dobro spavali",
+    "greeting_afternoon": "Dobar dan",
+    "greeting_afternoon_1": "Dobar dan – kako ste?",
+    "greeting_afternoon_2": "Dobar dan, nadam se da uživate u danu",
+    "greeting_evening": "Dobro veče",
+    "greeting_evening_1": "Dobra večer – vrijeme za odmor i ugodu",
+    "greeting_evening_2": "Dobra večer, lijep dan se bliži kraju",
+    "bottom_nav_daily": "Moj dan",
+    "bottom_nav_family": "Porodica",
+    "bottom_nav_report": "Izvještaj",
+    "bottom_nav_spil": "Igre",
+    "role_senior": "Pregled za seniora",
+    "role_relative": "Pregled za člana porodice",
+    "notification_water_title": "Ne zaboravite popiti vodu",
+    "notification_water_body": "Vrijeme je za vaš čaš vode u 10:00",
+    "coffee_invite_title": "{{name}} zove na kafu!",
+    "coffee_invite_sub": "Stavila je kafu i ima vremena za posjetu.",
+    "coffee_invite_accept": "Svratiću",
+    "coffee_ready_desc": "Porodica može vidjeti da imate vremena.",
+    "coffee_off_desc": "Pokažite da su vaša vrata otvorena.",
+    "coffee_coming_title": "Neko je na putu! 🚗",
+    "coffee_coming_msg": "{{name}} dolazi na kafu! ☕️",
+    "coffee_give_button": "Zovite na kafu?",
+    "peace_all_well": "Sve je u redu ✨",
+    "peace_good_day": "Dobar dan",
+    "peace_check_in": "Provjeri",
+    "peace_morning_missing": "Jutro nedostaje",
+    "peace_afternoon_missing": "Popodne nedostaje",
+    "peace_sub_all_well": "{{name}} je dobro",
+    "peace_sub_good_day": "Dan napreduje",
+    "peace_sub_check_in": "Ima zadataka na koje treba obratiti pažnju",
+    "peace_sub_morning_missing": "Nisu svi jutarnji zadaci obavljeni",
+    "peace_sub_afternoon_missing": "Nisu svi popodnevni zadaci obavljeni",
+    "daily_briefing_all_fine": "Sve izgleda u redu. {{name}} je imala miran dan.",
+    "daily_briefing_meds_fine": "{{name}} je uzela sve lijekove. Sve je dobro.",
+    "daily_briefing_symptom_noted": "{{name}} je zabilježila {{symptom}} u {{time}}, ali je uzela lijek.",
+    "daily_briefing_symptom_warning": "{{name}} je zabilježila simptome. Lijekovi: {{completed}}/{{total}} uzeto.",
+    "daily_briefing_meds_missing": "{{name}} nedostaje {{count}} lijekova danas.",
+    "daily_briefing_checked_in": "{{name}} se prijavila danas. Sve izgleda u redu.",
+    "daily_briefing_no_activity": "Danas još nema aktivnosti od {{name}}.",
+    "streak_msg_7": "🏆 {{count}}. dan zaredom da su svi lijekovi uzeti!",
+    "streak_msg_3": "🎉 {{count}}. dan zaredom!",
+    "maybe_later": "Možda kasnije",
+    "status_avail_now": "Status: Ima vremena sada",
+    "coordination_title": "Porodična razmjena",
+    "others_offers": "Od ostalih rođaka:",
+    "from_senior_name": "Od {{name}}:",
+    "you_offer": "Vi nudite:",
+    "you_request": "Vi želite:",
+    "add_offer": "Ponudi nešto",
+    "add_request": "Zatraži nešto",
+    "symptoms_today": "Današnji simptomi",
+    "open_tasks_count": "Otvoreni zadaci ({{count}})",
+    "completed_tasks_count": "Obavljeni zadaci ({{count}})",
+    "add_reminder_name": "Dodaj podsjetnik za {{name}}",
+    "status_work": "Na poslu",
+    "status_home": "Kod kuće",
+    "status_traveling": "Na putu",
+    "status_available": "Ima vremena za razgovor",
+    "status_busy": "Zauzeto",
+    "status_coffee_ready": "Kafa je gotova!",
+    "status_coffee_coming": "Neko je na putu!",
+    "no_relatives": "Još nema rođaka",
+    "more": "više",
+    "others": "ostali",
+    "din_status": "Vaš status",
+    "waiting_first_check": "Čeka se prva provjera...",
+    "last_checked_in": "Zadnji put",
+    "taken": "obavljeno",
+    "you": "ti",
+    "today": "Danas",
+    "days_ago": "-{{count}} dana",
+    "see_details": "Vidi detalje",
+    "no_one_played_today": "Danas još niko nije igrao",
+    "press_to_see": "(Pritisni za pregled)",
+    "symptoms_reported_today": "⚠️ Danas prijavljeno {{count}} simptoma",
+    "symptoms_reported_today_plural": "⚠️ Danas prijavljeno {{count}} simptoma",
+    "weekly_question_1": "O kome razmišljate danas?",
+    "weekly_question_2": "Šta vas je danas nasmijalo?",
+    "weekly_question_title": "Sedmično pitanje",
+    "weekly_question_header": "Sedmično pitanje",
+    "write_answer_placeholder": "Napišite svoj odgovor...",
+    "share_your_answer": "Podijelite odgovor",
+    "thanks_for_answer": "Hvala na odgovoru!",
+    "family_answers_count": "Odgovori porodice ({{count}})",
+    "just_now": "Upravo sada",
+    "minutes_ago": "prije {{count}}m",
+    "hours_ago": "prije {{count}}s",
+    "days_ago_relative": "prije {{count}}d",
+    "replies_count": "{{count}} odgovora",
+    "reply_verb": "Odgovori",
+    "write_reply_placeholder": "Napišite odgovor...",
+    "no_answers_yet": "Još nema odgovora. Budi prvi!",
+    "open_weekly_question": "Otvori sedmično pitanje",
+    "symptoms_today_count": "Današnji simptomi ({{count}})",
+    "be_the_first": "Budi prvi!",
+    "you_caps": "TI",
+    "todays_leaderboard": "Današnja rang lista",
+    "greeting_relative": "Zdravo, {{name}}",
+    "new_reminder": "Novi podsjetnik",
+    "title_label": "Naslov",
+    "reminder_placeholder": "Npr. Posjeta doktoru",
+    "when_question": "Kada?",
+    "morning": "Jutro",
+    "lunch": "Ručak",
+    "afternoon": "Popodne",
+    "evening": "Veče",
+    "reminder_notice": "Ovaj podsjetnik će se odmah pojaviti na ekranu korisnika {{name}}.",
+    "add_button": "Dodaj",
+    "doctor_report_title": "Izvještaj za doktora",
+    "symptoms_14_days": "Simptomi (14 dana)",
+    "most_frequent_count": "Najčešći ({{count}}x)",
+    "symptom_overview_14_days": "Pregled simptoma (14 dana)",
+    "symptoms_count": "{{count}} simptoma",
+    "medicine_compliance_7_days": "Uzimanje lijekova (7 dana)",
+    "symptom_log_14_days": "Dnevnik simptoma (zadnjih 14 dana)",
+    "no_symptoms_registered": "Nema registrovanih simptoma.",
+    "locale_code": "bs-BA",
+    "location_label": "Lokacija",
+    "intensity_label": "Intensitet",
+    "create_task_label": "Kreiraj zadatak",
+    "severe_symptoms_count": "{{count}} teških simptoma ove sedmice",
+    "contact_doctor_cta": "Razmislite o kontaktiranju doktora",
+    "increasing_symptoms_msg": "Povećan broj simptoma u zadnjim danima",
+    "book_doctor_cta": "Zakazati termin kod doktora?",
+    "decreasing_symptoms_msg": "Simptomi se povlače 👍",
+    "stable_symptoms_msg": "{{count}} simptoma ove sedmice",
+    "symptoms_this_week": "{{count}} simptoma ove sedmice",
+    "see_full_history": "Vidi punu historiju simptoma →",
+    "no_activity_yet": "Još nema aktivnosti",
+    "add_own_task": "Dodaj vlastiti zadatak",
+    "completed_tasks_count_special": "Obavljeni zadaci ({{count}})",
+    "time_period_morning": "Jutro",
+    "time_period_lunch": "Ručak",
+    "time_period_afternoon": "Popodne",
+    "time_period_evening": "Veče",
+    "time_period_morning_full": "Jutro (08-11)",
+    "time_period_lunch_full": "Ručak (12-13)",
+    "time_period_afternoon_full": "Popodne (14-17)",
+    "time_period_evening_full": "Veče (18-21)",
+    "where_does_it_hurt": "Gdje boli?",
+    "how_do_you_feel": "Kako se osjećate?",
+    "i_feel_good": "Dobro sam",
+    "i_feel_pain": "Imam bolove",
+    "task_completed": "Završeno",
+    "symptom_log_item": "Simptom: {{label}}",
+    "text_answer": "Tekst",
+    "audio_answer": "Glas",
+    "audio_answer_placeholder": "🎙️ Audio snimak",
+    "tell_your_story_placeholder": "Pritisnite da ispričate priču",
+    "stop_recording": "Zaustavi",
+    "start_recording": "Snimaj",
+    "recording_active": "Snima se...",
+    "play_recording": "Pusti",
+    "delete_and_retry": "Obriši i ponovi",
+    "mic_permission_denied": "Pristup mikrofonu odbijen",
+    "mic_access_error": "Greška pri pristupu mikrofonu",
+    "audio_recorder_not_supported": "Snimanje zvuka nije podržano",
+    "livsbog_title": "Životna knjiga (Sjećanja)",
+    "no_memories_yet": "Još nema sjećanja",
+    "memories_will_appear_here": "Životne priče će se pojaviti ovdje",
+    "stories": "priče",
+    "untilted_memory": "Bez naslova",
+    "audio": "Audio",
+    "uploading": "Učitavanje...",
+    "spillehjoernet_title": "Igraonica",
+    "spillehjoernet_subtitle": "Dnevna igra riječi s porodicom",
+    "word_game_complete": "Danas su riječi završene!",
+    "correct_answers": "tačnih odgovora",
+    "word_game_80_percent": "Fantastično! Ti si majstor riječi!",
+    "word_game_60_percent": "Dobro urađeno! Poznaješ svoje riječi.",
+    "word_game_below_60": "Dobar pokušaj! Probaj ponovo sutra.",
+    "word_of": "Riječ {{current}} od {{total}}",
+    "points": "bodova",
+    "what_does_mean": "Šta znači",
+    "answer_correct": "Potpuno tačno! 🎉",
+    "answer_wrong": "Ne baš...",
+    "word_means": "znači:",
+    "next_word": "Sljedeća riječ",
+    "symptom_pain": "Bol",
+    "symptom_dizzy": "Vrtoglavica",
+    "symptom_nausea": "Mučnina",
+    "symptom_fever": "Temperatura",
+    "symptom_sleep": "Problemi sa spavanjem",
+    "symptom_sweats": "Noćno znojenje",
+    "symptom_appetite": "Apetit",
+    "body_head": "Glava",
+    "body_neck": "Vrat",
+    "body_chest": "Prsa",
+    "body_back": "Leđa",
+    "body_stomach": "Stomak",
+    "body_left_arm": "Lijeva ruka",
+    "body_right_arm": "Desna ruka",
+    "body_left_leg": "Lijeva noga",
+    "body_right_leg": "Desna noga",
+    "severity_mild": "Malo",
+    "severity_moderate": "Umjereno",
+    "severity_severe": "Jako",
+    "pain_how_much": "Koliko boli u {{location}}?",
+    "select_location": "Izaberi {{label}}",
+    "pain_level_label": "Nivo boli: {{level}}",
+    "confirm": "Potvrdi",
+    "back": "Nazad",
+    "health_title": "Zdravlje i blagostanje",
+    "view_all": "Prikaži sve",
+    "chart_filter_hint": "Pritisnite na stubac za filtriranje",
+    "symptom_log_title": "Dnevnik simptoma",
+    "symptom_log_last_14_days": "(zadnjih 14 dana)",
+    "no_symptoms_recorded": "Nema registriranih simptoma.",
+    "symptoms_count_label": "simptoma",
+    "unknown": "Nepoznato",
+    "location_prefix": "Lokacija",
+    "intensity_prefix": "Intenzitet",
+    "health_steps": "Koraci",
+    "steps_avg": "prosjek",
+    "select_another_location": "Izaberi drugo mjesto",
+    "go_back_symptom_selection": "Vrati se na izbor simptoma",
+    "daily_photo_title": "Danas slika",
+    "daily_photo_subtitle": "Od porodice s ljubavlju ❤️",
+    "press_to_show": "Pritisni za prikaz",
+    "hide": "Sakrij",
+    "medication_taken": "Lijekovi uzeti! ❤️",
+    "press_to_minimize": "Pritisni za smanjenje",
+    "calling": "Zovem...",
+    "calling_to": "Zovem {{name}}",
+    "end_call": "Završi poziv",
+    "what_needs_done": "Šta treba uraditi?",
+    "example_call_doctor": "Npr. Nazvati doktora",
+    "add_task_button": "Dodaj zadatak",
+    "task_created_alert": "✅ Zadatak kreiran: {{title}}",
+    "dashboard_symptoms": "⚠️ Novi simptomi",
+    "dashboard_symptoms_sub": "Prijavljeno je {{count}} simptoma danas",
+    "dashboard_tasks_missing": "Nedostaju zadaci",
+    "dashboard_tasks_missing_sub": "Provjerite današnje podsjetnike",
+    "theme": "Izgled",
+    "theme_auto": "Automatski (Prati sunce)",
+    "theme_light": "Svijetlo",
+    "theme_dark": "Tamno",
+    "recurring": "Ponavljaj svaki dan",
+    "make_daily": "Ponavljaj svaki dan",
+    "privacy_title": "Privatnost & Podaci",
+    "privacy_pause_sharing": "Pauziraj dijeljenje",
+    "privacy_pause_on": "Vaša porodica ne može vidjeti vaše aktivnosti",
+    "privacy_pause_off": "Vaša porodica može vidjeti vaše aktivnosti",
+    "privacy_download_data": "Preuzmi moje podatke",
+    "privacy_download_desc": "Preuzmite kopiju svih vaših podataka",
+    "privacy_delete_account": "Obriši moj račun",
+    "privacy_delete_desc": "Trajno briše sve vaše podatke",
+    "privacy_confirm_title": "Jeste li sigurni?",
+    "privacy_confirm_desc": "Ovo će trajno obrisati sve vaše podatke, uključujući zadatke, simptome i vaš račun. Ovo se ne može poništiti.",
+    "privacy_cancel": "Otkaži",
+    "privacy_confirm_delete": "Da, obriši sve",
+    "privacy_deleting": "Brisanje...",
+    "privacy_error_relogin": "Morate se ponovo prijaviti da biste obrisali račun. Odjavite se i ponovo se prijavite.",
+    "privacy_error_generic": "Došlo je do greške. Pokušajte ponovo kasnije.",
+    "privacy_export_error": "Došlo je do greške pri izvozu podataka",
+    "privacy_info_storage": "Vaši podaci se čuvaju u EU (Frankfurt) i šifrirani su.",
+    "privacy_policy_link": "Pročitajte našu punu politiku privatnosti",
+    "match_task_call": "📞 Razgovor sa {{name}}",
+    "match_task_visit": "☕ Posjeta od {{name}}",
+    "match_task_meal": "🍳 Kuhanje sa {{name}}",
+    "match_task_transport": "🚗 Vožnja sa {{name}}",
+    "match_task_garden": "🌿 Vrtlarenje sa {{name}}",
+    "match_task_default": "Aktivnost sa {{name}}",
+    "match_task_call_relative": "📞 Nazovi {{name}}",
+    "match_task_visit_relative": "☕ Posjeti {{name}}",
+    "match_task_transport_relative": "🚗 Odvezi {{name}}",
+    "time_days_ago_short": "prije {{count}} dana",
+    "today": "Danas",
+    "task_completed": "Završeno",
+    "symptom_log_item": "Simptom: {{label}}",
+    "no_activity_yet": "Još nema aktivnosti",
+    "general": "Općenito",
+    "privacy_data": "Privatnost i podaci",
+    "seneste_aktivitet": "Nedavna aktivnost"
+}
+```
+---
+
+## File: tryg-app\src\locales\da.json
+```json
+{
+    "settings": "Indstillinger",
+    "language_selection": "Vælg sprog",
+    "sign_out": "Log ud",
+    "family_circle": "Familie-cirkel",
+    "invite_code": "Invitationskode",
+    "show_invite_code": "Vis invitationskode",
+    "logged_in_as": "Logget ind som",
+    "family_heart": "Familiens Hjerte",
+    "medication_title": "Medicin",
+    "pain_question": "Hvordan har du det?",
+    "greeting_morning": "Godmorgen",
+    "greeting_morning_1": "Godmorgen – klar til en ny dag?",
+    "greeting_morning_2": "Godmorgen, håber du har sovet godt",
+    "greeting_afternoon": "Goddag",
+    "greeting_afternoon_1": "Goddag – hvordan går det?",
+    "greeting_afternoon_2": "Goddag, håber du nyder dagen",
+    "greeting_evening": "Godaften",
+    "greeting_evening_1": "Godaften – tid til ro og hygge",
+    "greeting_evening_2": "Godaften, en dejlig dag går på hæld",
+    "medication_taken_check": "Al medicin er ordnet! ❤️",
+    "bottom_nav_daily": "Min dag",
+    "bottom_nav_family": "Familie",
+    "bottom_nav_report": "Rapport",
+    "bottom_nav_spil": "Spil",
+    "role_senior": "Senior oversigt",
+    "role_relative": "Pårørende oversigt",
+    "notification_water_title": "Husk at drikke vand",
+    "notification_water_body": "Det er tid til dit glas vand kl. 10:00",
+    "coffee_invite_title": "{{name}} giver kaffe!",
+    "coffee_invite_sub": "Hun har sat kanden over og har tid til besøg.",
+    "coffee_invite_accept": "Jeg kigger forbi",
+    "coffee_ready_desc": "Familien kan se, at du har tid.",
+    "coffee_off_desc": "Vis at din dør er åben.",
+    "coffee_coming_title": "Nogen er på vej! 🚗",
+    "coffee_coming_msg": "{{name}} kigger forbi til kaffe! ☕️",
+    "coffee_give_button": "Giv kaffe?",
+    "peace_all_well": "Alt er vel ✨",
+    "peace_good_day": "God dag",
+    "peace_check_in": "Tjek ind",
+    "peace_morning_missing": "Morgen mangler",
+    "peace_afternoon_missing": "Eftermiddag mangler",
+    "peace_sub_all_well": "{{name}} har det godt",
+    "peace_sub_good_day": "Dagen skrider fremad",
+    "peace_sub_check_in": "Der er opgaver at følge op på",
+    "peace_sub_morning_missing": "Ikke alle morgenopgaver er udført",
+    "peace_sub_afternoon_missing": "Ikke alle eftermiddagsopgaver er udført",
+    "daily_briefing_all_fine": "Alt ser fint ud. {{name}} har haft en rolig dag.",
+    "daily_briefing_meds_fine": "{{name}} har taget al medicin. Alt er godt.",
+    "daily_briefing_symptom_noted": "{{name}} har noteret {{symptom}} kl. {{time}}, men har taget sin medicin.",
+    "daily_briefing_symptom_warning": "{{name}} har logget symptomer. Medicin: {{completed}}/{{total}} taget.",
+    "daily_briefing_meds_missing": "{{name}} mangler {{count}} mediciner i dag.",
+    "daily_briefing_checked_in": "{{name}} har tjekket ind i dag. Alt ser fint ud.",
+    "daily_briefing_no_activity": "Ingen aktivitet fra {{name}} endnu i dag.",
+    "streak_msg_7": "🏆 {{count}}. dag i træk med alt medicin taget!",
+    "streak_msg_3": "🎉 {{count}}. dag i træk!",
+    "maybe_later": "Måske senere",
+    "status_avail_now": "Status: Har tid nu",
+    "coordination_title": "Familie-udveksling",
+    "others_offers": "Fra andre pårørende:",
+    "from_senior_name": "Fra {{name}}:",
+    "you_offer": "Du tilbyder:",
+    "you_request": "Du ønsker:",
+    "add_offer": "Tilbyd noget",
+    "add_request": "Bed om noget",
+    "symptoms_today": "Symptomer i dag",
+    "open_tasks_count": "Åbne opgaver ({{count}})",
+    "completed_tasks_count": "Udførte opgaver ({{count}})",
+    "add_reminder_name": "Tilføj påmindelse til {{name}}",
+    "status_work": "På arbejde",
+    "status_home": "Hjemme",
+    "status_traveling": "Undervejs",
+    "status_available": "Har tid til en snak",
+    "status_busy": "Optaget",
+    "status_coffee_ready": "Kaffen er klar!",
+    "status_coffee_coming": "Nogen er på vej!",
+    "no_relatives": "Ingen pårørende endnu",
+    "more": "mere",
+    "others": "andre",
+    "din_status": "Din status",
+    "waiting_first_check": "Venter på første tjek...",
+    "last_checked_in": "Sidst",
+    "taken": "ordnet",
+    "you": "dig",
+    "today": "I dag",
+    "days_ago": "-{{count}} dage",
+    "see_details": "Se detaljer",
+    "no_one_played_today": "Ingen har spillet endnu i dag",
+    "press_to_see": "(Tryk for at se)",
+    "symptoms_reported_today": "⚠️ {{count}} symptom rapporteret i dag",
+    "symptoms_reported_today_plural": "⚠️ {{count}} symptomer rapporteret i dag",
+    "weekly_question_1": "Hvem tænker du på i dag?",
+    "weekly_question_2": "Hvad har fået dig til at smile i dag?",
+    "weekly_question_title": "Ugens spørgsmål",
+    "weekly_question_header": "Denne uges spørgsmål",
+    "write_answer_placeholder": "Skriv dit svar her...",
+    "share_your_answer": "Del dit svar",
+    "thanks_for_answer": "Tak for dit svar!",
+    "family_answers_count": "Svar fra familien ({{count}})",
+    "just_now": "Lige nu",
+    "minutes_ago": "{{count}}m siden",
+    "hours_ago": "{{count}}t siden",
+    "days_ago_relative": "{{count}}d siden",
+    "replies_count": "{{count}} svar",
+    "reply_verb": "Svar",
+    "write_reply_placeholder": "Skriv et svar...",
+    "no_answers_yet": "Ingen svar endnu. Vær den første!",
+    "open_weekly_question": "Åbn ugens spørgsmål",
+    "symptoms_today_count": "Symptomer i dag ({{count}})",
+    "be_the_first": "Vær den første!",
+    "you_caps": "DIG",
+    "todays_leaderboard": "Dagens Rangliste",
+    "greeting_relative": "Hej, {{name}}",
+    "new_reminder": "Ny påmindelse",
+    "title_label": "Titel",
+    "reminder_placeholder": "F.eks. Lægebesøg",
+    "when_question": "Hvornår?",
+    "morning": "Morgen",
+    "lunch": "Frokost",
+    "afternoon": "Eftermiddag",
+    "evening": "Aften",
+    "reminder_notice": "Denne påmindelse vil straks dukke op på {{name}}s skærm.",
+    "add_button": "Tilføj",
+    "doctor_report_title": "Rapport til Lægen",
+    "symptoms_14_days": "Symptomer (14 dage)",
+    "most_frequent_count": "Mest hyppige ({{count}}x)",
+    "symptom_overview_14_days": "Symptom-oversigt (14 dage)",
+    "symptoms_count": "{{count}} symptomer",
+    "medicine_compliance_7_days": "Overholdelse af medicin (7 dage)",
+    "symptom_log_14_days": "Symptom Log (sidste 14 dage)",
+    "no_symptoms_registered": "Ingen symptomer registreret.",
+    "locale_code": "da-DK",
+    "location_label": "Lokation",
+    "intensity_label": "Intensitet",
+    "create_task_label": "Opret opgave",
+    "severe_symptoms_count": "{{count}} alvorlige symptomer denne uge",
+    "contact_doctor_cta": "Overvej at kontakte læge",
+    "increasing_symptoms_msg": "Flere symptomer de seneste dage",
+    "book_doctor_cta": "Book tid hos læge?",
+    "decreasing_symptoms_msg": "Symptomerne aftager 👍",
+    "stable_symptoms_msg": "{{count}} symptomer denne uge",
+    "symptoms_this_week": "{{count}} symptomer denne uge",
+    "see_full_history": "Se fuld symptom-historik →",
+    "no_activity_yet": "Ingen aktivitet endnu",
+    "add_own_task": "Tilføj egen opgave",
+    "completed_tasks_count_special": "Udførte opgaver ({{count}})",
+    "time_period_morning": "Morgen",
+    "time_period_lunch": "Frokost",
+    "time_period_afternoon": "Eftermiddag",
+    "time_period_evening": "Aften",
+    "time_period_morning_full": "Morgen (Kl. 8-11)",
+    "time_period_lunch_full": "Frokost (Kl. 12-13)",
+    "time_period_afternoon_full": "Eftermiddag (Kl. 14-17)",
+    "time_period_evening_full": "Aften (Kl. 18-21)",
+    "where_does_it_hurt": "Hvor gør det ondt?",
+    "how_do_you_feel": "Hvordan har du det?",
+    "i_feel_good": "Jeg har det godt",
+    "i_feel_pain": "Jeg har ondt",
+    "task_completed": "Udført",
+    "symptom_log_item": "Symptom: {{label}}",
+    "text_answer": "Skriv",
+    "audio_answer": "Fortæl",
+    "audio_answer_placeholder": "🎙️ Lydoptagelse",
+    "tell_your_story_placeholder": "Tryk for at fortælle din historie",
+    "stop_recording": "Stop optagelse",
+    "start_recording": "Start optagelse",
+    "recording_active": "Optager...",
+    "play_recording": "Afspil",
+    "delete_and_retry": "Slet og prøv igen",
+    "mic_permission_denied": "Mikrofonadgang nægtet",
+    "mic_access_error": "Fejl ved mikrofonadgang",
+    "audio_recorder_not_supported": "Lydoptagelse understøttes ikke",
+    "livsbog_title": "Livsbog (Minder)",
+    "no_memories_yet": "Ingen minder endnu",
+    "memories_will_appear_here": "Livshistorier vil dukke op her",
+    "stories": "historier",
+    "untilted_memory": "Uden titel",
+    "audio": "Lyd",
+    "uploading": "Uploader...",
+    "spillehjoernet_title": "Spillehjørnet",
+    "spillehjoernet_subtitle": "Dagens ordleg med familien",
+    "word_game_complete": "Dagens ord er klaret!",
+    "correct_answers": "rigtige svar",
+    "word_game_80_percent": "Fantastisk! Du er en ordmester!",
+    "word_game_60_percent": "Godt gået! Du kender dine ord.",
+    "word_game_below_60": "Godt forsøgt! Prøv igen i morgen.",
+    "word_of": "Ord {{current}} af {{total}}",
+    "points": "point",
+    "what_does_mean": "Hvad betyder",
+    "answer_correct": "Helt rigtigt! 🎉",
+    "answer_wrong": "Ikke helt...",
+    "word_means": "betyder:",
+    "next_word": "Næste ord",
+    "symptom_pain": "Smerter",
+    "symptom_dizzy": "Svimmel",
+    "symptom_nausea": "Kvalme",
+    "symptom_fever": "Feber",
+    "symptom_sleep": "Søvnbesvær",
+    "symptom_sweats": "Nattesved",
+    "symptom_appetite": "Appetit",
+    "body_head": "Hoved",
+    "body_neck": "Nakke",
+    "body_chest": "Bryst",
+    "body_back": "Ryg",
+    "body_stomach": "Mave",
+    "body_left_arm": "Venstre arm",
+    "body_right_arm": "Højre arm",
+    "body_left_leg": "Venstre ben",
+    "body_right_leg": "Højre ben",
+    "severity_mild": "Lidt",
+    "severity_moderate": "Noget",
+    "severity_severe": "Meget",
+    "pain_how_much": "Hvor ondt gør det i {{location}}?",
+    "select_location": "Vælg {{label}}",
+    "pain_level_label": "Smerte niveau: {{level}}",
+    "confirm": "Bekræft",
+    "back": "Tilbage",
+    "health_title": "Sundhed & Velvære",
+    "view_all": "Vis alle",
+    "chart_filter_hint": "Tryk på en søjle for at filtrere",
+    "symptom_log_title": "Symptom Log",
+    "symptom_log_last_14_days": "(sidste 14 dage)",
+    "no_symptoms_recorded": "Ingen symptomer registreret.",
+    "symptoms_count_label": "symptomer",
+    "unknown": "Ukendt",
+    "location_prefix": "Lokation",
+    "intensity_prefix": "Intensitet",
+    "health_steps": "Skridt",
+    "steps_avg": "gennemsnit",
+    "select_another_location": "Vælg et andet sted",
+    "go_back_symptom_selection": "Gå tilbage til symptomvalg",
+    "daily_photo_title": "Dagens Billede",
+    "daily_photo_subtitle": "Fra familien med kærlighed ❤️",
+    "press_to_show": "Tryk for at vise",
+    "hide": "Skjul",
+    "medication_taken": "Medicin taget! ❤️",
+    "press_to_minimize": "Tryk for at minimere",
+    "calling": "Ringer op...",
+    "calling_to": "Ringer til {{name}}",
+    "end_call": "Afslut opkald",
+    "what_needs_done": "Hvad skal gøres?",
+    "example_call_doctor": "F.eks. Ring til lægen",
+    "add_task_button": "Tilføj opgave",
+    "task_created_alert": "✅ Opgave oprettet: {{title}}",
+    "dashboard_symptoms": "⚠️ Nye symptomer",
+    "dashboard_symptoms_sub": "Der er rapporteret {{count}} symptomer i dag",
+    "dashboard_tasks_missing": "Mangler opgaver",
+    "dashboard_tasks_missing_sub": "Tjek op på dagens påmindelser",
+    "theme": "Udseende",
+    "theme_dark": "Mørkt",
+    "recurring": "Gentag dagligt",
+    "make_daily": "Gentag dagligt",
+    "privacy_title": "Privatliv & Data",
+    "privacy_pause_sharing": "Pause deling",
+    "privacy_pause_on": "Din familie kan ikke se dine aktiviteter",
+    "privacy_pause_off": "Din familie kan se dine aktiviteter",
+    "privacy_download_data": "Download mine data",
+    "privacy_download_desc": "Få en kopi af alle dine data",
+    "privacy_delete_account": "Slet min konto",
+    "privacy_delete_desc": "Sletter alle dine data permanent",
+    "privacy_confirm_title": "Er du sikker?",
+    "privacy_confirm_desc": "Dette vil permanent slette alle dine data, inklusiv opgaver, symptomer, og din konto. Dette kan ikke fortrydes.",
+    "privacy_cancel": "Annuller",
+    "privacy_confirm_delete": "Ja, slet alt",
+    "privacy_deleting": "Sletter...",
+    "privacy_error_relogin": "Du skal logge ind igen for at slette din konto. Log ud og log ind igen.",
+    "privacy_error_generic": "Der opstod en fejl. Prøv igen senere.",
+    "privacy_export_error": "Der opstod en fejl ved eksport af data",
+    "privacy_info_storage": "Dine data opbevares i EU (Frankfurt) og er krypteret.",
+    "privacy_policy_link": "Læs vores fulde privatlivspolitik",
+    "match_task_call": "📞 Ring med {{name}}",
+    "match_task_visit": "☕ Besøg fra {{name}}",
+    "match_task_meal": "🍳 Lav mad med {{name}}",
+    "match_task_transport": "🚗 Tur med {{name}}",
+    "match_task_garden": "🌿 Havearbejde med {{name}}",
+    "match_task_default": "Aktivitet med {{name}}",
+    "match_task_call_relative": "📞 Ring til {{name}}",
+    "match_task_visit_relative": "☕ Besøg hos {{name}}",
+    "match_task_transport_relative": "🚗 Kør {{name}}",
+    "time_days_ago_short": "{{count}} dage siden",
+    "today": "I dag",
+    "task_completed": "Udført",
+    "symptom_log_item": "Symptom: {{label}}",
+    "no_activity_yet": "Ingen aktivitet endnu",
+    "theme_auto": "Auto",
+    "theme_light": "Lys",
+    "theme_dark": "Mørk",
+    "general": "Generelt",
+    "privacy_data": "Privatliv & data",
+    "seneste_aktivitet": "Seneste aktivitet"
+}
+```
+---
+
+## File: tryg-app\src\locales\tr.json
+```json
+{
+    "settings": "Ayarlar",
+    "language_selection": "Dil Seçimi",
+    "sign_out": "Oturumu Kapat",
+    "family_circle": "Aile Çemberi",
+    "invite_code": "Davet Kodu",
+    "show_invite_code": "Davet kodunu göster",
+    "logged_in_as": "Olarak giriş yapıldı",
+    "family_heart": "Aile Kalbi",
+    "medication_title": "İlaç",
+    "pain_question": "Nasıl hissediyorsun?",
+    "greeting_morning": "Günaydın",
+    "greeting_morning_1": "Günaydın – yeni bir güne hazır mısınız?",
+    "greeting_morning_2": "Günaydın, umarım iyi uyudunuz",
+    "greeting_afternoon": "İyi Günler",
+    "greeting_afternoon_1": "İyi günler – nasılsınız?",
+    "greeting_afternoon_2": "İyi günler, umarım gününüz güzel geçiyordur",
+    "greeting_evening": "İyi Akşamlar",
+    "greeting_evening_1": "İyi akşamlar – dinlenme ve huzur zamanı",
+    "greeting_evening_2": "İyi akşamlar, güzel bir gün sona eriyor",
+    "bottom_nav_daily": "Günüm",
+    "bottom_nav_family": "Aile",
+    "bottom_nav_report": "Rapor",
+    "bottom_nav_spil": "Oyunlar",
+    "role_senior": "Yaşlı Bakım Özeti",
+    "role_relative": "Akraba Özeti",
+    "notification_water_title": "Su içmeyi unutmayın",
+    "notification_water_body": "Saat 10:00'da su bardağınız için zamanı",
+    "coffee_invite_title": "{{name}} kahve ikram ediyor!",
+    "coffee_invite_sub": "Kahveyi hazırladı ve ziyarete zamanı var.",
+    "coffee_invite_accept": "Uğrayacağım",
+    "coffee_ready_desc": "Ailen müsait olduğunu görebilir.",
+    "coffee_off_desc": "Kapının açık olduğunu göster.",
+    "coffee_coming_title": "Birisi yolda! 🚗",
+    "coffee_coming_msg": "{{name}} kahveye geliyor! ☕️",
+    "coffee_give_button": "Kahve verilsin mi?",
+    "peace_all_well": "Her şey yolunda ✨",
+    "peace_good_day": "İyi günler",
+    "peace_check_in": "Kontrol et",
+    "peace_morning_missing": "Sabah eksik",
+    "peace_afternoon_missing": "Öğleden sonra eksik",
+    "peace_sub_all_well": "{{name}} iyi durumda",
+    "peace_sub_good_day": "Gün ilerliyor",
+    "peace_sub_check_in": "Takip edilecek görevler var",
+    "peace_sub_morning_missing": "Tüm sabah görevleri tamamlanmadı",
+    "peace_sub_afternoon_missing": "Tüm öğleden sonra görevleri tamamlanmadı",
+    "daily_briefing_all_fine": "Her şey yolunda görünüyor. {{name}} sakin bir gün geçirdi.",
+    "daily_briefing_meds_fine": "{{name}} tüm ilaçlarını aldı. Her şey güzel.",
+    "daily_briefing_symptom_noted": "{{name}}, saat {{time}}'de {{symptom}} not etti ancak ilacını aldı.",
+    "daily_briefing_symptom_warning": "{{name}} belirti kaydetti. İlaç: {{completed}}/{{total}} alındı.",
+    "daily_briefing_meds_missing": "{{name}} bugün {{count}} ilacı eksik.",
+    "daily_briefing_checked_in": "{{name}} bugün giriş yaptı. Her şey yolunda görünüyor.",
+    "daily_briefing_no_activity": "{{name}} tarafından bugün henüz aktivite yok.",
+    "streak_msg_7": "🏆 Üst üste {{count}}. gün tüm ilaçlar alındı!",
+    "streak_msg_3": "🎉 Üst üste {{count}}. gün!",
+    "maybe_later": "Belki sonra",
+    "status_avail_now": "Durum: Şu an müsait",
+    "coordination_title": "Aile Paylaşımı",
+    "others_offers": "Diğer akrabalardan:",
+    "from_senior_name": "{{name}}'den:",
+    "you_offer": "Sundukların:",
+    "you_request": "İsteklerin:",
+    "add_offer": "Bir şey teklif et",
+    "add_request": "Bir şey iste",
+    "symptoms_today": "Bugünkü belirtiler",
+    "open_tasks_count": "Açık görevler ({{count}})",
+    "completed_tasks_count": "Tamamlanan görevler ({{count}})",
+    "add_reminder_name": "{{name}} için hatırlatıcı ekle",
+    "status_work": "İşte",
+    "status_home": "Evde",
+    "status_traveling": "Yolda",
+    "status_available": "Sohbet etmek için zamanı var",
+    "status_busy": "Meşgul",
+    "status_coffee_ready": "Kahve hazır!",
+    "status_coffee_coming": "Birisi yolda!",
+    "no_relatives": "Henüz akraba yok",
+    "more": "daha",
+    "others": "diğer",
+    "din_status": "Durumun",
+    "waiting_first_check": "İlk kontrol bekleniyor...",
+    "last_checked_in": "Son",
+    "taken": "tamamlandı",
+    "you": "sen",
+    "today": "Bugün",
+    "days_ago": "-{{count}} gün",
+    "see_details": "Detayları gör",
+    "no_one_played_today": "Bugün henüz kimse oynamadı",
+    "press_to_see": "(Görmek için tıkla)",
+    "symptoms_reported_today": "⚠️ Bugün {{count}} belirti bildirildi",
+    "symptoms_reported_today_plural": "⚠️ Bugün {{count}} belirti bildirildi",
+    "weekly_question_1": "Bugün kimi düşünüyorsun?",
+    "weekly_question_2": "Bugün seni ne gülümsetti?",
+    "weekly_question_title": "Haftanın Sorusu",
+    "weekly_question_header": "Bu haftanın sorusu",
+    "write_answer_placeholder": "Cevabını buraya yaz...",
+    "share_your_answer": "Cevabını paylaş",
+    "thanks_for_answer": "Cevabın için teşekkürler!",
+    "family_answers_count": "Aileden cevaplar ({{count}})",
+    "just_now": "Az önce",
+    "minutes_ago": "{{count}}dk önce",
+    "hours_ago": "{{count}}sa önce",
+    "days_ago_relative": "{{count}}g önce",
+    "replies_count": "{{count}} cevap",
+    "reply_verb": "Cevapla",
+    "write_reply_placeholder": "Bir cevap yaz...",
+    "no_answers_yet": "Henüz cevap yok. İlk sen ol!",
+    "open_weekly_question": "Haftanın sorusunu aç",
+    "symptoms_today_count": "Bugünkü belirtiler ({{count}})",
+    "be_the_first": "İlk sen ol!",
+    "you_caps": "SEN",
+    "todays_leaderboard": "Bugünkü Sıralama",
+    "greeting_relative": "Merhaba, {{name}}",
+    "new_reminder": "Yeni Hatırlatıcı",
+    "title_label": "Başlık",
+    "reminder_placeholder": "Örn. Doktor randevusu",
+    "when_question": "Ne zaman?",
+    "morning": "Sabah",
+    "lunch": "Öğle",
+    "afternoon": "Öğleden Sonra",
+    "evening": "Akşam",
+    "reminder_notice": "Bu hatırlatıcı hemen {{name}}'in ekranında görünecektir.",
+    "add_button": "Ekle",
+    "doctor_report_title": "Doktor Raporu",
+    "symptoms_14_days": "Belirtiler (14 gün)",
+    "most_frequent_count": "En sık ({{count}} kez)",
+    "symptom_overview_14_days": "Belirti Özeti (14 gün)",
+    "symptoms_count": "{{count}} belirti",
+    "medicine_compliance_7_days": "İlaç Uyumu (7 gün)",
+    "symptom_log_14_days": "Belirti Kaydı (son 14 gün)",
+    "no_symptoms_registered": "Kayıtlı belirti yok.",
+    "locale_code": "tr-TR",
+    "location_label": "Konum",
+    "intensity_label": "Yoğunluk",
+    "create_task_label": "Görev oluştur",
+    "severe_symptoms_count": "Bu hafta {{count}} ciddi belirti",
+    "contact_doctor_cta": "Doktorla iletişime geçmeyi düşünün",
+    "increasing_symptoms_msg": "Son günlerde artan belirtiler",
+    "book_doctor_cta": "Doktor randevusu al?",
+    "decreasing_symptoms_msg": "Belirtiler azalıyor 👍",
+    "stable_symptoms_msg": "Bu hafta {{count}} belirti",
+    "symptoms_this_week": "Bu hafta {{count}} belirti",
+    "see_full_history": "Tam belirti geçmişini gör →",
+    "no_activity_yet": "Henüz aktivite yok",
+    "add_own_task": "Kendi görevini ekle",
+    "completed_tasks_count_special": "Tamamlanan görevler ({{count}})",
+    "time_period_morning": "Sabah",
+    "time_period_lunch": "Öğle",
+    "time_period_afternoon": "Öğleden Sonra",
+    "time_period_evening": "Akşam",
+    "time_period_morning_full": "Sabah (08-11)",
+    "time_period_lunch_full": "Öğle (12-13)",
+    "time_period_afternoon_full": "Öğleden Sonra (14-17)",
+    "time_period_evening_full": "Akşam (18-21)",
+    "where_does_it_hurt": "Neresi ağrıyor?",
+    "how_do_you_feel": "Nasıl hissediyorsun?",
+    "i_feel_good": "İyiyim",
+    "i_feel_pain": "Ağrım var",
+    "task_completed": "Tamamlandı",
+    "symptom_log_item": "Belirti: {{label}}",
+    "text_answer": "Metin",
+    "audio_answer": "Ses",
+    "audio_answer_placeholder": "🎙️ Ses kaydı",
+    "tell_your_story_placeholder": "Hikayenizi anlatmak için basın",
+    "stop_recording": "Durdur",
+    "start_recording": "Kaydet",
+    "recording_active": "Kaydediliyor...",
+    "play_recording": "Oynat",
+    "delete_and_retry": "Sil ve tekrar dene",
+    "mic_permission_denied": "Mikrofon izni reddedildi",
+    "mic_access_error": "Mikrofon erişim hatası",
+    "audio_recorder_not_supported": "Ses kaydı desteklenmiyor",
+    "livsbog_title": "Yaşam Defteri (Anılar)",
+    "no_memories_yet": "Henüz anı yok",
+    "memories_will_appear_here": "Yaşam hikayeleri burada görünecek",
+    "stories": "hikaye",
+    "untilted_memory": "Adsız",
+    "audio": "Ses",
+    "uploading": "Yükleniyor...",
+    "spillehjoernet_title": "Oyun Köşesi",
+    "spillehjoernet_subtitle": "Aile ile günlük kelime oyunu",
+    "word_game_complete": "Günün kelimeleri tamamlandı!",
+    "correct_answers": "doğru cevap",
+    "word_game_80_percent": "Harika! Sen bir kelime ustasısın!",
+    "word_game_60_percent": "İyi iş! Kelimelerini biliyorsun.",
+    "word_game_below_60": "İyi deneme! Yarın tekrar dene.",
+    "word_of": "Kelime {{current}} / {{total}}",
+    "points": "puan",
+    "what_does_mean": "Ne demek",
+    "answer_correct": "Tamamen doğru! 🎉",
+    "answer_wrong": "Tam değil...",
+    "word_means": "anlamı:",
+    "next_word": "Sonraki kelime",
+    "symptom_pain": "Ağrı",
+    "symptom_dizzy": "Baş dönmesi",
+    "symptom_nausea": "Mide bulantısı",
+    "symptom_fever": "Ateş",
+    "symptom_sleep": "Uyku problemi",
+    "symptom_sweats": "Gece terlemesi",
+    "symptom_appetite": "İştah",
+    "body_head": "Baş",
+    "body_neck": "Boyun",
+    "body_chest": "Göğüs",
+    "body_back": "Sırt",
+    "body_stomach": "Mide",
+    "body_left_arm": "Sol kol",
+    "body_right_arm": "Sağ kol",
+    "body_left_leg": "Sol bacak",
+    "body_right_leg": "Sağ bacak",
+    "severity_mild": "Az",
+    "severity_moderate": "Orta",
+    "severity_severe": "Çok",
+    "pain_how_much": "{{location}} ne kadar ağrıyor?",
+    "select_location": "{{label}} seç",
+    "pain_level_label": "Ağrı seviyesi: {{level}}",
+    "confirm": "Onayla",
+    "back": "Geri",
+    "health_title": "Sağlık ve İyilik",
+    "view_all": "Tümünü Görüntüle",
+    "chart_filter_hint": "Filtrelemek için bir sütuna dokunun",
+    "symptom_log_title": "Semptom Günlüğü",
+    "symptom_log_last_14_days": "(son 14 gün)",
+    "no_symptoms_recorded": "Kayıtlı semptom yok.",
+    "symptoms_count_label": "semptom",
+    "unknown": "Bilinmeyen",
+    "location_prefix": "Konum",
+    "intensity_prefix": "Yoğunluk",
+    "health_steps": "Adımlar",
+    "steps_avg": "ortalama",
+    "select_another_location": "Başka yer seç",
+    "go_back_symptom_selection": "Belirti seçimine dön",
+    "daily_photo_title": "Günün Fotoğrafı",
+    "daily_photo_subtitle": "Aileden sevgiyle ❤️",
+    "press_to_show": "Göstermek için dokun",
+    "hide": "Gizle",
+    "medication_taken": "İlaç alındı! ❤️",
+    "press_to_minimize": "Küçültmek için dokun",
+    "calling": "Arıyor...",
+    "calling_to": "{{name}} aranıyor",
+    "end_call": "Aramayı bitir",
+    "what_needs_done": "Ne yapılması gerekiyor?",
+    "example_call_doctor": "Örn. Doktoru ara",
+    "add_task_button": "Görev ekle",
+    "task_created_alert": "✅ Görev oluşturuldu: {{title}}",
+    "dashboard_symptoms": "⚠️ Yeni semptomlar",
+    "dashboard_symptoms_sub": "Bugün {{count}} semptom bildirildi",
+    "dashboard_tasks_missing": "Eksik görevler",
+    "dashboard_tasks_missing_sub": "Bugünün hatırlatıcılarını kontrol edin",
+    "theme": "Görünüm",
+    "theme_auto": "Otomatik (Güneşi takip et)",
+    "theme_light": "Açık",
+    "theme_dark": "Koyu",
+    "recurring": "Her gün tekrarla",
+    "make_daily": "Her gün tekrarla",
+    "privacy_title": "Gizlilik & Veriler",
+    "privacy_pause_sharing": "Paylaşımı duraklat",
+    "privacy_pause_on": "Ailen aktivitelerini göremez",
+    "privacy_pause_off": "Ailen aktivitelerini görebilir",
+    "privacy_download_data": "Verilerimi indir",
+    "privacy_download_desc": "Tüm verilerinizin bir kopyasını alın",
+    "privacy_delete_account": "Hesabımı sil",
+    "privacy_delete_desc": "Tüm verilerinizi kalıcı olarak siler",
+    "privacy_confirm_title": "Emin misiniz?",
+    "privacy_confirm_desc": "Bu işlem görevler, semptomlar ve hesabınız dahil tüm verilerinizi kalıcı olarak silecektir. Bu geri alınamaz.",
+    "privacy_cancel": "İptal",
+    "privacy_confirm_delete": "Evet, hepsini sil",
+    "privacy_deleting": "Siliniyor...",
+    "privacy_error_relogin": "Hesabınızı silmek için tekrar giriş yapmanız gerekiyor. Çıkış yapıp tekrar giriş yapın.",
+    "privacy_error_generic": "Bir hata oluştu. Daha sonra tekrar deneyin.",
+    "privacy_export_error": "Veri dışa aktarılırken bir hata oluştu",
+    "privacy_info_storage": "Verileriniz AB'de (Frankfurt) saklanır ve şifrelenir.",
+    "privacy_policy_link": "Gizlilik politikamızın tamamını okuyun",
+    "match_task_call": "📞 {{name}} ile ara",
+    "match_task_visit": "☕ {{name}}'den ziyaret",
+    "match_task_meal": "🍳 {{name}} ile yemek yap",
+    "match_task_transport": "🚗 {{name}} ile tur",
+    "match_task_garden": "🌿 {{name}} ile bahçe işi",
+    "match_task_default": "{{name}} ile etkinlik",
+    "match_task_call_relative": "📞 {{name}}'i ara",
+    "match_task_visit_relative": "☕ {{name}}'i ziyaret et",
+    "match_task_transport_relative": "🚗 {{name}}'i götür",
+    "time_days_ago_short": "{{count}} gün önce",
+    "today": "Bugün",
+    "task_completed": "Tamamlandı",
+    "symptom_log_item": "Semptom: {{label}}",
+    "no_activity_yet": "Henüz aktivite yok",
+    "general": "Genel",
+    "privacy_data": "Gizlilik ve veriler",
+    "seneste_aktivitet": "Son aktivite"
 }
 ```
 ---
@@ -11389,6 +15161,7 @@ import * as Sentry from '@sentry/react'
 import AppWithAuth from './AppWithAuth'
 import ErrorBoundary from './components/ErrorBoundary'
 import './index.css'
+import './i18n'
 
 // ============================================================================
 // CRASH LOOP DETECTION - Self-healing mechanism
@@ -11479,10 +15252,14 @@ window.onunhandledrejection = (event) => {
 // APP RENDER
 // ============================================================================
 
+import { ThemeProvider } from './contexts/ThemeContext'
+
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
         <ErrorBoundary>
-            <AppWithAuth />
+            <ThemeProvider>
+                <AppWithAuth />
+            </ThemeProvider>
         </ErrorBoundary>
     </StrictMode>,
 )
@@ -11495,8 +15272,8 @@ createRoot(document.getElementById('root')!).render(
 // P2 Component Tests - Feature robustness
 // Tests for ProgressRing, InlineGatesIndicator, SeniorStatusCard
 
-import { describe, it, expect, vi } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { describe, it, expect } from 'vitest'
+import { render } from '@testing-library/react'
 
 describe('ProgressRing Component', () => {
     it('can be imported without error', async () => {
@@ -12197,7 +15974,7 @@ describe('useLocalStorage', () => {
 // Critical: Would have caught the PWA crash from undefined familyStatus
 
 import { describe, it, expect, vi } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render } from '@testing-library/react'
 
 // Mock Firebase modules before importing components
 vi.mock('../config/firebase', () => ({
@@ -12330,6 +16107,113 @@ describe('FamilyPresence Smoke Tests', () => {
 
 ## File: tryg-app\src\types.ts
 ```ts
+export interface Task {
+    id: string;
+    title: string;
+    period: string;
+    time: string;
+    emoji?: string;
+    completed: boolean;
+    createdAt?: any;
+    completedAt?: any;
+    recurring?: boolean;
+    originalId?: string;
+    type?: string; // e.g. 'medication'
+    [key: string]: any;
+}
+export interface WeeklyReply {
+    id: string;
+    userId: string;
+    userName: string;
+    text: string;
+    createdAt: string;
+}
+
+export interface WeeklyAnswer {
+    id: string;
+    questionId?: string;
+    text?: string;
+    userId?: string;
+    userName?: string;
+    answeredAt?: any; // Firestore Timestamp
+    likes?: string[];
+    replies?: WeeklyReply[];
+    audioUrl?: string;
+}
+
+export interface Ping {
+    id: string;
+    fromName: string;
+    fromUserId: string;
+    toRole: 'senior' | 'relative';
+    sentAt: any; // Date | Timestamp
+    toUserId?: string;
+    type?: string;
+    message?: string;
+}
+
+export interface Photo {
+    id: string;
+    imageUrl: string;
+    storagePath?: string;
+    fromUserId: string;
+    fromName: string;
+    uploadedAt: any;
+    viewedAt?: any;
+}
+
+export interface HelpOffer {
+    docId: string;
+    id: string;
+    label: string;
+    emoji: string;
+    createdByUid?: string;
+    createdByRole?: string;
+    createdByName?: string;
+    createdAt?: any;
+}
+
+export interface HelpRequest {
+    docId: string;
+    id: string;
+    label: string;
+    emoji: string;
+    createdByUid?: string;
+    createdByRole?: string;
+    createdByName?: string;
+    createdAt?: any;
+}
+
+export interface Severity {
+    id: 'mild' | 'moderate' | 'severe';
+    label: string;
+    emoji: string;
+    level: number;
+}
+
+export interface BodyLocation {
+    id: string;
+    label: string;
+    emoji: string;
+    severity?: Severity;
+}
+
+export interface SymptomLog {
+    id: string;
+    label?: string;
+    type?: string; // e.g. 'pain', 'dizzy'
+    color?: string;
+    bodyLocation?: BodyLocation;
+    time: string;
+    date: string;
+    loggedAt?: any; // Firestore Timestamp
+}
+
+export interface SymptomStats {
+    count: number;
+    lastOccurrence: string | null;
+}
+
 /**
  * Core Type Definitions for Tryg App
  */
@@ -12338,9 +16222,22 @@ export interface Member {
     docId: string;
     displayName: string;
     role: 'senior' | 'relative';
-    status: 'home' | 'work' | 'traveling' | 'available' | 'busy';
+    status: 'home' | 'work' | 'traveling' | 'available' | 'busy' | 'coffee_ready' | 'coffee_coming';
     updatedAt?: any; // Firestore timestamp
     id?: string; // Sometimes used interchangeably with docId
+    // Generational Orbits
+    relationship?: string; // e.g. 'son', 'granddaughter'
+    accessLevel?: 'admin' | 'caregiver' | 'joy' | 'guest'; // Permissions
+    archetype?: 'tech_wizard' | 'listener' | 'fixer' | 'driver' | 'cheerleader'; // Superpower badge
+}
+
+export interface MemberStatus {
+    docId: string; // This is the userId
+    status: string;
+    displayName: string;
+    role: 'senior' | 'relative';
+    updatedAt?: any;
+    [key: string]: any;
 }
 
 export interface UserProfile {
@@ -12352,6 +16249,7 @@ export interface UserProfile {
     consentTimestamp?: any;
     uid?: string;
     photoURL?: string;
+    languagePreference?: string;
 }
 
 export interface CareCircle {
@@ -12360,20 +16258,61 @@ export interface CareCircle {
     seniorName: string;
     inviteCode: string;
     createdAt: any;
+    lastResetDate?: string; // Daily reset tracker (YYYY-MM-DD)
 }
 
+export type AppTab = 'daily' | 'family' | 'health' | 'spil';
+
 export interface CareCircleContextValue {
+    // Circle info
     careCircleId: string | null;
     seniorId: string | null;
-    seniorName: string | null;
+    seniorName: string;
+
+    // Current user info
     currentUserId: string | null;
     userRole: 'senior' | 'relative' | null;
-    userName: string | null;
-    memberStatuses: Member[];
-    relativeStatuses: Member[];
-    seniorStatus?: Member;
-    myStatus: string;
-    setMyStatus: (status: string) => void;
+    userName: string;
+    relativeName: string; // Added
+
+    // Member statuses (for FamilyPresence, etc.)
+    memberStatuses: MemberStatus[];
+    members: Member[];
+    relativeStatuses: MemberStatus[];
+    seniorStatus: MemberStatus | null;
+    myStatus: string; // Changed from MemberStatus | null to string
+    setMyStatus: (status: string) => Promise<void>;
+
+    // Feature Data & Actions (The Prop Drilling Cure)
+    // ---------------------------------------------
+
+    // Navigation
+    activeTab: AppTab;
+    setActiveTab: (tab: AppTab) => void;
+
+    // Tasks
+    tasks: Task[];
+    toggleTask: (id: string) => void; // Return type changed
+    addTask: (task: Partial<Task>) => void; // Return type changed
+
+    // Symptoms
+    symptoms: SymptomLog[];
+    addSymptom: (symptom: Partial<SymptomLog>) => Promise<string | undefined>;
+
+    // Weekly Questions
+    weeklyAnswers: WeeklyAnswer[];
+    addWeeklyAnswer: (answer: string) => Promise<string | undefined>;
+    toggleLike: (answerId: string, userId: string, isLiked: boolean) => Promise<void>;
+    addReply: (answerId: string, reply: Omit<WeeklyReply, 'id'>) => Promise<void>;
+
+    // "Thinking of You" (Pings)
+    latestPing: Ping | null;
+    sendPing: (toRole: 'senior' | 'relative') => Promise<string | undefined>;
+    dismissPing: () => void;
+
+    // Check-in
+    lastCheckIn: string | null;
+    recordCheckIn: () => Promise<string | void | undefined>;
 }
 
 ```
@@ -12389,13 +16328,14 @@ export interface CareCircleContextValue {
  * a human-readable status instead of raw data.
  */
 
-import { Task } from '../features/tasks/useTasks';
+import { Task, SymptomLog } from '../types';
 
 interface BriefingParams {
     tasks?: Task[];
-    symptoms?: any[]; // Keep flexible if Symptom type not strictly defined globally yet
+    symptoms?: SymptomLog[];
     seniorName?: string;
-    lastCheckIn?: any;
+    lastCheckIn?: string | null;
+    t: any; // i18next t function
 }
 
 /**
@@ -12403,8 +16343,14 @@ interface BriefingParams {
  */
 const isToday = (date: any): boolean => {
     if (!date) return false;
-    // @ts-ignore - Firestore timestamps have toDate()
-    const d = date.toDate ? date.toDate() : new Date(date);
+    let d: Date;
+    if (date.toDate) {
+        d = date.toDate();
+    } else if (typeof date === 'string') {
+        d = new Date(date);
+    } else {
+        d = new Date(date);
+    }
     const today = new Date();
     return d.toDateString() === today.toDateString();
 };
@@ -12412,7 +16358,7 @@ const isToday = (date: any): boolean => {
 /**
  * Generate a natural language daily briefing
  */
-export function getDailyBriefing({ tasks = [], symptoms = [], seniorName = 'Mor', lastCheckIn = null }: BriefingParams) {
+export function getDailyBriefing({ tasks = [], symptoms = [], seniorName = 'Mor', lastCheckIn = null, t }: BriefingParams) {
     const firstName = seniorName.split(' ')[0]; // Use first name for warmth
 
     // Calculate task stats
@@ -12439,13 +16385,13 @@ export function getDailyBriefing({ tasks = [], symptoms = [], seniorName = 'Mor'
     if (allMedicineComplete && !hasSymptoms) {
         if (allTasksComplete) {
             return {
-                message: `Alt ser fint ud. ${firstName} har haft en rolig dag.`,
+                message: t('daily_briefing_all_fine', { name: firstName }),
                 emoji: '✨',
                 type: 'success' as const
             };
         }
         return {
-            message: `${firstName} har taget al medicin. Alt er godt.`,
+            message: t('daily_briefing_meds_fine', { name: firstName }),
             emoji: '💚',
             type: 'success' as const
         };
@@ -12458,7 +16404,7 @@ export function getDailyBriefing({ tasks = [], symptoms = [], seniorName = 'Mor'
         const time = todaySymptoms[0]?.loggedAt?.toDate?.()?.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' }) || '';
 
         return {
-            message: `${firstName} har noteret ${symptomName}${time ? ` kl. ${time}` : ''}, men har taget sin medicin.`,
+            message: t('daily_briefing_symptom_noted', { name: firstName, symptom: symptomName, time }),
             emoji: '📋',
             type: 'info' as const
         };
@@ -12467,7 +16413,7 @@ export function getDailyBriefing({ tasks = [], symptoms = [], seniorName = 'Mor'
     // Medicine not complete but symptoms logged
     if (!allMedicineComplete && hasSymptoms) {
         return {
-            message: `${firstName} har logget symptomer. Medicin: ${completedMedicine}/${medicineTasks.length} taget.`,
+            message: t('daily_briefing_symptom_warning', { name: firstName, completed: completedMedicine, total: medicineTasks.length }),
             emoji: '⚠️',
             type: 'warning' as const
         };
@@ -12477,7 +16423,7 @@ export function getDailyBriefing({ tasks = [], symptoms = [], seniorName = 'Mor'
     if (!allMedicineComplete && medicineTasks.length > 0) {
         const remaining = medicineTasks.length - completedMedicine;
         return {
-            message: `${firstName} mangler ${remaining} medicin${remaining > 1 ? 'er' : ''} i dag.`,
+            message: t('daily_briefing_meds_missing', { name: firstName, count: remaining }),
             emoji: '💊',
             type: 'info' as const
         };
@@ -12486,7 +16432,7 @@ export function getDailyBriefing({ tasks = [], symptoms = [], seniorName = 'Mor'
     // No tasks at all - show neutral status
     if (lastCheckIn && isToday(lastCheckIn)) {
         return {
-            message: `${firstName} har tjekket ind i dag. Alt ser fint ud.`,
+            message: t('daily_briefing_checked_in', { name: firstName }),
             emoji: '👍',
             type: 'success' as const
         };
@@ -12494,7 +16440,7 @@ export function getDailyBriefing({ tasks = [], symptoms = [], seniorName = 'Mor'
 
     // No activity yet today
     return {
-        message: `Ingen aktivitet fra ${firstName} endnu i dag.`,
+        message: t('daily_briefing_no_activity', { name: firstName }),
         emoji: '💤',
         type: 'info' as const
     };
@@ -12503,12 +16449,12 @@ export function getDailyBriefing({ tasks = [], symptoms = [], seniorName = 'Mor'
 /**
  * Get streak message if applicable
  */
-export function getStreakMessage(streakDays: number, seniorName = 'Mor') {
+export function getStreakMessage(streakDays: number, _seniorName = 'Mor', t: any) {
     if (streakDays >= 7) {
-        return `🏆 ${streakDays}. dag i træk med alt medicin taget!`;
+        return t('streak_msg_7', { count: streakDays });
     }
     if (streakDays >= 3) {
-        return `🎉 ${streakDays}. dag i træk!`;
+        return t('streak_msg_3', { count: streakDays });
     }
     return null;
 }
@@ -12611,6 +16557,111 @@ export function getImagePreview(file: File): Promise<string> {
         reader.onerror = () => reject(new Error('Failed to read file'));
         reader.readAsDataURL(file);
     });
+}
+
+```
+---
+
+## File: tryg-app\src\utils\notifications.ts
+```ts
+/**
+ * PWA Notification Helper
+ * Provides utilities for requesting notification permissions and displaying
+ * medication reminders as browser notifications.
+ */
+
+/**
+ * Request notification permission from the user.
+ * Returns true if granted, false otherwise.
+ */
+export async function requestNotificationPermission(): Promise<boolean> {
+    if (!('Notification' in window)) {
+        console.warn('📵 This browser does not support notifications');
+        return false;
+    }
+
+    if (Notification.permission === 'granted') {
+        return true;
+    }
+
+    if (Notification.permission === 'denied') {
+        console.warn('🚫 Notification permission was previously denied');
+        return false;
+    }
+
+    const permission = await Notification.requestPermission();
+    return permission === 'granted';
+}
+
+/**
+ * Check if notifications are currently supported and permitted.
+ */
+export function isNotificationEnabled(): boolean {
+    return 'Notification' in window && Notification.permission === 'granted';
+}
+
+/**
+ * Show a medication reminder notification.
+ */
+export function showMedicationReminder(taskTitle: string, time: string): void {
+    if (!isNotificationEnabled()) {
+        console.warn('⚠️ Cannot show notification - not enabled');
+        return;
+    }
+
+    const notification = new Notification(`💊 ${taskTitle}`, {
+        body: `Det er tid til ${taskTitle} (${time})`,
+        icon: '/icons/pill-192.png',
+        tag: `medication-${taskTitle}-${time}`,
+        requireInteraction: true,
+    });
+
+    notification.onclick = () => {
+        window.focus();
+        notification.close();
+    };
+
+    // Auto-close after 30 seconds
+    setTimeout(() => notification.close(), 30000);
+}
+
+/**
+ * Schedule a notification for a specific time today.
+ * Returns a timeout ID that can be used to cancel the notification.
+ */
+export function scheduleNotification(
+    taskTitle: string,
+    timeString: string // 'HH:MM' format
+): number | null {
+    if (!isNotificationEnabled()) {
+        return null;
+    }
+
+    const [hours, minutes] = timeString.split(':').map(Number);
+    const now = new Date();
+    const scheduledTime = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+        hours,
+        minutes,
+        0
+    );
+
+    // If the time has already passed today, don't schedule
+    if (scheduledTime <= now) {
+        return null;
+    }
+
+    const msUntilNotification = scheduledTime.getTime() - now.getTime();
+
+    const timeoutId = window.setTimeout(() => {
+        showMedicationReminder(taskTitle, timeString);
+    }, msUntilNotification);
+
+    console.log(`⏰ Scheduled notification for ${taskTitle} at ${timeString} (in ${Math.round(msUntilNotification / 60000)} minutes)`);
+
+    return timeoutId;
 }
 
 ```
