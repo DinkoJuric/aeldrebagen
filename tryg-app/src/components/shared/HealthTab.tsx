@@ -144,25 +144,7 @@ export const HealthTab: React.FC = () => {
                 </div>
             </div>
 
-            {/* Steps Trend */}
-            <div className="bg-stone-50 rounded-2xl p-4 border border-stone-100">
-                <div className="flex justify-between items-center mb-4">
-                    <h4 className="text-sm font-bold text-stone-600 uppercase tracking-wider">{t('health_steps')}</h4>
-                    <span className="text-teal-600 font-black">6.420 {t('steps_avg')}</span>
-                </div>
-                <div className="h-16 flex items-end gap-1 mb-2">
-                    {[35, 45, 30, 65, 85, 40, 55].map((h, i) => (
-                        <div
-                            key={i}
-                            className="flex-1 bg-teal-200 rounded-t-sm"
-                            style={{ height: `${h}%` }}
-                        ></div>
-                    ))}
-                </div>
-                <div className="flex justify-between text-[10px] text-stone-400 font-bold px-2">
-                    <span>{t('time_days_ago_short', { count: 7 })}</span><span>{t('today')}</span>
-                </div>
-            </div>
+
 
             {/* Symptom Log */}
             <div>
