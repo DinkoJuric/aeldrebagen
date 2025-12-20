@@ -277,5 +277,16 @@
     "match_task_default": "Aktivnost sa {{name}}",
     "match_task_call_relative": "📞 Nazovi {{name}}",
     "match_task_visit_relative": "☕ Posjeti {{name}}",
-    "match_task_transport_relative": "🚗 Odvezi {{name}}"
+    "match_task_transport_relative": "🚗 Odvezi {{name}}",
+    "time_days_ago_short": "prije {{count}} dana",
+    "today": "Danas",
+    "task_completed": "Završeno",
+    "symptom_log_item": "Simptom: {{label}}",
+    "no_activity_yet": "Još nema aktivnosti",
+    "theme_auto": "Auto",
+    "theme_light": "Svijetla",
+    "theme_dark": "Tamna",
+    "general": "Općenito",
+    "privacy_data": "Privatnost i podaci",
+    "seneste_aktivitet": "Nedavna aktivnost"
 }

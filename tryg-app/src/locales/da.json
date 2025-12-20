@@ -276,5 +276,16 @@
     "match_task_default": "Aktivitet med {{name}}",
     "match_task_call_relative": "📞 Ring til {{name}}",
     "match_task_visit_relative": "☕ Besøg hos {{name}}",
-    "match_task_transport_relative": "🚗 Kør {{name}}"
+    "match_task_transport_relative": "🚗 Kør {{name}}",
+    "time_days_ago_short": "{{count}} dage siden",
+    "today": "I dag",
+    "task_completed": "Udført",
+    "symptom_log_item": "Symptom: {{label}}",
+    "no_activity_yet": "Ingen aktivitet endnu",
+    "theme_auto": "Auto",
+    "theme_light": "Lys",
+    "theme_dark": "Mørk",
+    "general": "Generelt",
+    "privacy_data": "Privatliv & data",
+    "seneste_aktivitet": "Seneste aktivitet"
 }

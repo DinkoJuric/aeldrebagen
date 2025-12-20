@@ -122,21 +122,19 @@ export const HealthTab: React.FC = () => {
                         <button
                             key={i}
                             onClick={() => day.count > 0 && handleChartClick(day.dateKey)}
-                            className={`flex - 1 flex flex - col items - center gap - 1 transition - all ${filterDate === day.dateKey ? 'scale-110' : ''
-                                } ${day.count > 0 ? 'cursor-pointer' : 'cursor-default'} `}
+                            className={`flex-1 flex flex-col items-center gap-1 transition-all ${filterDate === day.dateKey ? 'scale-110' : ''} ${day.count > 0 ? 'cursor-pointer' : 'cursor-default'}`}
                         >
                             {day.count > 0 && (
-                                <span className={`text - [10px] font - bold ${filterDate === day.dateKey ? 'text-orange-800' : 'text-orange-600'
-                                    } `}>{day.count}</span>
+                                <span className={`text-[10px] font-bold ${filterDate === day.dateKey ? 'text-orange-800' : 'text-orange-600'}`}>{day.count}</span>
                             )}
                             <div
-                                className={`w - full rounded - t - sm transition - all ${day.count > 0
+                                className={`w-full rounded-t-sm transition-all ${day.count > 0
                                     ? filterDate === day.dateKey
                                         ? 'bg-orange-600'
                                         : 'bg-orange-400 hover:bg-orange-500'
                                     : 'bg-slate-200'
-                                    } `}
-                                style={{ height: `${Math.max((day.count / maxCount) * 60, 4)} px` }}
+                                    }`}
+                                style={{ height: `${Math.max((day.count / maxCount) * 60, 4)}px` }}
                             />
                         </button>
                     ))}
@@ -157,7 +155,7 @@ export const HealthTab: React.FC = () => {
                         <div
                             key={i}
                             className="flex-1 bg-teal-200 rounded-t-sm"
-                            style={{ height: `${h}% ` }}
+                            style={{ height: `${h}%` }}
                         ></div>
                     ))}
                 </div>

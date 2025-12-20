@@ -277,5 +277,16 @@
     "match_task_default": "{{name}} ile etkinlik",
     "match_task_call_relative": "📞 {{name}}'i ara",
     "match_task_visit_relative": "☕ {{name}}'i ziyaret et",
-    "match_task_transport_relative": "🚗 {{name}}'i götür"
+    "match_task_transport_relative": "🚗 {{name}}'i götür",
+    "time_days_ago_short": "{{count}} gün önce",
+    "today": "Bugün",
+    "task_completed": "Tamamlandı",
+    "symptom_log_item": "Semptom: {{label}}",
+    "no_activity_yet": "Henüz aktivite yok",
+    "theme_auto": "Otomatik",
+    "theme_light": "Açık",
+    "theme_dark": "Koyu",
+    "general": "Genel",
+    "privacy_data": "Gizlilik ve veriler",
+    "seneste_aktivitet": "Son aktivite"
 }
