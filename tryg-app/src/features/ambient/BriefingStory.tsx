@@ -31,11 +31,11 @@ export const BriefingStory: React.FC<BriefingStoryProps> = ({ className = '' }) 
 
     return (
         <div
-            className={`p-5 rounded-[1.5rem] border-2 shadow-sm transition-all duration-300 ${briefing.type === 'success'
-                    ? 'bg-emerald-50 border-emerald-100 shadow-emerald-50/50'
-                    : briefing.type === 'warning'
-                        ? 'bg-amber-50 border-amber-100 shadow-amber-50/50'
-                        : 'bg-stone-50 border-stone-200 shadow-stone-50/50'
+            className={`p-5 rounded-[1.5rem] glass-premium transition-all duration-300 ${briefing.type === 'success'
+                ? 'glow-warmth-success bg-gradient-to-br from-emerald-50/90 to-teal-50/80 border-emerald-100/50'
+                : briefing.type === 'warning'
+                    ? 'bg-gradient-to-br from-amber-50/90 to-orange-50/80 border-amber-100/50'
+                    : 'bg-gradient-to-br from-stone-50/90 to-stone-100/80 border-stone-200/50'
                 } ${className}`}
         >
             <div className="flex items-start gap-4">
@@ -43,10 +43,10 @@ export const BriefingStory: React.FC<BriefingStoryProps> = ({ className = '' }) 
                 <div className="flex-1">
                     <p
                         className={`text-lg font-semibold leading-relaxed ${briefing.type === 'success'
-                                ? 'text-emerald-900'
-                                : briefing.type === 'warning'
-                                    ? 'text-amber-900'
-                                    : 'text-stone-800'
+                            ? 'text-emerald-900'
+                            : briefing.type === 'warning'
+                                ? 'text-amber-900'
+                                : 'text-stone-800'
                             }`}
                     >
                         {briefing.message}

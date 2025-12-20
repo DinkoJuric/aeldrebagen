@@ -72,12 +72,30 @@
   /* 32px */
 
   /* === Animation Timing === */
+  --duration-instant: 100ms;
   --duration-fast: 150ms;
+  --duration-calm: 220ms;
+  /* Premium sweet spot - perceptible but not sluggish */
   --duration-normal: 300ms;
   --duration-slow: 500ms;
   --duration-slower: 800ms;
+  --duration-breath: 4000ms;
+  /* Ambient breathing animations */
   --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
   --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Natural deceleration */
+
+  /* === Hygge Warmth Colors === */
+  --color-ochre: 38 70% 55%;
+  /* Warm golden brown */
+  --color-ochre-light: 38 65% 92%;
+  --color-mustard: 43 75% 50%;
+  /* Danish mustard warmth */
+  --color-terracotta: 15 60% 50%;
+  /* Candlelight red-orange */
+  --color-cream: 40 40% 97%;
+  /* Warm off-white */
 
   /* === Theme Tokens (Circadian Defaults) === */
   --theme-bg: hsl(37 20% 95%);
@@ -370,6 +388,179 @@
 
 .peace-card-neutral {
   background: linear-gradient(135deg, hsl(200 15% 50%) 0%, hsl(200 10% 55%) 100%);
+}
+
+/* ============================================
+   PREMIUM DESIGN UTILITIES
+   "Accessible luxury" - Premium feel without sacrificing usability
+   ============================================ */
+
+/* === Tempered Glassmorphism ===
+   Key: Text sits on solid sub-layer, blur only behind card.
+   Passes WCAG contrast requirements. */
+.glass-premium {
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.95) 0%,
+      rgba(255, 255, 255, 0.88) 100%);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: var(--radius-xl);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.04),
+    0 8px 24px rgba(0, 0, 0, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  transition: all var(--duration-calm) var(--ease-premium);
+}
+
+.glass-premium:hover {
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.05),
+    0 12px 32px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  transform: translateY(-1px);
+}
+
+/* Dark mode support */
+.theme-dark .glass-premium {
+  background: linear-gradient(135deg,
+      rgba(30, 41, 59, 0.92) 0%,
+      rgba(30, 41, 59, 0.85) 100%);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.2),
+    0 8px 24px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* === Plush Shadows ===
+   Layered shadows for "cushion" feel like Scandinavian furniture */
+.shadow-plush {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.03),
+    0 4px 8px rgba(0, 0, 0, 0.04),
+    0 8px 16px rgba(0, 0, 0, 0.04),
+    0 16px 32px rgba(0, 0, 0, 0.03);
+}
+
+.shadow-plush-lg {
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.03),
+    0 8px 16px rgba(0, 0, 0, 0.05),
+    0 16px 32px rgba(0, 0, 0, 0.05),
+    0 32px 64px rgba(0, 0, 0, 0.04);
+}
+
+/* === Warm Glow ===
+   Radial gradient simulating candlelight - Hygge essential */
+.glow-warmth {
+  position: relative;
+}
+
+.glow-warmth::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  background: radial-gradient(ellipse at 30% 20%,
+      hsl(var(--color-ochre) / 0.15) 0%,
+      hsl(var(--color-primary) / 0.08) 50%,
+      transparent 70%);
+  border-radius: inherit;
+  z-index: -1;
+  pointer-events: none;
+  transition: opacity var(--duration-calm);
+}
+
+.glow-warmth-success::before {
+  background: radial-gradient(ellipse at 30% 20%,
+      hsl(var(--color-success) / 0.2) 0%,
+      hsl(var(--color-primary) / 0.1) 50%,
+      transparent 70%);
+}
+
+/* === Micro-Texture ===
+   Subtle noise overlay for "wool-like" softness */
+.texture-soft {
+  position: relative;
+}
+
+.texture-soft::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.015;
+  border-radius: inherit;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+
+/* === Connection Pulse Animation ===
+   When mom checks in, this warm pulse shows on Relative's view */
+@keyframes connection-pulse {
+  0% {
+    box-shadow: 0 0 0 0 hsl(var(--color-primary) / 0.5);
+    transform: scale(1);
+  }
+
+  50% {
+    box-shadow: 0 0 0 16px hsl(var(--color-primary) / 0);
+    transform: scale(1.02);
+  }
+
+  100% {
+    box-shadow: 0 0 0 24px transparent;
+    transform: scale(1);
+  }
+}
+
+.animate-connection-pulse {
+  animation: connection-pulse 800ms var(--ease-premium);
+}
+
+/* Repeating warm pulse for status cards */
+@keyframes status-glow {
+
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 0 hsl(var(--color-success) / 0.1),
+      0 4px 16px rgba(0, 0, 0, 0.05);
+  }
+
+  50% {
+    box-shadow:
+      0 0 24px 4px hsl(var(--color-success) / 0.15),
+      0 8px 24px rgba(0, 0, 0, 0.08);
+  }
+}
+
+.animate-status-glow {
+  animation: status-glow 4s ease-in-out infinite;
+}
+
+/* === Premium Card Base ===
+   Combines glass + shadow + texture for ultimate hygge */
+.card-premium {
+  background: linear-gradient(135deg,
+      hsl(var(--color-cream)) 0%,
+      rgba(255, 255, 255, 0.95) 100%);
+  border-radius: var(--radius-xl);
+  border: 1px solid hsl(37 20% 90%);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.02),
+    0 4px 12px rgba(0, 0, 0, 0.04),
+    0 8px 24px rgba(0, 0, 0, 0.03);
+  transition: all var(--duration-calm) var(--ease-premium);
+}
+
+.card-premium:hover {
+  border-color: hsl(37 20% 85%);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.03),
+    0 8px 20px rgba(0, 0, 0, 0.06),
+    0 16px 32px rgba(0, 0, 0, 0.04);
+  transform: translateY(-2px);
 }
 
 /* ============================================

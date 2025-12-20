@@ -116,13 +116,13 @@ export const AmbientHero: React.FC<AmbientHeroProps> = ({
     // ========== SENIOR MODE ==========
     if (role === 'senior') {
         return (
-            <div className="bg-white rounded-3xl p-6 shadow-sm border-2 border-teal-100 mb-8">
+            <div className="glass-premium shadow-plush p-6 mb-8 glow-warmth">
                 <h2 className="text-xl font-semibold theme-text mb-4">{t('pain_question')}</h2>
                 <div className="grid grid-cols-2 gap-4">
                     <Button
                         variant="primary"
                         size="large"
-                        className="w-full min-h-32 py-4"
+                        className="w-full min-h-32 py-4 shadow-plush hover:shadow-plush-lg transition-shadow"
                         onClick={onCheckIn}
                     >
                         <div className="flex flex-col items-center gap-2 text-center">
@@ -134,7 +134,7 @@ export const AmbientHero: React.FC<AmbientHeroProps> = ({
                     <Button
                         variant="secondary"
                         size="large"
-                        className="w-full min-h-32 py-4 bg-orange-50 text-orange-800 border-2 border-orange-100 hover:bg-orange-100"
+                        className="w-full min-h-32 py-4 bg-gradient-to-br from-orange-50 to-amber-50/80 text-orange-800 border border-orange-100/50 hover:from-orange-100 hover:to-amber-100/80 shadow-plush transition-all"
                         onClick={onOpenSymptomModal}
                     >
                         <div className="flex flex-col items-center gap-2 text-center">
@@ -152,13 +152,14 @@ export const AmbientHero: React.FC<AmbientHeroProps> = ({
         <motion.div
             layout
             className={`
-                relative overflow-hidden rounded-[2rem] p-8 shadow-2xl border border-white/30
+                relative overflow-hidden rounded-[2rem] p-8 shadow-plush-lg border border-white/40
                 bg-gradient-to-br ${theme.gradient}
                 ${theme.shadow}
+                ${isBursting ? 'animate-connection-pulse' : ''}
             `}
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
             {/* Ambient Background Blobs */}
             <div className="absolute inset-0 z-0 overflow-hidden blur-3xl opacity-60">

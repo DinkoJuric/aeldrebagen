@@ -5,14 +5,15 @@ import { Task } from '../../types';
 
 /**
  * Task card container variants
+ * Premium styling with glass effect and plush shadows
  */
 const cardVariants = cva(
-    "relative p-4 rounded-2xl border-2 transition-all duration-300 cursor-pointer",
+    "relative p-4 rounded-2xl border transition-all cursor-pointer",
     {
         variants: {
             state: {
-                completed: "bg-stone-100 border-stone-200",
-                pending: "bg-white border-stone-200 shadow-sm hover:border-teal-400",
+                completed: "bg-gradient-to-br from-stone-50/90 to-stone-100/80 border-stone-200/50 shadow-sm",
+                pending: "glass-premium shadow-plush hover:shadow-plush-lg hover:border-teal-200/60",
             },
         },
         defaultVariants: {

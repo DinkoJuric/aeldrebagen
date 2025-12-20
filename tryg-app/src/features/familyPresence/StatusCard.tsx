@@ -165,9 +165,9 @@ export const StatusCard: React.FC<StatusCardProps> = ({
         return (
             <div
                 className={`
-                    relative overflow-hidden rounded-2xl shadow-lg border border-white/20 p-6 
+                    relative overflow-hidden rounded-2xl shadow-plush-lg border border-white/30 p-6 
                     transition-all duration-500 ease-in-out
-                    ${statusInfo.theme === 'calm' ? 'animate-breathe' : ''}
+                    ${statusInfo.theme === 'calm' ? 'animate-status-glow' : ''}
                     ${className}
                 `}
                 style={{
@@ -262,20 +262,20 @@ export const StatusCard: React.FC<StatusCardProps> = ({
     }
 
     return (
-        <div className={`bg-white rounded-2xl p-4 shadow-sm border border-stone-100 mb-3 flex items-center justify-between ${className}`}>
+        <div className={`glass-premium shadow-plush p-4 mb-3 flex items-center justify-between ${className}`}>
             <div className="flex items-center gap-3">
                 <Avatar id={name === 'Brad' ? 'brad' : name.includes('Fatima') ? 'fatima' : 'louise'} size="md" />
                 <div>
                     <h4 className="font-bold text-stone-800 text-sm">{name}</h4>
                     <div className="flex items-center gap-1.5 mt-0.5">
-                        <span className="text-xs font-medium text-stone-500 bg-stone-100 px-2 py-0.5 rounded-full">
+                        <span className="text-xs font-medium text-stone-500 bg-stone-100/80 px-2 py-0.5 rounded-full backdrop-blur-sm">
                             {t(`status_${statusObj.id}`)}
                         </span>
                         <span className="text-[10px] text-stone-400">• {timeString}</span>
                     </div>
                 </div>
             </div>
-            <div className="bg-stone-50 p-1.5 rounded-xl border border-stone-100">
+            <div className="bg-gradient-to-br from-stone-50 to-stone-100/80 p-1.5 rounded-xl border border-stone-200/50 shadow-sm">
                 <Avatar id={avatarId} size="sm" />
             </div>
         </div>
