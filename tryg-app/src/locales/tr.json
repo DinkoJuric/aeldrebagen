@@ -283,9 +283,6 @@
     "task_completed": "Tamamlandı",
     "symptom_log_item": "Semptom: {{label}}",
     "no_activity_yet": "Henüz aktivite yok",
-    "theme_auto": "Otomatik",
-    "theme_light": "Açık",
-    "theme_dark": "Koyu",
     "general": "Genel",
     "privacy_data": "Gizlilik ve veriler",
     "seneste_aktivitet": "Son aktivite"

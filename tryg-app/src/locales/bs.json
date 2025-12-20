@@ -283,9 +283,6 @@
     "task_completed": "Završeno",
     "symptom_log_item": "Simptom: {{label}}",
     "no_activity_yet": "Još nema aktivnosti",
-    "theme_auto": "Auto",
-    "theme_light": "Svijetla",
-    "theme_dark": "Tamna",
     "general": "Općenito",
     "privacy_data": "Privatnost i podaci",
     "seneste_aktivitet": "Nedavna aktivnost"
