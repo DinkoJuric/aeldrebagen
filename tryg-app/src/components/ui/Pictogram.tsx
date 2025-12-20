@@ -27,7 +27,7 @@ export const Pictogram: React.FC<PictogramProps> = ({ sheet, position, className
 
     return (
         <div
-            className={`bg-no-repeat bg-cover rounded-xl overflow-hidden ${className}`}
+            className={`bg-no-repeat rounded-xl overflow-hidden aspect-square ${className}`}
             style={{
                 backgroundImage: `url(${import.meta.env.BASE_URL}assets/sprites/help-sheet-${sheet}.png)`,
                 backgroundPosition: bgPos[position],
