@@ -32,12 +32,20 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
         symptoms = []
     } = useCareCircleContext();
 
-    // Generate activity feed from tasks and symptoms
+    // Generate activity feed from tasks and symptoms - TODAY ONLY
     const recentActivity = useMemo<ActivityItem[]>(() => {
         const activities: Omit<ActivityItem, 'time'>[] = [];
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
 
-        // Add completed tasks
-        tasks.filter(task => task.completed && task.completedAt).forEach(task => {
+        // Add completed tasks FROM TODAY ONLY
+        tasks.filter(task => {
+            if (!task.completed || !task.completedAt) return false;
+            const timestamp = (task.completedAt as any)?.toDate
+                ? (task.completedAt as any).toDate()
+                : new Date(task.completedAt as any);
+            return timestamp >= today;
+        }).forEach(task => {
             const timestamp = (task.completedAt as any)?.toDate
                 ? (task.completedAt as any).toDate()
                 : new Date(task.completedAt as any);
@@ -49,8 +57,13 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
             });
         });
 
-        // Add symptoms
-        symptoms.forEach(symptom => {
+        // Add symptoms FROM TODAY ONLY
+        symptoms.filter(symptom => {
+            const timestamp = (symptom.loggedAt as any)?.toDate
+                ? (symptom.loggedAt as any).toDate()
+                : new Date(symptom.loggedAt as any);
+            return timestamp >= today;
+        }).forEach(symptom => {
             const timestamp = (symptom.loggedAt as any)?.toDate
                 ? (symptom.loggedAt as any).toDate()
                 : new Date(symptom.loggedAt as any);
@@ -74,26 +87,26 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
 
     if (recentActivity.length === 0) {
         return (
-            <div className={`bg-white/50 backdrop-blur-sm rounded-[1.5rem] p-6 border border-stone-100 shadow-sm ${className}`}>
-                <p className="text-sm text-stone-400 text-center">{t('no_activity_yet')}</p>
+            <div className={`theme-card rounded-[1.5rem] p-6 shadow-sm ${className}`}>
+                <p className="text-sm text-[var(--theme-text-muted)] text-center">{t('no_activity_yet')}</p>
             </div>
         );
     }
 
     // Relative view uses a softer, more observational style
     const containerClass = role === 'relative'
-        ? 'bg-white/50 backdrop-blur-sm rounded-[1.5rem] p-6 border border-stone-100 shadow-sm'
-        : 'bg-stone-50 rounded-2xl p-4 border border-stone-100';
+        ? 'theme-card rounded-[1.5rem] p-6 shadow-sm'
+        : 'theme-card rounded-2xl p-4';
 
     return (
         <div className={`${containerClass} ${className}`}>
-            <h3 className="text-xs font-black text-stone-400 uppercase tracking-[0.2em] mb-4">
+            <h3 className="text-xs font-black text-[var(--theme-text-muted)] uppercase tracking-[0.2em] mb-4">
                 {t('seneste_aktivitet') || 'Seneste aktivitet'}
             </h3>
             <div className="space-y-4">
                 {recentActivity.map((activity, i) => (
-                    <div key={i} className="flex items-center gap-3 text-sm text-stone-700">
-                        <span className="font-bold text-stone-300 w-12">{activity.time}</span>
+                    <div key={i} className="flex items-center gap-3 text-sm text-[var(--theme-text)]">
+                        <span className="font-bold text-[var(--theme-text-muted)] w-12">{activity.time}</span>
                         <span className="text-lg">{activity.emoji}</span>
                         <span className="font-medium">{activity.text}</span>
                     </div>

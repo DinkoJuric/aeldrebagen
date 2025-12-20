@@ -46,8 +46,8 @@ export const HelpExchange: React.FC<HelpExchangeProps> = ({
     const availableRequests = SENIOR_REQUESTS.filter(r => !activeRequests.some(active => active.id === r.id));
 
     return (
-        <div className="bg-white border border-stone-200 rounded-2xl p-4 space-y-5">
-            <h3 className="text-stone-700 font-bold flex items-center gap-2">
+        <div className="theme-card rounded-2xl p-4 space-y-5">
+            <h3 className="text-[var(--theme-text)] font-bold flex items-center gap-2">
                 <HandHeart className="w-5 h-5 text-teal-600" />
                 Familie-Børsen
             </h3>
@@ -74,7 +74,7 @@ export const HelpExchange: React.FC<HelpExchangeProps> = ({
             {/* OFFERS SECTION */}
             <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                    <p className="text-sm font-bold text-stone-500 uppercase tracking-wide">Du tilbyder:</p>
+                    <p className="text-sm font-bold text-[var(--theme-text-muted)] uppercase tracking-wide">Du tilbyder:</p>
                 </div>
 
                 <div className="flex flex-wrap gap-2">
@@ -101,7 +101,7 @@ export const HelpExchange: React.FC<HelpExchangeProps> = ({
                         className={`px-3 py-2 rounded-xl flex items-center gap-2 border-2 border-dashed transition-all
                             ${showOfferPicker
                                 ? 'bg-teal-50 border-teal-300 text-teal-700'
-                                : 'border-stone-200 text-stone-500 hover:border-teal-300 hover:text-teal-600 hover:bg-teal-50'}
+                                : 'border-[var(--theme-card-border)] text-[var(--theme-text-muted)] hover:border-teal-300 hover:text-teal-600 hover:bg-teal-50'}
                         `}
                     >
                         <Plus className="w-4 h-4" />
@@ -111,8 +111,8 @@ export const HelpExchange: React.FC<HelpExchangeProps> = ({
 
                 {/* Offer Picker */}
                 {showOfferPicker && (
-                    <div className="bg-stone-50 rounded-xl p-3 border border-stone-200 animate-in slide-in-from-top-2">
-                        <p className="text-xs text-stone-500 mb-2 font-medium">Vælg hvad du vil tilbyde:</p>
+                    <div className="theme-card rounded-xl p-3 animate-in slide-in-from-top-2">
+                        <p className="text-xs text-[var(--theme-text-muted)] mb-2 font-medium">Vælg hvad du vil tilbyde:</p>
                         <div className="flex flex-wrap gap-2">
                             {availableOffers.map(item => (
                                 <button
@@ -121,11 +121,11 @@ export const HelpExchange: React.FC<HelpExchangeProps> = ({
                                         onOffer?.(item);
                                         setShowOfferPicker(false);
                                     }}
-                                    className="bg-white border border-stone-200 hover:border-teal-400 hover:bg-teal-50 px-3 py-2 rounded-lg 
+                                    className="theme-card hover:border-teal-400 hover:bg-teal-50 px-3 py-2 rounded-lg 
                                         flex items-center gap-2 text-sm transition-colors text-left shadow-sm"
                                 >
                                     {renderIcon(item, 'lg')}
-                                    <span className="text-stone-700">{item.label}</span>
+                                    <span className="text-[var(--theme-text)]">{item.label}</span>
                                 </button>
                             ))}
                         </div>
@@ -134,12 +134,12 @@ export const HelpExchange: React.FC<HelpExchangeProps> = ({
             </div>
 
             {/* SEPARATOR */}
-            <div className="border-t border-stone-100"></div>
+            <div className="border-t border-[var(--theme-card-border)]"></div>
 
             {/* REQUESTS SECTION */}
             <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                    <p className="text-sm font-bold text-stone-500 uppercase tracking-wide">Du ønsker:</p>
+                    <p className="text-sm font-bold text-[var(--theme-text-muted)] uppercase tracking-wide">Du ønsker:</p>
                 </div>
 
                 <div className="flex flex-wrap gap-2">
@@ -166,7 +166,7 @@ export const HelpExchange: React.FC<HelpExchangeProps> = ({
                         className={`px-3 py-2 rounded-xl flex items-center gap-2 border-2 border-dashed transition-all
                             ${showRequestPicker
                                 ? 'bg-indigo-50 border-indigo-300 text-indigo-700'
-                                : 'border-stone-200 text-stone-500 hover:border-indigo-300 hover:text-indigo-600 hover:bg-indigo-50'}
+                                : 'border-[var(--theme-card-border)] text-[var(--theme-text-muted)] hover:border-indigo-300 hover:text-indigo-600 hover:bg-indigo-50'}
                         `}
                     >
                         <Plus className="w-4 h-4" />
@@ -176,8 +176,8 @@ export const HelpExchange: React.FC<HelpExchangeProps> = ({
 
                 {/* Request Picker */}
                 {showRequestPicker && (
-                    <div className="bg-stone-50 rounded-xl p-3 border border-stone-200 animate-in slide-in-from-top-2">
-                        <p className="text-xs text-stone-500 mb-2 font-medium">Hvad har du brug for?</p>
+                    <div className="theme-card rounded-xl p-3 animate-in slide-in-from-top-2">
+                        <p className="text-xs text-[var(--theme-text-muted)] mb-2 font-medium">Hvad har du brug for?</p>
                         <div className="flex flex-wrap gap-2">
                             {availableRequests.map(item => (
                                 <button
@@ -186,11 +186,11 @@ export const HelpExchange: React.FC<HelpExchangeProps> = ({
                                         onRequest?.(item);
                                         setShowRequestPicker(false);
                                     }}
-                                    className="bg-white border border-stone-200 hover:border-indigo-400 hover:bg-indigo-50 px-3 py-2 rounded-lg 
+                                    className="theme-card hover:border-indigo-400 hover:bg-indigo-50 px-3 py-2 rounded-lg 
                                         flex items-center gap-2 text-sm transition-colors text-left shadow-sm"
                                 >
                                     {renderIcon(item, 'lg')}
-                                    <span className="text-stone-700">{item.label}</span>
+                                    <span className="text-[var(--theme-text)]">{item.label}</span>
                                 </button>
                             ))}
                         </div>

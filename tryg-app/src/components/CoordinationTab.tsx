@@ -44,8 +44,8 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
     } = useCareCircleContext();
 
     const [showStatusPicker, setShowStatusPicker] = useState(false);
-    const [showOpenTasks, setShowOpenTasks] = useState(true);
-    const [showSymptoms, setShowSymptoms] = useState(true);
+    const [showOpenTasks, setShowOpenTasks] = useState(false);
+    const [showSymptoms, setShowSymptoms] = useState(false);
     const [showOfferPicker, setShowOfferPicker] = useState(false);
     const [showRequestPicker, setShowRequestPicker] = useState(false);
 
