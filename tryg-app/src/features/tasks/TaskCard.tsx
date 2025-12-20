@@ -38,12 +38,12 @@ const iconContainerVariants = cva(
 );
 
 const checkboxVariants = cva(
-    "w-12 h-12 rounded-full border-4 flex items-center justify-center transition-colors",
+    "w-12 h-12 rounded-full border-4 flex items-center justify-center transition-all",
     {
         variants: {
             state: {
-                completed: "bg-teal-500 border-teal-500",
-                pending: "border-stone-200 bg-white",
+                completed: "bg-teal-500 border-teal-500 shadow-[0_0_16px_4px_hsl(174_55%_38%/0.3)]",
+                pending: "border-stone-200 bg-white shadow-sm hover:border-teal-300 hover:shadow-plush",
             },
         },
         defaultVariants: {
