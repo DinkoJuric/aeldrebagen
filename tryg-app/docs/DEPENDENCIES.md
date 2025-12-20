@@ -2,7 +2,7 @@
 
 > **Purpose**: Help agents understand component relationships for safe refactoring and feature development.
 > 
-> **Last Updated**: 2025-12-17
+> **Last Updated**: 2025-12-20
 
 ## 📖 Table of Contents
 1. [Dependency Graph Overview](#dependency-graph-overview)
@@ -223,6 +223,11 @@ graph TD
 | `firebase.ts` | All hooks |
 | `features.ts` | AppCore, SeniorView, CoordinationTab, AuthScreen, AppWithAuth |
 | `helpExchangeConfig.ts` | HelpExchange, CoordinationTab |
+
+### Scripts (`scripts/`)
+| Script | Purpose |
+|--------|---------|
+| `reset-data.mjs` | Firestore data reset utility (clears symptoms, tasks, pings) |
 
 ---
 

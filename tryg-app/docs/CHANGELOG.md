@@ -22,7 +22,22 @@ All notable changes to this project will be documented in this file.
 **Icon & Copy Polish**
 - Fixed stretched icons in HelpExchange (Pictogram: removed `bg-cover`, added `aspect-square`)
 - Warmer microcopy in all 3 locales (DA/BS/TR): "Senest set", encouraging empty states, poetic Livsbog
-- Cleaned up duplicate JSON keys in all locale files
+### 🧹 UX Polish & Data Reset (2025-12-20)
+
+**Feature Removal**
+- Removed hardcoded "Steps" feature from `HealthTab.tsx` (fake 6,420 avg display)
+
+**Data Management**
+- Created `scripts/reset-data.mjs` Firestore reset utility
+- Executed reset: cleared symptoms, reset task completion, cleared pings
+
+**Default States**
+- `CoordinationTab.tsx`: symptoms/tasks sections now default to collapsed
+- `ActivityTimeline.tsx`: now filters to today-only activities
+
+**Dark Mode Fixes**
+- `HelpExchange.tsx`: theme-aware CSS variables (`--theme-text`, `--theme-card-border`)
+- `ActivityTimeline.tsx`: theme-card styling for dark mode visibility
 
 ### 🪞 Phase 8: AmbientTab Unification (2025-12-20)
 - **Mirror Protocol Enhancement**: Unified `DailyTab` (Senior) and `PeaceOfMindTab` (Relative) into a single role-aware `AmbientTab.tsx`.

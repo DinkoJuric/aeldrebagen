@@ -2,20 +2,20 @@
 
 This document tracks future enhancements, technical ideations, and non-critical features for the Tryg project.
 
-## 🟢 High Priority (Next Sprints)
-*Currently empty - Phase 9 (Dark Mode) completed.*
+## 🟢 High Priority (Next Sprint)
+
+### 1. Animated Onboarding 🚀 ⭐ HIGH PRIORITY
+- **Goal**: A smooth, Lottie-driven welcome flow for new Seniors that tells the "porch light" story.
+- **Value**: Reduces cognitive load during first-time use; sets emotional tone.
+- **Estimated Effort**: 16h (Asset Creation + Flow Logic).
+- **Status**: Backlog - waiting for more features before implementation.
 
 ## 🟡 Medium Priority (Backlog)
 
-### 1. Family Photo Background 🖼️
+### 2. Family Photo Background 🖼️
 - **Goal**: Allow relatives to upload photos that become the dynamic background for the Senior's view.
 - **Value**: High emotional utility; strengthens the connection loop.
 - **Estimated Effort**: 8h (Storage + State Management).
-
-### 2. Animated Onboarding 🚀
-- **Goal**: A smooth, Lottie-driven welcome flow for new Seniors.
-- **Value**: Reduces cognitive load during first-time use.
-- **Estimated Effort**: 16h (Asset Creation + Flow Logic).
 
 ## 🔵 Low Priority / Ideations
 
