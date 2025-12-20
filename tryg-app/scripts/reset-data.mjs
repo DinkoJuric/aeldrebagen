@@ -86,26 +86,65 @@ async function resetData() {
             console.log('   ℹ️  No symptoms to delete');
         }
 
-        // 2. Reset task completion status (keep tasks, just uncheck them)
-        console.log('\n📝 Resetting task completion status...');
+        // 2. Fetch tasks for analysis and potential purge
         const tasksRef = collection(db, 'careCircles', CARE_CIRCLE_ID, 'tasks');
         const tasksSnap = await getDocs(tasksRef);
 
-        let taskCount = 0;
+        // 3. Clear medicine tasks (Purge legacy data)
+        console.log('\n💊 Purging medicine-related tasks...');
+        const medicineCount = tasksSnap.docs.filter(docSnap => {
+            const data = docSnap.data();
+            return data.title?.toLowerCase().includes('medicin') ||
+                data.title?.toLowerCase().includes('pille') ||
+                data.title?.toLowerCase().includes('lac') ||
+                data.type === 'medication';
+        }).length;
+
+        const taskPurgeBatch = writeBatch(db);
+        let purgedCount = 0;
+        tasksSnap.forEach((docSnap) => {
+            const data = docSnap.data();
+            const isMed = data.title?.toLowerCase().includes('medicin') ||
+                data.title?.toLowerCase().includes('pille') ||
+                data.title?.toLowerCase().includes('lac') ||
+                data.type === 'medication';
+
+            if (isMed) {
+                taskPurgeBatch.delete(docSnap.ref);
+                purgedCount++;
+            }
+        });
+
+        if (purgedCount > 0) {
+            await taskPurgeBatch.commit();
+            console.log(`   ✅ Purged ${purgedCount} medicine tasks`);
+        } else {
+            console.log('   ℹ️  No medicine tasks to purge');
+        }
+
+        // 3. Reset OTHER task completion status (keep non-med tasks, just uncheck them)
+        console.log('\n📝 Resetting remaining task completion status...');
+        let resetCount = 0;
         for (const docSnap of tasksSnap.docs) {
             const taskData = docSnap.data();
-            if (taskData.completed || taskData.completedAt) {
+            // Don't try to update if we just deleted it
+            const isMed = taskData.title?.toLowerCase().includes('medicin') ||
+                taskData.title?.toLowerCase().includes('pille') ||
+                taskData.title?.toLowerCase().includes('lac') ||
+                taskData.type === 'medication';
+
+            if (!isMed && (taskData.completed || taskData.completedAt)) {
                 await updateDoc(docSnap.ref, {
                     completed: false,
                     completedAt: null
                 });
-                taskCount++;
+                resetCount++;
             }
         }
 
-        console.log(`   ✅ Reset ${taskCount} completed tasks`);
+        console.log(`   ✅ Reset ${resetCount} completed tasks`);
 
-        // 3. Clear activity pings
+        // 4. Clear activity pings
         console.log('\n💬 Clearing old pings...');
         const pingsRef = collection(db, 'careCircles', CARE_CIRCLE_ID, 'pings');
         const pingsSnap = await getDocs(pingsRef);
@@ -124,7 +163,7 @@ async function resetData() {
             console.log('   ℹ️  No pings to delete');
         }
 
-        // 4. Reset lastResetDate to today
+        // 5. Reset lastResetDate to today
         console.log('\n📅 Setting lastResetDate to today...');
         const circleRef = doc(db, 'careCircles', CARE_CIRCLE_ID);
         await updateDoc(circleRef, {
@@ -132,8 +171,8 @@ async function resetData() {
         });
         console.log('   ✅ Updated lastResetDate');
 
-        console.log('\n✨ Data reset complete!\n');
-        console.log('Your app will now start fresh from today.');
+        console.log('\n✨ Data reset and purge complete!\n');
+        console.log('Your app will now start fresh with 0 medicine tasks.');
         console.log('Refresh the browser to see the changes.\n');
 
     } catch (error) {
