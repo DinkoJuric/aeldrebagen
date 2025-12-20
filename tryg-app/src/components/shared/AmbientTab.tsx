@@ -85,8 +85,8 @@ export const AmbientTab: React.FC<AmbientTabProps> = ({
                     onClick={() => setActivePeriod(activePeriod === periodKey ? null : periodKey)}
                 >
                     {icon}
-                    <h2 className="text-xl font-bold theme-text">{periodTitle}</h2>
-                    {!isActive && <span className="text-sm theme-text-muted">{t('press_to_see')}</span>}
+                    <h2 className="text-xl font-bold theme-text tracking-tight">{periodTitle}</h2>
+                    {!isActive && <span className="text-sm theme-text-muted italic">{t('press_to_see')}</span>}
                 </div>
 
                 {isActive && (
@@ -137,8 +137,8 @@ export const AmbientTab: React.FC<AmbientTabProps> = ({
                         >
                             <ImageIcon className="w-5 h-5 text-indigo-600" />
                             <div>
-                                <span className="font-bold text-indigo-700">{t('daily_photo_title')}</span>
-                                <p className="text-xs text-indigo-500">{t('daily_photo_subtitle')}</p>
+                                <span className="font-bold text-indigo-700 tracking-tight">{t('daily_photo_title')}</span>
+                                <p className="text-xs text-indigo-500 font-medium">{t('daily_photo_subtitle')}</p>
                             </div>
                         </button>
                         <div className="flex items-center gap-2">
@@ -185,11 +185,11 @@ export const AmbientTab: React.FC<AmbientTabProps> = ({
 
             {/* Medicine Section */}
             {medicineTasks.length > 0 && !allMedicineComplete && (
-                <div className="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-2xl p-4 mb-6 border-2 border-purple-100">
+                <div className="bg-gradient-to-r from-purple-50/90 to-indigo-50/90 dark:from-indigo-900/40 dark:to-purple-900/40 rounded-2xl p-4 mb-6 border-2 border-purple-100/50 dark:border-indigo-800/50 shadow-plush">
                     <div className="flex items-center gap-2 mb-3">
-                        <Pill className="w-6 h-6 text-purple-600" />
-                        <h2 className="text-lg font-bold text-purple-800">{t('medication_title')}</h2>
-                        <span className="text-sm text-purple-500 ml-auto">
+                        <Pill className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                        <h2 className="text-lg font-bold text-purple-800 dark:text-purple-200 tracking-tight">{t('medication_title')}</h2>
+                        <span className="text-sm text-purple-500 dark:text-purple-300 font-bold ml-auto">
                             {completedMedicineCount}/{medicineTasks.length} {t('taken')}
                         </span>
                     </div>
@@ -200,12 +200,12 @@ export const AmbientTab: React.FC<AmbientTabProps> = ({
                                 onClick={() => handleToggleTask(med.id)}
                                 className="w-full flex items-center gap-3 p-3 rounded-xl transition-all bg-white border-2 border-purple-100 hover:border-purple-300"
                             >
-                                <div className="w-8 h-8 rounded-full border-2 border-purple-300 bg-white flex items-center justify-center transition-colors">
+                                <div className="w-8 h-8 rounded-full border-2 border-purple-300 dark:border-purple-600 bg-white dark:bg-slate-800 flex items-center justify-center transition-colors">
                                 </div>
-                                <span className="font-medium text-purple-800">
+                                <span className="font-bold text-purple-800 dark:text-purple-200">
                                     {med.title}
                                 </span>
-                                <span className="text-purple-400 text-sm ml-auto">{med.time}</span>
+                                <span className="text-purple-400 dark:text-purple-400 text-sm font-bold ml-auto">{med.time}</span>
                             </button>
                         ))}
                     </div>

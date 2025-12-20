@@ -4,6 +4,8 @@
    TRYG DESIGN SYSTEM - Hygge-Inspired Tokens
    ============================================ */
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;600;700&display=swap');
+
 :root {
   /* === Color Palette (Hygge-Inspired) === */
 
@@ -55,7 +57,9 @@
   --radius-full: 9999px;
 
   /* === Typography === */
-  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-family-body: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-family-heading: 'Outfit', 'Inter', sans-serif;
+  --font-family: var(--font-family-body);
   --font-size-xs: 0.75rem;
   /* 12px */
   --font-size-sm: 0.875rem;
@@ -568,7 +572,7 @@
    ============================================ */
 
 body {
-  font-family: var(--font-family);
+  font-family: var(--font-family-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   height: 100dvh;
@@ -576,8 +580,21 @@ body {
   /* Removed: overflow: hidden - was blocking scroll! */
   background-color: var(--theme-bg);
   color: var(--theme-text);
-  line-height: 1.5;
+  line-height: 1.6;
   transition: background-color var(--duration-slow), color var(--duration-slow);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-family-heading);
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+}
+
+.text-balance {
+  text-wrap: balance;
 }
 
 #root {

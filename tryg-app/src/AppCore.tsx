@@ -172,7 +172,7 @@ export default function TrygAppCore({
             lastCheckIn,
             recordCheckIn: handleCheckIn
         }}>
-            <div className="flex justify-center items-center min-h-screen bg-stone-50 sm:bg-zinc-800 sm:p-4 font-sans">
+            <div className="flex justify-center items-center min-h-screen bg-stone-50 dark:bg-zinc-950 sm:bg-zinc-800 sm:p-4">
 
                 {/* Phone Frame Simulator (Responsive) */}
                 {/* Mobile: Full screen, no border. Desktop: Phone frame with border. */}
@@ -190,15 +190,15 @@ export default function TrygAppCore({
                                     <notification.icon className="w-6 h-6 text-teal-600" />
                                 </div>
                                 <div>
-                                    <h4 className="font-bold text-stone-800 text-sm">{notification.title}</h4>
-                                    <p className="text-stone-500 text-xs">{notification.body}</p>
+                                    <h4 className="font-bold theme-text text-sm">{notification.title}</h4>
+                                    <p className="theme-text-muted text-xs opacity-80">{notification.body}</p>
                                 </div>
                             </div>
                         )}
                     </div>
 
                     {/* Header - COMPACT: Care Circle / Settings / Logout - now theme-aware */}
-                    <div className="absolute top-0 left-0 right-0 h-10 z-50 flex justify-between items-center backdrop-blur-sm px-3 bg-black/5 theme-dark:bg-white/5">
+                    <div className="absolute top-0 left-0 right-0 h-10 z-50 flex justify-between items-center backdrop-blur-sm px-3 bg-black/5 dark:bg-white/10">
                         {/* Care Circle button - Top Left */}
                         <button
                             onClick={() => setShowShare(true)}

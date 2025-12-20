@@ -46,25 +46,25 @@ export const HelpExchange: React.FC<HelpExchangeProps> = ({
     const availableRequests = SENIOR_REQUESTS.filter(r => !activeRequests.some(active => active.id === r.id));
 
     return (
-        <div className="theme-card rounded-2xl p-4 space-y-5">
-            <h3 className="text-[var(--theme-text)] font-bold flex items-center gap-2">
-                <HandHeart className="w-5 h-5 text-teal-600" />
+        <div className="theme-card rounded-2xl p-4 space-y-5 shadow-plush">
+            <h3 className="theme-text font-bold flex items-center gap-2 tracking-tight">
+                <HandHeart className="w-5 h-5 text-teal-600 dark:text-teal-400" />
                 Familie-Børsen
             </h3>
 
             {/* RELATIVES' ENTRIES - Show what family members have added */}
             {(relativeOffers.length > 0 || relativeRequests.length > 0) && (
-                <div className="bg-indigo-50 rounded-xl p-3 border border-indigo-100">
-                    <p className="text-xs font-bold text-indigo-600 uppercase tracking-wide mb-2">Fra familien:</p>
+                <div className="bg-indigo-50/80 dark:bg-indigo-900/40 rounded-xl p-3 border border-indigo-100 dark:border-indigo-800">
+                    <p className="text-xs font-extrabold text-indigo-600 dark:text-indigo-300 uppercase tracking-widest mb-2 opacity-80">Fra familien:</p>
                     <div className="flex flex-wrap gap-2">
                         {relativeOffers.map((offer, i) => (
-                            <span key={`ro-${i}`} className="text-sm bg-indigo-100 text-indigo-700 px-3 py-1.5 rounded-full" title={`Fra: ${offer.createdByName}`}>
-                                💚 {offer.label} <span className="text-indigo-400 text-xs">({offer.createdByName})</span>
+                            <span key={`ro-${i}`} className="text-sm bg-indigo-100 dark:bg-indigo-800 text-indigo-700 dark:text-indigo-200 px-3 py-1.5 rounded-full font-bold shadow-sm" title={`Fra: ${offer.createdByName}`}>
+                                💚 {offer.label} <span className="opacity-60 text-xs">({offer.createdByName})</span>
                             </span>
                         ))}
                         {relativeRequests.map((req, i) => (
-                            <span key={`rr-${i}`} className="text-sm bg-purple-100 text-purple-700 px-3 py-1.5 rounded-full" title={`Fra: ${req.createdByName}`}>
-                                💜 {req.label} <span className="text-purple-400 text-xs">({req.createdByName})</span>
+                            <span key={`rr-${i}`} className="text-sm bg-purple-100 dark:bg-purple-800 text-purple-700 dark:text-purple-200 px-3 py-1.5 rounded-full font-bold shadow-sm" title={`Fra: ${req.createdByName}`}>
+                                💜 {req.label} <span className="opacity-60 text-xs">({req.createdByName})</span>
                             </span>
                         ))}
                     </div>
@@ -98,10 +98,10 @@ export const HelpExchange: React.FC<HelpExchangeProps> = ({
                     {/* Add Button */}
                     <button
                         onClick={() => setShowOfferPicker(!showOfferPicker)}
-                        className={`px-3 py-2 rounded-xl flex items-center gap-2 border-2 border-dashed transition-all
+                        className={`px-3 py-2 rounded-xl flex items-center gap-2 border-2 border-dashed transition-all font-bold
                             ${showOfferPicker
-                                ? 'bg-teal-50 border-teal-300 text-teal-700'
-                                : 'border-[var(--theme-card-border)] text-[var(--theme-text-muted)] hover:border-teal-300 hover:text-teal-600 hover:bg-teal-50'}
+                                ? 'bg-teal-50 dark:bg-teal-900/40 border-teal-300 dark:border-teal-700 text-teal-700 dark:text-teal-200'
+                                : 'border-[var(--theme-card-border)] theme-text-muted hover:border-teal-300 hover:text-teal-600 hover:bg-teal-50 dark:hover:bg-teal-900/20'}
                         `}
                     >
                         <Plus className="w-4 h-4" />

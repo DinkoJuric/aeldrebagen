@@ -266,12 +266,12 @@ export const StatusCard: React.FC<StatusCardProps> = ({
             <div className="flex items-center gap-3">
                 <Avatar id={name === 'Brad' ? 'brad' : name.includes('Fatima') ? 'fatima' : 'louise'} size="md" />
                 <div>
-                    <h4 className="font-bold text-stone-800 text-sm">{name}</h4>
+                    <h4 className="font-bold theme-text text-sm tracking-tight">{name}</h4>
                     <div className="flex items-center gap-1.5 mt-0.5">
-                        <span className="text-xs font-medium text-stone-500 bg-stone-100/80 px-2 py-0.5 rounded-full backdrop-blur-sm">
+                        <span className="text-xs font-bold theme-text-muted bg-stone-100/50 dark:bg-stone-800/50 px-2 py-0.5 rounded-full backdrop-blur-sm">
                             {t(`status_${statusObj.id}`)}
                         </span>
-                        <span className="text-[10px] text-stone-400">• {timeString}</span>
+                        <span className="text-[10px] theme-text-muted opacity-60">• {timeString}</span>
                     </div>
                 </div>
             </div>

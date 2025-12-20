@@ -174,8 +174,8 @@ export const ProgressRing: React.FC<ProgressRingProps> = ({
 
             {/* Center content */}
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-2xl font-bold text-stone-800">{progressPercent}%</span>
-                <span className="text-xs text-stone-500">færdig</span>
+                <span className="text-2xl font-extrabold theme-text tracking-tighter leading-none">{progressPercent}%</span>
+                <span className="text-[10px] font-bold theme-text-muted uppercase tracking-widest opacity-80">færdig</span>
             </div>
 
             {/* Legend */}
@@ -187,7 +187,7 @@ export const ProgressRing: React.FC<ProgressRingProps> = ({
                                 className="w-3 h-3 rounded-full"
                                 style={{ backgroundColor: seg.colors.stroke }}
                             />
-                            <span className="text-xs text-stone-600">{seg.config.emoji}</span>
+                            <span className="text-[10px] theme-text-muted font-bold">{seg.config.emoji}</span>
                         </div>
                     ))}
                 </div>
@@ -274,7 +274,7 @@ export const InlineGatesIndicator: React.FC<InlineGatesIndicatorProps> = ({ task
                         className="w-2.5 h-2.5 rounded-full"
                         style={{ backgroundColor: p.color }}
                     />
-                    <span className={`font-medium ${p.isComplete ? 'text-green-700' : p.isOverdue ? 'text-red-600' : 'text-stone-500'}`}>
+                    <span className={`font-bold tracking-tight ${p.isComplete ? 'text-green-700' : p.isOverdue ? 'text-red-600' : 'theme-text-muted'}`}>
                         {p.label.slice(0, 3)}
                         {p.isComplete && ' ✓'}
                     </span>

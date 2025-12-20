@@ -42,11 +42,11 @@ export const BriefingStory: React.FC<BriefingStoryProps> = ({ className = '' }) 
                 <span className="text-3xl filter drop-shadow-sm">{briefing.emoji}</span>
                 <div className="flex-1">
                     <p
-                        className={`text-lg font-semibold leading-relaxed ${briefing.type === 'success'
-                            ? 'text-emerald-900'
+                        className={`text-lg font-bold leading-relaxed tracking-tight ${briefing.type === 'success'
+                            ? 'text-emerald-900 dark:text-emerald-100'
                             : briefing.type === 'warning'
-                                ? 'text-amber-900'
-                                : 'text-stone-800'
+                                ? 'text-amber-900 dark:text-amber-100'
+                                : 'theme-text'
                             }`}
                     >
                         {briefing.message}

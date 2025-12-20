@@ -83,8 +83,8 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, onToggle }) => {
                     <div>
                         <div className="flex items-center gap-2 flex-wrap">
                             <h3 className={cn(
-                                "text-xl font-bold",
-                                task.completed ? "text-stone-500 line-through" : "text-stone-800"
+                                "text-xl font-bold tracking-tight",
+                                task.completed ? "theme-text-muted opacity-60 line-through" : "theme-text"
                             )}>
                                 {task.title}
                             </h3>
@@ -96,7 +96,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, onToggle }) => {
                                 </span>
                             )}
                         </div>
-                        <p className="text-stone-500 font-medium">{task.time}</p>
+                        <p className="theme-text-muted font-medium opacity-80">{task.time}</p>
                     </div>
                 </div>
 

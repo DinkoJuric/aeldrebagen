@@ -65,8 +65,8 @@ export const SeniorView: React.FC = () => {
                     <div className="flex items-center gap-3">
                         <Avatar id="senior" size="md" />
                         <div onClick={() => setShowCallModal(true)} className="cursor-pointer">
-                            <h1 className="text-xl font-bold theme-text leading-tight">{greeting}</h1>
-                            <p className="text-sm theme-text-muted">{userName}</p>
+                            <h1 className="text-2xl font-extrabold theme-text leading-tight tracking-tighter">{greeting}</h1>
+                            <p className="text-base font-bold theme-text-muted opacity-90">{userName}</p>
                         </div>
                     </div>
                     {FEATURES.weeklyQuestion && activeTab === 'family' && (
