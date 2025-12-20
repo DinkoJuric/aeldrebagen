@@ -114,7 +114,7 @@
 .theme-dark {
   --theme-bg: hsl(220 30% 10%);
   --theme-text: hsl(220 20% 95%);
-  --theme-text-muted: hsl(220 15% 75%);
+  --theme-text-muted: hsl(220 10% 85%);
   --theme-card-bg: hsl(220 25% 15%);
   --theme-card-border: hsl(220 20% 25%);
   --theme-nav-bg: rgba(15, 23, 42, 0.8);
