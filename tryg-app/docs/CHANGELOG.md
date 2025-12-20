@@ -6,6 +6,24 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### 🎨 Premium Design System (2025-12-20)
+
+**Tempered Glassmorphism & Hygge Warmth**
+- New CSS design tokens: `--duration-calm: 220ms`, hygge colors (ochre, mustard, terracotta, cream)
+- Premium utility classes: `.glass-premium`, `.shadow-plush`, `.glow-warmth`, `.texture-soft`
+- Animation keyframes: `connection-pulse` (800ms), `status-glow` (4s breathing)
+
+**Component Upgrades**
+- `BriefingStory.tsx`: Glass-premium styling with warm success glow
+- `AmbientHero.tsx`: Premium shadows, connection pulse on check-in
+- `TaskCard.tsx`: Glass variants, teal glow on completion, hover states
+- `StatusCard.tsx`: Status glow animation, plush shadows
+
+**Icon & Copy Polish**
+- Fixed stretched icons in HelpExchange (Pictogram: removed `bg-cover`, added `aspect-square`)
+- Warmer microcopy in all 3 locales (DA/BS/TR): "Senest set", encouraging empty states, poetic Livsbog
+- Cleaned up duplicate JSON keys in all locale files
+
 ### 🪞 Phase 8: AmbientTab Unification (2025-12-20)
 - **Mirror Protocol Enhancement**: Unified `DailyTab` (Senior) and `PeaceOfMindTab` (Relative) into a single role-aware `AmbientTab.tsx`.
 - **New Feature Bundle**: Created `src/features/ambient/` with `AmbientHero.tsx`, `BriefingStory.tsx`, and `ActivityTimeline.tsx`.
