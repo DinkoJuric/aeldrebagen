@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle, Heart, Clock, Activity, AlertCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -16,6 +16,7 @@ export interface AmbientHeroProps {
  * AmbientHero - The emotional centerpiece of the AmbientTab.
  * - Senior Mode: Interactive check-in buttons ("I'm okay" / "I have pain")
  * - Relative Mode: Ambient status visualization (rings, pulse, gradient)
+ *   → Bursts with celebratory animation when Senior checks in!
  */
 export const AmbientHero: React.FC<AmbientHeroProps> = ({
     role,
@@ -29,6 +30,27 @@ export const AmbientHero: React.FC<AmbientHeroProps> = ({
         symptoms = [],
         lastCheckIn
     } = useCareCircleContext();
+
+    // ========== BURST ANIMATION STATE (Relative Mode) ==========
+    const [isBursting, setIsBursting] = useState(false);
+    const prevCheckInRef = useRef<string | null>(null);
+
+    // Detect check-in changes and trigger burst animation
+    useEffect(() => {
+        if (role !== 'relative') return;
+
+        // If lastCheckIn changed to a new value
+        if (lastCheckIn && lastCheckIn !== prevCheckInRef.current) {
+            // Trigger celebratory burst!
+            setIsBursting(true);
+
+            // Reset after 3 seconds
+            const timer = setTimeout(() => setIsBursting(false), 3000);
+
+            prevCheckInRef.current = lastCheckIn;
+            return () => clearTimeout(timer);
+        }
+    }, [lastCheckIn, role]);
 
     // Calculate today's symptom count
     const todaySymptomCount = symptoms.filter(s => {
@@ -164,18 +186,18 @@ export const AmbientHero: React.FC<AmbientHeroProps> = ({
             {/* Content Layer */}
             <div className="relative z-10 flex flex-col items-center text-center">
 
-                {/* Senior Presence Heartbeat */}
+                {/* Senior Presence Heartbeat - Bursts when check-in detected! */}
                 <div className="relative mb-6">
                     <motion.div
                         className="absolute inset-0 bg-white/40 rounded-full blur-xl"
                         animate={{
-                            scale: theme.pulseScale,
-                            opacity: [0.3, 0.6, 0.3]
+                            scale: isBursting ? [1, 1.5, 1, 1.3, 1] : theme.pulseScale,
+                            opacity: isBursting ? [0.5, 1, 0.5, 0.8, 0.3] : [0.3, 0.6, 0.3]
                         }}
                         transition={{
-                            duration: status === 'calm' ? 4 : status === 'warning' ? 2 : 1.5,
-                            repeat: Infinity,
-                            ease: "easeInOut"
+                            duration: isBursting ? 0.6 : (status === 'calm' ? 4 : status === 'warning' ? 2 : 1.5),
+                            repeat: isBursting ? 5 : Infinity,
+                            ease: isBursting ? "easeOut" : "easeInOut"
                         }}
                     />
                     <motion.div
