@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
+import { useScrollLock } from '../hooks/useScrollLock';
+import { RelationsSelect } from './ui/RelationsSelect';
 import { X, Copy, Users, Shield, Edit3, Check } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Button } from './ui/Button';
@@ -26,6 +29,9 @@ export const ShareModal: React.FC<ShareModalProps> = ({
     currentUserId
 }) => {
     const { t } = useTranslation();
+
+    // Lock scroll when modal is open
+    useScrollLock(true);
 
     // State for editing ANY member
     const [editingMember, setEditingMember] = useState<Member | null>(null);
@@ -95,7 +101,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
         return 'louise';
     };
 
-    return (
+    return createPortal(
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4">
             <div className="bg-white w-full sm:max-w-md h-[85vh] sm:h-auto sm:max-h-[90vh] sm:rounded-[2.5rem] flex flex-col overflow-hidden shadow-2xl animate-slide-up">
                 {/* Header */}
@@ -151,15 +157,10 @@ export const ShareModal: React.FC<ShareModalProps> = ({
                                     </div>
 
                                     <div>
-                                        <label className="block text-xs font-bold text-stone-500 uppercase tracking-wide mb-1">
-                                            Relation til {seniorName}
-                                        </label>
-                                        <input
-                                            type="text"
+                                        <RelationsSelect
                                             value={editRelationship}
-                                            onChange={(e) => setEditRelationship(e.target.value)}
-                                            className="w-full p-3 border border-stone-300 rounded-xl focus:ring-2 focus:ring-teal-500 outline-none bg-white text-stone-900"
-                                            placeholder="F.eks. Søn, Datter, Nevø..."
+                                            onChange={setEditRelationship}
+                                            seniorName={seniorName}
                                         />
                                     </div>
 
@@ -260,7 +261,8 @@ export const ShareModal: React.FC<ShareModalProps> = ({
                 {/* Footer safe area */}
                 <div className="h-8 sm:h-6" />
             </div>
-        </div>
+        </div>,
+        document.body
     );
 };
 

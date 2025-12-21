@@ -25,7 +25,7 @@ These tools are not part of the build bundle but are critical for the agentic de
 | Tool | Package | Purpose |
 |------|---------|---------|
 | **GitHub MCP** | `@modelcontextprotocol/server-github` | Agent access to Git/Issues |
-| **You.com MCP** | `@youdotcom-oss/mcp` | Agent access to Search/LLM |
+| **You.com MCP** | `@youdotcom-oss/mcp` | Agent access to Search (Returns real-time, LLM-ready web and news results)/Contents (Retrieves HTML or Markdown content from any webpage)/Agents (Executes custom AI agents you configure in the UI) |
 | **Chrome MCP** | `chrome-devtools-mcp` | Agent browser automation |
 | **Firebase CLI** | `firebase-tools` | Deployment & Rules management |
 
@@ -217,7 +217,9 @@ graph TD
 | `Avatar.tsx` | StatusCard, FamilyPresence, ThinkingOfYou, SeniorView, RelativeView |
 | `Button.tsx` | Multiple components |
 | `Modal.tsx` | SeniorView, RelativeView, HealthReport |
+| `Modal.tsx` | SeniorView, RelativeView, HealthReport |
 | `Pictogram.tsx` | HelpExchange |
+| `RelationsSelect.tsx` | CircleSetup, ShareModal |
 
 ### Contexts
 | Context | Used By |

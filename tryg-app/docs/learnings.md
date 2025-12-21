@@ -509,5 +509,33 @@ px packages over remote URLs where possible.
 
 ### Firestore Rules for POC
 - **Problem**: Needed to allow a specific user to edit ANY document for demo setup, bypassing ownership rules.
-- **Action**: Hardcoded email check equest.auth.token.email == 'admin@email.com' in irestore.rules.
+- **Action**: Hardcoded email check 
+equest.auth.token.email == 'admin@email.com' in irestore.rules.
 - **Future**: For rapid POC data setup, use email-based exceptions in rules rather than complex RBAC if speed is the priority.
+
+---
+
+## UI Components & UX (Dec 2025)
+
+### Modal Scroll Bleed
+- **Problem**: Opening a modal allowed the background application to scroll, confusing the user and hiding the header/footer.
+- **Root Cause**: Modal was just a `div` on top of the DOM. Touch events propagated to the body.
+- **Action**: Implemented `useScrollLock` hook to set `overflow: hidden` on `body` when modal opens.
+- **Future**: For any "App-like" overlay, Scroll Locking is mandatory for premium feel.
+
+### React Portals for Layout Safety
+- **Problem**: Modals were clipped by `overflow: hidden` on parent containers or affected by CSS transforms.
+- **Action**: Refactored `Modal` and `ShareModal` to use `createPortal` to render directly into `body`.
+- **Future**: Never render a Modal "inline". Always Portal it out.
+
+### Admin Data Silent Failure
+- **Problem**: Admin edits to members saved but "nothing happened" (firestore update failed silently).
+- **Root Cause**: Type mismatch. Component expected `docId` but Hook provided `id`. No TypeScript error because `any` or loose typing masked it.
+- **Action**: Added explicit mapping `docId: doc.id` in `useCareCircle` hook.
+- **Action**: Added explicit mapping `docId: doc.id` in `useCareCircle` hook.
+- **Future**: When data isn't saving, check the ID field names first. `id` vs `docId` vs `uid` is a classic trap.
+
+### Type Safety: The `as Type` Trap
+- **Problem**: TypeScript didn't catch that `docId` was missing from the `Member` object because we used `as Member[]` casting.
+- **Root Cause**: `as Type` tells TS "I know better," suppressing errors for missing fields.
+- **Action**: In the future, prefer Zod validation or constructor functions (e.g., `createMember(doc)`) that strictly assign fields. If using `as Type`, MANUALLY verify every required field matches the Firestore data transformation.

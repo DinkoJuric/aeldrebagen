@@ -2,7 +2,8 @@
 // Seniors create a new circle, relatives join via invite code
 
 import React, { useState } from 'react';
-import { Users, Plus, Key, Copy, Check, ArrowRight, Loader2, Heart } from 'lucide-react';
+import { Users, Plus, Key, Copy, Check, ArrowRight, Loader2 } from 'lucide-react';
+import { RelationsSelect } from './ui/RelationsSelect';
 
 export interface CircleSetupProps {
     userRole?: 'senior' | 'relative';
@@ -13,17 +14,7 @@ export interface CircleSetupProps {
     error?: string | null;
 }
 
-const RELATIONSHIPS = [
-    { id: 'daughter', label: 'Datter' },
-    { id: 'son', label: 'Søn' },
-    { id: 'sister', label: 'Søster' },
-    { id: 'brother', label: 'Bror' },
-    { id: 'grandchild', label: 'Barnebarn' },
-    { id: 'niece', label: 'Niece' },
-    { id: 'nephew', label: 'Nevø' },
-    { id: 'friend', label: 'Ven' },
-    { id: 'other', label: 'Andet' }
-];
+
 
 export const CircleSetup: React.FC<CircleSetupProps> = ({ userRole, userName, onCreateCircle, onJoinCircle, loading, error }) => {
     const [inviteCode, setInviteCode] = useState('');
@@ -150,22 +141,11 @@ export const CircleSetup: React.FC<CircleSetupProps> = ({ userRole, userName, on
 
                 <form onSubmit={handleJoin} className="space-y-4">
                     {/* Relationship Selector */}
-                    <div className="text-left">
-                        <label className="block text-sm font-medium text-stone-600 mb-1 ml-1">Din relation til senioren</label>
-                        <div className="relative">
-                            <select
-                                value={relationship}
-                                onChange={(e) => setRelationship(e.target.value)}
-                                className="w-full bg-stone-50 border-2 border-stone-200 text-stone-800 py-3 px-4 rounded-xl appearance-none focus:border-indigo-400 focus:outline-none transition-colors"
-                            >
-                                <option value="" disabled>Vælg relation...</option>
-                                {RELATIONSHIPS.map(rel => (
-                                    <option key={rel.id} value={rel.label}>{rel.label}</option>
-                                ))}
-                            </select>
-                            <Heart className="w-5 h-5 text-stone-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" />
-                        </div>
-                    </div>
+                    <RelationsSelect
+                        value={relationship}
+                        onChange={setRelationship}
+                        seniorName="Senioren"
+                    />
 
                     <div>
                         <label className="block text-sm font-medium text-stone-600 mb-1 ml-1 text-left">Invitationskode</label>

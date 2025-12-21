@@ -415,6 +415,27 @@ The project utilizes the **Model Context Protocol (MCP)** to empower AI agents w
 
 ---
 
+## Modals & Overlays Strategy (Dec 2025)
+
+**The "Native App" Feel Rule**:
+Web-based modals often feel "cheap" because they allow the background to scroll or get clipped by parent containers.
+
+**The Solution:**
+1.  **React Portals**: All modals (`Modal.tsx`, `ShareModal.tsx`)- **Solution**: Use **React Portal** (`createPortal(modal, document.body)`) to render modal at document root level.
+- **Future**: Any modal/overlay component in a complex UI should use Portal to escape CSS context issues.
+2.  **Scroll Locking**: The `useScrollLock` hook MUST be called whenever a modal is open. This freezes the `<body>` scroll, preventing the "rubber band" effect and ensuring the user's touch actions apply ONLY to the modal.
+
+---
+
+### 8. Admin Override Pattern (Client-Side)
+- **Problem**: Need to allow specific admin users (e.g., `dinko1991@hotmail.com`) to edit ANY member's data.
+- **Solution**:
+  1. **Backend**: `firestore.rules` checks `request.auth.token.email`.
+  2. **Frontend**: `ShareModal` logic checks `currentUserId` and email to bypass "You can only edit yourself" checks.
+  3. **Data**: Mapping `doc.id` -> `docId` strictly in hooks ensures update operations hit the correct document.
+
+---
+
 ## Security Model: Admin Access (POC)
 
 For rapid development and Proof-of-Concept (POC) data setup, the following admin permissions are hardcoded in `firestore.rules`:

@@ -104,6 +104,7 @@ export function useCareCircle(userId: string | undefined, _userProfile: UserProf
         const unsubscribe = onSnapshot(membersQuery, (snapshot) => {
             const memberList = snapshot.docs.map(doc => ({
                 id: doc.id,
+                docId: doc.id, // Explicitly map docId for Member interface compliance
                 ...doc.data()
             })) as Member[];
             setMembers(memberList);

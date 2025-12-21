@@ -1,4 +1,6 @@
 import React, { ReactNode } from 'react';
+import { createPortal } from 'react-dom';
+import { useScrollLock } from '../../hooks/useScrollLock';
 import { X } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
@@ -11,9 +13,13 @@ interface ModalProps {
 }
 
 export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, className }) => {
+    useScrollLock(isOpen);
+
     if (!isOpen) return null;
 
-    return (
+    // Use a portal to render outside the main DOM hierarchy
+    // This fixes z-index wars with sticky navigation and transform contexts
+    return createPortal(
         <div className="fixed inset-0 bg-black/60 z-[100] flex items-end sm:items-center justify-center animate-fade-in p-0 sm:p-4">
             <div className={cn(
                 "theme-card w-full max-w-md rounded-t-3xl sm:rounded-3xl p-0 shadow-2xl animate-slide-up max-h-[90vh] flex flex-col",
@@ -40,7 +46,8 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, 
                     {children}
                 </div>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 };
 
