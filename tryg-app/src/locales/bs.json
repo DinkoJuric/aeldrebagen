@@ -6,7 +6,7 @@
     "invite_code": "Pozivni kod",
     "show_invite_code": "Prikaži pozivni kod",
     "logged_in_as": "Prijavljeni kao",
-    "family_heart": "Porodično srce",
+    "family_heart": "Porodični Pregled",
     "medication_title": "Lijekovi",
     "pain_question": "Kako se osjećate?",
     "greeting_morning": "Dobro jutro",
@@ -281,5 +281,18 @@
     "time_days_ago_short": "prije {{count}} dana",
     "general": "Općenito",
     "privacy_data": "Privatnost i podaci",
-    "seneste_aktivitet": "Nedavna aktivnost"
+    "seneste_aktivitet": "Nedavna aktivnost",
+    "relation_mother": "Majka",
+    "relation_father": "Otac",
+    "relation_son": "Sin",
+    "relation_daughter": "Kćerka",
+    "relation_grandson": "Unuk (Muško)",
+    "relation_granddaughter": "Unuka (Žensko)",
+    "relation_sister": "Sestra",
+    "relation_brother": "Brat",
+    "relation_friend": "Prijatelj",
+    "relation_caregiver": "Njegovatelj",
+    "relation_other": "Ostalo",
+    "your_relation_to_target": "Ko je {{name}} za tebe?",
+    "relation_custom_placeholder": "Ili upiši sam..."
 }

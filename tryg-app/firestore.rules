@@ -47,17 +47,32 @@ service cloud.firestore {
       match /helpRequests/{requestId} {
         allow read, write: if request.auth != null && isMemberOfCircle(circleId);
       }
+
+      // Member Statuses subcollection (Critical for FamilyPresence)
+      match /memberStatuses/{statusId} {
+        allow read, write: if request.auth != null && isMemberOfCircle(circleId);
+      }
+
+      // Photos subcollection
+      match /photos/{photoId} {
+        allow read, write: if request.auth != null && isMemberOfCircle(circleId);
+      }
+
+      // Word Game Scores subcollection (Leaderboard)
+      match /wordGameScores/{scoreId} {
+        allow read, write: if request.auth != null && isMemberOfCircle(circleId);
+      }
+
+      // Memories (Livsbog) subcollection
+      match /memories/{memoryId} {
+        allow read, write: if request.auth != null && isMemberOfCircle(circleId);
+      }
     }
     
     // Care circle memberships - users can read all to find their circle
     // Admin (dinko1991@hotmail.com) can update any member for POC demo setup
     match /careCircleMemberships/{membershipId} {
-      allow read: if request.auth != null;
-      allow create: if request.auth != null;
-      allow update, delete: if request.auth != null && (
-        resource.data.userId == request.auth.uid ||
-        request.auth.token.email == 'dinko1991@hotmail.com'
-      );
+      allow read, write: if request.auth != null;
     }
     
     // Helper function to check if user is member of a circle

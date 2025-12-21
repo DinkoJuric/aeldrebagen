@@ -127,6 +127,7 @@ graph TD
 | `StatusCard.tsx` | ProgressRing, ui/Avatar | AmbientTab, SeniorView |
 | `AmbientDashboard.tsx`| framer-motion, ui/Avatar | AmbientHero (via AmbientTab) |
 | `FamilyPresence.tsx` | ui/Avatar, CareCircleContext | SeniorView, CoordinationTab |
+| `FamilyTree.tsx` | ui/Avatar, MemberActionMenu, CareCircleContext | ShareModal, CoordinationTab |
 | `useMemberStatus.ts` | Firebase | AppCore |
 
 **Dependencies**: Firebase, CareCircleContext, ProgressRing, Framer Motion. **Self-contained**: ❌ No
@@ -253,11 +254,11 @@ graph TD
 
 | Component | Uses | Used By |
 |-----------|------|---------|
-| `LivingBackground.tsx` | ThemeContext | AppWithAuth, AppCore |
+| `LivingBackground.tsx` | ThemeContext (Circadian Phase) | AppWithAuth, AppCore |
 | `AuthScreen.tsx` | FEATURES.livingDesign | AppWithAuth |
 | `glass-panel` (CSS) | — | AuthScreen |
 
-**Dependencies**: ThemeContext, framer-motion. **Self-contained**: ⚠️ Needs context
+**Dependencies**: ThemeContext (`useCircadianTheme`), framer-motion. **Self-contained**: ⚠️ Needs context
 
 **Toggle**: Set `livingDesign: false` in `features.ts` to revert to classic design.
 

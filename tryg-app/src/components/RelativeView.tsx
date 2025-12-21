@@ -34,11 +34,11 @@ export const RelativeView: React.FC = () => {
                 <div className="flex justify-between items-center">
                     <div className="flex items-center gap-2">
                         <Avatar
-                            id={(userName.includes('Fatima') || userName === 'Test User') ? 'fatima' : userName === 'Brad' ? 'brad' : 'louise'}
+                            id={userName.toLowerCase().includes('louise') ? 'louise' : (userName.toLowerCase().includes('brad') || userName.toLowerCase().includes('senior')) ? 'brad' : 'fatima'}
                             size="md"
                             className="bg-indigo-50"
                         />
-                        <span className="font-semibold theme-text text-sm whitespace-nowrap overflow-hidden text-ellipsis max-w-[120px]">
+                        <span className="font-semibold theme-text text-sm whitespace-nowrap overflow-hidden text-ellipsis max-w-[200px]">
                             {t('greeting_relative', { name: userName })}
                         </span>
                     </div>

@@ -4,7 +4,21 @@ All notable changes to this project will be documented in this file.
 
 
 
-## [Unreleased]
+### 🔧 Security, Stability & UI Polish (2025-12-22)
+
+**Hierarchy & Lineage Stability**
+- **Positional Character Slots**: Refactored `FamilyTree.tsx` to use stable character slots based on ID sorting. Renaming members (e.g., Louise → Pernille) no longer breaks relationships or duplicates nodes.
+- **"Søskende" Layout**: Refined sibling label positioning and vertical spacing to prevent overlap with name badges.
+
+**Typography & Accessibility**
+- **Theme-Aware Medication Cards**: Replaced hardcoded styles in `AmbientTab.tsx` with `.theme-card` and `theme-text` utilities. Fixed "invisible text" bug in dark mode for medication labels like "Aftenpille".
+
+**Admin & Coordination**
+- **Robust Admin Logic**: Unified `isAdmin` check in `FamilyTree` to recognize Senior Admins via UID/DocID comparison.
+- **Tree Editing**: Enabled profile and relationship editing directly from the Coordination Tab.
+- **Build Recovery**: Fixed duplicate `Avatar` import regression.
+
+---
 
 ### 🔧 Configuration & Security (2025-12-21)
 

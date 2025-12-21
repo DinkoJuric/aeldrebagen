@@ -59,7 +59,7 @@ export default function TrygApp() {
                     )}
                 </div>
 
-                <div className="relative h-full overflow-y-auto">
+                <div className="relative h-full overflow-y-auto no-scrollbar">
                     {/* Role Toggles for Demo */}
                     <div className="absolute top-4 right-4 z-50 flex bg-stone-100 rounded-full p-1 shadow-md">
                         <button

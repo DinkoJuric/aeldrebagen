@@ -103,6 +103,20 @@
   --color-pumpkin: 32 75% 85%;
   /* Pumpkin orange meets brown - Coffee Card warmth */
 
+  /* === Circadian Phase Gradients === */
+  --dawn-from: #F3E8FF;
+  --dawn-via: #FFF1F2;
+  --dawn-to: #FFEDD5;
+  --day-from: #E0F2FE;
+  --day-via: #FFFFFF;
+  --day-to: #F0FDFA;
+  --golden-from: #FFF7ED;
+  --golden-via: #FFEDD5;
+  --golden-to: #FDBA74;
+  --midnight-from: #0F172A;
+  --midnight-via: #1E1B4B;
+  --midnight-to: #312E81;
+
   /* === Theme Tokens (Circadian Defaults) === */
   --theme-bg: hsl(37 20% 95%);
   --theme-text: hsl(200 10% 20%);
@@ -697,4 +711,16 @@ h4 {
 ::selection {
   background-color: hsl(174 50% 85%);
   color: hsl(174 60% 25%);
+}
+
+/* Utility: Hide Scrollbar */
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none !important;
+  /* IE and Edge */
+  scrollbar-width: none !important;
+  /* Firefox */
 }

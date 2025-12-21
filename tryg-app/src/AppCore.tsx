@@ -136,10 +136,18 @@ export default function TrygAppCore({
         });
     };
 
-    // Get display names
-    const seniorName = careCircle?.seniorName || (userProfile?.role === 'senior' ? userProfile?.displayName : 'Senior');
+    // Live update: prefer real-time member data over static user profile
+    const currentMember = members.find(m => m.userId === user?.uid);
+    const seniorMember = members.find(m => m.role === 'senior');
+
+    const effectiveDisplayName = currentMember?.displayName || userProfile?.displayName;
+
+    // Get display names - Source of Truth is ALWAYS the membership record
+    const seniorName = seniorMember?.displayName || careCircle?.seniorName || (userProfile?.role === 'senior' ? effectiveDisplayName : 'Senior');
+
+    // Relative name logic
     const relativeName = userProfile?.role === 'relative'
-        ? userProfile?.displayName || 'Pårørende'
+        ? effectiveDisplayName || 'Pårørende'
         : members.find(m => m.role === 'relative')?.displayName || 'Pårørende';
 
     return (
@@ -233,7 +241,7 @@ export default function TrygAppCore({
                     {/* Care Circle & Family Share Modal */}
                     {showShare && (
                         <ShareModal
-                            members={memberStatuses}
+                            members={members}
                             inviteCode={inviteCode}
                             onGetInviteCode={onGetInviteCode}
                             seniorName={seniorName}

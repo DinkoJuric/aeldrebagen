@@ -62,7 +62,7 @@ export const CircleSetup: React.FC<CircleSetupProps> = ({ userRole, userName, on
                         <>
                             <h1 className="text-2xl font-bold text-stone-800 mb-2">Velkommen, {userName}!</h1>
                             <p className="text-stone-500 mb-8">
-                                Lad os oprette din familie-cirkel, så dine pårørende kan følge med.
+                                Lad os oprette dit familiens overblik, så dine pårørende kan følge med.
                             </p>
 
                             <button
@@ -71,7 +71,7 @@ export const CircleSetup: React.FC<CircleSetupProps> = ({ userRole, userName, on
                                 className="w-full bg-teal-600 text-white py-4 rounded-xl font-bold hover:bg-teal-700 transition-colors flex items-center justify-center gap-2"
                             >
                                 <Plus className="w-5 h-5" />
-                                Opret min familie-cirkel
+                                Opret min families overblik
                             </button>
                         </>
                     )}

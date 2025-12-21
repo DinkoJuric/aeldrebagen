@@ -132,11 +132,11 @@ export const WordGame: React.FC<WordGameProps> = ({
         <div className="glass-panel p-5">
             {/* Progress */}
             <div className="flex justify-between items-center mb-4">
-                <span className="text-xs font-bold text-stone-500 uppercase tracking-wide">
+                <span className="text-xs font-bold theme-text-muted uppercase tracking-wide">
                     {t('word_of', { current: currentWordIndex + 1, total: totalWords })}
                 </span>
-                <span className="text-xs font-bold text-teal-700 flex items-center gap-1">
-                    <Trophy className="w-3 h-3" /> {score} {t('points')}
+                <span className="text-xs font-bold text-teal-600 dark:text-teal-400 flex items-center gap-1">
+                    <Trophy className="w-3 h-3" /> {score} {score === 1 ? 'point' : t('points')}
                 </span>
             </div>
 
@@ -152,10 +152,10 @@ export const WordGame: React.FC<WordGameProps> = ({
             <div className="text-center mb-5">
                 <div className="flex items-center justify-center gap-2 mb-1">
                     <Sparkles className="w-4 h-4 text-amber-500" />
-                    <span className="text-xs text-stone-400 uppercase tracking-wider">{t('what_does_mean')}</span>
+                    <span className="text-xs theme-text-muted uppercase tracking-wider">{t('what_does_mean')}</span>
                     <Sparkles className="w-4 h-4 text-amber-500" />
                 </div>
-                <h2 className="text-2xl font-bold text-stone-800">{currentWord?.word}</h2>
+                <h2 className="text-2xl font-bold theme-text">{currentWord?.word}</h2>
             </div>
 
             {/* Options */}
@@ -167,13 +167,13 @@ export const WordGame: React.FC<WordGameProps> = ({
                         disabled={selectedIndex !== null}
                         className={`w-full p-4 rounded-xl text-left transition-all duration-200 border-2
                             ${selectedIndex === i
-                                ? 'border-amber-400 bg-amber-50'
-                                : 'border-stone-200 bg-stone-50 hover:border-stone-300 hover:bg-white'
+                                ? 'border-amber-400 bg-amber-50 dark:bg-amber-900/30'
+                                : 'border-stone-200 theme-card opacity-90 hover:border-stone-300 hover:bg-white dark:hover:bg-slate-800'
                             }
                             ${selectedIndex !== null ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer active:scale-[0.98]'}
                         `}
                     >
-                        <span className="font-medium text-stone-700 text-sm leading-snug">
+                        <span className="font-medium theme-text text-sm leading-snug">
                             {option.text}
                         </span>
                     </button>

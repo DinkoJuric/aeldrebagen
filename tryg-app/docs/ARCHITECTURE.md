@@ -15,33 +15,52 @@
 8. [Related Documentation](#related-documentation)
 
 
-## System Overview
+## System Overview: The Mirror Architecture
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                        Tryg PWA                              │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐  │
-│  │ SeniorView  │  │RelativeView │  │  StatusCard (Shared)│  │
-│  │ (Elder UI)  │  │ (Family UI) │  │ (Senior/Family Modes)│ │
-│  └──────┬──────┘  └──────┬──────┘  └──────────┬──────────┘  │
-│         │                │                     │             │
-│  ┌──────┴────────────────┴─────────────────────┴──────────┐  │
-│  │                    AppCore.tsx                          │  │
-│  │              (State Management + Routing)               │  │
-│  └─────────────────────────┬───────────────────────────────┘  │
-│                            │                                 │
-│  ┌─────────────────────────┴───────────────────────────────┐  │
-│  │                   Firebase Hooks Layer                   │  │
-│  │  useTasks | useSymptoms | useSettings | usePings | ...  │  │
-│  └─────────────────────────┬───────────────────────────────┘  │
-└────────────────────────────┼────────────────────────────────┘
-                             │
-                    ┌────────┴────────┐
-                    │  Firebase Cloud  │
-                    │  - Auth          │
-                    │  - Firestore     │
-                    │  - Storage       │
-                    └─────────────────┘
+Tryg is built on a **Symmetrical Mirror Protocol** where data flows bidirectionally through a single Source of Truth, projected through role-specific "Lenses."
+
+```mermaid
+graph TD
+    subgraph Lenses ["Experience Lenses (Role-Aware)"]
+        direction LR
+        SV["<b>SeniorView</b><br/>iPad/Tablet Lens"]
+        RV["<b>RelativeView</b><br/>Mobile/Handheld Lens"]
+    end
+
+    subgraph Mirror ["The Mirror Protocol (Shared Core)"]
+        direction TB
+        AT["AmbientTab<br/>Daily Reassurance"]
+        HT["HealthTab<br/>Clinical Visibility"]
+        FT["FamilyTree<br/>Relationship Map"]
+        ST["SpilTab<br/>Mutual Play"]
+    end
+
+    subgraph Engine ["Living Data Engine (State)"]
+        CCC["CareCircleContext<br/>Data Brain"]
+        TC["ThemeContext<br/>Circadian Pulse"]
+        FHL["Firebase Hooks<br/>Real-time Sync"]
+    end
+
+    subgraph Cloud ["Infrastructure"]
+        FB["Firebase Cloud<br/>Auth / DB / Storage"]
+    end
+
+    %% Flow
+    SV <--> Mirror
+    RV <--> Mirror
+    Mirror <--> Engine
+    Engine <--> Cloud
+
+    %% Styling for Max Legibility
+    classDef lens fill:#f1f5f9,stroke:#64748b,stroke-width:2px,color:#0f172a;
+    classDef shared fill:#f0f9ff,stroke:#0ea5e9,stroke-width:2px,color:#0c4a6e;
+    classDef engine fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#78350f;
+    classDef cloud fill:#fafafa,stroke:#262626,stroke-width:2px,color:#171717;
+    
+    class SV,RV lens;
+    class AT,HT,FT,ST shared;
+    class CCC,TC,FHL engine;
+    class FB cloud;
 ```
 
 ---
@@ -374,6 +393,22 @@ Standardized usage of Tailwind CSS:
 
 ---
 
+### 8. The "Soul" Layer (Design Systems)
+
+#### Circadian Engine (New Dec 2025)
+Instead of a static theme, Tryg uses a **Time-Aware Engine** (`useCircadianTheme.ts`) that shifts the app's emotional state through 4 phases:
+1.  **Dawn (05-09)**: Lavender/Peach (Soft awakening)
+2.  **Day (09-17)**: Sky/Teal (Clear & Bright)
+3.  **Golden (17-18)**: Warm Sand/Amber (Hygge transition)
+4.  **Midnight (18-05)**: Deep Slate/Indigo (Premium Dark Mode)
+
+**Key Logic**:
+*   Manual "Dark Mode" overrides time and forces **Midnight** phase.
+*   `LivingBackground.tsx` interpolates gradients over 4000ms for imperceptible shifts.
+*   **Nordic Glass**: Uses `.glass-nordic` token for accessible, double-pane glassmorphism.
+
+---
+
 ## Authentication Flow
 
 ```
@@ -443,3 +478,29 @@ For rapid development and Proof-of-Concept (POC) data setup, the following admin
 - **Privileges**: Can update ANY document in `careCircleMemberships` regardless of ownership.
 - **Purpose**: Allows setting up demo circles and modifying member statuses without simulating multiple user logins.
 
+---
+
+## Family Tree: POC Identity & Slot System
+
+To accelerate development while maintaining a high-fidelity visual experience, the `FamilyTree.tsx` component utilizes a **Stable Slot Heuristic** rather than a dynamic relationship database.
+
+### 1. The Heuristic Character Mapping
+The system maps existing `careCircleMemberships` to specific "Archetype Slots" based on a stable sort of their `userId`.
+
+*   **Stable Sorting**: Members are always sorted by ID before mapping. This ensures that Character A (Slot 0) remains Character A even if their `displayName` changes.
+*   **Slot 0 (The "Louise" Archetype)**:
+    *   Hardcoded Partner: `Jacob` (Dummy Node).
+    *   No offspring in current view.
+*   **Slot 1 (The "Fatima" Archetype)**:
+    *   No dummy partner.
+    *   Offspring: All members with "Juzu" in their name (heuristic tagging).
+
+### 2. Long-term Implications
+*   **Current Phase**: Perfect for testing and "Wizard of Oz" demos where names like "Louise" are swapped for "Pernille" without breaking the visual hierarchy.
+*   **Future Scaling**: When supporting multiple families or 3+ children, this will migrate to a **Relational Schema**:
+    *   `partnerId`: Linked to another `userId`.
+    *   `parentIds`: Array of linkable IDs.
+    *   **In-law Support**: Future "In-law" roles will be added to the `Member` role enum.
+
+> [!NOTE]
+> **Agents**: Do not refactor this to a fully dynamic relation model without explicit user confirmation. This structure is intentionally kept simple to avoid premature schema expansion.

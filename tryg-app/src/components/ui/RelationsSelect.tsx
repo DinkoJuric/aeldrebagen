@@ -4,6 +4,8 @@ import { cn } from '../../lib/utils';
 import { Check } from 'lucide-react';
 
 export type RelationshipType =
+    | 'mother'
+    | 'father'
     | 'son'
     | 'daughter'
     | 'grandson'
@@ -18,31 +20,41 @@ interface RelationsSelectProps {
     value: string;
     onChange: (value: string) => void;
     seniorName: string;
+    targetGender?: 'male' | 'female' | 'other';
 }
 
 export const RelationsSelect: React.FC<RelationsSelectProps> = ({
     value,
     onChange,
-    seniorName
+    seniorName,
+    targetGender
 }) => {
     const { t } = useTranslation();
 
-    const options: { id: RelationshipType; label: string }[] = [
-        { id: 'son', label: t('relation_son', 'Søn') },
-        { id: 'daughter', label: t('relation_daughter', 'Datter') },
-        { id: 'grandson', label: t('relation_grandson', 'Barnebarn (Han)') },
-        { id: 'granddaughter', label: t('relation_granddaughter', 'Barnebarn (Hun)') },
-        { id: 'sister', label: t('relation_sister', 'Søster') },
-        { id: 'brother', label: t('relation_brother', 'Bror') },
+    const allOptions: { id: RelationshipType; label: string; gender?: 'male' | 'female' }[] = [
+        { id: 'mother', label: t('relation_mother', 'Mor'), gender: 'female' },
+        { id: 'father', label: t('relation_father', 'Far'), gender: 'male' },
+        { id: 'son', label: t('relation_son', 'Søn'), gender: 'male' },
+        { id: 'daughter', label: t('relation_daughter', 'Datter'), gender: 'female' },
+        { id: 'grandson', label: t('relation_grandson', 'Barnebarn (Han)'), gender: 'male' },
+        { id: 'granddaughter', label: t('relation_granddaughter', 'Barnebarn (Hun)'), gender: 'female' },
+        { id: 'sister', label: t('relation_sister', 'Søster'), gender: 'female' },
+        { id: 'brother', label: t('relation_brother', 'Bror'), gender: 'male' },
         { id: 'friend', label: t('relation_friend', 'Ven') },
         { id: 'caregiver', label: t('relation_caregiver', 'Hjælper') },
         { id: 'other', label: t('relation_other', 'Andet') },
     ];
 
+    const options = allOptions.filter(opt => {
+        if (!targetGender || targetGender === 'other') return true;
+        if (!opt.gender) return true; // Neural options like Friend
+        return opt.gender === targetGender;
+    });
+
     return (
         <div className="space-y-3 animate-fade-in">
             <label className="block text-xs font-bold text-stone-500 uppercase tracking-wide">
-                {t('your_relation_to', { name: seniorName })}
+                {t('your_relation_to_target', { name: seniorName, defaultValue: `Din relation til ${seniorName}` })}
             </label>
 
             <div className="grid grid-cols-2 gap-2">

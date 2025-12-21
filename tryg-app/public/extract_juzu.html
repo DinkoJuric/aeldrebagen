@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <img id="source" src="/assets/sprites/family-presence.png" style="display:none;" />
+    <canvas id="canvas"></canvas>
+    <div id="output"></div>
+    <script>
+        const img = document.getElementById('source');
+        img.onload = () => {
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+
+            // Dimensions
+            const w = img.naturalWidth;
+            const h = img.naturalHeight;
+
+            // Grid: 4 cols, 2 rows. Beanie man is 3rd col, 1st row.
+            const spriteW = w / 4;
+            const spriteH = h / 2;
+
+            canvas.width = spriteW;
+            canvas.height = spriteH;
+
+            // Draw crop: Source X = custom, Source Y = 0
+            // User said it's the beanie man.
+            // Previous CSS used '66.66% 0'.
+            // In pixels: 2 * spriteW.
+
+            ctx.drawImage(img, 2 * spriteW, 0, spriteW, spriteH, 0, 0, spriteW, spriteH);
+
+            const dataURL = canvas.toDataURL('image/png');
+            document.getElementById('output').innerText = dataURL.split(',')[1]; // Base64 content
+        };
+    </script>
+</body>
+
+</html>

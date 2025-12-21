@@ -6,7 +6,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import {
     getFirestore,
-    enableIndexedDbPersistence
+    enableMultiTabIndexedDbPersistence
 } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 
@@ -27,9 +27,8 @@ export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
 
-// Enable offline persistence for Firestore
-// This allows the app to work offline and sync when back online
-enableIndexedDbPersistence(db).catch((err) => {
+// Enable offline persistence for Firestore (Multi-tab capable)
+enableMultiTabIndexedDbPersistence(db).catch((err) => {
     if (err.code === 'failed-precondition') {
         // Multiple tabs open, persistence can only be enabled in one tab at a time
         console.warn('Firestore persistence unavailable: multiple tabs open');

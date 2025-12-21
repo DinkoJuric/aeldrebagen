@@ -9,6 +9,8 @@ import { FEATURES } from './config/features';
 import { LivingBackground } from './components/ui/LivingBackground';
 import { ThemeProvider } from './contexts/ThemeContext';
 
+
+
 // Main app wrapper with Firebase integration
 export default function AppWithAuth() {
     // If Firebase is disabled, render the original localStorage app

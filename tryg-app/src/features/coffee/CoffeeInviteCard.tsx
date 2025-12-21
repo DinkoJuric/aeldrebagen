@@ -31,7 +31,7 @@ export const CoffeeInviteCard = () => {
                 <Coffee className="w-8 h-8 text-amber-600 animate-wiggle" />
             </div>
             <div className="flex-1 min-w-0 relative z-10">
-                <h3 className="font-bold text-lg text-amber-950 truncate">{t('coffee_invite_title', { name: seniorName })}</h3>
+                <h3 className="font-bold text-lg text-amber-950 leading-tight">{t('coffee_invite_title', { name: seniorName })}</h3>
                 <p className="text-amber-800/70 text-sm truncate">{t('coffee_invite_sub')}</p>
             </div>
             <Button

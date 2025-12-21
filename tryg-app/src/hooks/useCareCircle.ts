@@ -238,7 +238,7 @@ export function useCareCircle(userId: string | undefined, _userProfile: UserProf
         }
     }, [careCircle?.id, userId]);
 
-    // Update member profile
+    // Update member profile (Self)
     const updateMember = useCallback(async (data: Partial<Member>) => {
         if (!careCircle?.id || !userId) return;
 
@@ -251,6 +251,20 @@ export function useCareCircle(userId: string | undefined, _userProfile: UserProf
         }
     }, [careCircle?.id, userId]);
 
+    // Update ANY member (Admin Action) - Renaming/Relation changes
+    const updateMemberByDocId = useCallback(async (memberId: string, data: Partial<Member>) => {
+        if (!careCircle?.id) return;
+
+        try {
+            console.log("📝 Updating member:", memberId, data);
+            const memberRef = doc(db, 'careCircleMemberships', memberId);
+            await setDoc(memberRef, data, { merge: true });
+        } catch (err: any) {
+            console.error('Error updating member (Admin):', err);
+            throw err;
+        }
+    }, [careCircle?.id]);
+
     return {
         careCircle,
         members,
@@ -262,6 +276,7 @@ export function useCareCircle(userId: string | undefined, _userProfile: UserProf
         getInviteCode,
         leaveCareCircle,
         updateMember,
+        updateAnyMember: updateMemberByDocId,
         hasCareCircle: !!careCircle,
     };
 }

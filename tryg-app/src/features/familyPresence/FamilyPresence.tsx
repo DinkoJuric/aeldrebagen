@@ -17,8 +17,8 @@ interface MemberStatusRowProps {
 const MemberStatusRow: React.FC<MemberStatusRowProps> = ({ name, status, role, timestamp, isCurrentUser = false }) => {
     const { t } = useTranslation();
     const avatarId = role === 'senior' ? 'senior' :
-        (name.includes('Fatima') || name === 'Test User') ? 'fatima' :
-            name === 'Brad' ? 'brad' : 'louise';
+        name.toLowerCase().includes('louise') ? 'louise' :
+            (name.toLowerCase().includes('brad') || name.toLowerCase().includes('senior')) ? 'brad' : 'fatima';
 
     const statusIdMapping: Record<string, string> = {
         'home': 'home',
@@ -132,16 +132,23 @@ export const FamilyPresence: React.FC<FamilyPresenceProps> = ({
                 </div>
             </div>
             <div className="space-y-1">
-                {memberStatuses.map((member: MemberStatus, index: number) => (
-                    <MemberStatusRow
-                        key={member.docId || index}
-                        name={member.displayName || (member.role === 'senior' ? seniorName : 'Pårørende')}
-                        status={member.status}
-                        role={member.role}
-                        timestamp={member.updatedAt}
-                        isCurrentUser={member.docId === currentUserId}
-                    />
-                ))}
+                {context.members.map((member: any) => {
+                    // Normalize: find status by userId (memberStatus docId IS the userId)
+                    const statusObj = memberStatuses.find((s: any) => s.docId === member.userId);
+                    // Name source of truth: THE MEMBER RECORD
+                    const displayName = member.displayName || (member.role === 'senior' ? seniorName : 'Pårørende');
+
+                    return (
+                        <MemberStatusRow
+                            key={member.userId}
+                            name={displayName}
+                            status={statusObj?.status || 'home'}
+                            role={member.role}
+                            timestamp={statusObj?.updatedAt}
+                            isCurrentUser={member.userId === currentUserId}
+                        />
+                    );
+                })}
             </div>
         </div>
     );

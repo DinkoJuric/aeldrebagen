@@ -10,6 +10,16 @@ This document tracks future enhancements, technical ideations, and non-critical 
 - **Estimated Effort**: 16h (Asset Creation + Flow Logic).
 - **Status**: Backlog - waiting for more features before implementation.
 
+### 2. Multi-Family Relational Schema 🌲 ⭐ HIGH PRIORITY
+- **Goal**: Replace "Character Slots" with a fully dynamic `partnerId` and `parentIds` system.
+- **Value**: Critical for extending testing to 2-3 separate families and supporting complex hierarchies.
+- **Estimated Effort**: 12h (Data Migration + FamilyTree refactor).
+
+### 3. "X-in-law" Role Support 👥
+- **Goal**: Add "In-law" roles to the member enum and family tree visualization.
+- **Value**: Essential for capturing the full scope of modern family circles.
+- **Estimated Effort**: 4h (Type update + Pictogram additions).
+
 ## 🟡 Medium Priority (Backlog)
 
 ### 2. Family Photo Background 🖼️

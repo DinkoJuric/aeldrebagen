@@ -14,6 +14,10 @@ import { useHelpExchangeMatch } from '../features/helpExchange';
 import { useHelpExchange } from '../features/helpExchange';
 import { useCareCircleContext } from '../contexts/CareCircleContext';
 import { MemoriesGallery } from '../features/memories/MemoriesGallery';
+import { FamilyTree } from '../features/visualizations/FamilyTree';
+import { RelationshipMatrix } from '../features/onboarding/RelationshipMatrix';
+import { LayoutGrid, Network } from 'lucide-react';
+import { FEATURES } from '../config/features';
 
 export interface CoordinationTabProps {
     onAddTask?: () => void;
@@ -40,7 +44,10 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
         myStatus = 'home',
         setMyStatus: onMyStatusChange,
         tasks = [],
-        symptoms: symptomLogs = []
+        symptoms: symptomLogs = [],
+        members = [], // Added members for FamilyTree
+        seniorId,
+        updateMember: onMyUpdateMember
     } = useCareCircleContext();
 
     const [showStatusPicker, setShowStatusPicker] = useState(false);
@@ -48,6 +55,12 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
     const [showSymptoms, setShowSymptoms] = useState(false);
     const [showOfferPicker, setShowOfferPicker] = useState(false);
     const [showRequestPicker, setShowRequestPicker] = useState(false);
+    const [viewMode, setViewMode] = useState<'planets' | 'tree'>('planets'); // Toggle state
+    const [showRelationMatrix, setShowRelationMatrix] = useState(false);
+
+    // Identify current member object for Matrix
+    const currentMember = members.find(m => m.userId === currentUserId || m.docId === currentUserId);
+    const hasEdges = currentMember?.edges && Object.keys(currentMember.edges).length > 0;
 
     const {
         helpOffers: allOffersFetched,
@@ -140,12 +153,49 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
                 />
             )}
 
-            {memberStatuses.length > 0 && (
-                <FamilyPresence
-                    memberStatuses={memberStatuses}
-                    currentUserId={currentUserId ?? ''}
-                    seniorName={seniorName}
-                />
+            {members.length > 0 && (
+                <div className="space-y-2">
+                    {/* View Toggle Header */}
+                    <div className="flex justify-end gap-2 px-2">
+                        {!hasEdges && currentMember && (
+                            <button
+                                onClick={() => setShowRelationMatrix(true)}
+                                className="text-xs bg-indigo-50 text-indigo-600 px-2 py-1 rounded-full font-semibold border border-indigo-100 hover:bg-indigo-100 transition-colors animate-pulse"
+                            >
+                                🔗 Sæt relationer
+                            </button>
+                        )}
+                        <div className="bg-stone-100 p-1 rounded-lg flex items-center shadow-inner">
+                            <button
+                                onClick={() => setViewMode('planets')}
+                                className={`p-1.5 rounded-md transition-all ${viewMode === 'planets' ? 'bg-white shadow text-stone-800' : 'text-stone-400 hover:text-stone-600'}`}
+                            >
+                                <LayoutGrid size={16} />
+                            </button>
+                            <button
+                                onClick={() => setViewMode('tree')}
+                                className={`p-1.5 rounded-md transition-all ${viewMode === 'tree' ? 'bg-white shadow text-stone-800' : 'text-stone-400 hover:text-stone-600'}`}
+                            >
+                                <Network size={16} />
+                            </button>
+                        </div>
+                    </div>
+
+                    {viewMode === 'planets' ? (
+                        <FamilyPresence
+                            memberStatuses={memberStatuses}
+                            currentUserId={currentUserId ?? ''}
+                            seniorName={seniorName}
+                        />
+                    ) : (
+                        <FamilyTree
+                            members={members}
+                            seniorId={seniorId || ''}
+                            onUpdateMember={onMyUpdateMember}
+                            currentUserId={currentUserId ?? ''}
+                        />
+                    )}
+                </div>
             )}
 
             <div className="bg-stone-50 border-2 border-stone-100 rounded-xl p-4 space-y-4">
@@ -266,7 +316,8 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
             </div>
 
             {/* Family Heirloom - Livsbog */}
-            {careCircleId && (
+            {/* Family Heirloom - Livsbog */}
+            {careCircleId && FEATURES.memoryTriggers && (
                 <MemoriesGallery circleId={careCircleId} />
             )}
 
@@ -329,6 +380,15 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
                     <span>{t('add_reminder_name', { name: seniorName })}</span>
                 </div>
             </Button>
+
+            {/* Relationship Matrix Modal */}
+            {showRelationMatrix && currentMember && (
+                <RelationshipMatrix
+                    currentMember={currentMember}
+                    allMembers={members}
+                    onComplete={() => setShowRelationMatrix(false)}
+                />
+            )}
         </div>
     );
 };

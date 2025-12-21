@@ -113,12 +113,15 @@ export interface Member {
     docId: string;
     userId?: string; // Added userId
     displayName: string;
+    gender?: 'male' | 'female' | 'other';
     role: 'senior' | 'relative';
     status: 'home' | 'work' | 'traveling' | 'available' | 'busy' | 'coffee_ready' | 'coffee_coming';
     updatedAt?: any; // Firestore timestamp
     id?: string; // Sometimes used interchangeably with docId
     // Generational Orbits
     relationship?: string; // e.g. 'son', 'granddaughter'
+    edges?: Record<string, string>; // Map of relation to other members { [userId]: "brother" }
+    relationsLastUpdated?: any;
     accessLevel?: 'admin' | 'caregiver' | 'joy' | 'guest'; // Permissions
     archetype?: 'tech_wizard' | 'listener' | 'fixer' | 'driver' | 'cheerleader'; // Superpower badge
 }

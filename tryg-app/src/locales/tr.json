@@ -6,7 +6,7 @@
     "invite_code": "Davet Kodu",
     "show_invite_code": "Davet kodunu göster",
     "logged_in_as": "Olarak giriş yapıldı",
-    "family_heart": "Aile Kalbi",
+    "family_heart": "Aile Genel Bakış",
     "medication_title": "İlaç",
     "pain_question": "Nasıl hissediyorsun?",
     "greeting_morning": "Günaydın",
@@ -281,5 +281,18 @@
     "time_days_ago_short": "{{count}} gün önce",
     "general": "Genel",
     "privacy_data": "Gizlilik ve veriler",
-    "seneste_aktivitet": "Son aktivite"
+    "seneste_aktivitet": "Son aktivite",
+    "relation_mother": "Anne",
+    "relation_father": "Baba",
+    "relation_son": "Oğul",
+    "relation_daughter": "Kız",
+    "relation_grandson": "Torun (Erkek)",
+    "relation_granddaughter": "Torun (Kız)",
+    "relation_sister": "Kız Kardeş",
+    "relation_brother": "Erkek Kardeş",
+    "relation_friend": "Arkadaş",
+    "relation_caregiver": "Bakıcı",
+    "relation_other": "Diğer",
+    "your_relation_to_target": "{{name}} senin için kim?",
+    "relation_custom_placeholder": "Veya kendin yaz..."
 }

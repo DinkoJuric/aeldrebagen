@@ -1,11 +1,11 @@
 import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
+import { useCircadianTheme, CircadianPhase } from '../hooks/useCircadianTheme';
 
 type ThemeMode = 'auto' | 'light' | 'dark';
-type CircadianTheme = 'morning' | 'day' | 'evening' | 'night';
 
 interface ThemeContextType {
     mode: ThemeMode;
-    circadianTheme: CircadianTheme;
+    circadianPhase: CircadianPhase;
     setMode: (mode: ThemeMode) => void;
     isDark: boolean;
 }
@@ -19,22 +19,8 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         return (saved as ThemeMode) || 'auto';
     });
 
-    const [circadianTheme, setCircadianTheme] = useState<CircadianTheme>('day');
-
-    // Update circadian theme based on time
-    useEffect(() => {
-        const updateTheme = () => {
-            const hour = new Date().getHours();
-            if (hour >= 6 && hour < 11) setCircadianTheme('morning');
-            else if (hour >= 11 && hour < 17) setCircadianTheme('day');
-            else if (hour >= 17 && hour < 22) setCircadianTheme('evening');
-            else setCircadianTheme('night');
-        };
-
-        updateTheme();
-        const timer = setInterval(updateTheme, 60000); // Check every minute
-        return () => clearInterval(timer);
-    }, []);
+    // Use the robust Circadian Engine
+    const circadianPhase = useCircadianTheme(mode === 'dark');
 
     // Persist mode changes
     const setMode = (newMode: ThemeMode) => {
@@ -43,12 +29,13 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     };
 
     // Determine if we should be in dark mode
+    // Determine if we should be in dark mode
     const isDark = useMemo(() => {
         if (mode === 'dark') return true;
         if (mode === 'light') return false;
-        // AUTO: Dark in evening and night
-        return circadianTheme === 'evening' || circadianTheme === 'night';
-    }, [mode, circadianTheme]);
+        // AUTO: Phase 'midnight' is strictly for dark mode
+        return circadianPhase === 'midnight';
+    }, [mode, circadianPhase]);
 
     // Apply theme class to body
     useEffect(() => {
@@ -62,10 +49,10 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     const value = useMemo(() => ({
         mode,
-        circadianTheme,
+        circadianPhase,
         setMode,
         isDark
-    }), [mode, circadianTheme, isDark]);
+    }), [mode, circadianPhase, isDark]);
 
     return (
         <ThemeContext.Provider value={value}>

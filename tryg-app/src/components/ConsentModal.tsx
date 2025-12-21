@@ -69,7 +69,7 @@ export const ConsentModal: React.FC<ConsentModalProps> = ({ userName, onAccept, 
                     <ul className="space-y-2 text-sm text-stone-600">
                         <li className="flex items-start gap-2">
                             <span className="text-indigo-600 mt-0.5">•</span>
-                            <span><strong>Kun din familie-cirkel</strong> - dem du inviterer</span>
+                            <span><strong>Kun din families overblik</strong> - dem du inviterer</span>
                         </li>
                         <li className="flex items-start gap-2">
                             <span className="text-indigo-600 mt-0.5">•</span>
@@ -121,7 +121,7 @@ export const ConsentModal: React.FC<ConsentModalProps> = ({ userName, onAccept, 
                             {checkedItems.dataSharing && <Check className="w-4 h-4 text-white" />}
                         </div>
                         <span className="text-sm text-stone-700">
-                            Jeg forstår, at min familie-cirkel kan se mine aktiviteter
+                            Jeg forstår, at min families overblik kan se mine aktiviteter
                         </span>
                     </label>
 

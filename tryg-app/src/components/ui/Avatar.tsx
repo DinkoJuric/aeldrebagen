@@ -41,7 +41,8 @@ const IMAGE_MAP: Record<string, string> = {
     'work': 'work.png',
     'car': 'car.png',
     'coffee': 'coffee.png',
-    'moon': 'moon.png'
+    'moon': 'moon.png',
+    'juzu': 'juzu.png'
 };
 
 /**
@@ -50,7 +51,7 @@ const IMAGE_MAP: Record<string, string> = {
  */
 export const Avatar: React.FC<AvatarProps> = ({ id, className, size }) => {
     // Fallback for unknown IDs
-    if (!IMAGE_MAP[id]) {
+    if (!id || !IMAGE_MAP[id]) {
         return (
             <div className={cn(
                 avatarVariants({ size }),

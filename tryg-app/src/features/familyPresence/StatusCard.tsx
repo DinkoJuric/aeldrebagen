@@ -264,7 +264,7 @@ export const StatusCard: React.FC<StatusCardProps> = ({
     }
 
     return (
-        <div className={`glass-panel-heavy p-4 mb-3 flex items-center justify-between rounded-2xl ${className}`}>
+        <div className={`glass-premium p-4 mb-3 flex items-center justify-between rounded-2xl ${className}`}>
             <div className="flex items-center gap-3">
                 <Avatar id={name === 'Brad' ? 'brad' : name.includes('Fatima') ? 'fatima' : 'louise'} size="md" />
                 <div>

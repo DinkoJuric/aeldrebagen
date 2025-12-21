@@ -198,14 +198,14 @@ export const AmbientTab: React.FC<AmbientTabProps> = ({
                             <button
                                 key={med.id}
                                 onClick={() => handleToggleTask(med.id)}
-                                className="w-full flex items-center gap-3 p-3 rounded-xl transition-all bg-white border-2 border-purple-100 hover:border-purple-300"
+                                className="w-full flex items-center gap-3 p-3 rounded-xl transition-all theme-card border-2 border-purple-100 dark:border-purple-900/50 hover:border-purple-300 shadow-sm"
                             >
-                                <div className="w-8 h-8 rounded-full border-2 border-purple-300 dark:border-purple-600 bg-white dark:bg-slate-800 flex items-center justify-center transition-colors">
+                                <div className="w-8 h-8 rounded-full border-2 border-purple-300 dark:border-purple-600 bg-theme-bg flex items-center justify-center transition-colors">
                                 </div>
-                                <span className="font-bold text-purple-800 dark:text-purple-200">
+                                <span className="font-bold theme-text">
                                     {med.title}
                                 </span>
-                                <span className="text-purple-400 dark:text-purple-400 text-sm font-bold ml-auto">{med.time}</span>
+                                <span className="theme-text-muted text-sm font-bold ml-auto">{med.time}</span>
                             </button>
                         ))}
                     </div>

@@ -112,8 +112,9 @@ export const SuperpowerBadge: React.FC<SuperpowerBadgeProps> = ({
 
     const Icon = config.icon;
 
-    const handleTap = () => {
+    const handleTap = (e: React.MouseEvent) => {
         if (!interactive) return;
+        e.stopPropagation();
         setShowActionSheet(true);
     };
 

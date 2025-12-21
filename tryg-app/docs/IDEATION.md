@@ -26,6 +26,14 @@ It turns Tryg into the central communication hub for the entire care ecosystem, 
 
 ---
 
+## 🚀 Specialized Onboarding & Connection Setup
+To support 2-3 families and more complex circles, the onboarding needs to be more than just a code.
+- **Connection Rituals**: Users choose how they are connected to each other and the Senior explicitly (e.g., "Grandchild", "Son-in-law").
+- **Local Group Documents**: Instead of one flat list, relatives could maintain "Sub-group" documents for their specific branch of the family tree.
+- **In-Law Visibility**: Explicitly adding "X-in-law" relations to ensure everyone feels included in the "Livstræet".
+
+---
+
 ## 🌟 Connection & Shared Experiences
 
 ### Photo Exchange & Reactions

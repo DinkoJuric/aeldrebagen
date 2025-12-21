@@ -539,3 +539,44 @@ equest.auth.token.email == 'admin@email.com' in irestore.rules.
 - **Problem**: TypeScript didn't catch that `docId` was missing from the `Member` object because we used `as Member[]` casting.
 - **Root Cause**: `as Type` tells TS "I know better," suppressing errors for missing fields.
 - **Action**: In the future, prefer Zod validation or constructor functions (e.g., `createMember(doc)`) that strictly assign fields. If using `as Type`, MANUALLY verify every required field matches the Firestore data transformation.
+
+### Refactoring Hook Exports
+- **Problem**: Renamed `updateAnyMember` to `updateMemberByDocId` inside `useCareCircle` but did not update the `return` object.
+- **Result**: `ReferenceError` at runtime (function undefined), causing Admin features to break silently or throw.
+- **Action**: Renamed export key to match function name or aliased it.
+- **Future**: When renaming functions in a custom hook, **IMMEDIATELY** check the `return` statement. Typescript might not catch this if the return type is inferred or loose.
+
+### Firestore ID Confusion (Member Updates)
+- **Problem**: `updateAnyMember` assumed `circleId_userId` format. Failed for manual members or if `userId` was missing/different.
+- **Action**: Shifted to updating by `docId` directly, which is the reliable primary key.
+- **Future**: Always prefer `docId` for update/delete operations. `userId` is a property, not necessarily the key.
+
+### Firestore Persistence Locking
+- **Problem**: Application showed ailed-precondition errors and failed to sync writes in dev environment (concurrent tabs).
+- **Action**: Switched from enableIndexedDbPersistence to enableMultiTabIndexedDbPersistence.
+- **Future**: Always use enableMultiTabIndexedDbPersistence for modern web apps to ensure resilience across tabs.
+
+
+### Hook Context & Scoping
+- **Problem**: useCareCircle hook was called inside a child component (FamilyTree) without a valid careCircleId or context, causing it to return a dead update function.
+- **Action**: Lifted the update logic to the parent (ShareModal) which has access to the Firestore instance, and passed it down as a callback prop.
+- **Future**: Avoid initializing data-fetching hooks in presentational components just to get mutation functions. Pass mutation callbacks from the container/page level.
+
+
+### Fragile Logic in POCs
+- **Problem**: UI logic relied on string matching of names (includes('Fatima')) to build the family tree structure. Renaming the user broke the tree structure.
+- **Action**: Switched to exclusion-based logic (defaults to parent if not the other sibling) or ID-based logic where possible, to make it robust against user edits.
+- **Future**: Never use mutable fields like displayName for structural logic. Always rely on stable IDs.
+
+
+### UI Density vs Clarity
+- **Problem**: Default Tailwind spacing (gap-4, p-4) created a sparse feeling in a modal context where information density was preferred.
+- **Action**: Reduced vertical rhythm significantly (mt-1, h-4 trunks) and used negative margins (-mt-2) to overlap labels with avatars slightly for a tighter look.
+- **Future**: For information-rich modals, start with tighter spacing tokens or custom density classes.
+
+
+### Data Synchronization Pitfalls
+- **Problem**: Renaming a user in one collection (careCircleMemberships) did not reflect in a component reading from another (memberStatuses), leading to stale UI.
+- **Action**: Refactored the UI component (FamilyPresence) to read names from the canonical source (members list from context) and join with status data on the fly.
+- **Future**: Avoid duplicating mutable data like names across collections. Store them in one place and join/read as needed.
+
