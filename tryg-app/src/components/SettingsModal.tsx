@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
-import { X, Lock, Shield, Trash2, Download, Globe, LogOut, Sun, Moon, Zap } from 'lucide-react';
+import { Modal } from './ui/Modal';
+import { Button } from './ui/Button';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../contexts/ThemeContext';
-import { LanguageSwitcher } from './LanguageSwitcher';
+import { Sun, Moon, SunMoon, Globe, Shield, LogOut, Download, Trash2, ChevronRight } from 'lucide-react';
+import { User } from 'firebase/auth';
+import { deleteUser, reauthenticateWithPopup, GoogleAuthProvider } from 'firebase/auth';
 
-export interface SettingsModalProps {
-    user: any;
+interface SettingsModalProps {
+    user: User | null;
     careCircle: any;
     onClose: () => void;
-    onSignOut: () => Promise<void>;
+    onSignOut: () => void;
 }
 
 export const SettingsModal: React.FC<SettingsModalProps> = ({
@@ -17,144 +20,240 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
     onClose,
     onSignOut
 }) => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const { mode, setMode } = useTheme();
-    const [activeTab, setActiveTab] = useState<'general' | 'privacy'>('general');
+    const [showPrivacy, setShowPrivacy] = useState(false);
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [deleting, setDeleting] = useState(false);
+    const [pauseSharing, setPauseSharing] = useState(false);
 
+    const languages = [
+        { code: 'da', label: 'Dansk', flag: '🇩🇰' },
+        { code: 'bs', label: 'Bosanski', flag: '🇧🇦' },
+        { code: 'tr', label: 'Türkçe', flag: '🇹🇷' }
+    ];
 
-    return (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4">
-            <div className="theme-card w-full sm:max-w-md h-[90vh] sm:h-auto sm:max-h-[85vh] sm:rounded-[2.5rem] flex flex-col overflow-hidden shadow-2xl theme-aware-border">
-                {/* Header */}
-                <div className="px-6 py-6 border-b border-stone-100 flex justify-between items-center bg-stone-50/50">
-                    <div>
-                        <h2 className="text-xl font-bold text-stone-800">{t('settings')}</h2>
-                        <p className="text-xs text-stone-500 font-medium">{user?.email}</p>
+    const themes = [
+        { id: 'auto', label: t('theme_auto', 'Auto (Følger solen)'), icon: SunMoon },
+        { id: 'light', label: t('theme_light', 'Lys'), icon: Sun },
+        { id: 'dark', label: t('theme_dark', 'Mørk'), icon: Moon }
+    ];
+
+    const handleDeleteAccount = async () => {
+        if (!user) return;
+        setDeleting(true);
+        try {
+            // Re-authenticate if needed
+            try {
+                await deleteUser(user);
+            } catch (err: any) {
+                if (err.code === 'auth/requires-recent-login') {
+                    const provider = new GoogleAuthProvider();
+                    await reauthenticateWithPopup(user, provider);
+                    await deleteUser(user);
+                } else {
+                    throw err;
+                }
+            }
+            onClose();
+        } catch (error) {
+            console.error('Error deleting account:', error);
+            alert(t('privacy_error_generic'));
+        } finally {
+            setDeleting(false);
+        }
+    };
+
+    const handleExportData = async () => {
+        // Simple data export - in production would be more comprehensive
+        const data = {
+            email: user?.email,
+            circleId: careCircle?.id,
+            exportedAt: new Date().toISOString()
+        };
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'tryg-data-export.json';
+        a.click();
+    };
+
+    // Privacy sub-view
+    if (showPrivacy) {
+        return (
+            <Modal isOpen={true} onClose={() => setShowPrivacy(false)} title={t('privacy_title')}>
+                <div className="space-y-4">
+                    {/* Pause Sharing Toggle */}
+                    <div className="flex items-center justify-between p-4 bg-stone-50 rounded-xl">
+                        <div>
+                            <h4 className="font-bold text-stone-800">{t('privacy_pause_sharing')}</h4>
+                            <p className="text-xs text-stone-500">
+                                {pauseSharing ? t('privacy_pause_on') : t('privacy_pause_off')}
+                            </p>
+                        </div>
+                        <button
+                            onClick={() => setPauseSharing(!pauseSharing)}
+                            className={`w-14 h-8 rounded-full transition-colors ${pauseSharing ? 'bg-amber-500' : 'bg-stone-300'}`}
+                        >
+                            <div className={`w-6 h-6 bg-white rounded-full shadow transition-transform ${pauseSharing ? 'translate-x-7' : 'translate-x-1'}`} />
+                        </button>
                     </div>
+
+                    {/* Download Data */}
                     <button
-                        onClick={onClose}
-                        className="p-2 hover:bg-stone-200 rounded-full transition-colors"
+                        onClick={handleExportData}
+                        className="w-full flex items-center justify-between p-4 bg-stone-50 rounded-xl hover:bg-stone-100 transition-colors"
                     >
-                        <X className="w-6 h-6 text-stone-500" />
+                        <div className="flex items-center gap-3">
+                            <Download className="w-5 h-5 text-teal-600" />
+                            <div className="text-left">
+                                <h4 className="font-bold text-stone-800">{t('privacy_download_data')}</h4>
+                                <p className="text-xs text-stone-500">{t('privacy_download_desc')}</p>
+                            </div>
+                        </div>
+                        <ChevronRight className="w-5 h-5 text-stone-400" />
                     </button>
-                </div>
 
-                {/* Tabs */}
-                <div className="flex px-6 border-b border-stone-100">
-                    <button
-                        onClick={() => setActiveTab('general')}
-                        className={`flex-1 py-4 text-sm font-bold transition-all border-b-2 ${activeTab === 'general'
-                            ? 'border-teal-500 text-teal-700'
-                            : 'border-transparent text-stone-400 hover:text-stone-600'
-                            }`}
-                    >
-                        {t('general')}
-                    </button>
-                    <button
-                        onClick={() => setActiveTab('privacy')}
-                        className={`flex-1 py-4 text-sm font-bold transition-all border-b-2 ${activeTab === 'privacy'
-                            ? 'border-teal-500 text-teal-700'
-                            : 'border-transparent text-stone-400 hover:text-stone-600'
-                            }`}
-                    >
-                        {t('privacy_data')}
-                    </button>
-                </div>
-
-                {/* Content */}
-                <div className="flex-1 overflow-y-auto p-6 space-y-8">
-                    {activeTab === 'general' ? (
-                        <>
-                            {/* Theme Selection */}
-                            <section className="space-y-4">
-                                <div className="flex items-center gap-2 text-stone-600 mb-1">
-                                    <Zap className="w-4 h-4" />
-                                    <h3 className="text-sm font-bold uppercase tracking-wider">{t('theme')}</h3>
+                    {/* Delete Account */}
+                    {!showDeleteConfirm ? (
+                        <button
+                            onClick={() => setShowDeleteConfirm(true)}
+                            className="w-full flex items-center justify-between p-4 bg-red-50 rounded-xl hover:bg-red-100 transition-colors"
+                        >
+                            <div className="flex items-center gap-3">
+                                <Trash2 className="w-5 h-5 text-red-600" />
+                                <div className="text-left">
+                                    <h4 className="font-bold text-red-700">{t('privacy_delete_account')}</h4>
+                                    <p className="text-xs text-red-500">{t('privacy_delete_desc')}</p>
                                 </div>
-                                <div className="flex bg-stone-100 p-1 rounded-2xl">
-                                    {[
-                                        { id: 'auto', label: t('theme_auto'), icon: Sun },
-                                        { id: 'light', label: t('theme_light'), icon: Sun },
-                                        { id: 'dark', label: t('theme_dark'), icon: Moon }
-                                    ].map((m) => (
-                                        <button
-                                            key={m.id}
-                                            onClick={() => setMode(m.id as any)}
-                                            className={`flex-1 flex items-center justify-center gap-2 py-3 px-2 rounded-xl text-xs font-bold transition-all ${mode === m.id
-                                                ? 'bg-white text-teal-700 shadow-sm'
-                                                : 'text-stone-500 hover:text-stone-700'
-                                                }`}
-                                        >
-                                            <m.icon className={`w-3.5 h-3.5 ${mode === m.id ? 'text-teal-500' : 'text-stone-400'}`} />
-                                            {m.label}
-                                        </button>
-                                    ))}
-                                </div>
-                            </section>
-
-                            {/* Language Selection */}
-                            <section className="space-y-3">
-                                <div className="flex items-center gap-2 text-stone-600 mb-1">
-                                    <Globe className="w-4 h-4" />
-                                    <h3 className="text-sm font-bold uppercase tracking-wider">{t('language_selection')}</h3>
-                                </div>
-                                <LanguageSwitcher />
-                            </section>
-
-                            {/* Sign Out */}
-                            <section className="pt-4">
-                                <button
-                                    onClick={onSignOut}
-                                    className="w-full flex items-center justify-center gap-2 p-4 text-red-500 font-bold bg-red-50 hover:bg-red-100 rounded-2xl transition-colors"
-                                >
-                                    <LogOut className="w-5 h-5" />
-                                    {t('sign_out')}
-                                </button>
-                            </section>
-                        </>
+                            </div>
+                            <ChevronRight className="w-5 h-5 text-red-400" />
+                        </button>
                     ) : (
-                        // Simplified Privacy view (reusing logic from PrivacySettings)
-                        <div className="space-y-6">
-                            <div className="flex items-center gap-3 p-4 bg-orange-50 border border-orange-100 rounded-2xl">
-                                <Shield className="w-6 h-6 text-orange-500" />
-                                <p className="text-xs text-orange-800 leading-relaxed font-medium">
-                                    {t('privacy_notice', 'Dine data gemmes sikkert og deles kun med din lukkede familie-cirkel.')}
-                                </p>
-                            </div>
-
-                            <div className="space-y-3">
-                                <h4 className="text-xs font-bold text-stone-400 uppercase tracking-wider">{t('data_management', 'Data Management')}</h4>
-                                <button className="w-full flex items-center justify-between p-4 bg-stone-50 hover:bg-stone-100 rounded-2xl transition-colors text-sm font-medium">
-                                    <div className="flex items-center gap-3">
-                                        <Download className="w-5 h-5 text-stone-500" />
-                                        <span>{t('export_my_data', 'Eksporter mine data')}</span>
-                                    </div>
-                                </button>
-                                <button className="w-full flex items-center justify-between p-4 bg-stone-50 hover:bg-red-50 hover:text-red-600 rounded-2xl transition-colors text-sm font-medium text-stone-600">
-                                    <div className="flex items-center gap-3">
-                                        <Trash2 className="w-5 h-5" />
-                                        <span>{t('delete_my_account', 'Slet min konto')}</span>
-                                    </div>
-                                </button>
-                            </div>
-
-                            <div className="p-4 bg-stone-50 rounded-2xl">
-                                <div className="flex items-center gap-2 mb-2 text-stone-500">
-                                    <Lock className="w-4 h-4" />
-                                    <span className="text-xs font-bold uppercase tracking-wider">{t('security', 'Sikkerhed')}</span>
-                                </div>
-                                <p className="text-[10px] text-stone-400 uppercase font-bold tracking-tight">Care Circle ID</p>
-                                <p className="text-xs font-mono text-stone-500 truncate">{careCircle?.id}</p>
+                        <div className="p-4 bg-red-50 rounded-xl border-2 border-red-200 space-y-3">
+                            <h4 className="font-bold text-red-700">{t('privacy_confirm_title')}</h4>
+                            <p className="text-sm text-red-600">{t('privacy_confirm_desc')}</p>
+                            <div className="flex gap-2">
+                                <Button
+                                    variant="secondary"
+                                    size="small"
+                                    onClick={() => setShowDeleteConfirm(false)}
+                                    className="flex-1"
+                                >
+                                    {t('privacy_cancel')}
+                                </Button>
+                                <Button
+                                    variant="primary"
+                                    size="small"
+                                    onClick={handleDeleteAccount}
+                                    disabled={deleting}
+                                    className="flex-1 bg-red-600 hover:bg-red-700"
+                                >
+                                    {deleting ? t('privacy_deleting') : t('privacy_confirm_delete')}
+                                </Button>
                             </div>
                         </div>
                     )}
-                </div>
 
-                {/* Footer safe area */}
-                <div className="h-8 sm:h-0" />
+                    {/* Info */}
+                    <p className="text-xs text-stone-400 text-center pt-2">
+                        {t('privacy_info_storage')}
+                    </p>
+
+                    <Button variant="secondary" className="w-full" onClick={() => setShowPrivacy(false)}>
+                        {t('back')}
+                    </Button>
+                </div>
+            </Modal>
+        );
+    }
+
+    return (
+        <Modal isOpen={true} onClose={onClose} title={t('settings')}>
+            <div className="space-y-6">
+
+                {/* General Section */}
+                <section>
+                    <h3 className="text-xs font-bold text-stone-500 uppercase tracking-wider mb-3">{t('general')}</h3>
+
+                    {/* Theme Selection */}
+                    <div className="space-y-2 mb-4">
+                        <label className="text-sm font-medium text-stone-700">{t('theme')}</label>
+                        <div className="grid grid-cols-3 gap-2">
+                            {themes.map((theme) => (
+                                <button
+                                    key={theme.id}
+                                    onClick={() => setMode(theme.id as 'auto' | 'light' | 'dark')}
+                                    className={`p-3 rounded-xl border-2 transition-all flex flex-col items-center gap-1 ${mode === theme.id
+                                        ? 'border-teal-500 bg-teal-50'
+                                        : 'border-stone-200 hover:border-teal-300'
+                                        }`}
+                                >
+                                    <theme.icon className={`w-5 h-5 ${mode === theme.id ? 'text-teal-600' : 'text-stone-500'}`} />
+                                    <span className={`text-xs font-medium ${mode === theme.id ? 'text-teal-700' : 'text-stone-600'}`}>
+                                        {theme.label.split(' ')[0]}
+                                    </span>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Language Selection */}
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium text-stone-700 flex items-center gap-2">
+                            <Globe className="w-4 h-4" />
+                            {t('language_selection')}
+                        </label>
+                        <div className="grid grid-cols-3 gap-2">
+                            {languages.map((lang) => (
+                                <button
+                                    key={lang.code}
+                                    onClick={() => i18n.changeLanguage(lang.code)}
+                                    className={`p-3 rounded-xl border-2 transition-all flex flex-col items-center gap-1 ${i18n.language === lang.code
+                                        ? 'border-teal-500 bg-teal-50'
+                                        : 'border-stone-200 hover:border-teal-300'
+                                        }`}
+                                >
+                                    <span className="text-xl">{lang.flag}</span>
+                                    <span className={`text-xs font-medium ${i18n.language === lang.code ? 'text-teal-700' : 'text-stone-600'}`}>
+                                        {lang.label}
+                                    </span>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+
+                {/* Privacy & Data Section */}
+                <section>
+                    <h3 className="text-xs font-bold text-stone-500 uppercase tracking-wider mb-3">{t('privacy_data')}</h3>
+                    <button
+                        onClick={() => setShowPrivacy(true)}
+                        className="w-full flex items-center justify-between p-4 bg-stone-50 rounded-xl hover:bg-stone-100 transition-colors"
+                    >
+                        <div className="flex items-center gap-3">
+                            <Shield className="w-5 h-5 text-teal-600" />
+                            <span className="font-medium text-stone-800">{t('privacy_title')}</span>
+                        </div>
+                        <ChevronRight className="w-5 h-5 text-stone-400" />
+                    </button>
+                </section>
+
+                {/* Sign Out */}
+                <div className="border-t border-stone-100 pt-4">
+                    <button
+                        onClick={onSignOut}
+                        className="w-full flex items-center justify-center gap-2 p-4 text-red-600 hover:bg-red-50 rounded-xl transition-colors font-semibold"
+                    >
+                        <LogOut className="w-5 h-5" />
+                        {t('sign_out')}
+                    </button>
+                    <div className="text-center mt-2">
+                        <p className="text-[10px] text-stone-300">Version 1.0.3 • Build 2024</p>
+                    </div>
+                </div>
             </div>
-        </div>
+        </Modal>
     );
 };
-
-export default SettingsModal;

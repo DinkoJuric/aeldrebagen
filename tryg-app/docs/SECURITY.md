@@ -60,7 +60,14 @@ match /users/{userId} {
   allow read, write: if request.auth.uid == userId;
 }
 
+// ADMIN OVERRIDE (POC ONLY)
+// Allows admin email to bypass all checks for circle maintenance
+match /careCircleMemberships/{document=**} {
+  allow read, write: if request.auth.token.email == 'dinko1991@hotmail.com';
+}
+
 // Circle members can read/write shared data
+
 match /careCircles/{circleId}/tasks/{taskId} {
   allow read, write: if isMemberOfCircle(circleId);
 }

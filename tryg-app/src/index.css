@@ -100,6 +100,8 @@
   /* Candlelight red-orange */
   --color-cream: 40 40% 97%;
   /* Warm off-white */
+  --color-pumpkin: 32 75% 85%;
+  /* Pumpkin orange meets brown - Coffee Card warmth */
 
   /* === Theme Tokens (Circadian Defaults) === */
   --theme-bg: hsl(37 20% 95%);
@@ -108,6 +110,11 @@
   --theme-card-bg: white;
   --theme-card-border: hsl(37 15% 90%);
   --theme-nav-bg: rgba(255, 255, 255, 0.8);
+
+  /* Glassmorphism Tokens (Light) */
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.5);
+  --glass-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
 }
 
 /* === Dark Mode Tokens === */
@@ -118,6 +125,12 @@
   --theme-card-bg: hsl(220 25% 15%);
   --theme-card-border: hsl(220 20% 25%);
   --theme-nav-bg: rgba(15, 23, 42, 0.8);
+
+  /* Glassmorphism Tokens (Dark) */
+  --glass-bg: rgba(30, 41, 59, 0.7);
+  /* slate-900 @ 70% */
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
 }
 
 /* === Theme-Aware Utility Classes === */
@@ -144,6 +157,48 @@
 
 .theme-bg {
   background: var(--theme-bg);
+}
+
+/* Glassmorphism Utilities */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+.glass-panel-heavy {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+/* Warm Glass Panel (Coffee/Invite Cards) - using Hygge tokens */
+.glass-panel-warm {
+  background: hsl(var(--color-pumpkin));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid hsl(var(--color-ochre) / 0.2);
+  box-shadow: 0 4px 12px -2px hsl(var(--color-ochre) / 0.15);
+}
+
+.theme-dark .glass-panel-warm {
+  background: hsl(var(--color-pumpkin) / 0.3);
+  border: 1px solid hsl(var(--color-pumpkin) / 0.4);
+}
+
+/* Dark mode text contrast boost for warm panels */
+.theme-dark .glass-panel-warm h3,
+.theme-dark .glass-panel-warm p {
+  color: hsl(40 30% 95%);
+  /* Warm off-white for readability */
+}
+
+.theme-dark .glass-panel-warm p {
+  opacity: 0.85;
 }
 
 /* ============================================
@@ -365,14 +420,7 @@
 }
 
 /* Glassmorphic panel for Living Design 🏠 */
-.glass-panel {
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  border-radius: var(--radius-xl);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-}
+
 
 /* Gradient header (warm teal) */
 .header-gradient {
@@ -404,8 +452,8 @@
    Passes WCAG contrast requirements. */
 .glass-premium {
   background: linear-gradient(135deg,
-      rgba(255, 255, 255, 0.95) 0%,
-      rgba(255, 255, 255, 0.88) 100%);
+      rgba(255, 255, 255, 0.70) 0%,
+      rgba(255, 255, 255, 0.60) 100%);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border: 1px solid rgba(255, 255, 255, 0.6);
@@ -578,10 +626,31 @@ body {
   height: 100dvh;
   width: 100vw;
   /* Removed: overflow: hidden - was blocking scroll! */
-  background-color: var(--theme-bg);
+  /* Living Background: Subtle Warm Gradient */
+  background: linear-gradient(135deg,
+      hsl(37 30% 97%) 0%,
+      hsl(40 40% 96%) 25%,
+      hsl(35 30% 94%) 50%,
+      hsl(174 20% 96%) 100%);
+  background-size: 400% 400%;
+  animation: living-bg 20s ease-in-out infinite;
+
   color: var(--theme-text);
   line-height: 1.6;
-  transition: background-color var(--duration-slow), color var(--duration-slow);
+}
+
+@keyframes living-bg {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 h1,

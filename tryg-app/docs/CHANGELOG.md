@@ -6,6 +6,22 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### 🔧 Configuration & Security (2025-12-21)
+
+**MCP Server Architecture**
+- **You.com Integration**: Switched to `@youdotcom-oss/mcp` local package to resolve gateway errors.
+- **GitHub Integration**: Migrated from Docker-based execution to `npx` for simpler local runtime.
+- **Config Restoration**: Repaired corrupted `mcp_config.json` structure.
+
+**Firebase Admin**
+- **POC Privileges**: Updated `firestore.rules` to grant global edit rights to admin email (`dinko1991@hotmail.com`).
+- **CLI Config**: Added `firebase.json` and `.firebaserc` for direct rules deployment.
+
+**UI Fixes**
+- **ShareModal**: Improved input readability (dark text on white) and enabled relationship editing.
+- **FamilyPresence**: Fixed negative timer bug ("-1m").
+
+
 ### 🎨 Premium Design System (2025-12-20)
 
 **Tempered Glassmorphism & Hygge Warmth**

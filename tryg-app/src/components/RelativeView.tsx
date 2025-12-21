@@ -30,7 +30,7 @@ export const RelativeView: React.FC = () => {
     return (
         <div className="flex flex-col h-full bg-transparent relative pt-10">
             {/* Header - COMPACT */}
-            <header className="px-4 py-2 theme-header shadow-sm rounded-b-3xl z-10 shrink-0">
+            <header className="px-4 py-2 glass-panel rounded-b-3xl z-10 shrink-0">
                 <div className="flex justify-between items-center">
                     <div className="flex items-center gap-2">
                         <Avatar

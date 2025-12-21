@@ -397,3 +397,28 @@ Standardized usage of Tailwind CSS:
 - [DEPLOYMENT.md](./DEPLOYMENT.md) - How to deploy
 - [SECURITY.md](./SECURITY.md) - Security model
 - [firebase_learnings.md](./firebase_learnings.md) - Lessons learned
+
+---
+
+## MCP Integration (Agentic Tooling)
+
+The project utilizes the **Model Context Protocol (MCP)** to empower AI agents with direct access to external tools.
+
+**Configuration Location**: `~/.gemini/antigravity/mcp_config.json` (Local only, not checked in)
+
+**Active Servers**:
+1.  **Google Chrome DevTools** (`npx chrome-devtools-mcp`) - Browser control
+2.  **GitHub** (`npx @modelcontextprotocol/server-github`) - Repo management
+3.  **You.com** (`npx @youdotcom-oss/mcp`) - Search & Reasoning
+4.  **Firebase** (`firebase-mcp-server`) - Database management
+5.  **Perplexity** (`perplexity-ask`) - Deep research
+
+---
+
+## Security Model: Admin Access (POC)
+
+For rapid development and Proof-of-Concept (POC) data setup, the following admin permissions are hardcoded in `firestore.rules`:
+- **Admin Email**: `dinko1991@hotmail.com`
+- **Privileges**: Can update ANY document in `careCircleMemberships` regardless of ownership.
+- **Purpose**: Allows setting up demo circles and modifying member statuses without simulating multiple user logins.
+

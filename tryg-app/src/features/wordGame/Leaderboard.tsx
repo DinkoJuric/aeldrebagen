@@ -12,7 +12,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ scores, currentUserId 
     const { t } = useTranslation();
     if (!scores || scores.length === 0) {
         return (
-            <div className="bg-stone-50 rounded-xl p-4 text-center">
+            <div className="glass-panel text-center">
                 <Users className="w-8 h-8 text-stone-300 mx-auto mb-2" />
                 <p className="text-stone-400 text-sm">{t('no_one_played_today')}</p>
                 <p className="text-stone-300 text-xs">{t('be_the_first')}</p>
@@ -35,19 +35,19 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ scores, currentUserId 
         let base = 'flex items-center gap-3 p-3 rounded-xl transition-all';
 
         if (isMe) {
-            return `${base} bg-indigo-50 border-2 border-indigo-200`;
+            return `${base} bg-indigo-50/60 border-2 border-indigo-200/50 backdrop-blur-sm`;
         }
 
         switch (rank) {
-            case 0: return `${base} bg-gradient-to-r from-amber-50 to-yellow-50 border-2 border-amber-200`;
-            case 1: return `${base} bg-stone-50 border border-stone-200`;
-            case 2: return `${base} bg-orange-50/50 border border-orange-100`;
-            default: return `${base} bg-white border border-stone-100`;
+            case 0: return `${base} bg-gradient-to-r from-amber-50/70 to-yellow-50/70 border-2 border-amber-200/50 backdrop-blur-sm`;
+            case 1: return `${base} bg-stone-50/50 border border-stone-200/50 backdrop-blur-sm`;
+            case 2: return `${base} bg-orange-50/40 border border-orange-100/50 backdrop-blur-sm`;
+            default: return `${base} bg-white/20 border border-stone-100/30 backdrop-blur-sm`;
         }
     };
 
     return (
-        <div className="bg-white rounded-2xl p-4 border-2 border-stone-100 shadow-sm">
+        <div className="glass-panel p-4">
             <h3 className="text-sm font-bold text-stone-500 uppercase tracking-wider mb-3 flex items-center gap-2">
                 <Crown className="w-4 h-4 text-amber-500" />
                 {t('todays_leaderboard')}

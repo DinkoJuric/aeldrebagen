@@ -60,7 +60,7 @@ export const SeniorView: React.FC = () => {
     return (
         <div className="flex flex-col h-full bg-transparent relative pt-10">
             {/* Header */}
-            <header className="px-4 py-2 theme-header shadow-sm rounded-b-3xl z-10 shrink-0">
+            <header className="px-4 py-2 glass-panel shadow-sm rounded-b-3xl z-10 shrink-0">
                 <div className="flex justify-between items-center">
                     <div className="flex items-center gap-3">
                         <Avatar id="senior" size="md" />

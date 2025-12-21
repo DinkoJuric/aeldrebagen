@@ -76,7 +76,7 @@ export const AmbientHero: React.FC<AmbientHeroProps> = ({
         switch (status) {
             case 'symptom':
                 return {
-                    gradient: 'from-rose-400 to-orange-500',
+                    gradient: 'from-rose-400/85 to-orange-500/85',
                     blob: 'fill-rose-200/40',
                     pulseScale: [1, 1.15, 1],
                     label: t('dashboard_symptoms'),
@@ -85,7 +85,7 @@ export const AmbientHero: React.FC<AmbientHeroProps> = ({
                 };
             case 'warning':
                 return {
-                    gradient: 'from-amber-400 to-orange-400',
+                    gradient: 'from-amber-400/85 to-orange-400/85',
                     blob: 'fill-amber-200/40',
                     pulseScale: [1, 1.05, 1],
                     label: t('dashboard_tasks_missing'),
@@ -94,7 +94,7 @@ export const AmbientHero: React.FC<AmbientHeroProps> = ({
                 };
             case 'calm':
                 return {
-                    gradient: 'from-teal-400 to-emerald-500',
+                    gradient: 'from-teal-400/85 to-emerald-500/85',
                     blob: 'fill-teal-100/40',
                     pulseScale: [1, 1.02, 1],
                     label: t('peace_all_well'),
@@ -103,7 +103,7 @@ export const AmbientHero: React.FC<AmbientHeroProps> = ({
                 };
             default:
                 return {
-                    gradient: 'from-stone-400 to-stone-500',
+                    gradient: 'from-stone-400/85 to-stone-500/85',
                     blob: 'fill-stone-200/40',
                     pulseScale: [1, 1, 1],
                     label: t('peace_good_day'),
@@ -154,6 +154,7 @@ export const AmbientHero: React.FC<AmbientHeroProps> = ({
             className={`
                 relative overflow-hidden rounded-[2rem] p-8 shadow-plush-lg border border-white/40
                 bg-gradient-to-br ${theme.gradient}
+                backdrop-blur-xl
                 ${theme.shadow}
                 ${isBursting ? 'animate-connection-pulse' : ''}
             `}

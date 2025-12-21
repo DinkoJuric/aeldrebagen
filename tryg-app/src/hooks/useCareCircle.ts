@@ -164,7 +164,7 @@ export function useCareCircle(userId: string | undefined, _userProfile: UserProf
     }, [userId]);
 
     // Join an existing care circle via invite code
-    const joinCareCircle = useCallback(async (code: string, displayName: string) => {
+    const joinCareCircle = useCallback(async (code: string, displayName: string, relationship?: string) => {
         if (!userId) return;
 
         try {
@@ -192,6 +192,7 @@ export function useCareCircle(userId: string | undefined, _userProfile: UserProf
                 displayName,
                 role: 'relative',
                 joinedAt: serverTimestamp(),
+                relationship: relationship || 'family' // Default if not provided
             });
 
             setCareCircle({ id: circleId, ...circleData } as CareCircle);
@@ -236,6 +237,19 @@ export function useCareCircle(userId: string | undefined, _userProfile: UserProf
         }
     }, [careCircle?.id, userId]);
 
+    // Update member profile
+    const updateMember = useCallback(async (data: Partial<Member>) => {
+        if (!careCircle?.id || !userId) return;
+
+        try {
+            const memberRef = doc(db, 'careCircleMemberships', `${careCircle.id}_${userId}`);
+            await setDoc(memberRef, data, { merge: true });
+        } catch (err: any) {
+            console.error('Error updating member:', err);
+            throw err;
+        }
+    }, [careCircle?.id, userId]);
+
     return {
         careCircle,
         members,
@@ -246,6 +260,7 @@ export function useCareCircle(userId: string | undefined, _userProfile: UserProf
         joinCareCircle,
         getInviteCode,
         leaveCareCircle,
+        updateMember,
         hasCareCircle: !!careCircle,
     };
 }

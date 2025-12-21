@@ -77,19 +77,17 @@ export function getDailyBriefing({ tasks = [], symptoms = [], seniorName = 'Mor'
 
     // Symptoms logged but medicine taken
     if (allMedicineComplete && hasSymptoms) {
-        const symptomTypes = [...new Set(todaySymptoms.map(s => s.type))];
-        const symptomName = symptomTypes[0] || 'symptom';
-        const time = todaySymptoms[0]?.loggedAt?.toDate?.()?.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' }) || '';
-
-        return {
-            message: t('daily_briefing_symptom_noted', { name: firstName, symptom: symptomName, time }),
-            emoji: '📋',
-            type: 'info' as const
-        };
+        // Hero card already shows "New Symptoms", so we silence the briefing to avoid redundancy.
+        return null;
     }
 
     // Medicine not complete but symptoms logged
     if (!allMedicineComplete && hasSymptoms) {
+        if (medicineTasks.length === 0) {
+            // Hero card already shows "New Symptoms", so we silence the briefing to avoid redundancy.
+            return null;
+        }
+
         return {
             message: t('daily_briefing_symptom_warning', { name: firstName, completed: completedMedicine, total: medicineTasks.length }),
             emoji: '⚠️',

@@ -18,6 +18,20 @@
 
 ---
 
+## 🛠️ Dev Tools & MCP (Agent Support)
+
+These tools are not part of the build bundle but are critical for the agentic development workflow.
+
+| Tool | Package | Purpose |
+|------|---------|---------|
+| **GitHub MCP** | `@modelcontextprotocol/server-github` | Agent access to Git/Issues |
+| **You.com MCP** | `@youdotcom-oss/mcp` | Agent access to Search/LLM |
+| **Chrome MCP** | `chrome-devtools-mcp` | Agent browser automation |
+| **Firebase CLI** | `firebase-tools` | Deployment & Rules management |
+
+
+---
+
 ## Dependency Graph Overview
 
 ```mermaid

@@ -26,19 +26,22 @@ export const CoffeeInviteCard = () => {
     };
 
     return (
-        <div className="bg-gradient-to-r from-amber-500 to-orange-400 rounded-2xl p-1 shadow-xl animate-slide-in mb-4">
-            <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 flex items-center gap-4">
-                <div className="bg-amber-100 p-3 rounded-full">
-                    <Coffee className="w-8 h-8 text-amber-600 animate-wiggle" />
-                </div>
-                <div className="flex-1">
-                    <h3 className="font-bold text-lg text-amber-950">{t('coffee_invite_title', { name: seniorName })}</h3>
-                    <p className="text-amber-800/80 text-sm">{t('coffee_invite_sub')}</p>
-                </div>
-                <Button size="small" variant="primary" onClick={handleAcceptInvite}>
-                    {t('coffee_invite_accept')}
-                </Button>
+        <div className="glass-panel-warm rounded-2xl p-4 flex items-center gap-4 mb-4 relative overflow-hidden">
+            <div className="bg-amber-100/80 p-3 rounded-full shrink-0 relative z-10">
+                <Coffee className="w-8 h-8 text-amber-600 animate-wiggle" />
             </div>
+            <div className="flex-1 min-w-0 relative z-10">
+                <h3 className="font-bold text-lg text-amber-950 truncate">{t('coffee_invite_title', { name: seniorName })}</h3>
+                <p className="text-amber-800/70 text-sm truncate">{t('coffee_invite_sub')}</p>
+            </div>
+            <Button
+                size="small"
+                variant="primary"
+                onClick={handleAcceptInvite}
+                className="shrink-0 relative z-10 bg-teal-500 hover:bg-teal-600 text-white border-none shadow-[0_0_20px_rgba(20,184,166,0.5)]"
+            >
+                {t('coffee_invite_accept')}
+            </Button>
         </div>
     );
 };

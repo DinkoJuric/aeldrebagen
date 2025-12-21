@@ -52,6 +52,7 @@ function FirebaseApp() {
         joinCareCircle,
         getInviteCode,
         inviteCode,
+        updateMember, // Destructured
     } = useCareCircle(user?.uid, userProfile);
 
     // Auth handler for AuthScreen
@@ -194,6 +195,7 @@ function FirebaseApp() {
             inviteCode={inviteCode}
             onGetInviteCode={getInviteCode}
             members={members}
+            updateMember={updateMember}
         />
     );
 }

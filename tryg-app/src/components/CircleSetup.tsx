@@ -2,22 +2,35 @@
 // Seniors create a new circle, relatives join via invite code
 
 import React, { useState } from 'react';
-import { Users, Plus, Key, Copy, Check, ArrowRight, Loader2 } from 'lucide-react';
+import { Users, Plus, Key, Copy, Check, ArrowRight, Loader2, Heart } from 'lucide-react';
 
 export interface CircleSetupProps {
     userRole?: 'senior' | 'relative';
     userName?: string;
     onCreateCircle: (userName: string) => Promise<string | undefined>;
-    onJoinCircle: (code: string, userName: string) => Promise<string | undefined | void>;
+    onJoinCircle: (code: string, userName: string, relationship?: string) => Promise<string | undefined | void>;
     loading?: boolean;
     error?: string | null;
 }
+
+const RELATIONSHIPS = [
+    { id: 'daughter', label: 'Datter' },
+    { id: 'son', label: 'Søn' },
+    { id: 'sister', label: 'Søster' },
+    { id: 'brother', label: 'Bror' },
+    { id: 'grandchild', label: 'Barnebarn' },
+    { id: 'niece', label: 'Niece' },
+    { id: 'nephew', label: 'Nevø' },
+    { id: 'friend', label: 'Ven' },
+    { id: 'other', label: 'Andet' }
+];
 
 export const CircleSetup: React.FC<CircleSetupProps> = ({ userRole, userName, onCreateCircle, onJoinCircle, loading, error }) => {
     const [inviteCode, setInviteCode] = useState('');
     const [createdCode, setCreatedCode] = useState<string | null>(null);
     const [copied, setCopied] = useState(false);
     const [step, setStep] = useState<'initial' | 'creating' | 'created' | 'joining'>('initial'); // 'initial', 'creating', 'created', 'joining'
+    const [relationship, setRelationship] = useState<string>('');
 
     const handleCreate = async () => {
         setStep('creating');
@@ -32,8 +45,8 @@ export const CircleSetup: React.FC<CircleSetupProps> = ({ userRole, userName, on
 
     const handleJoin = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (inviteCode.length !== 6) return;
-        await onJoinCircle(inviteCode.toUpperCase(), userName || '');
+        if (inviteCode.length !== 6 || !relationship) return;
+        await onJoinCircle(inviteCode.toUpperCase(), userName || '', relationship);
     };
 
     const copyCode = () => {
@@ -136,7 +149,26 @@ export const CircleSetup: React.FC<CircleSetupProps> = ({ userRole, userName, on
                 </p>
 
                 <form onSubmit={handleJoin} className="space-y-4">
+                    {/* Relationship Selector */}
+                    <div className="text-left">
+                        <label className="block text-sm font-medium text-stone-600 mb-1 ml-1">Din relation til senioren</label>
+                        <div className="relative">
+                            <select
+                                value={relationship}
+                                onChange={(e) => setRelationship(e.target.value)}
+                                className="w-full bg-stone-50 border-2 border-stone-200 text-stone-800 py-3 px-4 rounded-xl appearance-none focus:border-indigo-400 focus:outline-none transition-colors"
+                            >
+                                <option value="" disabled>Vælg relation...</option>
+                                {RELATIONSHIPS.map(rel => (
+                                    <option key={rel.id} value={rel.label}>{rel.label}</option>
+                                ))}
+                            </select>
+                            <Heart className="w-5 h-5 text-stone-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+                        </div>
+                    </div>
+
                     <div>
+                        <label className="block text-sm font-medium text-stone-600 mb-1 ml-1 text-left">Invitationskode</label>
                         <input
                             type="text"
                             value={inviteCode}
@@ -146,7 +178,6 @@ export const CircleSetup: React.FC<CircleSetupProps> = ({ userRole, userName, on
                             maxLength={6}
                             autoComplete="off"
                         />
-                        <p className="text-sm text-stone-400 mt-2">6-tegns kode</p>
                     </div>
 
                     {error && (
@@ -157,7 +188,7 @@ export const CircleSetup: React.FC<CircleSetupProps> = ({ userRole, userName, on
 
                     <button
                         type="submit"
-                        disabled={loading || inviteCode.length !== 6}
+                        disabled={loading || inviteCode.length !== 6 || !relationship}
                         className="w-full bg-indigo-600 text-white py-4 rounded-xl font-bold hover:bg-indigo-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                     >
                         {loading ? (

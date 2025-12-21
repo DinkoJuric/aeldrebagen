@@ -241,7 +241,7 @@ export const AmbientTab: React.FC<AmbientTabProps> = ({
             {/* Add Own Task Button */}
             <button
                 onClick={onOpenAddTaskModal}
-                className="w-full flex items-center justify-center gap-2 p-4 mt-4 bg-white border-2 border-dashed border-teal-300 rounded-2xl text-teal-600 font-medium hover:bg-teal-50 hover:border-teal-400 transition-colors"
+                className="w-full flex items-center justify-center gap-2 p-4 mt-4 glass-panel border-2 border-dashed border-teal-300/50 rounded-2xl text-teal-700 font-bold hover:bg-white/40 transition-colors"
             >
                 <Plus className="w-5 h-5" />
                 <span>{t('add_own_task')}</span>

@@ -94,6 +94,7 @@ export const StatusSelector: React.FC<StatusSelectorProps> = ({ currentStatus, o
 interface StatusCardProps {
     mode?: 'senior' | 'relative';
     name?: string;
+    relationship?: string; // Added relationship prop
     status?: string;
     timestamp?: any;
     className?: string;
@@ -114,6 +115,7 @@ interface StatusCardProps {
 export const StatusCard: React.FC<StatusCardProps> = ({
     mode = 'relative',
     name = 'Bruger',
+    relationship,
     status: statusId,
     timestamp,
     className = '',
@@ -262,11 +264,18 @@ export const StatusCard: React.FC<StatusCardProps> = ({
     }
 
     return (
-        <div className={`glass-premium shadow-plush p-4 mb-3 flex items-center justify-between ${className}`}>
+        <div className={`glass-panel-heavy p-4 mb-3 flex items-center justify-between rounded-2xl ${className}`}>
             <div className="flex items-center gap-3">
                 <Avatar id={name === 'Brad' ? 'brad' : name.includes('Fatima') ? 'fatima' : 'louise'} size="md" />
                 <div>
-                    <h4 className="font-bold theme-text text-sm tracking-tight">{name}</h4>
+                    <h4 className="font-bold theme-text text-sm tracking-tight">
+                        {name}
+                        {relationship && (
+                            <span className="ml-1.5 font-normal text-stone-400 text-xs capitalize text-[10px] bg-stone-100 px-1.5 py-0.5 rounded-[4px] align-middle">
+                                {relationship}
+                            </span>
+                        )}
+                    </h4>
                     <div className="flex items-center gap-1.5 mt-0.5">
                         <span className="text-xs font-bold theme-text-muted bg-stone-100/50 dark:bg-stone-800/50 px-2 py-0.5 rounded-full backdrop-blur-sm">
                             {t(`status_${statusObj.id}`)}
@@ -289,6 +298,10 @@ interface StatusListProps {
     maxDisplay?: number;
 }
 
+import { useCareCircleContext } from '../../contexts/CareCircleContext';
+
+// ... (existing constants)
+
 export const StatusList: React.FC<StatusListProps> = ({
     members = [],
     relativeStatuses = [],
@@ -296,7 +309,14 @@ export const StatusList: React.FC<StatusListProps> = ({
     maxDisplay = 3
 }) => {
     const { t } = useTranslation();
+    const { members: allMembers } = useCareCircleContext(); // Get full member data for relationships
     const relatives = members.filter(m => m.role === 'relative');
+
+    // Helper to find relationship from members list
+    const getRelationship = (uid: string) => {
+        const member = allMembers.find(m => (m.userId === uid || m.docId === uid || m.id === uid));
+        return member?.relationship;
+    };
 
     if (relatives.length === 0 && relativeStatuses.length === 0) {
         return (
@@ -319,6 +339,7 @@ export const StatusList: React.FC<StatusListProps> = ({
                 <StatusCard
                     key={member.docId || member.userId || index}
                     name={member.displayName || 'Pårørende'}
+                    relationship={getRelationship(member.userId || member.docId)}
                     status={member.status}
                     timestamp={member.updatedAt || lastUpdated}
                 />

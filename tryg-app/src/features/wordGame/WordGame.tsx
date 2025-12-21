@@ -38,7 +38,7 @@ export const WordGame: React.FC<WordGameProps> = ({
 
     if (loading) {
         return (
-            <div className="bg-white rounded-2xl p-6 border-2 border-stone-100 text-center">
+            <div className="glass-panel p-6 text-center">
                 <div className="animate-pulse">
                     <div className="h-6 bg-stone-200 rounded w-1/2 mx-auto mb-4"></div>
                     <div className="h-10 bg-stone-200 rounded w-3/4 mx-auto"></div>
@@ -52,7 +52,7 @@ export const WordGame: React.FC<WordGameProps> = ({
         const percentage = Math.round((score / totalWords) * 100);
 
         return (
-            <div className="bg-gradient-to-br from-amber-400 to-orange-500 rounded-2xl p-6 text-white text-center shadow-lg overflow-hidden relative">
+            <div className="bg-gradient-to-br from-amber-400/90 to-orange-500/90 backdrop-blur-xl rounded-2xl p-6 text-white text-center shadow-lg overflow-hidden relative border border-white/20">
                 {/* Success Trophy Image */}
                 <div className="mb-4 -mt-2">
                     <img
@@ -63,7 +63,7 @@ export const WordGame: React.FC<WordGameProps> = ({
                 </div>
 
                 <h3 className="text-2xl font-bold mb-2 relative z-10">{t('word_game_complete')}</h3>
-                <div className="bg-white/20 rounded-xl p-4 mb-4 backdrop-blur-sm relative z-10">
+                <div className="bg-white/20 rounded-xl p-4 mb-4 backdrop-blur-sm relative z-10 border border-white/30">
                     <p className="text-4xl font-bold">{score}/{totalWords}</p>
                     <p className="text-amber-100">{t('correct_answers')}</p>
                 </div>
@@ -81,9 +81,9 @@ export const WordGame: React.FC<WordGameProps> = ({
     // Show feedback after answer
     if (feedback) {
         return (
-            <div className={`rounded-2xl p-6 text-center shadow-lg ${feedback.isCorrect
-                ? 'bg-gradient-to-br from-green-400 to-teal-500'
-                : 'bg-gradient-to-br from-orange-400 to-red-400'
+            <div className={`rounded-2xl p-6 text-center shadow-lg backdrop-blur-xl border border-white/20 ${feedback.isCorrect
+                ? 'bg-gradient-to-br from-green-400/90 to-teal-500/90'
+                : 'bg-gradient-to-br from-orange-400/90 to-red-400/90'
                 } text-white`}>
                 <div className="text-4xl mb-3">
                     {feedback.isCorrect ? <CheckCircle className="w-12 h-12 mx-auto" /> : <XCircle className="w-12 h-12 mx-auto" />}
@@ -101,7 +101,7 @@ export const WordGame: React.FC<WordGameProps> = ({
                         setFeedback(null);
                         setSelectedIndex(null);
                     }}
-                    className="bg-white/20 hover:bg-white/30 px-6 py-3 rounded-xl font-bold flex items-center gap-2 mx-auto transition-colors"
+                    className="bg-white/20 hover:bg-white/30 px-6 py-3 rounded-xl font-bold flex items-center gap-2 mx-auto transition-colors border border-white/30"
                 >
                     {t('next_word')} <ArrowRight className="w-4 h-4" />
                 </button>
@@ -129,13 +129,13 @@ export const WordGame: React.FC<WordGameProps> = ({
     };
 
     return (
-        <div className="bg-white rounded-2xl p-5 border-2 border-stone-100 shadow-sm">
+        <div className="glass-panel p-5">
             {/* Progress */}
             <div className="flex justify-between items-center mb-4">
-                <span className="text-xs font-bold text-stone-400 uppercase tracking-wide">
+                <span className="text-xs font-bold text-stone-500 uppercase tracking-wide">
                     {t('word_of', { current: currentWordIndex + 1, total: totalWords })}
                 </span>
-                <span className="text-xs font-bold text-teal-600 flex items-center gap-1">
+                <span className="text-xs font-bold text-teal-700 flex items-center gap-1">
                     <Trophy className="w-3 h-3" /> {score} {t('points')}
                 </span>
             </div>

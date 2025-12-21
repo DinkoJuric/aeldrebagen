@@ -29,13 +29,15 @@ export const BriefingStory: React.FC<BriefingStoryProps> = ({ className = '' }) 
         t
     });
 
+    if (!briefing) return null;
+
     return (
         <div
-            className={`p-5 rounded-[1.5rem] glass-premium transition-all duration-300 ${briefing.type === 'success'
-                ? 'glow-warmth-success bg-gradient-to-br from-emerald-50/90 to-teal-50/80 border-emerald-100/50'
+            className={`p-5 rounded-[1.5rem] glass-panel transition-all duration-300 ${briefing.type === 'success'
+                ? 'border-emerald-100/50'
                 : briefing.type === 'warning'
-                    ? 'bg-gradient-to-br from-amber-50/90 to-orange-50/80 border-amber-100/50'
-                    : 'bg-gradient-to-br from-stone-50/90 to-stone-100/80 border-stone-200/50'
+                    ? 'border-amber-100/50'
+                    : 'border-stone-200/50'
                 } ${className}`}
         >
             <div className="flex items-start gap-4">

@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
-import { MessageCircle, X, Check, Heart, MessageSquare, Send, Sparkles } from 'lucide-react';
+import { MessageCircle, X, Check, Heart, MessageSquare, Send, Sparkles, Loader2, Mic, Play as PlayIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { WEEKLY_QUESTIONS, getWeekNumber } from './WeeklyQuestion';
-import { WeeklyAnswer, WeeklyReply } from '../../types';
+import { WeeklyAnswer, WeeklyReply, Member } from '../../types';
 import { AudioRecorder } from '../memories/AudioRecorder';
-import { Loader2, Mic, Play as PlayIcon } from 'lucide-react';
 
 // Simple time ago formatter (no external deps)
-const formatTimeAgo = (isoString: string, t: any) => {
+const formatTimeAgo = (isoString: string | any, t: any) => {
     if (!isoString) return '';
     try {
-        const date = new Date(isoString);
+        // Handle Firestore Timestamp if passed directly
+        const dateStr = isoString?.toDate ? isoString.toDate().toISOString() : isoString;
+        const date = new Date(dateStr);
         const now = new Date();
         const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
 
@@ -64,6 +65,7 @@ interface WeeklyQuestionModalProps {
     currentUserId?: string;
     onToggleLike?: (answerId: string, userId: string, isLiked: boolean) => void;
     onReply?: (answerId: string, reply: Omit<WeeklyReply, 'id'>) => void;
+    members?: Member[];
 }
 
 // Full modal for answering and viewing
@@ -75,7 +77,8 @@ export const WeeklyQuestionModal: React.FC<WeeklyQuestionModalProps> = ({
     userName,
     currentUserId,
     onToggleLike,
-    onReply
+    onReply,
+    members = []
 }) => {
     const [myAnswer, setMyAnswer] = useState('');
     const [replyText, setReplyText] = useState('');
@@ -92,6 +95,18 @@ export const WeeklyQuestionModal: React.FC<WeeklyQuestionModalProps> = ({
     // Filter answers for this week's question
     const answersThisWeek = answers.filter(a => a.questionId === questionKey);
     const hasAnsweredThisWeek = answersThisWeek.some(a => a.userName === userName);
+
+    // Logic for Strict Barrier
+    // Count ALL members (Senior + Relatives) as participants
+    const participants = members;
+    const totalParticipants = participants.length;
+
+    // Count unique users who answered
+    const uniqueAnswerers = new Set(answersThisWeek.map(a => a.userId)).size;
+
+    // If we have members data, enforce the barrier.
+    const allAnswered = totalParticipants > 0 ? uniqueAnswerers >= totalParticipants : true;
+
 
     // Sorting: Popularity (likes) -> Newest
     const sortedAnswers = [...answersThisWeek].sort((a, b) => {
@@ -239,9 +254,26 @@ export const WeeklyQuestionModal: React.FC<WeeklyQuestionModalProps> = ({
                         </div>
                     )}
 
-                    {/* All Answers Feed */}
+                    {/* All Answers Feed - STRICT BARRIER */}
                     <div className="space-y-4">
-                        {sortedAnswers.length > 0 ? (
+                        {!allAnswered && hasAnsweredThisWeek ? (
+                            <div className="bg-stone-50 rounded-2xl p-6 text-center border-2 border-stone-100 border-dashed animate-fade-in">
+                                <div className="bg-indigo-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
+                                    <Sparkles className="w-6 h-6 text-indigo-500" />
+                                </div>
+                                <h3 className="text-lg font-bold text-stone-700 mb-1">{t('waiting_for_family')}</h3>
+                                <p className="text-stone-500 mb-4">{t('waiting_for_family_desc', { count: totalParticipants - uniqueAnswerers })}</p>
+                                <div className="w-full bg-stone-200 rounded-full h-2 overflow-hidden">
+                                    <div
+                                        className="bg-indigo-500 h-full transition-all duration-1000"
+                                        style={{ width: `${(uniqueAnswerers / totalParticipants) * 100}%` }}
+                                    />
+                                </div>
+                                <p className="text-xs font-bold text-indigo-600 mt-2 text-right">
+                                    {uniqueAnswerers} / {totalParticipants} {t('answers')}
+                                </p>
+                            </div>
+                        ) : sortedAnswers.length > 0 ? (
                             <>
                                 <p className="text-stone-500 text-sm font-bold ml-1 uppercase tracking-wide">{t('family_answers_count', { count: sortedAnswers.length })}</p>
                                 {sortedAnswers.map((answer) => {
@@ -257,7 +289,7 @@ export const WeeklyQuestionModal: React.FC<WeeklyQuestionModalProps> = ({
                                                     <p className="font-bold text-stone-800 text-lg">{answer.userName}</p>
                                                     {answer.answeredAt && (
                                                         <p className="text-xs text-stone-400">
-                                                            {formatTimeAgo(answer.answeredAt?.toDate?.()?.toISOString() || answer.answeredAt, t)}
+                                                            {formatTimeAgo(answer.answeredAt, t)}
                                                         </p>
                                                     )}
                                                 </div>

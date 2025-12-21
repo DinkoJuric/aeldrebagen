@@ -44,7 +44,8 @@ export const SeniorModals: React.FC<SeniorModalsProps> = ({
         weeklyAnswers,
         addWeeklyAnswer,
         toggleLike,
-        addReply
+        addReply,
+        members
     } = useCareCircleContext();
 
     // Symptom flow state
@@ -154,6 +155,7 @@ export const SeniorModals: React.FC<SeniorModalsProps> = ({
                 currentUserId={currentUserId || undefined}
                 onToggleLike={toggleLike}
                 onReply={addReply}
+                members={members}
             />
 
             {/* Add Task Modal */}

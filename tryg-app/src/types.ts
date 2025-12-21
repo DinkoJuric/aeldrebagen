@@ -111,6 +111,7 @@ export interface SymptomStats {
 
 export interface Member {
     docId: string;
+    userId?: string; // Added userId
     displayName: string;
     role: 'senior' | 'relative';
     status: 'home' | 'work' | 'traveling' | 'available' | 'busy' | 'coffee_ready' | 'coffee_coming';
@@ -204,4 +205,7 @@ export interface CareCircleContextValue {
     // Check-in
     lastCheckIn: string | null;
     recordCheckIn: () => Promise<string | void | undefined>;
+
+    // Member Management
+    updateMember: (data: Partial<Member>) => Promise<void>;
 }

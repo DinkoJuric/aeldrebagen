@@ -43,7 +43,7 @@ const MemberStatusRow: React.FC<MemberStatusRowProps> = ({ name, status, role, t
 
         const now = new Date();
         const diffMs = now.getTime() - date.getTime();
-        const diffMins = Math.floor(diffMs / 60000);
+        const diffMins = Math.max(0, Math.floor(diffMs / 60000)); // Prevent negative values
 
         if (diffMins < 60) {
             timeString = `${diffMins}m`;

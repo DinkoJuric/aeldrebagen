@@ -39,7 +39,8 @@ export const RelativeModals: React.FC<RelativeModalsProps> = ({
         addWeeklyAnswer,
         toggleLike,
         addReply,
-        currentUserId
+        currentUserId,
+        members
     } = useCareCircleContext();
 
     const [newTaskTitle, setNewTaskTitle] = useState('');
@@ -141,6 +142,7 @@ export const RelativeModals: React.FC<RelativeModalsProps> = ({
                 onToggleLike={toggleLike}
                 onReply={addReply}
                 currentUserId={currentUserId || undefined}
+                members={members}
             />
 
             {/* Match Celebration Modal */}

@@ -493,3 +493,21 @@ git checkout -b fix-typescript-errors
 - **Problem**: Symptom chart bars weren't rendering. Classes like `flex - 1` (with spaces) were breaking styling silently.
 - **Action**: Fixed by removing spurious spaces (`flex-1`, `w-full`, etc.) and `{h}px` instead of `{h} px`.
 - **Future**: When charts or layouts break unexpectedly, grep for spaces in Tailwind class strings. Template literal formatting can inject unwanted whitespace.
+
+---
+
+## Configuration & Security (Dec 2025)
+
+### MCP Server Configuration
+- **Problem**: mcp_config.json became corrupted during edits, and You.com server returned Bad Gateway.
+- **Action**: Switched You.com to use local npm package @youdotcom-oss/mcp instead of remote HTTP URL. Switched GitHub to 
+px execution to avoid Docker dependency.
+- **Learnings**: Remote HTTP MCP servers can be flaky. Local 
+px execution is more robust.
+- **Future**: When configuring MCP servers, prefer local 
+px packages over remote URLs where possible.
+
+### Firestore Rules for POC
+- **Problem**: Needed to allow a specific user to edit ANY document for demo setup, bypassing ownership rules.
+- **Action**: Hardcoded email check equest.auth.token.email == 'admin@email.com' in irestore.rules.
+- **Future**: For rapid POC data setup, use email-based exceptions in rules rather than complex RBAC if speed is the priority.

@@ -31,6 +31,7 @@ export const CareCircleContext = createContext<CareCircleContextValue>({
     dismissPing: () => { },
     lastCheckIn: null,
     recordCheckIn: async () => undefined,
+    updateMember: async () => { },
 });
 
 /**

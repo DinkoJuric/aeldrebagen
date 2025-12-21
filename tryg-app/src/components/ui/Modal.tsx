@@ -14,12 +14,13 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, 
     if (!isOpen) return null;
 
     return (
-        <div className="absolute inset-0 bg-black/60 z-50 flex items-end sm:items-center justify-center animate-fade-in p-0 sm:p-4">
+        <div className="fixed inset-0 bg-black/60 z-[100] flex items-end sm:items-center justify-center animate-fade-in p-0 sm:p-4">
             <div className={cn(
-                "theme-card w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl animate-slide-up max-h-[90vh] overflow-y-auto flex flex-col",
+                "theme-card w-full max-w-md rounded-t-3xl sm:rounded-3xl p-0 shadow-2xl animate-slide-up max-h-[90vh] flex flex-col",
                 className
             )}>
-                <div className="flex justify-between items-center mb-6 shrink-0">
+                {/* Header - Fixed/Sticky */}
+                <div className="flex justify-between items-center p-6 pb-2 shrink-0">
                     <h3 className="text-xl font-bold theme-text">{title}</h3>
                     <button
                         onClick={onClose}
@@ -33,7 +34,11 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, 
                         <X className="w-6 h-6 theme-text-muted" />
                     </button>
                 </div>
-                {children}
+
+                {/* Content - Scrollable with safe area padding */}
+                <div className="p-6 pt-2 pb-24 overflow-y-auto flex-1 min-h-0">
+                    {children}
+                </div>
             </div>
         </div>
     );
