@@ -64,6 +64,9 @@
 | 11 | Progress Ring Glow | 2025-12-18 | Green drop-shadow glow at 100% completion |
 | 12 | Typography Refinement | 2025-12-18 | Font-size scale CSS vars & WCAG base (18px) |
 | 13 | Header Navigation Refactor | 2025-12-18 | Split Share/Settings for better ergonomics |
+| 14 | ShareModal Relationship Editor | 2025-12-21 | Added role editing (mor/far) directly in share modal |
+| 15 | High Contrast Inputs | 2025-12-21 | Enforced dark text on white bg for input fields |
+
 
 ---
 
