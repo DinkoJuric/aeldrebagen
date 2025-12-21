@@ -5,14 +5,18 @@
 > **Note to Agents:** Always update the Table of Contents below when adding new sections.
 
 ## 📖 Table of Contents
-1. [System Overview](#system-overview)
+1. [System Overview: The Mirror Architecture](#system-overview-the-mirror-architecture)
 2. [Directory Structure](#directory-structure)
 3. [Data Model (Firestore)](#data-model-firestore)
 4. [HelpExchange Match System](#helpexchange-match-system)
 5. [RelativeView Tab Architecture](#relativeview-tab-architecture)
 6. [Key Patterns](#key-patterns)
 7. [Authentication Flow](#authentication-flow)
-8. [Related Documentation](#related-documentation)
+8. [MCP Integration](#mcp-integration-agentic-tooling)
+9. [Modals & Overlays Strategy](#modals--overlays-strategy-dec-2025)
+10. [Security Model: Admin Access](#security-model-admin-access-poc)
+11. [Family Tree: POC Slot System](#family-tree-poc-identity--slot-system)
+12. [Related Documentation](#related-documentation)
 
 
 ## System Overview: The Mirror Architecture

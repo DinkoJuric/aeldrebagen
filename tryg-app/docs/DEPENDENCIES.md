@@ -5,11 +5,13 @@
 > **Last Updated**: 2025-12-20
 
 ## 📖 Table of Contents
-1. [Dependency Graph Overview](#dependency-graph-overview)
-2. [Feature Dependencies](#feature-dependencies)
-3. [Shared Resources](#shared-resources)
-4. [Import Patterns](#import-patterns)
-5. [Safe Refactoring Guide](#safe-refactoring-guide)
+1. [Technology Stack Update](#technology-stack-update)
+2. [Dependency Graph Overview](#dependency-graph-overview)
+3. [Feature Dependencies](#feature-dependencies)
+4. [Shared Resources](#shared-resources)
+5. [React Hooks & Contexts](#react-hooks--contexts)
+6. [Import Patterns](#import-patterns)
+7. [Safe Refactoring Guide](#safe-refactoring-guide)
 
 ---
 

@@ -2,6 +2,16 @@
 
 This document tracks future enhancements, technical ideations, and non-critical features for the Tryg project.
 
+---
+
+## 📖 Table of Contents
+1. [High Priority (Next Sprint)](#high-priority-next-sprint)
+2. [Medium Priority (Future Vision)](#medium-priority-future-vision)
+3. [Long-term / Ideation](#long-term--ideation)
+4. [Technical Debt & Standardization](#technical-debt--standardization)
+
+---
+
 ## 🟢 High Priority (Next Sprint)
 
 ### 1. Animated Onboarding 🚀 ⭐ HIGH PRIORITY

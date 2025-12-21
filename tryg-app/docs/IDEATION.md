@@ -6,6 +6,18 @@ A living document for brainstorming features that could make Tryg more valuable.
 
 ---
 
+## 📖 Table of Contents
+1. [The SOSU Bridge](#high-priority-the-sosu-bridge)
+2. [Specialized Onboarding](#specialized-onboarding--connection-setup)
+3. [Connection & Shared Experiences](#connection--shared-experiences)
+4. [Health & Well-being](#health--well-being-dignity-first)
+5. [Motivation & Meaningful Moments](#motivation--meaningful-moments)
+6. [Development Roadmap (MVP+)](#development-roadmap-mvp)
+7. [Anti-Surveillance Principles](#anti-surveillance-design-principles)
+8. [Research References](#research-references)
+
+---
+
 ## 🦄 High-Priority: The "SOSU Bridge"
 The biggest friction in Danish care is the lack of sync between the Senior, the Family, and the Municipality (Hjemmeplejen).
 
