@@ -8,10 +8,7 @@
 
 ## 1. The Core Philosophy (Don't Break This)
 - **High-Fidelity or Bust**: This is not a CRUD app. It must feel "alive". Use `framer-motion`, glassmorphism, and the `LivingBackground`.
-- **The Mirror Protocol**: Every feature has two faces.
-  - **Senior View (`SeniorView.tsx`)**: Big buttons, simple text, read-only mostly.
-  - **Relative View (`RelativeView.tsx`)**: Dashboards, controls, status updates.
-  - **Rule**: If you touch one, you **MUST** verify the other.
+
 
 ## 2. Architecture & Data Flow
 - **Data Source**: `AppCore.tsx` creates the `CareCircleContext`.
