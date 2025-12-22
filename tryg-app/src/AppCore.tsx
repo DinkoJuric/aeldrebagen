@@ -245,7 +245,7 @@ export default function TrygAppCore({
                     </div>
 
                     {/* Header - COMPACT - Moved to Relative to push content down */}
-                    <div className="relative h-10 z-50 flex justify-between items-center backdrop-blur-sm px-3 bg-black/5 dark:bg-white/10 shrink-0">
+                    <div className="relative h-10 z-50 flex justify-between items-center backdrop-blur-sm px-3 bg-white/5 dark:bg-white/10 shrink-0">
                         <button
                             onClick={() => setShowShare(true)}
                             className="p-2 rounded-full hover:bg-white/50 transition-colors"
