@@ -26,7 +26,7 @@ export const SeniorWelcome = ({ onComplete }: { onComplete: () => void }) => {
             case 0: // Porch Light
                 return (
                     <>
-                        <motion.div className="relative w-full aspect-square max-w-sm rounded-full overflow-hidden shadow-orange-200/50 shadow-2xl border-4 border-white mb-6">
+                        <motion.div className="relative w-64 h-64 rounded-full overflow-hidden shadow-orange-200/50 shadow-2xl border-4 border-white mb-6">
                             <img src="/onboarding/porch-light.png" alt="Porch Light" className="w-full h-full object-cover" />
                             <div className="absolute inset-0 bg-orange-500/10 animate-pulse" />
                         </motion.div>
@@ -39,7 +39,7 @@ export const SeniorWelcome = ({ onComplete }: { onComplete: () => void }) => {
             case 1: // Captain Wave
                 return (
                     <>
-                        <div className="w-full aspect-video rounded-2xl overflow-hidden shadow-lg border-2 border-white bg-white mb-6">
+                        <div className="w-full h-64 rounded-2xl overflow-hidden shadow-lg border-2 border-white bg-white mb-6">
                             <video
                                 src="/onboarding/video-wave.mp4"
                                 autoPlay
@@ -57,7 +57,7 @@ export const SeniorWelcome = ({ onComplete }: { onComplete: () => void }) => {
             case 2: // The Ship
                 return (
                     <>
-                        <div className="w-full aspect-video rounded-2xl overflow-hidden shadow-lg border-2 border-white bg-blue-50 mb-6">
+                        <div className="w-full h-64 rounded-2xl overflow-hidden shadow-lg border-2 border-white bg-blue-50 mb-6">
                             <video
                                 src="/onboarding/video-ship.mp4"
                                 autoPlay
@@ -75,7 +75,7 @@ export const SeniorWelcome = ({ onComplete }: { onComplete: () => void }) => {
             case 3: // Unity
                 return (
                     <>
-                        <div className="w-full aspect-square max-w-sm rounded-2xl overflow-hidden shadow-lg border-2 border-white bg-white mb-6">
+                        <div className="w-full h-64 rounded-2xl overflow-hidden shadow-lg border-2 border-white bg-white mb-6">
                             <video
                                 src="/onboarding/video-wave.mp4"
                                 autoPlay

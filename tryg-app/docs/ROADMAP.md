@@ -13,13 +13,6 @@ This document tracks future enhancements, technical ideations, and non-critical 
 ---
 
 ## 🟢 High Priority (Next Sprint)
-
-### 1. Animated Onboarding 🚀 ⭐ HIGH PRIORITY
-- **Goal**: A smooth, Lottie-driven welcome flow for new Seniors that tells the "porch light" story.
-- **Value**: Reduces cognitive load during first-time use; sets emotional tone.
-- **Estimated Effort**: 16h (Asset Creation + Flow Logic).
-- **Status**: ✅ Completed (Dec 22). Full localized flows for Senior/Relative implemented.
-
 ### 2. Multi-Family Relational Schema 🌲 ⭐ HIGH PRIORITY
 - **Goal**: Replace "Character Slots" with a fully dynamic `partnerId` and `parentIds` system.
 - **Value**: Critical for extending testing to 2-3 separate families and supporting complex hierarchies.
