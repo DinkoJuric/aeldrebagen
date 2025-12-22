@@ -77,7 +77,7 @@ export const SeniorWelcome = ({ onComplete }: { onComplete: () => void }) => {
                     <>
                         <div className="w-full h-64 rounded-2xl overflow-hidden shadow-lg border-2 border-white bg-white mb-6">
                             <video
-                                src="/onboarding/video-wave.mp4"
+                                src="/onboarding/video-unity.mp4"
                                 autoPlay
                                 loop
                                 playsInline
