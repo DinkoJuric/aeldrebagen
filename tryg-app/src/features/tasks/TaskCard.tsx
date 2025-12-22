@@ -76,7 +76,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, onToggle }) => {
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                     {/* Pictogram Container */}
-                    <div className={cn(iconContainerVariants({ state }))}>
+                    <div className={cn(iconContainerVariants({ state }), "shrink-0")}>
                         <Icon className="w-8 h-8" />
                     </div>
 

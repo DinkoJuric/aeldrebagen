@@ -18,7 +18,8 @@ const MemberStatusRow: React.FC<MemberStatusRowProps> = ({ name, status, role, t
     const { t } = useTranslation();
     const avatarId = role === 'senior' ? 'senior' :
         name.toLowerCase().includes('louise') ? 'louise' :
-            (name.toLowerCase().includes('brad') || name.toLowerCase().includes('senior')) ? 'brad' : 'fatima';
+            name.toLowerCase().includes('juzu') ? 'juzu' :
+                (name.toLowerCase().includes('brad') || name.toLowerCase().includes('senior')) ? 'brad' : 'fatima';
 
     const statusIdMapping: Record<string, string> = {
         'home': 'home',

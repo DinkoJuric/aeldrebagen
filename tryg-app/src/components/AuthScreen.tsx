@@ -165,7 +165,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onAuth, onResetPassword,
                         <div className="inline-flex items-center justify-center w-20 h-20 bg-teal-100 rounded-full mb-4">
                             <Heart className="w-10 h-10 text-teal-600" />
                         </div>
-                        <h1 className="text-3xl font-bold text-stone-800">Tryg</h1>
+                        <h1 className="text-3xl font-bold theme-text">Tryg</h1>
                         <p className="text-stone-500 mt-2">Forbind med din familie</p>
                     </div>
 

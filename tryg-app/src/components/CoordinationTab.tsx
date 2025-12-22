@@ -206,7 +206,7 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
 
                 {(otherRelativeOffers.length > 0 || otherRelativeRequests.length > 0) && (
                     <div className="bg-indigo-50 rounded-xl p-3 border border-indigo-100">
-                        <p className="text-xs font-bold text-indigo-600 uppercase tracking-wide mb-2">{t('others_offers')}</p>
+                        <p className="text-xs font-bold text-indigo-800 uppercase tracking-wide mb-2">{t('others_offers')}</p>
                         <div className="flex flex-wrap gap-2">
                             {otherRelativeOffers.map((offer: any, i: number) => (
                                 <span key={`oro-${i}`} className="text-sm bg-indigo-100 text-indigo-700 px-3 py-1.5 rounded-full">
@@ -245,8 +245,9 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
                     <div className="flex flex-wrap gap-2">
                         {myRelativeOffers.map((offer: any, i: number) => (
                             <span key={`ro-${i}`} className="text-sm bg-teal-500 text-white px-3 py-1.5 rounded-full flex items-center gap-1">
-                                {offer.emoji || '✨'} {offer.label}
-                                <button onClick={() => removeOffer?.(offer.docId)} className="ml-1 hover:bg-teal-600 rounded-full p-0.5">
+                                <span className="shrink-0">{offer.emoji || '✨'}</span>
+                                <span>{offer.label}</span>
+                                <button onClick={() => removeOffer?.(offer.docId)} className="ml-1 hover:bg-teal-600 rounded-full p-0.5 shrink-0">
                                     <X className="w-3 h-3" />
                                 </button>
                             </span>
@@ -282,8 +283,9 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
                     <div className="flex flex-wrap gap-2">
                         {myRelativeRequests.map((req: any, i: number) => (
                             <span key={`rr-${i}`} className="text-sm bg-indigo-500 text-white px-3 py-1.5 rounded-full flex items-center gap-1">
-                                {req.emoji || '💜'} {req.label}
-                                <button onClick={() => removeRequest?.(req.docId)} className="ml-1 hover:bg-indigo-600 rounded-full p-0.5">
+                                <span className="shrink-0">{req.emoji || '💜'}</span>
+                                <span>{req.label}</span>
+                                <button onClick={() => removeRequest?.(req.docId)} className="ml-1 hover:bg-indigo-600 rounded-full p-0.5 shrink-0">
                                     <X className="w-3 h-3" />
                                 </button>
                             </span>

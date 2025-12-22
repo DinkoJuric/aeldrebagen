@@ -1,0 +1,109 @@
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { WelcomeLayout } from './WelcomeLayout';
+import { motion } from 'framer-motion';
+
+
+export const SeniorWelcome = ({ onComplete }: { onComplete: () => void }) => {
+    const { t } = useTranslation();
+    const [step, setStep] = useState(0);
+    const totalSteps = 4;
+
+    const handleNext = () => {
+        if (step < totalSteps - 1) {
+            setStep(step + 1);
+        } else {
+            onComplete();
+        }
+    };
+
+    const handleBack = () => {
+        if (step > 0) setStep(step - 1);
+    };
+
+    const renderContent = () => {
+        switch (step) {
+            case 0: // Porch Light
+                return (
+                    <>
+                        <motion.div className="relative w-full aspect-square max-w-sm rounded-full overflow-hidden shadow-orange-200/50 shadow-2xl border-4 border-white mb-6">
+                            <img src="/onboarding/porch-light.png" alt="Porch Light" className="w-full h-full object-cover" />
+                            <div className="absolute inset-0 bg-orange-500/10 animate-pulse" />
+                        </motion.div>
+                        <div>
+                            <h2 className="text-3xl font-serif font-bold text-amber-900 mb-3">{t('onboarding_senior_0_title')}</h2>
+                            <p className="text-lg text-amber-800/80 leading-relaxed max-w-[280px] mx-auto">{t('onboarding_senior_0_body')}</p>
+                        </div>
+                    </>
+                );
+            case 1: // Captain Wave
+                return (
+                    <>
+                        <div className="w-full aspect-video rounded-2xl overflow-hidden shadow-lg border-2 border-white bg-white mb-6">
+                            <video
+                                src="/onboarding/video-wave.mp4"
+                                autoPlay
+                                loop
+                                playsInline
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
+                        <div>
+                            <h2 className="text-2xl font-bold text-amber-900 mb-3">{t('onboarding_senior_1_title')}</h2>
+                            <p className="text-lg text-amber-800/80 leading-relaxed">{t('onboarding_senior_1_body')}</p>
+                        </div>
+                    </>
+                );
+            case 2: // The Ship
+                return (
+                    <>
+                        <div className="w-full aspect-video rounded-2xl overflow-hidden shadow-lg border-2 border-white bg-blue-50 mb-6">
+                            <video
+                                src="/onboarding/video-ship.mp4"
+                                autoPlay
+                                loop
+                                playsInline
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
+                        <div>
+                            <h2 className="text-2xl font-bold text-amber-900 mb-3">{t('onboarding_senior_2_title')}</h2>
+                            <p className="text-lg text-amber-800/80 leading-relaxed">{t('onboarding_senior_2_body')}</p>
+                        </div>
+                    </>
+                );
+            case 3: // Unity
+                return (
+                    <>
+                        <div className="w-full aspect-square max-w-sm rounded-2xl overflow-hidden shadow-lg border-2 border-white bg-white mb-6">
+                            <video
+                                src="/onboarding/video-wave.mp4"
+                                autoPlay
+                                loop
+                                playsInline
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
+                        <div>
+                            <h2 className="text-2xl font-bold text-amber-900 mb-3">{t('onboarding_senior_3_title')}</h2>
+                            <p className="text-lg text-amber-800/80 leading-relaxed">{t('onboarding_senior_3_body')}</p>
+                        </div>
+                    </>
+                );
+            default:
+                return null;
+        }
+    };
+
+    return (
+        <WelcomeLayout
+            step={step}
+            totalSteps={totalSteps}
+            onNext={handleNext}
+            onBack={handleBack}
+            theme="warm"
+        >
+            {renderContent()}
+        </WelcomeLayout>
+    );
+};

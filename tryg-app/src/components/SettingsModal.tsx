@@ -83,7 +83,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
     if (showPrivacy) {
         return (
             <Modal isOpen={true} onClose={() => setShowPrivacy(false)} title={t('privacy_title')}>
-                <div className="space-y-4">
+                <div className="space-y-4 relative min-h-[400px] pb-12">
                     {/* Pause Sharing Toggle */}
                     <div className="flex items-center justify-between p-4 bg-stone-50 rounded-xl">
                         <div>
@@ -157,13 +157,26 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     )}
 
                     {/* Info */}
-                    <p className="text-xs text-stone-400 text-center pt-2">
+                    <p className="text-xs text-stone-400 text-center pt-2 pb-6">
                         {t('privacy_info_storage')}
                     </p>
 
-                    <Button variant="secondary" className="w-full" onClick={() => setShowPrivacy(false)}>
-                        {t('back')}
-                    </Button>
+                    <div className="pt-2 flex flex-col items-center gap-6">
+                        <Button variant="secondary" className="w-full" onClick={() => setShowPrivacy(false)}>
+                            {t('back')}
+                        </Button>
+
+                        {/* THE BACKDOOR 🦄 - Placed below 'Untilbage' with breathing room */}
+                        <button
+                            onClick={() => {
+                                window.dispatchEvent(new Event('trigger-secret-unicorn'));
+                            }}
+                            className="p-2 hover:scale-110 transition-transform animate-pulse-slow"
+                            title="Secret Onboarding"
+                        >
+                            <img src="/unicorn_static_wave.png" alt="Secret" className="w-40 h-40 drop-shadow-lg" />
+                        </button>
+                    </div>
                 </div>
             </Modal>
         );

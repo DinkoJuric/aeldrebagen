@@ -13,6 +13,9 @@ import { PhotoUploadModal, PhotoViewerModal, PhotoNotificationBadge } from './fe
 import { ShareModal } from './components/ShareModal';
 import { useTasks } from './features/tasks';
 import { useSymptoms } from './features/symptoms';
+import { SeniorWelcome } from './features/onboarding/SeniorWelcome';
+import { RelativeWelcome } from './features/onboarding/RelativeWelcome';
+import { X } from 'lucide-react';
 // import { useSettings } from './hooks/useSettings';
 import { useWeeklyQuestions } from './features/weeklyQuestion';
 import { usePings } from './features/thinkingOfYou';
@@ -48,7 +51,7 @@ export default function TrygAppCore({
     members = [],
     updateMember
 }: AppCoreProps) {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     // View is determined by user role - no toggle allowed
     const isSenior = userProfile?.role === 'senior';
     // const [activePing, setActivePing] = useState(null); // Unused?
@@ -57,6 +60,39 @@ export default function TrygAppCore({
     const [showShare, setShowShare] = useState(false);
     const [activeTab, setActiveTab] = useState<AppTab>('daily');
     const [showPhotoViewer, setShowPhotoViewer] = useState(false);
+    const [showOnboarding, setShowOnboarding] = useState(false);
+    const [showSecretScreen, setShowSecretScreen] = useState(false);
+
+    // 🇧🇦 JUZU EXCEPTION: Force Bosnian (Requested by User)
+    useEffect(() => {
+        const nameToCheck = (userProfile?.displayName || user?.displayName || '').toLowerCase();
+        if (nameToCheck.includes('juzu')) {
+            if (i18n.language !== 'bs') {
+                i18n.changeLanguage('bs');
+            }
+        }
+    }, [userProfile, user, i18n]);
+
+    // Force Onboarding logic
+    useEffect(() => {
+        const hasSeen = localStorage.getItem('tryg_welcome_seen_v2');
+        if (!hasSeen) {
+            setShowOnboarding(true);
+        }
+    }, []);
+
+    // Secret Screen Listener
+    useEffect(() => {
+        const handleSecret = () => setShowSecretScreen(true);
+        window.addEventListener('trigger-secret-unicorn', handleSecret);
+        return () => window.removeEventListener('trigger-secret-unicorn', handleSecret);
+    }, []);
+
+    const handleOnboardingComplete = () => {
+        localStorage.setItem('tryg_welcome_seen_v2', 'true');
+        setShowOnboarding(false);
+        setShowSecretScreen(false);
+    };
 
     // Firebase hooks for real-time data
     const { tasks, toggleTask, addTask } = useTasks(careCircle?.id);
@@ -216,7 +252,7 @@ export default function TrygAppCore({
                             className="p-2 rounded-full hover:bg-white/50 transition-colors"
                             aria-label="Care Circle"
                         >
-                            <Users className="w-5 h-5 theme-text" />
+                            <Users className="w-5 h-5 text-stone-900 dark:text-stone-100" />
                         </button>
 
                         {/* Center: Settings gear (Unified Settings) */}
@@ -225,7 +261,7 @@ export default function TrygAppCore({
                             className="p-2 rounded-full hover:bg-white/50 transition-colors"
                             aria-label={t('settings')}
                         >
-                            <Settings className="w-5 h-5 theme-text" />
+                            <Settings className="w-5 h-5 text-stone-900 dark:text-stone-100" />
                         </button>
 
                         {/* Sign out - Top Right */}
@@ -234,7 +270,7 @@ export default function TrygAppCore({
                             className="p-1.5 rounded-full hover:bg-white/50 transition-colors"
                             aria-label={t('sign_out')}
                         >
-                            <LogOut className="w-4 h-4 theme-text" />
+                            <LogOut className="w-4 h-4 text-stone-900 dark:text-stone-100" />
                         </button>
                     </div>
 
@@ -260,6 +296,23 @@ export default function TrygAppCore({
                         />
                     )}
 
+                    {/* SECRET SCREEN OVERLAY */}
+                    {showSecretScreen && (
+                        <div className="absolute inset-0 z-[100] bg-zinc-900">
+                            <button
+                                onClick={() => setShowSecretScreen(false)}
+                                className="absolute top-6 right-6 z-50 p-2 bg-black/40 backdrop-blur-md rounded-full text-white/70 hover:text-white"
+                            >
+                                <X size={24} />
+                            </button>
+                            {isSenior ? (
+                                <SeniorWelcome onComplete={() => setShowSecretScreen(false)} />
+                            ) : (
+                                <RelativeWelcome onComplete={() => setShowSecretScreen(false)} />
+                            )}
+                        </div>
+                    )}
+
                     <div className="h-full relative z-10">
                         {/* LivingBackground for circadian atmosphere (Living Design 🏠) */}
                         {FEATURES.livingDesign ? (
@@ -273,13 +326,21 @@ export default function TrygAppCore({
                                         />
                                     )}
 
-                                    {isSenior ? (
-                                        <SeniorView />
+                                    {showOnboarding ? (
+                                        isSenior ? (
+                                            <SeniorWelcome onComplete={handleOnboardingComplete} />
+                                        ) : (
+                                            <RelativeWelcome onComplete={handleOnboardingComplete} />
+                                        )
                                     ) : (
-                                        <RelativeView />
+                                        isSenior ? (
+                                            <SeniorView />
+                                        ) : (
+                                            <RelativeView />
+                                        )
                                     )}
                                     {/* Photo notification badge */}
-                                    {latestPhoto && (
+                                    {latestPhoto && !showOnboarding && (
                                         <div className="absolute bottom-24 left-4 right-4 z-40 flex justify-center">
                                             <PhotoNotificationBadge
                                                 photo={latestPhoto}
@@ -299,12 +360,20 @@ export default function TrygAppCore({
                                             onDismiss={dismissPing}
                                         />
                                     )}
-                                    {isSenior ? (
-                                        <SeniorView />
+                                    {showOnboarding ? (
+                                        isSenior ? (
+                                            <SeniorWelcome onComplete={handleOnboardingComplete} />
+                                        ) : (
+                                            <RelativeWelcome onComplete={handleOnboardingComplete} />
+                                        )
                                     ) : (
-                                        <RelativeView />
+                                        isSenior ? (
+                                            <SeniorView />
+                                        ) : (
+                                            <RelativeView />
+                                        )
                                     )}
-                                    {latestPhoto && (
+                                    {latestPhoto && !showOnboarding && (
                                         <div className="absolute bottom-24 left-4 right-4 z-40 flex justify-center">
                                             <PhotoNotificationBadge
                                                 photo={latestPhoto}

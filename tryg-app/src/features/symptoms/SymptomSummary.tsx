@@ -87,6 +87,16 @@ interface SymptomSummaryProps {
     hideTitle?: boolean;
 }
 
+// Helper to get friendly advice based on symptom
+const getSymptomAdvice = (symptomLabel: string, t: any): string => {
+    const label = symptomLabel.toLowerCase();
+    if (label.includes('kvalme')) return t('symptom_advice_nausea', 'Kvalme kan lindres med ingefær-te og frisk luft.');
+    if (label.includes('hovedpine')) return t('symptom_advice_headache', 'Husk at drikke vand og sikre ro omkring dig.');
+    if (label.includes('svimmel')) return t('symptom_advice_dizzyness', 'Rejs dig langsomt og støt dig til noget fast.');
+    if (label.includes('smerte')) return t('symptom_advice_pain', 'Spørg om medicin skal justeres, hvis smerter fortsætter.');
+    return t('symptom_advice_generic', 'Ring og hør hvordan det går. En stemme varmer.');
+};
+
 // Symptom Summary Card - shows today's symptoms with 7-day overview
 export const SymptomSummary: React.FC<SymptomSummaryProps> = ({ symptomLogs = [], onViewReport, hideTitle = false }) => {
     const { t } = useTranslation();
@@ -103,23 +113,27 @@ export const SymptomSummary: React.FC<SymptomSummaryProps> = ({ symptomLogs = []
     const weeklySymptoms = symptomLogs.filter(s => isWithinDays(s.loggedAt, 7));
     const trend = useMemo(() => analyzeTrend(weeklySymptoms, t), [weeklySymptoms, t]);
 
-    // Count symptoms by type for summary
-    const symptomCounts = useMemo(() => {
+    // Most frequent symptom for Nudge
+    const topSymptom = useMemo(() => {
+        if (weekSymptoms.length === 0) return null;
         const counts: Record<string, number> = {};
         weekSymptoms.forEach(s => {
             const type = s.label || s.id;
             counts[type] = (counts[type] || 0) + 1;
         });
-        return Object.entries(counts)
-            .sort((a, b) => b[1] - a[1])
-            .slice(0, 3);
+        const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+        return sorted[0] ? sorted[0][0] : null;
     }, [weekSymptoms]);
 
-    if (symptomLogs.length === 0) return null;
+    // Hide entire component if NO symptoms at all (Today or Week)
+    // "Remove or hide the entire element, when there are no symptoms that day" 
+    // (INTERPRETATION: User likely meant "If nothing to show, show nothing". 
+    // But keeps Week view if relevant.)
+    if (todaySymptoms.length === 0 && weekSymptoms.length === 0) return null;
 
     return (
-        <div className="bg-orange-50 border-2 border-orange-100 rounded-2xl p-4 space-y-3">
-            {/* Today's Symptoms */}
+        <div className="bg-orange-50 border-2 border-orange-100 rounded-2xl p-4 space-y-3 shadow-sm">
+            {/* Today's Symptoms - Only show if present */}
             {todaySymptoms.length > 0 && (
                 <div>
                     {!hideTitle && (
@@ -130,122 +144,111 @@ export const SymptomSummary: React.FC<SymptomSummaryProps> = ({ symptomLogs = []
                     )}
                     <div className="space-y-2">
                         {todaySymptoms.map((log, i) => (
-                            <div key={i} className="flex items-center justify-between text-sm text-orange-900 bg-white/70 p-3 rounded-xl">
+                            <div key={i} className="flex items-center justify-between text-sm text-orange-900 bg-white/70 p-3 rounded-xl border border-orange-100">
                                 <div className="flex flex-wrap items-center gap-2">
-                                    <span className="font-medium">{log.label}</span>
+                                    <span className="font-bold">{log.label}</span>
                                     {log.bodyLocation && (
                                         <span className="text-orange-600 text-xs bg-orange-100 px-2 py-0.5 rounded-full">
                                             {log.bodyLocation.emoji} {log.bodyLocation.label}
                                         </span>
                                     )}
-                                    {log.bodyLocation?.severity && (
-                                        <span className="text-xs bg-orange-200 px-2 py-0.5 rounded-full">
-                                            {log.bodyLocation.severity.emoji} {log.bodyLocation.severity.label}
-                                        </span>
-                                    )}
                                 </div>
-                                <span className="text-orange-500 text-xs whitespace-nowrap">{log.time}</span>
+                                <span className="text-orange-500 text-xs font-medium whitespace-nowrap">{log.time}</span>
                             </div>
                         ))}
                     </div>
                 </div>
             )}
 
-            {/* 7-Day Summary */}
+            {/* 7-Day Summary Nudge - "Insight" instead of "Count" */}
             {weekSymptoms.length > 0 && (
-                <div className="border-t border-orange-200 pt-3">
+                <div className={`${todaySymptoms.length > 0 ? 'border-t border-orange-200 pt-3' : ''}`}>
                     <button
                         onClick={() => setShowOlder(!showOlder)}
-                        className="w-full flex items-center justify-between text-sm"
+                        className="w-full text-left"
                     >
-                        <div className="flex items-center gap-2 text-orange-700">
-                            {trend.trend === 'increasing' && <TrendingUp className="w-4 h-4 text-red-500" />}
-                            {trend.trend === 'decreasing' && <TrendingDown className="w-4 h-4 text-green-500" />}
-                            {trend.trend === 'stable' && <AlertCircle className="w-4 h-4" />}
-                            {trend.trend === 'warning' && <AlertCircle className="w-4 h-4 text-red-500" />}
-                            <span className="font-medium">
-                                {trend.message || t('symptoms_this_week', { count: weekSymptoms.length })}
-                            </span>
+                        {/* Insight Nudge Header */}
+                        <div className="flex items-start gap-3">
+                            <div className="bg-orange-100 p-2 rounded-full mt-1">
+                                <Phone className="w-4 h-4 text-orange-600" />
+                            </div>
+                            <div>
+                                <h5 className="text-sm font-bold text-orange-900">
+                                    {topSymptom ? t('symptom_insight_title', { symptom: topSymptom }) : t('symptom_insight_general')}
+                                </h5>
+                                <p className="text-xs text-orange-700 mt-1 leading-relaxed">
+                                    {topSymptom ? getSymptomAdvice(topSymptom, t) : t('symptom_insight_generic_body')}
+                                </p>
+                                <button className="mt-2 text-xs font-bold text-orange-800 bg-white/70 px-3 py-1 rounded-full border border-orange-200 hover:bg-white shadow-sm transition-colors" onClick={(e) => {
+                                    e.stopPropagation();
+                                    alert('Ringer til familien...');
+                                }}>
+                                    📞 Ring nu
+                                </button>
+                            </div>
+                            <div className="ml-auto pl-2">
+                                {showOlder ? <ChevronUp className="w-4 h-4 text-orange-400" /> : <ChevronDown className="w-4 h-4 text-orange-400" />}
+                            </div>
                         </div>
-                        {showOlder ? (
-                            <ChevronUp className="w-4 h-4 text-orange-500" />
-                        ) : (
-                            <ChevronDown className="w-4 h-4 text-orange-500" />
-                        )}
                     </button>
 
-                    {/* Collapsed summary */}
-                    {!showOlder && symptomCounts.length > 0 && (
-                        <div className="flex flex-wrap gap-2 mt-2">
-                            {symptomCounts.map(([type, count], i) => (
-                                <span key={i} className="text-xs text-orange-600 bg-white/60 px-2 py-1 rounded-full">
-                                    {type} ({count}x)
-                                </span>
-                            ))}
-                        </div>
-                    )}
-
-                    {/* Expanded view */}
-                    {showOlder && (
-                        <div className="space-y-2 mt-3">
-                            {/* When in warning mode, only show severe symptoms */}
-                            {(trend.trend === 'warning'
-                                ? weekSymptoms.filter(s => s.bodyLocation?.severity?.id === 'severe')
-                                : weekSymptoms
-                            ).map((log, i) => (
-                                <div key={i} className="flex items-center justify-between text-sm text-orange-800 bg-white/50 p-2 rounded-lg">
-                                    <div className="flex items-center gap-2">
+                    {/* Expanded History */}
+                    {
+                        showOlder && (
+                            <div className="space-y-2 mt-4 animate-fade-in">
+                                <h6 className="text-xs font-bold text-orange-400 uppercase tracking-widest mb-2">{t('history_last_7_days')}</h6>
+                                {weekSymptoms.map((log, i) => (
+                                    <div key={i} className="flex items-center justify-between text-sm text-orange-800 bg-white/50 p-2 rounded-lg">
                                         <span>{log.label}</span>
-                                        {log.bodyLocation && (
-                                            <span className="text-xs text-orange-500">
-                                                {log.bodyLocation.emoji}
-                                            </span>
-                                        )}
-                                        {log.bodyLocation?.severity && (
-                                            <span className={`text-xs px-1.5 py-0.5 rounded-full ${log.bodyLocation.severity.id === 'severe'
-                                                ? 'bg-red-100 text-red-700'
-                                                : 'bg-orange-100 text-orange-600'
-                                                }`}>
-                                                {log.bodyLocation.severity.label}
-                                            </span>
-                                        )}
+                                        <span className="text-xs text-orange-400">{log.date}</span>
                                     </div>
-                                    <span className="text-xs text-orange-400">{log.date || log.time}</span>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                </div>
+                                ))}
+                                {onViewReport && (
+                                    <button
+                                        onClick={onViewReport}
+                                        className="w-full text-center text-xs text-orange-500 hover:text-orange-700 transition-colors mt-2 font-medium"
+                                    >
+                                        {t('see_full_history')} →
+                                    </button>
+                                )}
+                            </div>
+                        )
+                    }
+                </div >
             )}
 
             {/* Trend-based CTA */}
-            {trend.cta && (
-                <div className="border-t border-orange-200 pt-3">
-                    <button
-                        onClick={() => {
-                            // Future: integrate with phone/calendar
-                            if (trend.cta?.action === 'call') {
-                                alert('Ring til læge funktionalitet kommer snart');
-                            }
-                        }}
-                        className="w-full flex items-center justify-center gap-2 py-2 px-4 bg-orange-100 hover:bg-orange-200 text-orange-800 rounded-xl text-sm font-medium transition-colors"
-                    >
-                        <trend.cta.icon className="w-4 h-4" />
-                        {trend.cta.text}
-                    </button>
-                </div>
-            )}
+            {
+                trend.cta && (
+                    <div className="border-t border-orange-200 pt-3">
+                        <button
+                            onClick={() => {
+                                // Future: integrate with phone/calendar
+                                if (trend.cta?.action === 'call') {
+                                    alert('Ring til læge funktionalitet kommer snart');
+                                }
+                            }}
+                            className="w-full flex items-center justify-center gap-2 py-2 px-4 bg-orange-100 hover:bg-orange-200 text-orange-800 rounded-xl text-sm font-medium transition-colors"
+                        >
+                            <trend.cta.icon className="w-4 h-4" />
+                            {trend.cta.text}
+                        </button>
+                    </div>
+                )
+            }
 
             {/* Link to full report */}
-            {onViewReport && (
-                <button
-                    onClick={onViewReport}
-                    className="w-full text-center text-xs text-orange-500 hover:text-orange-700 transition-colors"
-                >
-                    {t('see_full_history')}
-                </button>
-            )}
-        </div>
+            {
+                onViewReport && !showOlder && ( // Only show if not already shown in expanded view
+                    <button
+                        onClick={onViewReport}
+                        className="w-full text-center text-xs text-orange-500 hover:text-orange-700 transition-colors"
+                    >
+                        {t('see_full_history')}
+                    </button>
+                )
+            }
+        </div >
     );
 };
 
