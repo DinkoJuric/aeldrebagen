@@ -187,6 +187,18 @@ description: Master record of all project and cross-project learnings
 
 ---
 
+## Mobile / PWA
+
+### PWA Cache Limits (The "Missing File" Mystery)
+- **Problem**: Large assets (e.g., 5MB PNGs) worked on localhost but failed to load in the installed PWA on mobile.
+- **Root Cause**: VitePWA / Workbox has a default `maximumFileSizeToCacheInBytes` of **2MB**. Files larger than this are silently excluded from the service worker cache.
+- **Fix**:
+    1.  **Immediate**: Increased limit in `vite.config.js` to 6MB.
+    2.  **Proper**: Compress assets! A 5MB image for a mobile app is an anti-pattern.
+- **Lesson**: Always check `dist/sw.js` or build logs for warnings about "skipping large assets".
+
+---
+
 ## Agent & Tooling
 
 ### File Search Scope

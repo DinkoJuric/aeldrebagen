@@ -72,20 +72,22 @@ export const WelcomeLayout: React.FC<WelcomeLayoutProps> = ({
                 </button>
             </div>
 
-            {/* Main Content Area (Storybook Page) */}
-            <div className="flex-1 relative z-10 flex flex-col justify-center items-center p-6 text-center">
-                <AnimatePresence mode="wait">
-                    <motion.div
-                        key={step}
-                        initial={{ opacity: 0, x: 20, scale: 0.95 }}
-                        animate={{ opacity: 1, x: 0, scale: 1 }}
-                        exit={{ opacity: 0, x: -20, scale: 0.95 }}
-                        transition={{ duration: 0.5, ease: "easeOut" }}
-                        className="w-full max-w-sm flex flex-col items-center gap-6"
-                    >
-                        {children}
-                    </motion.div>
-                </AnimatePresence>
+            {/* Main Content Area (Scrollable) */}
+            <div className="flex-1 relative z-10 w-full overflow-y-auto min-h-0 scrollbar-hide">
+                <div className="min-h-full flex flex-col justify-center items-center p-6 pt-24 pb-4 text-center">
+                    <AnimatePresence mode="wait">
+                        <motion.div
+                            key={step}
+                            initial={{ opacity: 0, x: 20, scale: 0.95 }}
+                            animate={{ opacity: 1, x: 0, scale: 1 }}
+                            exit={{ opacity: 0, x: -20, scale: 0.95 }}
+                            transition={{ duration: 0.5, ease: "easeOut" }}
+                            className="w-full max-w-sm flex flex-col items-center gap-6"
+                        >
+                            {children}
+                        </motion.div>
+                    </AnimatePresence>
+                </div>
             </div>
 
             {/* Bottom Navigation */}
