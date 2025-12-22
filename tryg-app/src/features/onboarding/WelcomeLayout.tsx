@@ -46,7 +46,7 @@ export const WelcomeLayout: React.FC<WelcomeLayoutProps> = ({
     const colors = themeColors[theme];
 
     return (
-        <div className={cn("relative w-full h-[100dvh] overflow-hidden flex flex-col", colors.bg)}>
+        <div className={cn("relative w-full h-full overflow-hidden flex flex-col", colors.bg)}>
             {/* Top Bar: Progress & Audio (Relative - pushes content down) */}
             <div className="w-full p-6 z-20 flex justify-between items-center shrink-0">
                 <div className="flex gap-2">

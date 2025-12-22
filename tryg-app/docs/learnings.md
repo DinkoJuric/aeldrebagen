@@ -597,3 +597,13 @@ equest.auth.token.email == 'admin@email.com' in irestore.rules.
 - **Action**: Refactored the UI component (FamilyPresence) to read names from the canonical source (members list from context) and join with status data on the fly.
 - **Future**: Avoid duplicating mutable data like names across collections. Store them in one place and join/read as needed.
 
+
+---
+
+## PWA & Viewport Layout (Dec 2025)
+
+### The 120% Height Conflict (Viewport Inheritance)
+- **Problem**: In PWA, the onboarding flow had an unwanted scrollbar, and the "Next" button was pushed out of sight.
+- **Root Cause**: A "Math Error" in the CSS hierarchy. `AppCore.tsx` had a Global Header + Content Area + Global Footer. The Content Area (Onboarding) was set to `h-[100dvh]`. This caused the total height to be `100dvh + 40px (header) + 80px (footer)`, resulting in ~115% vertical overflow.
+- **Action**: Refactored the parent container to `flex flex-col`. Set the Header/Footer to `shrink-0` and the Content Area to `flex-1` with `h-full`.
+- **Future**: Never use `100dvh` for a component that will be nested alongside siblings. Use `h-full` and let a Flexbox parent handle the "squeeze". Ensure the middle container has `min-h-0` to allow its children to scroll internally if they exceed the squeezed height.

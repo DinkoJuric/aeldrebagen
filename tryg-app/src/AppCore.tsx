@@ -223,7 +223,7 @@ export default function TrygAppCore({
 
                 {/* Phone Frame Simulator (Responsive) */}
                 {/* Mobile: Full screen, no border. Desktop: Phone frame with border. */}
-                <div className="relative w-full sm:max-w-md h-[100dvh] sm:h-[850px] bg-white sm:rounded-[3rem] overflow-hidden sm:border-8 sm:border-zinc-900 shadow-2xl sm:ring-1 sm:ring-zinc-400/50">
+                <div className="relative w-full sm:max-w-md h-[100dvh] sm:h-[850px] bg-white sm:rounded-[3rem] overflow-hidden sm:border-8 sm:border-zinc-900 shadow-2xl sm:ring-1 sm:ring-zinc-400/50 flex flex-col">
 
                     {/* Push Notification Banner */}
                     <div className={`
@@ -244,9 +244,8 @@ export default function TrygAppCore({
                         )}
                     </div>
 
-                    {/* Header - COMPACT: Care Circle / Settings / Logout - now theme-aware */}
-                    <div className="absolute top-0 left-0 right-0 h-10 z-50 flex justify-between items-center backdrop-blur-sm px-3 bg-black/5 dark:bg-white/10">
-                        {/* Care Circle button - Top Left */}
+                    {/* Header - COMPACT - Moved to Relative to push content down */}
+                    <div className="relative h-10 z-50 flex justify-between items-center backdrop-blur-sm px-3 bg-black/5 dark:bg-white/10 shrink-0">
                         <button
                             onClick={() => setShowShare(true)}
                             className="p-2 rounded-full hover:bg-white/50 transition-colors"
@@ -255,7 +254,6 @@ export default function TrygAppCore({
                             <Users className="w-5 h-5 text-stone-900 dark:text-stone-100" />
                         </button>
 
-                        {/* Center: Settings gear (Unified Settings) */}
                         <button
                             onClick={() => setShowSettings(true)}
                             className="p-2 rounded-full hover:bg-white/50 transition-colors"
@@ -264,7 +262,6 @@ export default function TrygAppCore({
                             <Settings className="w-5 h-5 text-stone-900 dark:text-stone-100" />
                         </button>
 
-                        {/* Sign out - Top Right */}
                         <button
                             onClick={onSignOut}
                             className="p-1.5 rounded-full hover:bg-white/50 transition-colors"
@@ -313,11 +310,11 @@ export default function TrygAppCore({
                         </div>
                     )}
 
-                    <div className="h-full relative z-10">
+                    <div className="flex-1 min-h-0 relative z-10">
                         {/* LivingBackground for circadian atmosphere (Living Design 🏠) */}
                         {FEATURES.livingDesign ? (
                             <LivingBackground>
-                                <div className="h-full overflow-y-auto">
+                                <div className="h-full overflow-hidden">
                                     {/* Ping Notification from Firestore */}
                                     {latestPing && (
                                         <PingNotification
@@ -352,8 +349,8 @@ export default function TrygAppCore({
                             </LivingBackground>
                         ) : (
                             /* Fallback: Static gradient when Living Design is disabled */
-                            <div className="h-full bg-gradient-to-b from-sky-100 via-sky-50 to-stone-100">
-                                <div className="h-full overflow-y-auto">
+                            <div className="h-full bg-gradient-to-b from-sky-100 via-sky-50 to-stone-100 overflow-hidden">
+                                <div className="h-full">
                                     {latestPing && (
                                         <PingNotification
                                             ping={latestPing}
@@ -384,8 +381,10 @@ export default function TrygAppCore({
                                 </div>
                             </div>
                         )}
+                    </div>
 
-                        {/* Global Bottom Navigation */}
+                    {/* Global Bottom Navigation (Shrink-0) */}
+                    <div className="shrink-0">
                         <BottomNavigation
                             activeTab={activeTab}
                             onTabChange={setActiveTab}
