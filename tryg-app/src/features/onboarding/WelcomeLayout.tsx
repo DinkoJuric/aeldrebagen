@@ -46,9 +46,9 @@ export const WelcomeLayout: React.FC<WelcomeLayoutProps> = ({
     const colors = themeColors[theme];
 
     return (
-        <div className={cn("relative w-full h-full overflow-hidden flex flex-col", colors.bg)}>
-            {/* Top Bar: Progress & Audio */}
-            <div className="absolute top-0 left-0 right-0 p-6 z-20 flex justify-between items-center">
+        <div className={cn("relative w-full h-[100dvh] overflow-hidden flex flex-col", colors.bg)}>
+            {/* Top Bar: Progress & Audio (Relative - pushes content down) */}
+            <div className="w-full p-6 z-20 flex justify-between items-center shrink-0">
                 <div className="flex gap-2">
                     {Array.from({ length: totalSteps }).map((_, i) => (
                         <motion.div
@@ -72,9 +72,9 @@ export const WelcomeLayout: React.FC<WelcomeLayoutProps> = ({
                 </button>
             </div>
 
-            {/* Main Content Area (Scrollable) */}
-            <div className="flex-1 relative z-10 w-full overflow-y-auto min-h-0 scrollbar-hide">
-                <div className="min-h-full flex flex-col justify-center items-center p-6 pt-24 pb-4 text-center">
+            {/* Main Content Area (Scrollable - fills remaining space) */}
+            <div className="flex-1 w-full overflow-y-auto min-h-0 scrollbar-hide">
+                <div className="min-h-full flex flex-col justify-center items-center p-6 pb-4 text-center">
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={step}
@@ -90,8 +90,8 @@ export const WelcomeLayout: React.FC<WelcomeLayoutProps> = ({
                 </div>
             </div>
 
-            {/* Bottom Navigation */}
-            <div className="p-8 z-20 w-full flex justify-between items-center bg-gradient-to-t from-white/80 via-white/50 to-transparent pb-10">
+            {/* Bottom Navigation (Relative - sits at bottom of flex container) */}
+            <div className="p-8 z-20 w-full flex justify-between items-center bg-transparent shrink-0">
                 {/* Back Button (Hidden on step 0) */}
                 <button
                     onClick={onBack}
