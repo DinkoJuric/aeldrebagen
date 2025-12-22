@@ -18,7 +18,7 @@ This document tracks future enhancements, technical ideations, and non-critical 
 - **Goal**: A smooth, Lottie-driven welcome flow for new Seniors that tells the "porch light" story.
 - **Value**: Reduces cognitive load during first-time use; sets emotional tone.
 - **Estimated Effort**: 16h (Asset Creation + Flow Logic).
-- **Status**: Backlog - waiting for more features before implementation.
+- **Status**: ✅ Completed (Dec 22). Full localized flows for Senior/Relative implemented.
 
 ### 2. Multi-Family Relational Schema 🌲 ⭐ HIGH PRIORITY
 - **Goal**: Replace "Character Slots" with a fully dynamic `partnerId` and `parentIds` system.

@@ -63,6 +63,11 @@ description: Master record of all project and cross-project learnings
 - **Action**: Ensured all documents have default values for sorted fields (e.g., added default `time` to tasks).
 - **Future**: When using `orderBy` in Firestore, remember it implicitly filters out docs missing that field. Always set defaults.
 
+### "Red Text" Panic (Git Status)
+- **Problem**: User panicked seeing `git status` output in red, thinking it was a build error.
+- **Action**: Explained that `git status` lists modified files in red before staging.
+- **Future**: When presenting git status to non-technical users, explicitly clarify "These are just the files we changed, not errors."
+
 ---
 
 ## React & Vite

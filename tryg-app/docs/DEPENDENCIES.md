@@ -136,6 +136,17 @@ graph TD
 
 ---
 
+### Onboarding Feature (Welcome Flow)
+| Component | Uses | Used By |
+|-----------|------|---------|
+| `WelcomeLayout.tsx` | framer-motion | AppCore |
+| `SeniorWelcome.tsx` | useTranslation, ui/Button | WelcomeLayout |
+| `RelativeWelcome.tsx` | useTranslation, ui/Button | WelcomeLayout |
+
+**Dependencies**: framer-motion, react-i18next. **Self-contained**: ✅ Yes
+
+---
+
 ### Weekly Question Feature
 | Component | Uses | Used By |
 |-----------|------|---------|
