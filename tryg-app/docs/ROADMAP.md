@@ -35,6 +35,11 @@ This document tracks future enhancements, technical ideations, and non-critical 
 - **Value**: High emotional utility; strengthens the connection loop.
 - **Estimated Effort**: 8h (Storage + State Management).
 
+### 3. Dynamic Gender/Language Support 🌍
+- **Goal**: Link user gender to translation keys to avoid "He/She" usage and enable proper gendered grammar (e.g., "Hun/Han" in DA, "Uzeo/Uzela" in BS).
+- **Value**: Personalization and grammatical correctness.
+- **Estimated Effort**: 8h (Schema update + i18n interpolation logic).
+
 ## 🔵 Low Priority / Ideations
 
 ### 3. Haptic Feedback 📳
