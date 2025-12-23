@@ -98,7 +98,7 @@ const RelativeWelcomeContent = ({ onComplete }: { onComplete: () => void }) => {
                                 src={resolvePath('onboarding/video-ship.mp4')}
                                 autoPlay
                                 loop
-                                muted
+                                muted={isMuted}
                                 playsInline
                                 className="w-full h-full object-cover"
                             />
@@ -118,7 +118,7 @@ const RelativeWelcomeContent = ({ onComplete }: { onComplete: () => void }) => {
                                 src={resolvePath('onboarding/video-unity.mp4')}
                                 autoPlay
                                 loop
-                                muted
+                                muted={isMuted}
                                 playsInline
                                 className="w-full h-full object-cover"
                             />

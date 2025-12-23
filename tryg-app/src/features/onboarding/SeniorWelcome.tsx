@@ -90,7 +90,7 @@ const SeniorWelcomeContent = ({ onComplete }: { onComplete: () => void }) => {
                                 src={resolvePath('onboarding/video-wave.mp4')}
                                 autoPlay
                                 loop
-                                muted
+                                muted={isMuted}
                                 playsInline
                                 className="w-full h-full object-cover"
                             />
@@ -110,7 +110,7 @@ const SeniorWelcomeContent = ({ onComplete }: { onComplete: () => void }) => {
                                 src={resolvePath('onboarding/video-ship.mp4')}
                                 autoPlay
                                 loop
-                                muted
+                                muted={isMuted}
                                 playsInline
                                 className="w-full h-full object-cover"
                             />
@@ -130,7 +130,7 @@ const SeniorWelcomeContent = ({ onComplete }: { onComplete: () => void }) => {
                                 src={resolvePath('onboarding/video-unity.mp4')}
                                 autoPlay
                                 loop
-                                muted
+                                muted={isMuted}
                                 playsInline
                                 className="w-auto h-full object-cover"
                             />
