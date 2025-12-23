@@ -56,6 +56,10 @@ const RelativeWelcomeContent = ({ onComplete }: { onComplete: () => void }) => {
     useEffect(() => {
         if (videoRef.current) {
             videoRef.current.muted = isMuted;
+            // Critical fix: If user unmutes, we must ensure playback resumes if it was paused
+            if (!isMuted && videoRef.current.paused) {
+                videoRef.current.play().catch(e => console.log("Resume on unmute failed:", e));
+            }
         }
     }, [isMuted]);
 
