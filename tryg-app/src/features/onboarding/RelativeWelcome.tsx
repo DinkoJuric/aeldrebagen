@@ -68,7 +68,7 @@ export const RelativeWelcome = ({ onComplete }: { onComplete: () => void }) => {
             case 3: // Unity (Result)
                 return (
                     <>
-                        <div className="w-full h-64 rounded-2xl overflow-hidden shadow-lg border-2 border-white bg-white">
+                        <div className="w-full aspect-[9/16] rounded-2xl overflow-hidden shadow-lg border-2 border-white bg-white">
                             <video
                                 src="/onboarding/video-unity.mp4"
                                 autoPlay

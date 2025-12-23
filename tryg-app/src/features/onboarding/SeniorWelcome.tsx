@@ -75,7 +75,7 @@ export const SeniorWelcome = ({ onComplete }: { onComplete: () => void }) => {
             case 3: // Unity
                 return (
                     <>
-                        <div className="w-full h-64 rounded-2xl overflow-hidden shadow-lg border-2 border-white bg-white mb-6">
+                        <div className="w-full aspect-[9/16] rounded-2xl overflow-hidden shadow-lg border-2 border-white bg-white mb-6">
                             <video
                                 src="/onboarding/video-unity.mp4"
                                 autoPlay
