@@ -1,10 +1,20 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { WelcomeLayout } from './WelcomeLayout';
+import { AudioProvider, useAudio } from './AudioContext';
 
 
 export const RelativeWelcome = ({ onComplete }: { onComplete: () => void }) => {
+    return (
+        <AudioProvider>
+            <RelativeWelcomeContent onComplete={onComplete} />
+        </AudioProvider>
+    );
+};
+
+const RelativeWelcomeContent = ({ onComplete }: { onComplete: () => void }) => {
     const { t } = useTranslation();
+    const { isMuted } = useAudio();
     const [step, setStep] = useState(0);
     const totalSteps = 4;
 
@@ -54,7 +64,7 @@ export const RelativeWelcome = ({ onComplete }: { onComplete: () => void }) => {
                                 src="/onboarding/video-ship.mp4"
                                 autoPlay
                                 loop
-                                muted
+                                muted={isMuted}
                                 playsInline
                                 className="w-full h-full object-cover"
                             />
@@ -73,7 +83,7 @@ export const RelativeWelcome = ({ onComplete }: { onComplete: () => void }) => {
                                 src="/onboarding/video-unity.mp4"
                                 autoPlay
                                 loop
-                                muted
+                                muted={isMuted}
                                 playsInline
                                 className="w-full h-full object-cover"
                             />

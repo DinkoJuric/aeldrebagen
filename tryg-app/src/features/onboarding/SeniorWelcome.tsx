@@ -2,10 +2,20 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { WelcomeLayout } from './WelcomeLayout';
 import { motion } from 'framer-motion';
+import { AudioProvider, useAudio } from './AudioContext';
 
 
 export const SeniorWelcome = ({ onComplete }: { onComplete: () => void }) => {
+    return (
+        <AudioProvider>
+            <SeniorWelcomeContent onComplete={onComplete} />
+        </AudioProvider>
+    );
+};
+
+const SeniorWelcomeContent = ({ onComplete }: { onComplete: () => void }) => {
     const { t } = useTranslation();
+    const { isMuted } = useAudio();
     const [step, setStep] = useState(0);
     const totalSteps = 4;
 
@@ -44,6 +54,7 @@ export const SeniorWelcome = ({ onComplete }: { onComplete: () => void }) => {
                                 src="/onboarding/video-wave.mp4"
                                 autoPlay
                                 loop
+                                muted={isMuted}
                                 playsInline
                                 className="w-full h-full object-cover"
                             />
@@ -62,6 +73,7 @@ export const SeniorWelcome = ({ onComplete }: { onComplete: () => void }) => {
                                 src="/onboarding/video-ship.mp4"
                                 autoPlay
                                 loop
+                                muted={isMuted}
                                 playsInline
                                 className="w-full h-full object-cover"
                             />
@@ -75,13 +87,14 @@ export const SeniorWelcome = ({ onComplete }: { onComplete: () => void }) => {
             case 3: // Unity
                 return (
                     <>
-                        <div className="w-full h-64 rounded-2xl overflow-hidden shadow-lg border-2 border-white bg-white mb-6">
+                        <div className="w-full h-64 rounded-2xl overflow-hidden shadow-lg border-2 border-white bg-blue-50 mb-6 aspect-ratio:auto relative">
                             <video
                                 src="/onboarding/video-unity.mp4"
                                 autoPlay
                                 loop
+                                muted={isMuted}
                                 playsInline
-                                className="w-full h-full object-cover"
+                                className="w-auto h-full object-cover"
                             />
                         </div>
                         <div>

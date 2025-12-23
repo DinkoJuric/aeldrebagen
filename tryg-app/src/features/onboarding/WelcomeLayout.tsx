@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Volume2, VolumeX, ChevronRight, Check } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { useTranslation } from 'react-i18next';
+import { useAudio } from './AudioContext';
 
 interface WelcomeLayoutProps {
     children: React.ReactNode;
@@ -24,7 +25,7 @@ export const WelcomeLayout: React.FC<WelcomeLayoutProps> = ({
     theme = 'warm'
 }) => {
     const { t } = useTranslation();
-    const [isMuted, setIsMuted] = useState(false);
+    const { isMuted, setIsMuted } = useAudio();
     const audioRef = useRef<HTMLAudioElement | null>(null);
 
     // Theme-based colors
@@ -107,7 +108,7 @@ export const WelcomeLayout: React.FC<WelcomeLayoutProps> = ({
                 <button
                     onClick={onNext}
                     className={cn(
-                        "flex items-center gap-2 px-8 py-4 rounded-full shadow-xl shadow-stone-200/50 transform transition-all active:scale-95",
+                        "flex items-center gap-2 px-4 py-2 rounded-full shadow-xl shadow-stone-200/50 transform transition-all active:scale-95",
                         colors.button
                     )}
                 >

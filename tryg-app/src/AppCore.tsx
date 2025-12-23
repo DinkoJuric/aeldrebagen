@@ -245,29 +245,29 @@ export default function TrygAppCore({
                     </div>
 
                     {/* Header - COMPACT - Moved to Relative to push content down */}
-                    <div className="relative h-10 z-50 flex justify-between items-center backdrop-blur-sm px-3 bg-white/5 dark:bg-white/10 shrink-0">
+                    <div className="relative h-10 z-50 flex justify-between items-center px-3 glass-panel border-b-0 rounded-none bg-transparent shadow-none shrink-0">
                         <button
                             onClick={() => setShowShare(true)}
-                            className="p-2 rounded-full hover:bg-white/50 transition-colors"
+                            className="p-2 rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
                             aria-label="Care Circle"
                         >
-                            <Users className="w-5 h-5 text-stone-900 dark:text-stone-100" />
+                            <Users className="w-5 h-5 theme-text" />
                         </button>
 
                         <button
                             onClick={() => setShowSettings(true)}
-                            className="p-2 rounded-full hover:bg-white/50 transition-colors"
+                            className="p-2 rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
                             aria-label={t('settings')}
                         >
-                            <Settings className="w-5 h-5 text-stone-900 dark:text-stone-100" />
+                            <Settings className="w-5 h-5 theme-text" />
                         </button>
 
                         <button
                             onClick={onSignOut}
-                            className="p-1.5 rounded-full hover:bg-white/50 transition-colors"
+                            className="p-1.5 rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
                             aria-label={t('sign_out')}
                         >
-                            <LogOut className="w-4 h-4 text-stone-900 dark:text-stone-100" />
+                            <LogOut className="w-4 h-4 theme-text" />
                         </button>
                     </div>
 
