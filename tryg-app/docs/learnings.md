@@ -635,6 +635,11 @@ equest.auth.token.email == 'admin@email.com' in irestore.rules.
 - **Action**: Refactored to use `ref.current.muted = state` inside a `useEffect`.
 - **Future**: For media playback state (play/pause/mute) on mobile, prefer direct DOM manipulation via refs over declarative props to ensure sync with browser autoplay policies.
 
+### Autoplay vs Dynamic Mute
+- **Problem**: Removing the `muted` attribute (even if `isMuted` becomes false) prevents Autoplay from starting on iOS, resulting in a frozen still image.
+- **Action**: Always render with `muted` attribute to satisfy the browser policy, then un-mute via JS (`ref.current.muted = false`). Added `ref.current.play()` to force playback if initial load was blocked.
+- **Future**: `<video autoPlay>` must ALWAYS have `muted` and `playsInline` attributes statically present in the JSX.
+
 ### PWA Updates & Caching
 - **Observation**: Significant changes to assets or manifest often require iOS users to re-save to Home Screen if the service worker update strategy isn't aggressive (`clientsClaim: true`, `skipWaiting: true`).
 - **Action**: Confirmed fix by reinstalling PWA.

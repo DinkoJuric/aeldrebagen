@@ -35,6 +35,7 @@ const RelativeWelcomeContent = ({ onComplete }: { onComplete: () => void }) => {
     useEffect(() => {
         if (videoRef.current) {
             videoRef.current.muted = isMuted;
+            videoRef.current.play().catch(e => console.log('Playback error:', e));
         }
     }, [isMuted, step]);
 
@@ -73,7 +74,7 @@ const RelativeWelcomeContent = ({ onComplete }: { onComplete: () => void }) => {
                                 src={resolvePath('onboarding/video-ship.mp4')}
                                 autoPlay
                                 loop
-                                muted={isMuted}
+                                muted
                                 playsInline
                                 className="w-full h-full object-cover"
                             />
@@ -93,7 +94,7 @@ const RelativeWelcomeContent = ({ onComplete }: { onComplete: () => void }) => {
                                 src={resolvePath('onboarding/video-unity.mp4')}
                                 autoPlay
                                 loop
-                                muted={isMuted}
+                                muted
                                 playsInline
                                 className="w-full h-full object-cover"
                             />

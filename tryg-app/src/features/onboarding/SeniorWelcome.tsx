@@ -36,6 +36,8 @@ const SeniorWelcomeContent = ({ onComplete }: { onComplete: () => void }) => {
     useEffect(() => {
         if (videoRef.current) {
             videoRef.current.muted = isMuted;
+            // Force play ensures that even if unmuting paused it (or autoplay failed), we try again
+            videoRef.current.play().catch(e => console.log('Playback error:', e));
         }
     }, [isMuted, step]);
 
@@ -63,7 +65,7 @@ const SeniorWelcomeContent = ({ onComplete }: { onComplete: () => void }) => {
                                 src={resolvePath('onboarding/video-wave.mp4')}
                                 autoPlay
                                 loop
-                                muted={isMuted}
+                                muted
                                 playsInline
                                 className="w-full h-full object-cover"
                             />
@@ -83,7 +85,7 @@ const SeniorWelcomeContent = ({ onComplete }: { onComplete: () => void }) => {
                                 src={resolvePath('onboarding/video-ship.mp4')}
                                 autoPlay
                                 loop
-                                muted={isMuted}
+                                muted
                                 playsInline
                                 className="w-full h-full object-cover"
                             />
@@ -103,7 +105,7 @@ const SeniorWelcomeContent = ({ onComplete }: { onComplete: () => void }) => {
                                 src={resolvePath('onboarding/video-unity.mp4')}
                                 autoPlay
                                 loop
-                                muted={isMuted}
+                                muted
                                 playsInline
                                 className="w-auto h-full object-cover"
                             />
