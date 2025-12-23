@@ -6,6 +6,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import { Sun, Moon, SunMoon, Globe, Shield, LogOut, Download, Trash2, ChevronRight } from 'lucide-react';
 import { User } from 'firebase/auth';
 import { deleteUser, reauthenticateWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { resolvePath } from '../utils/assetUtils';
 
 interface SettingsModalProps {
     user: User | null;
@@ -174,7 +175,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                             className="p-2 hover:scale-110 transition-transform animate-pulse-slow"
                             title="Secret Onboarding"
                         >
-                            <img src="/unicorn_static_wave.png" alt="Secret" className="w-40 h-40 drop-shadow-lg" />
+                            <img src={resolvePath('unicorn_static_wave.png')} alt="Secret" className="w-40 h-40 drop-shadow-lg" />
                         </button>
                     </div>
                 </div>

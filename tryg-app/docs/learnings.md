@@ -634,3 +634,8 @@ equest.auth.token.email == 'admin@email.com' in irestore.rules.
 - **Problem**: Toggling `muted` prop on `<video>` elements was unreliable in iOS PWA (UI showed unmuted, video remained silent).
 - **Action**: Refactored to use `ref.current.muted = state` inside a `useEffect`.
 - **Future**: For media playback state (play/pause/mute) on mobile, prefer direct DOM manipulation via refs over declarative props to ensure sync with browser autoplay policies.
+
+### PWA Updates & Caching
+- **Observation**: Significant changes to assets or manifest often require iOS users to re-save to Home Screen if the service worker update strategy isn't aggressive (`clientsClaim: true`, `skipWaiting: true`).
+- **Action**: Confirmed fix by reinstalling PWA.
+- **Future**: When shipping critical PWA fixes, assume users might need to clear cache or reinstall unless an explicit "New Version Available" prompt (Toast) is implemented to trigger SW updates.
