@@ -607,3 +607,10 @@ equest.auth.token.email == 'admin@email.com' in irestore.rules.
 - **Root Cause**: A "Math Error" in the CSS hierarchy. `AppCore.tsx` had a Global Header + Content Area + Global Footer. The Content Area (Onboarding) was set to `h-[100dvh]`. This caused the total height to be `100dvh + 40px (header) + 80px (footer)`, resulting in ~115% vertical overflow.
 - **Action**: Refactored the parent container to `flex flex-col`. Set the Header/Footer to `shrink-0` and the Content Area to `flex-1` with `h-full`.
 - **Future**: Never use `100dvh` for a component that will be nested alongside siblings. Use `h-full` and let a Flexbox parent handle the "squeeze". Ensure the middle container has `min-h-0` to allow its children to scroll internally if they exceed the squeezed height.
+
+### Mixed-Orientation Media in Fixed Containers
+- **Problem**: Portrait videos (9:16) appearing letterboxed or "constrained" inside 16:9-style containers.
+- **Root Cause**: Fixed `h-64` or `aspect-video` on containers forced the video to fit width-first, adding black bars.
+- **Action**: Implemented a flexible layout (`w-auto h-full`) for the video element and a `white` background to match the app's hygge aesthetic, effectively hiding the aspect ratio mismatch.
+- **Discovery**: Explicit `aspect-[9/16]` works great for layout but can cause visual "jumps" if the container background doesn't match the card. For now, manual unconstraining provides the cleanest look.
+- **Future**: Standardize on a `MediaContainer` component that adapts to the asset's aspect ratio or uses `object-cover` within a consistent card shape.

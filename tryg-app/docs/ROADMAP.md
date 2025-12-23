@@ -13,6 +13,11 @@ This document tracks future enhancements, technical ideations, and non-critical 
 ---
 
 ## 🟢 High Priority (Next Sprint)
+### 1. Onboarding Media Refinement (Portrait Aspect Ratio) 🎥 ⭐ HIGH PRIORITY
+- **Goal**: Ensure the "Unity" video asset in the onboarding flow renders in a proper portrait container without manual layout overrides.
+- **Context**: Currently using a simplified manual layout after the initial `aspect-[9/16]` attempt was deferred.
+- **Estimated Effort**: 3h.
+
 ### 2. Multi-Family Relational Schema 🌲 ⭐ HIGH PRIORITY
 - **Goal**: Replace "Character Slots" with a fully dynamic `partnerId` and `parentIds` system.
 - **Value**: Critical for extending testing to 2-3 separate families and supporting complex hierarchies.

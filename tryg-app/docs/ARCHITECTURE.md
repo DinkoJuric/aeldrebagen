@@ -159,6 +159,7 @@ tryg-app/
 ✅ **State Management Refactor**: COMPLETED. `CareCircleContext` is the central state hub.
 ✅ **Localization Audit**: COMPLETED. 100% translation coverage.
 ✅ **AmbientTab Unification**: COMPLETED. (Phase 8) `DailyTab` + `PeaceOfMindTab` merged into `AmbientTab`.
+✅ **Onboarding Audio Sync**: COMPLETED. Global `isMuted` state via `AudioContext`.
 
 ---
 

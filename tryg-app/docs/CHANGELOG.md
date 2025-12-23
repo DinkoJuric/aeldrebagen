@@ -1,8 +1,15 @@
-# Tryg App Changelog
 
-All notable changes to this project will be documented in this file.
+### [Unreleased] - 2025-12-23
 
+**Onboarding Audio Sync & UI Polish**
+- **Global Audio Context**: Implemented `AudioContext` to synchronize the volume toggle across the entire welcome flow. Muting in the layout now correctly mutes all underlying videos.
+- **Header Refinement**: Switched global header to `glass-panel` utility. Fixed icon visibility in light mode by increasing hover contrast (`black/10`) and using `theme-text`.
+- **Button Sizing**: Reduced "Næste" button padding to ensure balanced proportions on mobile.
 
+**Pending Refinements**
+- **Unity Video Aspect Ratio**: Portrait unconstraining implemented manually; full refactor to a dynamic `MediaContainer` component is planned for the next phase.
+
+---
 
 ### 🔧 Security, Stability & UI Polish (2025-12-22)
 

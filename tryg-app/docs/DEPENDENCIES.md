@@ -139,9 +139,10 @@ graph TD
 ### Onboarding Feature (Welcome Flow)
 | Component | Uses | Used By |
 |-----------|------|---------|
-| `WelcomeLayout.tsx` | framer-motion | AppCore |
-| `SeniorWelcome.tsx` | useTranslation, ui/Button | WelcomeLayout |
-| `RelativeWelcome.tsx` | useTranslation, ui/Button | WelcomeLayout |
+| `WelcomeLayout.tsx` | framer-motion, AudioContext | AppCore |
+| `AudioContext.tsx` | React Context | WelcomeLayout, SeniorWelcome, RelativeWelcome |
+| `SeniorWelcome.tsx` | useTranslation, ui/Button, useAudio | WelcomeLayout |
+| `RelativeWelcome.tsx` | useTranslation, ui/Button, useAudio | WelcomeLayout |
 
 **Dependencies**: framer-motion, react-i18next. **Self-contained**: ✅ Yes
 
