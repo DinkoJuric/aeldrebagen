@@ -629,3 +629,8 @@ equest.auth.token.email == 'admin@email.com' in irestore.rules.
 - **Problem**: Onboarding videos didn't load offline.
 - **Action**: Added `mp4` to `workbox.globPatterns` in `vite.config.js`.
 - **Future**: Explicitly verify that large media assets needed for core flows (like onboarding) are included in the SW cache.
+
+### Mobile Video Mute Stability
+- **Problem**: Toggling `muted` prop on `<video>` elements was unreliable in iOS PWA (UI showed unmuted, video remained silent).
+- **Action**: Refactored to use `ref.current.muted = state` inside a `useEffect`.
+- **Future**: For media playback state (play/pause/mute) on mobile, prefer direct DOM manipulation via refs over declarative props to ensure sync with browser autoplay policies.

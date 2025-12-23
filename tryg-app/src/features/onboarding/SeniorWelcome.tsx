@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { WelcomeLayout } from './WelcomeLayout';
 import { motion } from 'framer-motion';
@@ -32,6 +32,13 @@ const SeniorWelcomeContent = ({ onComplete }: { onComplete: () => void }) => {
         if (step > 0) setStep(step - 1);
     };
 
+    const videoRef = useRef<HTMLVideoElement>(null);
+    useEffect(() => {
+        if (videoRef.current) {
+            videoRef.current.muted = isMuted;
+        }
+    }, [isMuted, step]);
+
     const renderContent = () => {
         switch (step) {
             case 0: // Porch Light
@@ -52,6 +59,7 @@ const SeniorWelcomeContent = ({ onComplete }: { onComplete: () => void }) => {
                     <>
                         <div className="w-full h-64 rounded-2xl overflow-hidden shadow-lg border-2 border-white bg-white mb-6">
                             <video
+                                ref={videoRef}
                                 src={resolvePath('onboarding/video-wave.mp4')}
                                 autoPlay
                                 loop
@@ -71,6 +79,7 @@ const SeniorWelcomeContent = ({ onComplete }: { onComplete: () => void }) => {
                     <>
                         <div className="w-full h-64 rounded-2xl overflow-hidden shadow-lg border-2 border-white bg-blue-50 mb-6">
                             <video
+                                ref={videoRef}
                                 src={resolvePath('onboarding/video-ship.mp4')}
                                 autoPlay
                                 loop
@@ -90,6 +99,7 @@ const SeniorWelcomeContent = ({ onComplete }: { onComplete: () => void }) => {
                     <>
                         <div className="w-full h-64 rounded-2xl overflow-hidden shadow-lg border-2 border-white bg-blue-50 mb-6 aspect-ratio:auto relative">
                             <video
+                                ref={videoRef}
                                 src={resolvePath('onboarding/video-unity.mp4')}
                                 autoPlay
                                 loop
