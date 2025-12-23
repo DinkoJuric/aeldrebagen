@@ -619,3 +619,13 @@ equest.auth.token.email == 'admin@email.com' in irestore.rules.
 - **Problem**: Build failed because `key={member.userId}` was used, but `userId` is optional in `Member` type.
 - **Action**: Used explicit fallback `key={member.userId || member.docId}`.
 - **Future**: When using a type with optional IDs as a React key, always provide a stable fallback (like `docId` or index) to satisfy TypeScript and ensure rendering stability.
+
+### PWA Assets in Subdirectories
+- **Problem**: Images and videos failed to load on iOS/PWA when deployed to GitHub Pages (subdirectory `/aeldrebagen/`).
+- **Action**: Created `resolvePath()` utility using `import.meta.env.BASE_URL` to prepend the correct base path dynamically.
+- **Future**: Never use hardcoded absolute paths `/assets/...`. Always wrap in `resolvePath()` or import explicitly.
+
+### PWA Video Caching
+- **Problem**: Onboarding videos didn't load offline.
+- **Action**: Added `mp4` to `workbox.globPatterns` in `vite.config.js`.
+- **Future**: Explicitly verify that large media assets needed for core flows (like onboarding) are included in the SW cache.

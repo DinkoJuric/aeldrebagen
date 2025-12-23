@@ -44,7 +44,7 @@ export default defineConfig(({ mode }) => {
           ]
         },
         workbox: {
-          globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+          globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2,mp4}'],
           maximumFileSizeToCacheInBytes: 6000000, // 6MB to accommodate large unicorn assets
           runtimeCaching: [
             {

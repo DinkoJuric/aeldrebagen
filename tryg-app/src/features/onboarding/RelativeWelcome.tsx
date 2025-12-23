@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { resolvePath } from '../../utils/assetUtils';
 import { useTranslation } from 'react-i18next';
 import { WelcomeLayout } from './WelcomeLayout';
 import { AudioProvider, useAudio } from './AudioContext';
@@ -36,7 +37,7 @@ const RelativeWelcomeContent = ({ onComplete }: { onComplete: () => void }) => {
                 return (
                     <>
                         <div className="relative w-64 h-64 rounded-full overflow-hidden shadow-sky-200/50 shadow-2xl border-4 border-white bg-sky-50 flex items-center justify-center">
-                            <img src="/onboarding/captain-point.png" alt="Captain Point" className="w-[90%] h-[90%] object-contain" />
+                            <img src={resolvePath('onboarding/captain-point.png')} alt="Captain Point" className="w-[90%] h-[90%] object-contain" />
                         </div>
                         <div>
                             <h2 className="text-2xl font-bold text-sky-900 mb-3">{t('onboarding_relative_0_title')}</h2>
@@ -48,7 +49,7 @@ const RelativeWelcomeContent = ({ onComplete }: { onComplete: () => void }) => {
                 return (
                     <>
                         <div className="relative w-full h-64 rounded-2xl overflow-hidden shadow-lg border-2 border-white bg-white flex items-center justify-center p-4">
-                            <img src="/onboarding/family-connect.png" alt="Family Connection" className="w-full h-full object-contain" />
+                            <img src={resolvePath('onboarding/family-connect.png')} alt="Family Connection" className="w-full h-full object-contain" />
                         </div>
                         <div>
                             <h2 className="text-2xl font-bold text-sky-900 mb-3">{t('onboarding_relative_1_title')}</h2>
@@ -61,7 +62,7 @@ const RelativeWelcomeContent = ({ onComplete }: { onComplete: () => void }) => {
                     <>
                         <div className="w-full h-64 rounded-2xl overflow-hidden shadow-lg border-2 border-white bg-blue-50">
                             <video
-                                src="/onboarding/video-ship.mp4"
+                                src={resolvePath('onboarding/video-ship.mp4')}
                                 autoPlay
                                 loop
                                 muted={isMuted}
@@ -80,7 +81,7 @@ const RelativeWelcomeContent = ({ onComplete }: { onComplete: () => void }) => {
                     <>
                         <div className="w-full h-64 rounded-2xl overflow-hidden shadow-lg border-2 border-white bg-white">
                             <video
-                                src="/onboarding/video-unity.mp4"
+                                src={resolvePath('onboarding/video-unity.mp4')}
                                 autoPlay
                                 loop
                                 muted={isMuted}

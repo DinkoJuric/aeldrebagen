@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { WelcomeLayout } from './WelcomeLayout';
 import { motion } from 'framer-motion';
+import { resolvePath } from '../../utils/assetUtils';
 import { AudioProvider, useAudio } from './AudioContext';
 
 
@@ -37,7 +38,7 @@ const SeniorWelcomeContent = ({ onComplete }: { onComplete: () => void }) => {
                 return (
                     <>
                         <motion.div className="relative w-64 h-64 rounded-full overflow-hidden shadow-orange-200/50 shadow-2xl border-4 border-white mb-6">
-                            <img src="/onboarding/porch-light.png" alt="Porch Light" className="w-full h-full object-cover" />
+                            <img src={resolvePath('onboarding/porch-light.png')} alt="Porch Light" className="w-full h-full object-cover" />
                             <div className="absolute inset-0 bg-orange-500/10 animate-pulse" />
                         </motion.div>
                         <div>
@@ -51,7 +52,7 @@ const SeniorWelcomeContent = ({ onComplete }: { onComplete: () => void }) => {
                     <>
                         <div className="w-full h-64 rounded-2xl overflow-hidden shadow-lg border-2 border-white bg-white mb-6">
                             <video
-                                src="/onboarding/video-wave.mp4"
+                                src={resolvePath('onboarding/video-wave.mp4')}
                                 autoPlay
                                 loop
                                 muted={isMuted}
@@ -70,7 +71,7 @@ const SeniorWelcomeContent = ({ onComplete }: { onComplete: () => void }) => {
                     <>
                         <div className="w-full h-64 rounded-2xl overflow-hidden shadow-lg border-2 border-white bg-blue-50 mb-6">
                             <video
-                                src="/onboarding/video-ship.mp4"
+                                src={resolvePath('onboarding/video-ship.mp4')}
                                 autoPlay
                                 loop
                                 muted={isMuted}
@@ -89,7 +90,7 @@ const SeniorWelcomeContent = ({ onComplete }: { onComplete: () => void }) => {
                     <>
                         <div className="w-full h-64 rounded-2xl overflow-hidden shadow-lg border-2 border-white bg-blue-50 mb-6 aspect-ratio:auto relative">
                             <video
-                                src="/onboarding/video-unity.mp4"
+                                src={resolvePath('onboarding/video-unity.mp4')}
                                 autoPlay
                                 loop
                                 muted={isMuted}
