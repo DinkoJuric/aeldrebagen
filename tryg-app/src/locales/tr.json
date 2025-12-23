@@ -48,7 +48,7 @@
     "daily_briefing_meds_fine": "{{name}} tüm ilaçlarını aldı. Her şey güzel.",
     "daily_briefing_symptom_noted": "{{name}}, saat {{time}}'de {{symptom}} not etti ancak ilacını aldı.",
     "daily_briefing_symptom_warning": "{{name}} belirti kaydetti. İlaç: {{completed}}/{{total}} alındı.",
-    "daily_briefing_meds_missing": "{{name}} bugün {{count}} ilacı eksik.",
+    "daily_briefing_meds_missing": "{{name}} bugün {{count}} doz ilacını almadı.",
     "daily_briefing_checked_in": "{{name}} bugün giriş yaptı. Her şey yolunda görünüyor.",
     "daily_briefing_no_activity": "{{name}} herhalde hala dinleniyor – henüz aktivite yok.",
     "streak_msg_7": "🏆 Üst üste {{count}}. gün tüm ilaçlar alındı!",

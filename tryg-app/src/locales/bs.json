@@ -48,7 +48,7 @@
     "daily_briefing_meds_fine": "{{name}} je uzela sve lijekove. Sve je dobro.",
     "daily_briefing_symptom_noted": "{{name}} je zabilježila {{symptom}} u {{time}}, ali je uzela lijek.",
     "daily_briefing_symptom_warning": "{{name}} je zabilježila simptome. Lijekovi: {{completed}}/{{total}} uzeto.",
-    "daily_briefing_meds_missing": "{{name}} nedostaje {{count}} lijekova danas.",
+    "daily_briefing_meds_missing": "{{name}} nije uzeo/la {{count}} doza lijekova.",
     "daily_briefing_checked_in": "{{name}} se prijavila danas. Sve izgleda u redu.",
     "daily_briefing_no_activity": "{{name}} vjerovatno još odmara – nema aktivnosti za sada.",
     "streak_msg_7": "🏆 {{count}}. dan zaredom da su svi lijekovi uzeti!",

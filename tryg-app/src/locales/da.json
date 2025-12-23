@@ -49,7 +49,7 @@
     "daily_briefing_meds_fine": "{{name}} har taget al medicin. Alt er godt.",
     "daily_briefing_symptom_noted": "{{name}} har noteret {{symptom}} kl. {{time}}, men har taget sin medicin.",
     "daily_briefing_symptom_warning": "{{name}} har logget symptomer. Medicin: {{completed}}/{{total}} taget.",
-    "daily_briefing_meds_missing": "{{name}} mangler {{count}} mediciner i dag.",
+    "daily_briefing_meds_missing": "{{name}} mangler {{count}} doser medicin i dag.",
     "daily_briefing_checked_in": "{{name}} har tjekket ind i dag. Alt ser fint ud.",
     "daily_briefing_no_activity": "{{name}} hviler nok stadig – ingen aktivitet endnu.",
     "streak_msg_7": "🏆 {{count}}. dag i træk med alt medicin taget!",
