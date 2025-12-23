@@ -32,12 +32,32 @@ const RelativeWelcomeContent = ({ onComplete }: { onComplete: () => void }) => {
     };
 
     const videoRef = useRef<HTMLVideoElement>(null);
+
+    // Effect 1: Handle Lifecycle & Autoplay (Run only when step changes)
+    useEffect(() => {
+        if (videoRef.current) {
+            // iOS Critical: Always reset to muted before attempting autoplay
+            videoRef.current.muted = isMuted;
+
+            const playPromise = videoRef.current.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.log("Autoplay prevented:", error);
+                    if (!videoRef.current!.muted) {
+                        videoRef.current!.muted = true;
+                        videoRef.current!.play().catch(e => console.error("Retry failed", e));
+                    }
+                });
+            }
+        }
+    }, [step]);
+
+    // Effect 2: Handle Audio Toggle (User Interaction)
     useEffect(() => {
         if (videoRef.current) {
             videoRef.current.muted = isMuted;
-            videoRef.current.play().catch(e => console.log('Playback error:', e));
         }
-    }, [isMuted, step]);
+    }, [isMuted]);
 
     const renderContent = () => {
         switch (step) {

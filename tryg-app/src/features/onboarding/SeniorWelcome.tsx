@@ -33,13 +33,34 @@ const SeniorWelcomeContent = ({ onComplete }: { onComplete: () => void }) => {
     };
 
     const videoRef = useRef<HTMLVideoElement>(null);
+
+    // Effect 1: Handle Lifecycle & Autoplay (Run only when step changes)
+    useEffect(() => {
+        if (videoRef.current) {
+            // iOS Critical: Always reset to muted before attempting autoplay
+            // This ensures the "clean slate" the OS expects
+            videoRef.current.muted = isMuted;
+
+            const playPromise = videoRef.current.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.log("Autoplay prevented:", error);
+                    // Critical fallback: Ensure it's muted and try again if it wasn't
+                    if (!videoRef.current!.muted) {
+                        videoRef.current!.muted = true;
+                        videoRef.current!.play().catch(e => console.error("Retry failed", e));
+                    }
+                });
+            }
+        }
+    }, [step]); // Intentionally removed isMuted dependency
+
+    // Effect 2: Handle Audio Toggle (User Interaction)
     useEffect(() => {
         if (videoRef.current) {
             videoRef.current.muted = isMuted;
-            // Force play ensures that even if unmuting paused it (or autoplay failed), we try again
-            videoRef.current.play().catch(e => console.log('Playback error:', e));
         }
-    }, [isMuted, step]);
+    }, [isMuted]);
 
     const renderContent = () => {
         switch (step) {
