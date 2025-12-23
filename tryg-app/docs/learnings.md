@@ -614,3 +614,8 @@ equest.auth.token.email == 'admin@email.com' in irestore.rules.
 - **Action**: Implemented a flexible layout (`w-auto h-full`) for the video element and a `white` background to match the app's hygge aesthetic, effectively hiding the aspect ratio mismatch.
 - **Discovery**: Explicit `aspect-[9/16]` works great for layout but can cause visual "jumps" if the container background doesn't match the card. For now, manual unconstraining provides the cleanest look.
 - **Future**: Standardize on a `MediaContainer` component that adapts to the asset's aspect ratio or uses `object-cover` within a consistent card shape.
+
+### React Keys with Optional IDs
+- **Problem**: Build failed because `key={member.userId}` was used, but `userId` is optional in `Member` type.
+- **Action**: Used explicit fallback `key={member.userId || member.docId}`.
+- **Future**: When using a type with optional IDs as a React key, always provide a stable fallback (like `docId` or index) to satisfy TypeScript and ensure rendering stability.

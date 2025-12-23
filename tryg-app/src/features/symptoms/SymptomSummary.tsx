@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from 'react';
-import { AlertCircle, ChevronDown, ChevronUp, TrendingUp, TrendingDown, Phone, Calendar } from 'lucide-react';
+import { useState, useMemo } from 'react';
+import { AlertCircle, ChevronDown, ChevronUp, Phone, Calendar } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { SymptomLog } from '../../types';
 

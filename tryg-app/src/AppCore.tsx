@@ -39,6 +39,7 @@ export interface AppCoreProps {
     onGetInviteCode: () => Promise<void>;
     members?: Member[];
     updateMember: (data: Partial<Member>) => Promise<void>;
+    updateAnyMember: (memberId: string, data: Partial<Member>) => Promise<void>;
 }
 
 export default function TrygAppCore({
@@ -49,7 +50,8 @@ export default function TrygAppCore({
     inviteCode,
     onGetInviteCode,
     members = [],
-    updateMember
+    updateMember,
+    updateAnyMember,
 }: AppCoreProps) {
     const { t, i18n } = useTranslation();
     // View is determined by user role - no toggle allowed
@@ -217,7 +219,8 @@ export default function TrygAppCore({
             dismissPing: dismissPing,
             lastCheckIn,
             recordCheckIn: handleCheckIn,
-            updateMember: updateMember
+            updateMember: updateMember,
+            updateAnyMember: updateAnyMember
         }}>
             <div className="flex justify-center items-center min-h-screen bg-stone-50 dark:bg-zinc-950 sm:bg-zinc-800 sm:p-4">
 

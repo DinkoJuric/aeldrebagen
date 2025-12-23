@@ -47,12 +47,15 @@ export const ShareModal: React.FC<ShareModalProps> = ({
     };
 
     // When clicking a member in constellation, open edit mode
+    // TODO: Connect this to FamilyTree when it supports onMemberClick
+    /*
     const handleMemberClick = (member: Member) => {
         console.log('📝 Editing member:', member);
         setEditingMember(member);
         setEditName(member.displayName || '');
         setEditRelationship(member.relationship || '');
     };
+    */
 
     // Save member updates directly to Firestore (POC - allows editing any member)
     const handleSaveMember = async () => {

@@ -1,11 +1,11 @@
 
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Member } from '../types';
+import type { Member } from '../../types';
 import { RelationsSelect } from '../../components/ui/RelationsSelect';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../../config/firebase';
-import { User, Check, X } from 'lucide-react';
+import { Check, X } from 'lucide-react';
 
 interface RelationshipMatrixProps {
     currentMember: Member;
@@ -30,7 +30,7 @@ export function RelationshipMatrix({ currentMember, allMembers, onComplete }: Re
     const [targetGender, setTargetGender] = useState<'male' | 'female' | 'other' | undefined>(undefined);
 
     // Reset target gender when index changes
-    React.useEffect(() => {
+    useEffect(() => {
         setTargetGender(undefined);
     }, [currentIndex]);
 
@@ -42,7 +42,7 @@ export function RelationshipMatrix({ currentMember, allMembers, onComplete }: Re
     const handleSelect = (relation: string) => {
         setRelations(prev => ({
             ...prev,
-            [currentTarget.userId]: relation
+            [currentTarget.userId || currentTarget.docId]: relation
         }));
     };
 
@@ -132,7 +132,7 @@ export function RelationshipMatrix({ currentMember, allMembers, onComplete }: Re
                     ) : (
                         <AnimatePresence mode="wait">
                             <motion.div
-                                key={currentTarget.userId}
+                                key={currentTarget.userId || currentTarget.docId}
                                 initial={{ x: 20, opacity: 0 }}
                                 animate={{ x: 0, opacity: 1 }}
                                 exit={{ x: -20, opacity: 0 }}
@@ -167,10 +167,9 @@ export function RelationshipMatrix({ currentMember, allMembers, onComplete }: Re
 
                                     <div className="max-w-xs mx-auto text-left">
                                         <RelationsSelect
-                                            value={relations[currentTarget.userId] || ''}
+                                            value={relations[currentTarget.userId || currentTarget.docId] || ''}
                                             onChange={handleSelect}
                                             seniorName={currentTarget.displayName}
-                                            userGender={undefined} // Disconnect own gender
                                             targetGender={targetGender} // Use manual target gender
                                         />
                                     </div>
@@ -185,7 +184,7 @@ export function RelationshipMatrix({ currentMember, allMembers, onComplete }: Re
                     <div className="p-4 border-t border-stone-100 bg-white flex justify-end shrink-0 safe-area-bottom">
                         <button
                             onClick={handleNext}
-                            disabled={!relations[currentTarget.userId] || loading}
+                            disabled={!relations[currentTarget.userId || currentTarget.docId] || loading}
                             className="px-8 py-3 bg-stone-900 text-white rounded-full font-bold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 hover:scale-105 active:scale-95 transition-all w-full sm:w-auto justify-center"
                         >
                             {loading ? 'Gemmer...' : isLast ? 'Færdig' : 'Næste'}

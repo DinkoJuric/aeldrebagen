@@ -2,9 +2,8 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Member } from '../../types';
-import { X, Edit2, UserCog, Save, Trash2 } from 'lucide-react'; // Added Trash2 just in case, but won't use yet
+import { X, Edit2, UserCog, Save } from 'lucide-react';
 import { RelationsSelect } from './RelationsSelect';
-import { cn } from '../../lib/utils';
 
 interface MemberActionMenuProps {
     member: Member | null;

@@ -1,6 +1,6 @@
 
-import React, { useEffect } from 'react';
-import { doc, setDoc, collection, getDocs, query, where } from 'firebase/firestore';
+import { useEffect } from 'react';
+import { doc, setDoc, collection, getDocs, query } from 'firebase/firestore';
 import { db } from '../config/firebase';
 
 export const FamilyDataFixer = () => {
@@ -12,25 +12,7 @@ export const FamilyDataFixer = () => {
             // Since IDs might be random or 'Louise', 'Juzu', we'll search by name or try direct IDs if known.
             // In POC, IDs are often just the name lowercase.
 
-            const updates = [
-                {
-                    id: 'test-louise', // Assuming ID from user description or standard POC pattern
-                    data: {
-                        displayName: 'Test-Louise',
-                        role: 'relative',
-                        relationship: 'Datter' // Daughter to Brad? User said: "make Louise a daughter to Brad"
-                        // Wait, "Louise a daughter to Brad and sister of Fatima"
-                    }
-                },
-                {
-                    id: 'juzu', // Hypothetical ID, will try to find logic
-                    data: {
-                        displayName: 'Juzu',
-                        role: 'relative',
-                        relationship: 'Barnebarn (Han)' // Son of Fatima -> Grandson of Brad
-                    }
-                }
-            ];
+
 
             // HEURISTIC: Search for members with these names
             const q = query(collection(db, 'careCircleMemberships'));

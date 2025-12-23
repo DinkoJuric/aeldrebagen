@@ -211,4 +211,5 @@ export interface CareCircleContextValue {
 
     // Member Management
     updateMember: (data: Partial<Member>) => Promise<void>;
+    updateAnyMember: (memberId: string, data: Partial<Member>) => Promise<void>;
 }

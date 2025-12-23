@@ -47,7 +47,8 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
         symptoms: symptomLogs = [],
         members = [], // Added members for FamilyTree
         seniorId,
-        updateMember: onMyUpdateMember
+
+        updateAnyMember
     } = useCareCircleContext();
 
     const [showStatusPicker, setShowStatusPicker] = useState(false);
@@ -191,7 +192,7 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
                         <FamilyTree
                             members={members}
                             seniorId={seniorId || ''}
-                            onUpdateMember={onMyUpdateMember}
+                            onUpdateMember={updateAnyMember}
                             currentUserId={currentUserId ?? ''}
                         />
                     )}
