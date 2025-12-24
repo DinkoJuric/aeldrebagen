@@ -13,10 +13,15 @@ This document tracks future enhancements, technical ideations, and non-critical 
 ---
 
 ## 🟢 High Priority (Next Sprint)
-### 1. Onboarding Media Refinement (Portrait Aspect Ratio) 🎥 ⭐ HIGH PRIORITY
 - **Goal**: Ensure the "Unity" video asset in the onboarding flow renders in a proper portrait container without manual layout overrides.
+- **Status**: ✅ Content verified, caching strategies confirmed.
 - **Context**: Currently using a simplified manual layout after the initial `aspect-[9/16]` attempt was deferred.
 - **Estimated Effort**: 3h.
+
+### 2. The AppCore Diet (Phase 1) 🏗️ ⭐ HIGH PRIORITY
+- **Goal**: Decompose `AppCore.tsx` by extracting UI layout and data fetching into distinct components.
+- **Value**: Improved maintainability and performance; unblocks further feature isolation.
+- **Estimated Effort**: 4h.
 
 ### 2. Multi-Family Relational Schema 🌲 ⭐ HIGH PRIORITY
 - **Goal**: Replace "Character Slots" with a fully dynamic `partnerId` and `parentIds` system.
@@ -51,9 +56,11 @@ This document tracks future enhancements, technical ideations, and non-critical 
 - **Goal**: Play a warm vocal greeting when the app is opened (e.g., "Godmorgen, Louise").
 - **Value**: Accessibility for visually impaired seniors.
 
-### 6. ~~Admin Tools (POC)~~ ✅ (Dec 2025)
-- **Goal**: Allow developers/admins to set up data without role restrictions.
-- **Status**: ✅ Completed. `dinko1991@hotmail.com` has global edit rights in Firestore.
+### 6. Funding Strategy Document ✅ (Dec 2025)
+- **Goal**: Create comprehensive strategy doc for foundations.
+- **Status**: ✅ Completed. `docs/FONDSANSOEGNING_STRATEGI.md` covers 4 strategic tracks and factsheet.
+
+### 5. Admin Tools (POC) ✅ (Dec 2025)
 
 ### 5. ~~Prop Drilling Refactor~~ ✅ (COMPLETED in Phase 2)
 

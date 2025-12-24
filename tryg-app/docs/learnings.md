@@ -638,6 +638,8 @@ equest.auth.token.email == 'admin@email.com' in irestore.rules.
 ### Autoplay vs Dynamic Mute
 - **Video Autoplay vs. State Sync**: On iOS, combining `video.play()` and `video.muted = state` in the same `useEffect` can be fatal. If the state updates (even to `true` on mount), the browser might interpret it as an "unmute attempt" before the `play()` promise resolves, blocking autoplay.
   - **Fix**: Decouple them. One `useEffect` for lifecycle (`[]` or `[step]`) that strictly sets `muted=true` then `play()`. A second `useEffect` strictly for `[isMuted]` that only toggles the property.
+- **iOS Silent Switch & HTML5 Video**: Unlike native apps (YouTube), web apps/PWAs often strictly respect the physical Ring/Silent switch on iPhone. If the switch is orange (Silent), `<video>` elements will play without sound even if the volume UI is up.
+  - **Action**: Always ask users to check this first when "Video plays but no audio".
 - **Problem**: Removing the `muted` attribute (even if `isMuted` becomes false) prevents Autoplay from starting on iOS, resulting in a frozen still image.
 - **Action**: Always render with `muted` attribute to satisfy the browser policy, then un-mute via JS (`ref.current.muted = false`). Added `ref.current.play()` to force playback if initial load was blocked.
 - **Future**: `<video autoPlay>` must ALWAYS have `muted` and `playsInline` attributes statically present in the JSX.
@@ -646,4 +648,7 @@ equest.auth.token.email == 'admin@email.com' in irestore.rules.
 - **Observation**: Significant changes to assets or manifest often require iOS users to re-save to Home Screen if the service worker update strategy isn't aggressive (`clientsClaim: true`, `skipWaiting: true`).
 - **Action**: Confirmed fix by reinstalling PWA.
 - **Future**: When shipping critical PWA fixes, assume users might need to clear cache or reinstall unless an explicit "New Version Available" prompt (Toast) is implemented to trigger SW updates.
-```
+### Architectural Misalignment (Mirror Protocol)
+- **Problem**: Proposed a "textbook" refactor to split `CareCircleContext` into multiple specialized contexts (Tasks, Symptoms, etc.).
+- **Action**: Realized this contradicts the "Mirror Protocol" (role symmetry) and "Unified Context" (Single Source of Truth) architecture which is central to Tryg's design.
+- **Future**: Prioritize domain-specific patterns (like Mirror Protocol) over generic "best practices" when refactoring. The "AppCore Diet" (Provider extraction) is the preferred middle-ground.

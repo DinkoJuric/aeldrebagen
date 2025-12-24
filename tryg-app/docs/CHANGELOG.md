@@ -1,3 +1,13 @@
+### [Unreleased] - 2025-12-24
+
+**Funding & Strategy**
+- **Strategic Roadmap**: Created `docs/FONDSANSOEGNING_STRATEGI.md` (Danish).
+- **Expansion**: Added "Spor D" (Independence & Developmental Disabilities) and expanded the Fact Sheet with VIVE 2025 and Ældre Sagen data.
+- **Loneliness Pitch**: Integrated "Visiting Friend Scarcity" argument as a key differentiator for Tryg.
+
+**Architecture (Planning)**
+- **AppCore Diet**: Proposed Phase 1 decomposition plan (Extracting `PhoneFrame` and `CareCircleProvider`).
+- **Mirror Protocol**: Re-affirmed and protected the Unified Context pattern against proposed splitting.
 
 ### [Unreleased] - 2025-12-23
 
