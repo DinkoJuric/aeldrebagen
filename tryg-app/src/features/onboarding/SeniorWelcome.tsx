@@ -118,13 +118,14 @@ const SeniorWelcomeContent = ({ onComplete }: { onComplete: () => void }) => {
                         <div>
                             <h2 className="text-2xl font-bold text-amber-900 mb-3">{t('onboarding_senior_2_title')}</h2>
                             <p className="text-lg text-amber-800/80 leading-relaxed">{t('onboarding_senior_2_body')}</p>
+
                         </div>
                     </>
                 );
             case 3: // Unity
                 return (
                     <>
-                        <div className="w-full h-64 rounded-2xl overflow-hidden shadow-lg border-2 border-white bg-blue-50 mb-6 aspect-ratio:auto relative">
+                        <div className="w-full aspect-[9/16] rounded-2xl overflow-hidden shadow-lg border-2 border-white bg-white mb-6">
                             <video
                                 ref={videoRef}
                                 src={resolvePath('onboarding/video-unity.mp4')}
@@ -132,7 +133,7 @@ const SeniorWelcomeContent = ({ onComplete }: { onComplete: () => void }) => {
                                 loop
                                 muted={isMuted}
                                 playsInline
-                                className="w-auto h-full object-cover"
+                                className="w-full h-full object-cover"
                             />
                         </div>
                         <div>
