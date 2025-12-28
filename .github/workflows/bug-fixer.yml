@@ -21,7 +21,7 @@ jobs:
       - name: Invoke Jules
         # SECURITY: Only allow trusted users to trigger Jules
         if: ${{ contains(fromJSON('["DinkoJuric", "hwyx8p6rhb-beep"]'), github.event.issue.user.login) }}
-        uses: google-labs-code/jules-action@v1
+        uses: google-labs-code/jules-action@v1.0.0
         with:
           prompt: |
             Please diagnose and fix the following bug:
