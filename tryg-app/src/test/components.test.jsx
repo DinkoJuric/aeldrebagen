@@ -2,7 +2,7 @@
 // Tests for ProgressRing, InlineGatesIndicator, SeniorStatusCard
 
 import { describe, it, expect } from 'vitest'
-import { render } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 
 describe('ProgressRing Component', () => {
     it('can be imported without error', async () => {

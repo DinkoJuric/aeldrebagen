@@ -11,6 +11,21 @@ vi.mock('../config/firebase', () => ({
     storage: {}
 }))
 
+vi.mock('../contexts/CareCircleContext', () => ({
+    useCareCircleContext: () => ({
+        members: [
+            { userId: 'brad', displayName: 'Brad', role: 'senior' },
+            { userId: 'louise', displayName: 'Louise', role: 'relative' }
+        ],
+        seniorName: 'Brad',
+        currentUserId: 'louise',
+        memberStatuses: [
+            { docId: 'brad', displayName: 'Brad', status: 'good', role: 'senior' },
+            { docId: 'louise', displayName: 'Louise', status: 'home', role: 'relative' }
+        ]
+    })
+}));
+
 vi.mock('../features/helpExchange/useHelpExchangeMatch', () => ({
     useHelpExchangeMatch: () => ({
         topMatch: null,
@@ -58,7 +73,7 @@ describe('CoordinationTab Integration', () => {
 
         expect(container).toBeTruthy()
         // FamilyPresence should render with header
-        expect(screen.getByText(/Familien nu/i)).toBeTruthy()
+        expect(screen.getByText(/Familiens Overblik/i)).toBeTruthy()
     })
 
     it('shows status selector for user', async () => {
