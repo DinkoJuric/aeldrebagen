@@ -3,13 +3,18 @@ trigger: always_on
 description: Standards of Excellence
 ---
 
+---
+trigger: always_on
+description: Standards of Excellence
+---
+
 # Tryg Onboarding: Standards of Excellence
 
 Welcome to the Tryg project. To maintain the "Soulful & High-Fidelity" nature of this PWA, all agents **MUST** adhere to the following strict standards.
 
 ## 1. The Mirror Protocol 🪞
 Tryg is a two-sided app (Senior & Relative).
-- **Golden Rule**: Never implement a feature for one role without verifying how it affects the other.
+- **Golden Rule**: Never implement a feature for one role without verifying how it affects the other. (See .agent/rules/mirror-protocol.md for the specific "Senior vs. Relative" implementation checklist)
 - **Real-time Sync**: Actions in one view must reflect in the other in real-time (Firestore listeners).
 - **Simultaneous Testing**: Always keep two browser windows/tabs open: one for Senior, one for Relative.
 

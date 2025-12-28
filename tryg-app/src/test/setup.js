@@ -41,3 +41,18 @@ vi.mock('virtual:pwa-register/react', () => ({
         updateServiceWorker: () => Promise.resolve(),
     }),
 }));
+
+// Mock react-i18next
+vi.mock('react-i18next', () => ({
+    useTranslation: () => ({
+        t: (key) => key,
+        i18n: {
+            changeLanguage: () => new Promise(() => { }),
+            language: 'da',
+        },
+    }),
+    initReactI18next: {
+        type: '3rdParty',
+        init: () => { },
+    },
+}));

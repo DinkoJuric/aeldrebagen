@@ -2,7 +2,8 @@
 // Tests for ProgressRing, InlineGatesIndicator, SeniorStatusCard
 
 import { describe, it, expect } from 'vitest'
-import { render } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
+import type { Task } from '../types'
 
 describe('ProgressRing Component', () => {
     it('can be imported without error', async () => {
@@ -21,10 +22,10 @@ describe('ProgressRing Component', () => {
         const { ProgressRing } = await import('../features/tasks')
 
         const tasks = [
-            { id: 1, title: 'Morning Med', period: 'morgen', completed: true },
-            { id: 2, title: 'Lunch Med', period: 'eftermiddag', completed: false },
-            { id: 3, title: 'Evening Med', period: 'aften', completed: false }
-        ]
+            { id: '1', title: 'Morning Med', period: 'morgen', completed: true, time: '08:00' },
+            { id: '2', title: 'Lunch Med', period: 'eftermiddag', completed: false, time: '12:00' },
+            { id: '3', title: 'Evening Med', period: 'aften', completed: false, time: '18:00' }
+        ] as Task[]
 
         const { container } = render(<ProgressRing tasks={tasks} />)
         expect(container).toBeTruthy()
@@ -34,11 +35,11 @@ describe('ProgressRing Component', () => {
         const { ProgressRing } = await import('../features/tasks')
 
         const tasks = [
-            { id: 1, period: 'morgen', completed: true },
-            { id: 2, period: 'morgen', completed: true },
-            { id: 3, period: 'morgen', completed: false },
-            { id: 4, period: 'morgen', completed: false }
-        ]
+            { id: '1', period: 'morgen', completed: true, time: '08:00' },
+            { id: '2', period: 'morgen', completed: true, time: '08:00' },
+            { id: '3', period: 'morgen', completed: false, time: '08:00' },
+            { id: '4', period: 'morgen', completed: false, time: '08:00' }
+        ] as Task[]
 
         render(<ProgressRing tasks={tasks} />)
         // 2 of 4 = 50%
@@ -88,8 +89,8 @@ describe('StatusCard Component', () => {
         const { StatusCard } = await import('../features/familyPresence')
 
         const tasks = [
-            { id: 1, title: 'Med', period: 'morgen', completed: true }
-        ]
+            { id: '1', title: 'Med', period: 'morgen', completed: true, time: '09:00' }
+        ] as Task[]
 
         const { container } = render(
             <StatusCard

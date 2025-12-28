@@ -1,5 +1,10 @@
 ---
+trigger: manual
+---
+
+---
 trigger: always_on
+description: Protocol for Feature Development 
 ---
 
 # Contributing & Feature Protocol 🛡️
