@@ -14,7 +14,9 @@ interface MemberStatusRowProps {
     isCurrentUser?: boolean;
 }
 
-const MemberStatusRow: React.FC<MemberStatusRowProps> = ({ name, status, role, timestamp, isCurrentUser = false }) => {
+// 🚀 TURBO: Memoized MemberStatusRow to prevent re-renders when parent state changes.
+// This is a high-frequency component, so memoization provides a significant performance boost.
+const MemberStatusRow: React.FC<MemberStatusRowProps> = React.memo(({ name, status, role, timestamp, isCurrentUser = false }) => {
     const { t } = useTranslation();
     const avatarId = role === 'senior' ? 'senior' :
         name.toLowerCase().includes('louise') ? 'louise' :
@@ -91,7 +93,7 @@ const MemberStatusRow: React.FC<MemberStatusRowProps> = ({ name, status, role, t
             </div>
         </div>
     );
-};
+});
 
 interface FamilyPresenceProps {
     memberStatuses?: MemberStatus[];
