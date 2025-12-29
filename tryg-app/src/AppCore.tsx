@@ -13,8 +13,7 @@ import { PhotoUploadModal, PhotoViewerModal, PhotoNotificationBadge } from './fe
 import { ShareModal } from './components/ShareModal';
 import { useTasks } from './features/tasks';
 import { useSymptoms } from './features/symptoms';
-import { SeniorWelcome } from './features/onboarding/SeniorWelcome';
-import { RelativeWelcome } from './features/onboarding/RelativeWelcome';
+import { Onboarding, SeniorWelcome, RelativeWelcome } from './features/onboarding';
 import { X } from 'lucide-react';
 // import { useSettings } from './hooks/useSettings';
 import { useWeeklyQuestions } from './features/weeklyQuestion';
@@ -64,6 +63,11 @@ export default function TrygAppCore({
     const [showPhotoViewer, setShowPhotoViewer] = useState(false);
     const [showOnboarding, setShowOnboarding] = useState(false);
     const [showSecretScreen, setShowSecretScreen] = useState(false);
+
+    const handleStartOnboarding = () => {
+        setShowSettings(false);
+        setShowOnboarding(true);
+    };
 
     // 🇧🇦 JUZU EXCEPTION: Force Bosnian (Requested by User)
     useEffect(() => {
@@ -293,6 +297,7 @@ export default function TrygAppCore({
                             careCircle={careCircle}
                             onClose={() => setShowSettings(false)}
                             onSignOut={onSignOut}
+                            onStartOnboarding={handleStartOnboarding}
                         />
                     )}
 
@@ -327,11 +332,7 @@ export default function TrygAppCore({
                                     )}
 
                                     {showOnboarding ? (
-                                        isSenior ? (
-                                            <SeniorWelcome onComplete={handleOnboardingComplete} />
-                                        ) : (
-                                            <RelativeWelcome onComplete={handleOnboardingComplete} />
-                                        )
+                                        <Onboarding show={showOnboarding} onComplete={handleOnboardingComplete} />
                                     ) : (
                                         isSenior ? (
                                             <SeniorView />
@@ -361,11 +362,7 @@ export default function TrygAppCore({
                                         />
                                     )}
                                     {showOnboarding ? (
-                                        isSenior ? (
-                                            <SeniorWelcome onComplete={handleOnboardingComplete} />
-                                        ) : (
-                                            <RelativeWelcome onComplete={handleOnboardingComplete} />
-                                        )
+                                        <Onboarding show={showOnboarding} onComplete={handleOnboardingComplete} />
                                     ) : (
                                         isSenior ? (
                                             <SeniorView />

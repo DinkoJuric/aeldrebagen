@@ -3,7 +3,7 @@ import { Modal } from './ui/Modal';
 import { Button } from './ui/Button';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../contexts/ThemeContext';
-import { Sun, Moon, SunMoon, Globe, Shield, LogOut, Download, Trash2, ChevronRight } from 'lucide-react';
+import { Sun, Moon, SunMoon, Globe, Shield, LogOut, Download, Trash2, ChevronRight, BookOpen } from 'lucide-react';
 import { User } from 'firebase/auth';
 import { deleteUser, reauthenticateWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { resolvePath } from '../utils/assetUtils';
@@ -13,13 +13,15 @@ interface SettingsModalProps {
     careCircle: any;
     onClose: () => void;
     onSignOut: () => void;
+    onStartOnboarding: () => void;
 }
 
 export const SettingsModal: React.FC<SettingsModalProps> = ({
     user,
     careCircle,
     onClose,
-    onSignOut
+    onSignOut,
+    onStartOnboarding
 }) => {
     const { t, i18n } = useTranslation();
     const { mode, setMode } = useTheme();
@@ -236,6 +238,23 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                                 </button>
                             ))}
                         </div>
+                    </div>
+
+                    {/* Onboarding Button */}
+                    <div className="pt-4">
+                        <button
+                            onClick={onStartOnboarding}
+                            className="w-full flex items-center justify-between p-4 bg-stone-50 rounded-xl hover:bg-stone-100 transition-colors"
+                        >
+                            <div className="flex items-center gap-3">
+                                <BookOpen className="w-5 h-5 text-teal-600" />
+                                <div className="text-left">
+                                    <h4 className="font-bold text-stone-800">{t('onboarding_title', 'App Guide')}</h4>
+                                    <p className="text-xs text-stone-500">{t('onboarding_description', 'Se hvordan appen virker')}</p>
+                                </div>
+                            </div>
+                            <ChevronRight className="w-5 h-5 text-stone-400" />
+                        </button>
                     </div>
                 </section>
 
