@@ -126,6 +126,11 @@ tryg-app/
 │   │   │   ├── index.ts
 │   │   │   ├── CoffeeToggle.tsx
 │   │   │   └── CoffeeInviteCard.tsx
+│   │   ├── onboarding/          # App Guide & Feature Tour
+│   │   │   ├── index.ts
+│   │   │   ├── Onboarding.tsx
+│   │   │   ├── SeniorWelcome.tsx
+│   │   │   └── RelativeWelcome.tsx
 │   │   └── ... (thinkingOfYou, weeklyQuestion)
 │   │
 │   ├── components/          # Shared/Orchestration Components
@@ -160,6 +165,7 @@ tryg-app/
 ✅ **Localization Audit**: COMPLETED. 100% translation coverage.
 ✅ **AmbientTab Unification**: COMPLETED. (Phase 8) `DailyTab` + `PeaceOfMindTab` merged into `AmbientTab`.
 ✅ **Onboarding Audio Sync**: COMPLETED. Global `isMuted` state via `AudioContext`.
+✅ **Onboarding Feature**: COMPLETED. Role-based welcome guide accessible via Settings.
 
 ---
 
