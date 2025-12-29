@@ -42,9 +42,14 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 // Test user config
+if (!process.env.TEST_USER_PASSWORD) {
+    console.error('❌ Missing required environment variable: TEST_USER_PASSWORD');
+    process.exit(1);
+}
+
 const TEST_USER = {
     email: 'louise.relative@test.com',
-    password: 'Test1234!',
+    password: process.env.TEST_USER_PASSWORD,
     displayName: 'Fatima',
     role: 'relative'
 };
@@ -120,7 +125,6 @@ async function main() {
 
         console.log('\n✅✅✅ SUCCESS! Test user ready:');
         console.log('   Email:', TEST_USER.email);
-        console.log('   Password:', TEST_USER.password);
         console.log('   Circle:', circleId);
         console.log('\n👉 Login at http://localhost:5173 to see the RelativeView!');
 

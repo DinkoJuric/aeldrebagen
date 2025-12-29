@@ -133,18 +133,6 @@ git commit -m "Revert to pre-tabs version"
 
 ---
 
-## Test Credentials
-
-For automated testing and development:
-
-| Role | Name | Email | Password | Circle |
-|------|------|-------|----------|--------|
-| Relative | Fatima | `louise.relative@test.com` | `Test1234!` | 6C9Y3M |
-
-> **Note**: These credentials work on localhost and production. Use for testing RelativeView and cross-role sync scenarios.
-
----
-
 ## Color System
 
 | Element | Senior (teal) | Relative (indigo) | Neutral |
