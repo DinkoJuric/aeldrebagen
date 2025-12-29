@@ -1,6 +1,7 @@
 // Vitest setup file - runs before each test file
 import '@testing-library/jest-dom'
 import { vi } from 'vitest'
+import '../i18n'; // Initialize i18next
 
 // Mock AudioContext for sounds.js (doesn't exist in test environment)
 global.AudioContext = class AudioContext {
