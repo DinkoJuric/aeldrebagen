@@ -60,18 +60,23 @@ vi.mock('react-i18next', () => ({
 
 // Mock Firebase
 vi.mock('firebase/auth', () => ({
-    getAuth: vi.fn(),
+    getAuth: vi.fn(() => ({})),
     onAuthStateChanged: vi.fn((auth, callback) => {
         // Immediately invoke callback with a mock user
         callback({ uid: 'test-user' });
         return vi.fn(); // Return an unsubscribe function
     }),
+    GoogleAuthProvider: class { },
 }));
 
 vi.mock('firebase/firestore', () => ({
-    getFirestore: vi.fn(),
+    getFirestore: vi.fn(() => ({})),
     collection: vi.fn(),
     doc: vi.fn(),
     onSnapshot: vi.fn(() => vi.fn()), // Return an unsubscribe function
     enableMultiTabIndexedDbPersistence: vi.fn(() => Promise.resolve()),
+}));
+
+vi.mock('firebase/storage', () => ({
+    getStorage: vi.fn(() => ({})),
 }));

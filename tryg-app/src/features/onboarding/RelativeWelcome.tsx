@@ -63,6 +63,16 @@ const RelativeWelcomeContent = ({ onComplete }: { onComplete: () => void }) => {
         }
     }, [isMuted]);
 
+    // Handle mute toggle directly from the button click
+    const handleToggleMute = (newMuted: boolean) => {
+        if (videoRef.current) {
+            videoRef.current.muted = newMuted;
+            if (!newMuted && videoRef.current.paused) {
+                videoRef.current.play().catch(e => console.error("Play failed", e));
+            }
+        }
+    };
+
     const renderContent = () => {
         switch (step) {
             case 0: // Captain Point
@@ -141,6 +151,7 @@ const RelativeWelcomeContent = ({ onComplete }: { onComplete: () => void }) => {
             onNext={handleNext}
             onBack={handleBack}
             theme="cool"
+            onToggleMute={handleToggleMute}
         >
             {renderContent()}
         </WelcomeLayout>

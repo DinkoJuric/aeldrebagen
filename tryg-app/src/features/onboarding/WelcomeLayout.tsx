@@ -14,6 +14,7 @@ interface WelcomeLayoutProps {
     onSkip?: () => void;
     bgClass?: string;
     theme?: 'warm' | 'cool';
+    onToggleMute?: (isMuted: boolean) => void;
 }
 
 export const WelcomeLayout: React.FC<WelcomeLayoutProps> = ({
@@ -22,7 +23,8 @@ export const WelcomeLayout: React.FC<WelcomeLayoutProps> = ({
     totalSteps,
     onNext,
     onBack,
-    theme = 'warm'
+    theme = 'warm',
+    onToggleMute
 }) => {
     const { t } = useTranslation();
     const { isMuted, setIsMuted } = useAudio();
@@ -66,7 +68,12 @@ export const WelcomeLayout: React.FC<WelcomeLayoutProps> = ({
                 </div>
 
                 <button
-                    onClick={() => setIsMuted(!isMuted)}
+                    onClick={() => {
+                        const newMuted = !isMuted;
+                        // iOS/Android Critical: Must toggle mute directly in the click handler for playback to work
+                        if (onToggleMute) onToggleMute(newMuted);
+                        setIsMuted(newMuted);
+                    }}
                     className="p-2 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 text-stone-600 hover:bg-white/40 transition-colors"
                 >
                     {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
