@@ -244,16 +244,18 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     <div className="pt-4">
                         <button
                             onClick={onStartOnboarding}
-                            className="w-full flex items-center justify-between p-4 bg-stone-50 rounded-xl hover:bg-stone-100 transition-colors"
+                            className="w-full flex items-center justify-between p-4 bg-teal-50 border-2 border-teal-100 rounded-xl hover:bg-teal-100 hover:border-teal-200 transition-colors group"
                         >
                             <div className="flex items-center gap-3">
-                                <BookOpen className="w-5 h-5 text-teal-600" />
+                                <div className="p-2 bg-white rounded-full text-teal-600 shadow-sm group-hover:scale-110 transition-transform">
+                                    <BookOpen className="w-5 h-5" />
+                                </div>
                                 <div className="text-left">
-                                    <h4 className="font-bold text-stone-800">{t('onboarding_title', 'App Guide')}</h4>
-                                    <p className="text-xs text-stone-500">{t('onboarding_description', 'Se hvordan appen virker')}</p>
+                                    <h4 className="font-bold text-teal-900">{t('app_guide_button', 'App Guide')}</h4>
+                                    <p className="text-xs text-teal-700">{t('app_guide_desc', 'Se hvordan appen virker')}</p>
                                 </div>
                             </div>
-                            <ChevronRight className="w-5 h-5 text-stone-400" />
+                            <ChevronRight className="w-5 h-5 text-teal-400 group-hover:text-teal-600 group-hover:translate-x-1 transition-all" />
                         </button>
                     </div>
                 </section>
