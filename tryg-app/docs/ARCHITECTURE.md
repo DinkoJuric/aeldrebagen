@@ -17,6 +17,7 @@
 10. [Security Model: Admin Access](#security-model-admin-access-poc)
 11. [Family Tree: POC Slot System](#family-tree-poc-identity--slot-system)
 12. [Related Documentation](#related-documentation)
+13. [Development Protocols (Mirror Protocol)](#13-development-protocols-mirror-protocol)
 
 
 ## System Overview: The Mirror Architecture
@@ -545,3 +546,89 @@ The system maps existing `careCircleMemberships` to specific "Archetype Slots" b
 
 > [!NOTE]
 > **Agents**: Do not refactor this to a fully dynamic relation model without explicit user confirmation. This structure is intentionally kept simple to avoid premature schema expansion.
+
+---
+
+## 13. Development Protocols (Mirror Protocol)
+
+> **"Symmetry by Design"**
+> To ensure features work seamlessly for both Seniors and Relatives, follow this rigorous protocol.
+
+### The Mirror Protocol 🪞
+
+Before writing code, define the experience for **both roles**. If a feature seems "one-sided", explicitly challenge that assumption.
+
+| Feature Type | Senior View Question | Relative View Question |
+|--------------|----------------------|------------------------|
+| **Data Input** | "If Senior logs this, how does Relative see it?" | "If Relative adds this, how is Senior notified?" |
+| **Status/State** | "Does this change my status for the family?" | "Does this update my dashboard view of the Senior?" |
+| **Configuration**| "Can Senior change this?" | "Can Relative remotely configure this?" |
+
+**🛑 STOP & CHECK:** Never implement a UI element in `SeniorView` without immediately asking: *"Does `RelativeView` need a read-only version, a control for this, or a notification?"*
+
+### Implementation Checklist ✅
+
+Use this template in `task.md` or `implementation_plan.md` for every feature:
+
+```markdown
+- [ ] **Core Logic (Shared)**
+    - [ ] Create/Update Firestore Hook (`useX`)
+    - [ ] Verify security rules for both roles
+
+- [ ] **Senior View (The Actor)**
+    - [ ] UI Implementation (Large touch targets)
+    - [ ] Feedback (Toast/Sound)
+
+- [ ] **Relative View (The Observer/Helper)**
+    - [ ] UI Implementation (Dashboard/Status)
+    - [ ] Remote Control (if applicable)
+
+- [ ] **Verification (The Switch)**
+    - [ ] Test: Action in Senior View → Visible in Relative View?
+    - [ ] Test: Action in Relative View → Visible in Senior View?
+```
+
+### Shared Component Architecture 🧩
+
+Avoid duplicating UI logic. If a card or widget appears in both views (even with slight differences), abstract it.
+
+- **Bad**: `SeniorStatusCard.jsx` and `RelativeStatusCard.jsx` (duplicates logic)
+- **Good**: `StatusCard.jsx` with `mode="senior" | "relative"` prop.
+- **Good**: `Shared/` folder for common widgets.
+
+### Development Habits 🛠️
+
+1.  **Simultaneous Browsers**: Always keep two browser windows open during dev:
+    - Window 1: `userProfile.role = 'senior'`
+    - Window 2: `userProfile.role = 'relative'`
+    - *Watch real-time sync happen as you code.*
+
+2.  **Grep Audit**: When changing a prop or constant, `grep` for it across the *entire* `src` folder, not just the file you're working on.
+
+### TypeScript Standard 📘
+
+**Strict Typing for Logic**
+- writes to `src/features/*/use*.ts` hooks MUST be in TypeScript.
+- Define interfaces for all data models (e.g., `Task`, `SymptomLog`).
+- Avoid `any` types. Use `interface` or `type`.
+
+**Gradual Adoption for UI**
+- `.jsx` is still permitted for UI components.
+- Converting UI to `.tsx` is encouraged but not required for quick fixes.
+
+### Component Philosophy 🧱
+
+**"Smart vs Dumb" Components** — Strict separation of concerns.
+
+**Dumb Components (Presentational)**
+- **Purpose**: Render UI based on props, emit events.
+- **Rules**: ❌ No hooks (except `useState` for UI). ❌ No context access. ❌ No data fetching.
+- **Examples**: `Button.tsx`, `Modal.tsx`.
+
+**Smart Components (Containers)**
+- **Purpose**: Connect to context/hooks, orchestrate data.
+- **Rules**: ✅ Use `useCareCircleContext()`. ✅ Use Firebase hooks.
+- **Examples**: `AppCore.tsx`, `CoordinationTab.tsx`.
+
+> **The Golden Rule**: A Button should never know where its data comes from. A Container should never know how to render a button.
+

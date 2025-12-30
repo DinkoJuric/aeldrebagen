@@ -55,7 +55,7 @@ Open your `mcp.json` and add this configuration:
       "command": "npx",
       "args": ["-y", "@anthropic/perplexity-mcp@latest"],
       "env": {
-        "PERPLEXITY_API_KEY": "your-key-here"
+        "PERPLEXITY_API_KEY": "<your-perplexity-api-key>"
       }
     },
     "chrome-devtools": {
