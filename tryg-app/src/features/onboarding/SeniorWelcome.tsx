@@ -18,7 +18,7 @@ const SeniorWelcomeContent = ({ onComplete }: { onComplete: () => void }) => {
     const { t } = useTranslation();
     const { isMuted } = useAudio();
     const [step, setStep] = useState(0);
-    const totalSteps = 4;
+    const totalSteps = 6;
 
     const handleNext = () => {
         if (step < totalSteps - 1) {
@@ -111,7 +111,31 @@ const SeniorWelcomeContent = ({ onComplete }: { onComplete: () => void }) => {
                         </div>
                     </>
                 );
-            case 2: // The Ship
+            case 2: // HelpExchange (New)
+                return (
+                    <>
+                        <div className="relative w-full h-64 rounded-2xl overflow-hidden shadow-lg border-2 border-white bg-white flex items-center justify-center p-4 mb-6">
+                            <img src={resolvePath('onboarding/help-exchange.png')} alt="Help Exchange" className="w-full h-full object-contain" />
+                        </div>
+                        <div>
+                            <h2 className="text-2xl font-bold text-amber-900 mb-3">{t('onboarding_tutorial_helpexchange_title')}</h2>
+                            <p className="text-lg text-amber-800/80 leading-relaxed">{t('onboarding_tutorial_helpexchange_body')}</p>
+                        </div>
+                    </>
+                );
+            case 3: // Match Celebration (New)
+                return (
+                    <>
+                        <div className="relative w-full h-64 rounded-2xl overflow-hidden shadow-lg border-2 border-white bg-white flex items-center justify-center p-4 mb-6">
+                            <img src={resolvePath('onboarding/match-celebration.png')} alt="Match Celebration" className="w-full h-full object-contain" />
+                        </div>
+                        <div>
+                            <h2 className="text-2xl font-bold text-amber-900 mb-3">{t('onboarding_tutorial_match_title')}</h2>
+                            <p className="text-lg text-amber-800/80 leading-relaxed">{t('onboarding_tutorial_match_body')}</p>
+                        </div>
+                    </>
+                );
+            case 4: // The Ship
                 return (
                     <>
                         <div className="w-full h-64 rounded-2xl overflow-hidden shadow-lg border-2 border-white bg-blue-50 mb-6">
@@ -132,7 +156,7 @@ const SeniorWelcomeContent = ({ onComplete }: { onComplete: () => void }) => {
                         </div>
                     </>
                 );
-            case 3: // Unity
+            case 5: // Unity
                 return (
                     <>
                         <div className="w-full aspect-[9/16] rounded-2xl overflow-hidden shadow-lg border-2 border-white bg-white mb-6">

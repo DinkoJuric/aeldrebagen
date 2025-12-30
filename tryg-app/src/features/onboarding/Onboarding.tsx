@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useCareCircle } from '../../hooks/useCareCircle';
 import { SeniorWelcome } from './SeniorWelcome';
@@ -12,14 +13,14 @@ interface OnboardingProps {
 export const Onboarding: React.FC<OnboardingProps> = ({ show, onComplete }) => {
     const { userRole } = useCareCircle();
 
-    return (
+    return createPortal(
         <AnimatePresence>
             {show && (
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="fixed inset-0 z-50 bg-black/20 backdrop-blur-sm"
+                    className="fixed inset-0 z-[200] bg-black/20 backdrop-blur-sm"
                 >
                     <div className="w-full h-full">
                         {userRole === 'senior' ? (
@@ -30,6 +31,7 @@ export const Onboarding: React.FC<OnboardingProps> = ({ show, onComplete }) => {
                     </div>
                 </motion.div>
             )}
-        </AnimatePresence>
+        </AnimatePresence>,
+        document.body
     );
 };
