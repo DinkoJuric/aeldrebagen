@@ -114,6 +114,16 @@ export const FamilyPresence: React.FC<FamilyPresenceProps> = ({
     const currentUserId = propsUserId ?? context?.currentUserId;
     const seniorName = propsSeniorName ?? context?.seniorName ?? 'Far/Mor';
 
+    // 🚀 TURBO: Create a lookup map for member statuses to optimize the render loop.
+    // This reduces the complexity from O(n*m) to O(n+m), preventing a nested loop.
+    const statusMap = React.useMemo(() => {
+        return memberStatuses.reduce((acc: any, status: any) => {
+            acc[status.docId] = status;
+            return acc;
+        }, {});
+    }, [memberStatuses]);
+
+
     if (memberStatuses.length === 0) {
         return (
             <div className={`bg-stone-50 rounded-xl ${compact ? 'p-3' : 'p-4'} border border-stone-200`}>
@@ -136,8 +146,8 @@ export const FamilyPresence: React.FC<FamilyPresenceProps> = ({
             </div>
             <div className="space-y-1">
                 {context.members.map((member: any) => {
-                    // Normalize: find status by userId (memberStatus docId IS the userId)
-                    const statusObj = memberStatuses.find((s: any) => s.docId === member.userId);
+                    // O(1) lookup instead of O(m) .find()
+                    const statusObj = statusMap[member.userId];
                     // Name source of truth: THE MEMBER RECORD
                     const displayName = member.displayName || (member.role === 'senior' ? seniorName : 'Pårørende');
 
