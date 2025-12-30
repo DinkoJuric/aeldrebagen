@@ -23,7 +23,8 @@ describe('useLocalStorage', () => {
         })
 
         expect(result.current[0]).toBe('new value')
-        expect(JSON.parse(localStorage.getItem('test-key'))).toBe('new value')
+        // @ts-ignore
+        expect(JSON.parse(localStorage.getItem('test-key')!)).toBe('new value')
     })
 
     it('retrieves existing value from localStorage', () => {
@@ -39,6 +40,7 @@ describe('useLocalStorage', () => {
         const { result } = renderHook(() => useLocalStorage('object-key', {}))
 
         act(() => {
+            // @ts-ignore
             result.current[1](testObject)
         })
 
@@ -50,6 +52,7 @@ describe('useLocalStorage', () => {
         const { result } = renderHook(() => useLocalStorage('array-key', []))
 
         act(() => {
+            // @ts-ignore
             result.current[1](testArray)
         })
 

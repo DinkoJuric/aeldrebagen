@@ -16,11 +16,12 @@ describe('Feature Flags', () => {
 
     it('isFeatureEnabled returns correct value for existing features', () => {
         Object.entries(FEATURES).forEach(([key, value]) => {
-            expect(isFeatureEnabled(key)).toBe(value)
+            expect(isFeatureEnabled(key as keyof typeof FEATURES)).toBe(value)
         })
     })
 
     it('isFeatureEnabled returns true for unknown features (safe default)', () => {
+        // @ts-ignore - Testing fallback for unknown keys
         expect(isFeatureEnabled('unknownFeature')).toBe(true)
     })
 

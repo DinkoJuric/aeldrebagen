@@ -1,8 +1,8 @@
 // P1 Hook Tests - Core functionality verification
 // Tests for useMemberStatus, useHelpExchange, useTasks
 
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { renderHook, act, waitFor } from '@testing-library/react'
+import { describe, it, expect, vi } from 'vitest'
+import { renderHook } from '@testing-library/react'
 
 // Mock Firebase
 vi.mock('../config/firebase', () => ({
@@ -18,8 +18,9 @@ vi.mock('firebase/firestore', () => ({
     query: vi.fn(),
     orderBy: vi.fn(),
     limit: vi.fn(),
-    onSnapshot: vi.fn((query, callback) => {
+    onSnapshot: vi.fn((_query, callback) => {
         // Simulate empty snapshot
+        // @ts-ignore
         callback({ docs: [] })
         return vi.fn() // unsubscribe
     }),
