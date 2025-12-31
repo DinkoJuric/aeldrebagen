@@ -168,8 +168,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                         {t('back')}
                     </Button>
                 </div>
-            </div>
-            </Modal >
+            </Modal>
         );
     }
 
