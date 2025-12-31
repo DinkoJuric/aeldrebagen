@@ -12,6 +12,15 @@
 - **Architecture**: Moved "Mirror Protocol" definition from `CONTRIBUTING.md` to `ARCHITECTURE.md`.
 - **Deletion**: Removed "School of Unicorns" legacy code and easter eggs.
 
+### 🤖 Jules Handover & Infrastructure (2025-12-28)
+**Architecture Refactor**
+- **Feature Tour Context**: Introduced `FeatureTourContext` to decouple tutorial logic from core layout.
+- **Settings Refactor**: Migrated `SettingsModal` to consume the new tour context.
+
+**CI/CD & Workflows**
+- **Action Fixes**: Corrected GitHub Action references in `.github/workflows` to fix deployment failures (`google-labs-code/jules-action@v1.0.0`).
+- **Test Setup**: Refined `setup.js` and `integration.test.jsx` for better test stability.
+
 ---
 
 ### [Unreleased] - 2025-12-24
