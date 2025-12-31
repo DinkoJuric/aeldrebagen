@@ -1,3 +1,19 @@
+### [1.15.0] - 2025-12-31
+
+### 🚀 Onboarding V2 Experience
+**Multimedia & Accessibility**
+- **Audio/Video Integration**: Added `video-unity.mp4` tutorial step and `AudioProvider` for synchronized sound control.
+- **Tutorial Content**: New "Help Exchange" and "Match Celebration" slides with localized copy.
+- **App Guide**: Added "App Guide" button in Settings to re-trigger the onboarding tour anytime (replaced "Secret Unicorn" easter egg).
+
+### 🧹 Documentation & Codebase Hygiene
+**Cleanup Operation**
+- **Consolidation**: Merged 15+ scattered docs into `FEATURE_BACKLOG.md` and `UX_RESEARCH.md`.
+- **Architecture**: Moved "Mirror Protocol" definition from `CONTRIBUTING.md` to `ARCHITECTURE.md`.
+- **Deletion**: Removed "School of Unicorns" legacy code and easter eggs.
+
+---
+
 ### [Unreleased] - 2025-12-24
 
 **Funding & Strategy**

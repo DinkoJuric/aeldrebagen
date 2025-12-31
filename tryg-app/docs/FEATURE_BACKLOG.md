@@ -3,24 +3,24 @@
 > **Status:** Living document for future roadmap items.
 > **Philosophy:** Connection over surveillance. Features must enable reciprocity.
 
-## 🦄 High-Priority Concepts
+## ✅ Completed / In Production
 
 ### 1. Spontan Kaffe (The Open Door Strategy)
+**Status:** ✅ Live in `SeniorView` (CoffeeToggle)
 **Goal:** Reduce loneliness through low-friction connection.
-*   **The Problem:** Seniors feel "intrusive" calling for a visit.
 *   **The Solution:** A "Kaffekande" toggle.
-    *   **Senior Action:** Toggles "Coffee Pot" icon => Status becomes "Coffee Ready".
-    *   **Relative View:** Sees "Mor giver kaffe i eftermiddag" card/notification.
-    *   **Reaction:** Relative taps "I'm coming" (Senior sees approaching car icon).
-    *   **Implementation:** Status modifier in `SeniorView`.
+*   **Senior Action:** Toggles "Coffee Pot" icon => Status becomes "Coffee Ready".
+*   **Reaction:** Relative taps "I'm coming" (Senior sees approaching car icon).
 
 ### 2. Livshistorier (The Family Heirloom)
+**Status:** ✅ Live (AudioRecorder & Weekly Question)
 **Goal:** Preserve legacy and replace "medical interrogation" with meaningful conversation.
 *   **Concept:** Turn "Weekly Question" into an Audio Biography.
-*   **Prompt Examples:** "Hvordan mødte du Far?" instead of "Hvordan har du det?"
-*   **Tech:** `AudioRecorder` (already implemented in `WeeklyQuestion`).
 *   **Storage:** Permanent "Livsbog" (Life Book) gallery.
-*   **Value:** Transforms user from "patient" to "storyteller".
+
+---
+
+## 🦄 High-Priority Concepts
 
 ### 3. The SOSU Bridge (Guest View)
 **Goal:** Sync the Family and Municipality (Hjemmeplejen).
