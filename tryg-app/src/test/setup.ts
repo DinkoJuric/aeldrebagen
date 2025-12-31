@@ -1,19 +1,6 @@
 // Vitest setup file
 import '@testing-library/jest-dom'
-import { vi, beforeAll, afterAll } from 'vitest'
-
-// Suppress JSDOM CSS parsing errors
-const originalConsoleError = console.error;
-beforeAll(() => {
-    console.error = (...args) => {
-        if (args[0] && args[0].includes && args[0].includes('Could not parse CSS stylesheet')) return;
-        originalConsoleError(...args);
-    };
-});
-
-afterAll(() => {
-    console.error = originalConsoleError;
-});
+import { vi } from 'vitest'
 
 // Initialize i18next mock
 vi.mock('react-i18next', () => ({
@@ -64,7 +51,7 @@ vi.mock('firebase/storage', () => ({
 }));
 
 // Mock AudioContext
-global.AudioContext = class AudioContext {
+(globalThis as any).AudioContext = class AudioContext {
     state = 'running';
     baseLatency = 0;
     outputLatency = 0;
@@ -119,7 +106,7 @@ global.AudioContext = class AudioContext {
     removeEventListener() { }
 } as unknown as typeof AudioContext;
 
-global.webkitAudioContext = global.AudioContext;
+(globalThis as any).webkitAudioContext = (globalThis as any).AudioContext;
 
 // Mock vite-plugin-pwa
 vi.mock('virtual:pwa-register/react', () => ({
