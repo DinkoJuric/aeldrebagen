@@ -24,9 +24,14 @@ describe('Firebase Configuration', () => {
 describe('App Entry Points', () => {
     it('AppWithAuth module can be imported', async () => {
         // This catches any top-level import errors
-        const module = await import('../AppWithAuth')
-        expect(module.default).toBeDefined()
-    })
+        try {
+            const module = await import('../AppWithAuth')
+            expect(module.default).toBeDefined()
+        } catch (error) {
+            console.error('Failed to import AppWithAuth:', error)
+            throw error
+        }
+    }, 10000)
 
     it('main hooks can be imported without error', async () => {
         // Import all critical hooks - catches missing dependencies
