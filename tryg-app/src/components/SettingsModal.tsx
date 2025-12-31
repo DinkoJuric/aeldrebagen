@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Modal } from './ui/Modal';
 import { Button } from './ui/Button';
 import { useTranslation } from 'react-i18next';
@@ -16,6 +16,14 @@ interface SettingsModalProps {
     onStartOnboarding: () => void;
 }
 
+// 🚀 TURBO: Moved `languages` array outside the component.
+// This prevents it from being recreated on every render, reducing garbage collection pressure.
+const languages = [
+    { code: 'da', label: 'Dansk', flag: '🇩🇰' },
+    { code: 'bs', label: 'Bosanski', flag: '🇧🇦' },
+    { code: 'tr', label: 'Türkçe', flag: '🇹🇷' }
+];
+
 export const SettingsModal: React.FC<SettingsModalProps> = ({
     user,
     careCircle,
@@ -30,17 +38,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
     const [deleting, setDeleting] = useState(false);
     const [pauseSharing, setPauseSharing] = useState(false);
 
-    const languages = [
-        { code: 'da', label: 'Dansk', flag: '🇩🇰' },
-        { code: 'bs', label: 'Bosanski', flag: '🇧🇦' },
-        { code: 'tr', label: 'Türkçe', flag: '🇹🇷' }
-    ];
-
-    const themes = [
+    // 🚀 TURBO: Memoized `themes` array to avoid recreation on re-renders.
+    // The `t` function from i18next is stable, so this only computes once.
+    const themes = useMemo(() => [
         { id: 'auto', label: t('theme_auto', 'Auto (Følger solen)'), icon: SunMoon },
         { id: 'light', label: t('theme_light', 'Lys'), icon: Sun },
         { id: 'dark', label: t('theme_dark', 'Mørk'), icon: Moon }
-    ];
+    ], [t]);
 
     const handleDeleteAccount = async () => {
         if (!user) return;
