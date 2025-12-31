@@ -1,15 +1,68 @@
 import React, { useState } from 'react';
 import { useAuth } from './hooks/useAuth';
 import { useCareCircle } from './hooks/useCareCircle';
-import { AuthScreen } from './components/AuthScreen';
-import { CircleSetup } from './components/CircleSetup';
-import { ConsentModal } from './components/ConsentModal';
-import TrygAppCore from './AppCore';
 import { FEATURES } from './config/features';
 import { LivingBackground } from './components/ui/LivingBackground';
 import { ThemeProvider } from './contexts/ThemeContext';
 
+// Lazy load heavy components to improve initial load time
+const AuthScreen = React.lazy(() => import('./components/AuthScreen').then(module => ({ default: module.AuthScreen })));
+const CircleSetup = React.lazy(() => import('./components/CircleSetup').then(module => ({ default: module.CircleSetup })));
+const ConsentModal = React.lazy(() => import('./components/ConsentModal').then(module => ({ default: module.ConsentModal })));
+const TrygAppCore = React.lazy(() => import('./AppCore'));
 
+// Loading screen component
+interface LoadingScreenProps {
+    message?: string;
+}
+
+function LoadingScreen({ message = 'Indlæser...' }: LoadingScreenProps) {
+    return (
+        <div className="min-h-screen bg-gradient-to-br from-teal-50 to-indigo-50 flex flex-col">
+            {/* Skeleton header */}
+            <div className="p-6 animate-pulse">
+                <div className="flex items-center justify-between mb-6">
+                    <div className="space-y-2">
+                        <div className="h-6 bg-stone-200 rounded w-32" />
+                        <div className="h-4 bg-stone-200 rounded w-24" />
+                    </div>
+                    <div className="w-12 h-12 bg-stone-200 rounded-full" />
+                </div>
+
+                {/* Skeleton status card */}
+                <div className="bg-white/60 rounded-2xl p-5 mb-4">
+                    <div className="flex items-start gap-4">
+                        <div className="w-16 h-16 bg-stone-200 rounded-full" />
+                        <div className="flex-1 space-y-3">
+                            <div className="h-5 bg-stone-200 rounded w-2/3" />
+                            <div className="h-4 bg-stone-200 rounded w-1/2" />
+                        </div>
+                    </div>
+                </div>
+
+                {/* Skeleton task cards */}
+                <div className="space-y-3">
+                    {[1, 2, 3].map(i => (
+                        <div key={i} className="bg-white/60 rounded-2xl p-4">
+                            <div className="flex items-center gap-3">
+                                <div className="w-12 h-12 bg-stone-200 rounded-full" />
+                                <div className="flex-1 space-y-2">
+                                    <div className="h-4 bg-stone-200 rounded w-3/4" />
+                                    <div className="h-3 bg-stone-200 rounded w-1/2" />
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* Loading message at bottom */}
+            <div className="mt-auto p-6 text-center">
+                <p className="text-stone-400 text-sm">{message}</p>
+            </div>
+        </div>
+    );
+}
 
 // Main app wrapper with Firebase integration
 export default function AppWithAuth() {
@@ -112,12 +165,14 @@ function FirebaseApp() {
     // Not authenticated - show auth screen
     if (!user) {
         const screen = (
-            <AuthScreen
-                onAuth={handleAuth}
-                onResetPassword={resetPassword}
-                error={authFormError || authError || undefined}
-                loading={authLoading}
-            />
+            <React.Suspense fallback={<LoadingScreen />}>
+                <AuthScreen
+                    onAuth={handleAuth}
+                    onResetPassword={resetPassword}
+                    error={authFormError || authError || undefined}
+                    loading={authLoading}
+                />
+            </React.Suspense>
         );
         // Wrap in Living Design if enabled
         return FEATURES.livingDesign ? (
@@ -130,11 +185,13 @@ function FirebaseApp() {
     // Authenticated but no consent given - show consent modal
     if (userProfile && !userProfile.consentGiven) {
         return (
-            <ConsentModal
-                userName={userProfile?.displayName || user.displayName || 'bruger'}
-                onAccept={handleConsent}
-                loading={consentLoading}
-            />
+            <React.Suspense fallback={<LoadingScreen />}>
+                <ConsentModal
+                    userName={userProfile?.displayName || user.displayName || 'bruger'}
+                    onAccept={handleConsent}
+                    loading={consentLoading}
+                />
+            </React.Suspense>
         );
     }
 
@@ -177,82 +234,33 @@ function FirebaseApp() {
     // Authenticated but no care circle - show setup
     if (!careCircle) {
         return (
-            <CircleSetup
-                userRole={userProfile?.role || 'relative'}
-                userName={userProfile?.displayName || user.displayName || 'Bruger'}
-                onCreateCircle={createCareCircle}
-                onJoinCircle={joinCareCircle}
-                loading={circleLoading}
-                error={circleError}
-            />
+            <React.Suspense fallback={<LoadingScreen />}>
+                <CircleSetup
+                    userRole={userProfile?.role || 'relative'}
+                    userName={userProfile?.displayName || user.displayName || 'Bruger'}
+                    onCreateCircle={createCareCircle}
+                    onJoinCircle={joinCareCircle}
+                    loading={circleLoading}
+                    error={circleError}
+                />
+            </React.Suspense>
         );
     }
 
     // Fully authenticated with circle - render main app
     return (
-        <TrygAppCore
-            user={user}
-            userProfile={userProfile}
-            careCircle={careCircle}
-            onSignOut={signOut}
-            inviteCode={inviteCode}
-            onGetInviteCode={getInviteCode}
-            members={members}
-            updateMember={updateMember}
-            updateAnyMember={updateAnyMember}
-        />
-    );
-}
-
-// Loading screen component
-interface LoadingScreenProps {
-    message?: string;
-}
-
-function LoadingScreen({ message = 'Indlæser...' }: LoadingScreenProps) {
-    return (
-        <div className="min-h-screen bg-gradient-to-br from-teal-50 to-indigo-50 flex flex-col">
-            {/* Skeleton header */}
-            <div className="p-6 animate-pulse">
-                <div className="flex items-center justify-between mb-6">
-                    <div className="space-y-2">
-                        <div className="h-6 bg-stone-200 rounded w-32" />
-                        <div className="h-4 bg-stone-200 rounded w-24" />
-                    </div>
-                    <div className="w-12 h-12 bg-stone-200 rounded-full" />
-                </div>
-
-                {/* Skeleton status card */}
-                <div className="bg-white/60 rounded-2xl p-5 mb-4">
-                    <div className="flex items-start gap-4">
-                        <div className="w-16 h-16 bg-stone-200 rounded-full" />
-                        <div className="flex-1 space-y-3">
-                            <div className="h-5 bg-stone-200 rounded w-2/3" />
-                            <div className="h-4 bg-stone-200 rounded w-1/2" />
-                        </div>
-                    </div>
-                </div>
-
-                {/* Skeleton task cards */}
-                <div className="space-y-3">
-                    {[1, 2, 3].map(i => (
-                        <div key={i} className="bg-white/60 rounded-2xl p-4">
-                            <div className="flex items-center gap-3">
-                                <div className="w-12 h-12 bg-stone-200 rounded-full" />
-                                <div className="flex-1 space-y-2">
-                                    <div className="h-4 bg-stone-200 rounded w-3/4" />
-                                    <div className="h-3 bg-stone-200 rounded w-1/2" />
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-
-            {/* Loading message at bottom */}
-            <div className="mt-auto p-6 text-center">
-                <p className="text-stone-400 text-sm">{message}</p>
-            </div>
-        </div>
+        <React.Suspense fallback={<LoadingScreen />}>
+            <TrygAppCore
+                user={user}
+                userProfile={userProfile}
+                careCircle={careCircle}
+                onSignOut={signOut}
+                inviteCode={inviteCode}
+                onGetInviteCode={getInviteCode}
+                members={members}
+                updateMember={updateMember}
+                updateAnyMember={updateAnyMember}
+            />
+        </React.Suspense>
     );
 }

@@ -31,7 +31,7 @@ describe('App Entry Points', () => {
             console.error('Failed to import AppWithAuth:', error)
             throw error
         }
-    }, 20000)
+    }, 5000)
 
     it('main hooks can be imported without error', async () => {
         // Import all critical hooks - catches missing dependencies
