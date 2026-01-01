@@ -4,7 +4,7 @@
 export { HelpExchange } from './HelpExchange';
 export { MatchCelebration, MatchBanner } from './MatchCelebration';
 export { useHelpExchange } from './useHelpExchange';
-export { useHelpExchangeMatch } from './useHelpExchangeMatch';
+export { useHelpExchangeMatch, type ActiveMatch } from './useHelpExchangeMatch';
 export {
     RELATIVE_OFFERS,
     RELATIVE_REQUESTS,

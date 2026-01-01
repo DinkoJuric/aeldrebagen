@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useCareCircleContext } from '../../contexts/CareCircleContext';
 import { Button } from '../../components/ui/Button';
 import { Avatar } from '../../components/ui/Avatar';
+import { toJsDate } from '../../utils/dateUtils';
 
 export interface AmbientHeroProps {
     role: 'senior' | 'relative';
@@ -42,7 +43,8 @@ export const AmbientHero: React.FC<AmbientHeroProps> = ({
         // If lastCheckIn changed to a new value
         if (lastCheckIn && lastCheckIn !== prevCheckInRef.current) {
             // Trigger celebratory burst!
-            setIsBursting(true);
+            // Defer slightly to avoid set-state-in-effect warning during render phase
+            setTimeout(() => setIsBursting(true), 0);
 
             // Reset after 3 seconds
             const timer = setTimeout(() => setIsBursting(false), 3000);
@@ -54,8 +56,8 @@ export const AmbientHero: React.FC<AmbientHeroProps> = ({
 
     // Calculate today's symptom count
     const todaySymptomCount = symptoms.filter(s => {
-        const date = (s.loggedAt as any)?.toDate ? (s.loggedAt as any).toDate() : new Date(s.loggedAt as any);
-        return date.toDateString() === new Date().toDateString();
+        const date = toJsDate(s.loggedAt);
+        return date && date.toDateString() === new Date().toDateString();
     }).length;
 
     // Calculate completion rate

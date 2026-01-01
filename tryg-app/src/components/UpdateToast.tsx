@@ -17,14 +17,14 @@ export const UpdateToast: React.FC = () => {
         updateServiceWorker
     } = useRegisterSW({
         /** @param {any} r */
-        onRegistered(r: any) {
+        onRegistered(r: ServiceWorkerRegistration | undefined) {
             // Check for updates every hour
             r && setInterval(() => {
                 r.update();
             }, 60 * 60 * 1000);
         },
-        /** @param {any} error */
-        onRegisterError(error: any) {
+        /** @param {unknown} error */
+        onRegisterError(error: unknown) {
             console.error('SW registration error:', error);
         }
     });

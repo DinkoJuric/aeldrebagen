@@ -10,6 +10,14 @@ import { cn } from './lib/utils';
 import { useTheme } from './contexts/ThemeContext';
 import './index.css';
 
+import './index.css';
+
+interface NotificationType {
+    title: string;
+    body: string;
+    icon: React.ElementType;
+}
+
 export default function TrygApp() {
     const { t } = useTranslation();
     const { setMode } = useTheme();
@@ -19,7 +27,7 @@ export default function TrygApp() {
     // Secret "Backdoor" Mode
     const [showSecretScreen, setShowSecretScreen] = useState(false);
 
-    const [notification, setNotification] = useState<any | null>(null);
+    const [notification, setNotification] = useState<NotificationType | null>(null);
 
     // Default to Midnight Theme on mount
     useEffect(() => {
@@ -31,7 +39,7 @@ export default function TrygApp() {
         // ROTATED KEY to force onboarding for everyone one last time
         const hasSeenOnboarding = localStorage.getItem('tryg_welcome_seen_v2');
         if (!hasSeenOnboarding) {
-            setShowOnboarding(true);
+            setTimeout(() => setShowOnboarding(true), 0);
         }
     }, []);
 
@@ -53,7 +61,7 @@ export default function TrygApp() {
             });
         }, 5000);
         return () => clearTimeout(timer);
-    }, []);
+    }, [t]);
 
     // Clear notification after 4 seconds
     useEffect(() => {

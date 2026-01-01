@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
 
+
 interface AudioContextType {
     isMuted: boolean;
     setIsMuted: (muted: boolean) => void;
@@ -8,7 +9,7 @@ interface AudioContextType {
 const AudioContext = createContext<AudioContextType | undefined>(undefined);
 
 export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [isMuted, setIsMuted] = useState(true); // Default to muted for better autoplay support
+    const [isMuted, setIsMuted] = useState(true);
 
     return (
         <AudioContext.Provider value={{ isMuted, setIsMuted }}>
@@ -17,6 +18,7 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAudio = () => {
     const context = useContext(AudioContext);
     if (!context) {

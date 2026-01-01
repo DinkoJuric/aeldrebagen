@@ -26,13 +26,19 @@ import { FEATURES } from './config/features';
 import { LivingBackground } from './components/ui/LivingBackground';
 import './index.css';
 import { User } from 'firebase/auth'; // Or your custom user type
-import { AppTab, UserProfile, Member, Task, SymptomLog } from './types';
+import { AppTab, UserProfile, Member, Task, SymptomLog, CareCircle } from './types';
+
+interface NotificationType {
+    title: string;
+    body: string;
+    icon: React.ElementType;
+}
 
 
 export interface AppCoreProps {
     user: User | null;
     userProfile: UserProfile | null;
-    careCircle: any; // CareCircle but mapped from hook which might differ slightly
+    careCircle: CareCircle | null; // CareCircle but mapped from hook which might differ slightly
     onSignOut: () => Promise<void>;
     inviteCode: string | null;
     onGetInviteCode: () => Promise<void>;
@@ -56,7 +62,7 @@ export default function TrygAppCore({
     // View is determined by user role - no toggle allowed
     const isSenior = userProfile?.role === 'senior';
     // const [activePing, setActivePing] = useState(null); // Unused?
-    const [notification, setNotification] = useState<any | null>(null);
+    const [notification, setNotification] = useState<NotificationType | null>(null);
     const [showSettings, setShowSettings] = useState(false);
     const [showShare, setShowShare] = useState(false);
     const [activeTab, setActiveTab] = useState<AppTab>('daily');
@@ -83,7 +89,7 @@ export default function TrygAppCore({
     useEffect(() => {
         const hasSeen = localStorage.getItem('tryg_welcome_seen_v2');
         if (!hasSeen) {
-            setShowOnboarding(true);
+            setTimeout(() => setShowOnboarding(true), 0);
         }
     }, []);
 
@@ -101,8 +107,9 @@ export default function TrygAppCore({
     };
 
     // Firebase hooks for real-time data
-    const { tasks, toggleTask, addTask } = useTasks(careCircle?.id);
-    const { symptoms, addSymptom } = useSymptoms(careCircle?.id);
+    // Firebase hooks for real-time data
+    const { tasks, toggleTask, addTask } = useTasks(careCircle?.id ?? null);
+    const { symptoms, addSymptom } = useSymptoms(careCircle?.id ?? null);
     // Per-member status tracking
     const {
         memberStatuses,
@@ -110,16 +117,16 @@ export default function TrygAppCore({
         setMyStatus,
         relativeStatuses,
         seniorStatus
-    } = useMemberStatus(careCircle?.id, user?.uid ?? null, (userProfile?.displayName ?? undefined) as string | null, userProfile?.role ?? 'relative');
+    } = useMemberStatus(careCircle?.id ?? null, user?.uid ?? null, (userProfile?.displayName ?? null), userProfile?.role ?? 'relative');
     const {
         answers: weeklyAnswers,
         addAnswer: addWeeklyAnswer,
         toggleLike: onToggleLike,
         addReply: onReply
-    } = useWeeklyQuestions(careCircle?.id);
-    const { latestPing, sendPing, dismissPing } = usePings(careCircle?.id, user?.uid ?? null);
-    const { lastCheckIn, recordCheckIn } = useCheckIn(careCircle?.id);
-    const { latestPhoto, uploading, deletePhoto } = usePhotos(careCircle?.id, user?.uid ?? null);
+    } = useWeeklyQuestions(careCircle?.id ?? null);
+    const { latestPing, sendPing, dismissPing } = usePings(careCircle?.id ?? null, user?.uid ?? null);
+    const { lastCheckIn, recordCheckIn } = useCheckIn(careCircle?.id ?? null);
+    const { latestPhoto, uploading, deletePhoto } = usePhotos(careCircle?.id ?? null, user?.uid);
 
     // Incoming pings logic
     useEffect(() => {
@@ -195,17 +202,17 @@ export default function TrygAppCore({
     return (
         <CareCircleProvider value={{
             careCircleId: careCircle?.id ?? null,
-            seniorId: careCircle?.seniorId || null,
+            seniorId: careCircle?.seniorId ?? '',
             seniorName: seniorName,
             currentUserId: user?.uid ?? null,
-            userRole: userProfile?.role ?? null,
+            userRole: (userProfile?.role as 'senior' | 'relative') ?? 'relative',
             userName: isSenior ? seniorName : relativeName,
             relativeName: relativeName,
             memberStatuses,
             members,
             relativeStatuses,
             seniorStatus: seniorStatus || null,
-            myStatus: myStatus as any,
+            myStatus: myStatus,
             setMyStatus: setMyStatus,
             activeTab: activeTab as AppTab,
             setActiveTab: setActiveTab,
@@ -284,7 +291,7 @@ export default function TrygAppCore({
                             members={members}
                             inviteCode={inviteCode}
                             onGetInviteCode={onGetInviteCode}
-                            seniorName={seniorName}
+                            seniorName={seniorName ?? 'Senior'}
                             currentUserId={user?.uid ?? undefined}
                             onClose={() => setShowShare(false)}
                         />

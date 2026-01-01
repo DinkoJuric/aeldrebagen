@@ -51,7 +51,7 @@ vi.mock('firebase/storage', () => ({
 }));
 
 // Mock AudioContext
-(globalThis as any).AudioContext = class AudioContext {
+(globalThis as unknown as { AudioContext: unknown }).AudioContext = class AudioContext {
     state = 'running';
     baseLatency = 0;
     outputLatency = 0;
@@ -106,7 +106,7 @@ vi.mock('firebase/storage', () => ({
     removeEventListener() { }
 } as unknown as typeof AudioContext;
 
-(globalThis as any).webkitAudioContext = (globalThis as any).AudioContext;
+(globalThis as unknown as { webkitAudioContext: unknown }).webkitAudioContext = (globalThis as unknown as { AudioContext: unknown }).AudioContext;
 
 // Mock vite-plugin-pwa
 vi.mock('virtual:pwa-register/react', () => ({

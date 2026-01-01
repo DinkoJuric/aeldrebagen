@@ -1,16 +1,21 @@
+import { Timestamp } from 'firebase/firestore';
+
+export type FirestoreDate = Timestamp | Date | string | number | null;
+
 export interface Task {
     id: string;
     title: string;
     period: string;
     time: string;
     emoji?: string;
+    description?: string;
     completed: boolean;
-    createdAt?: any;
-    completedAt?: any;
+    createdAt?: FirestoreDate;
+    completedAt?: FirestoreDate;
     recurring?: boolean;
     originalId?: string;
     type?: string; // e.g. 'medication'
-    [key: string]: any;
+    [key: string]: unknown;
 }
 export interface WeeklyReply {
     id: string;
@@ -26,7 +31,7 @@ export interface WeeklyAnswer {
     text?: string;
     userId?: string;
     userName?: string;
-    answeredAt?: any; // Firestore Timestamp
+    answeredAt?: FirestoreDate; // Firestore Timestamp
     likes?: string[];
     replies?: WeeklyReply[];
     audioUrl?: string;
@@ -37,7 +42,7 @@ export interface Ping {
     fromName: string;
     fromUserId: string;
     toRole: 'senior' | 'relative';
-    sentAt: any; // Date | Timestamp
+    sentAt: FirestoreDate; // Date | Timestamp
     toUserId?: string;
     type?: string;
     message?: string;
@@ -49,8 +54,8 @@ export interface Photo {
     storagePath?: string;
     fromUserId: string;
     fromName: string;
-    uploadedAt: any;
-    viewedAt?: any;
+    uploadedAt: FirestoreDate;
+    viewedAt?: FirestoreDate;
 }
 
 export interface HelpOffer {
@@ -61,7 +66,7 @@ export interface HelpOffer {
     createdByUid?: string;
     createdByRole?: string;
     createdByName?: string;
-    createdAt?: any;
+    createdAt?: FirestoreDate;
 }
 
 export interface HelpRequest {
@@ -72,7 +77,7 @@ export interface HelpRequest {
     createdByUid?: string;
     createdByRole?: string;
     createdByName?: string;
-    createdAt?: any;
+    createdAt?: FirestoreDate;
 }
 
 export interface Severity {
@@ -97,7 +102,7 @@ export interface SymptomLog {
     bodyLocation?: BodyLocation;
     time: string;
     date: string;
-    loggedAt?: any; // Firestore Timestamp
+    loggedAt?: FirestoreDate; // Firestore Timestamp
 }
 
 export interface SymptomStats {
@@ -116,12 +121,12 @@ export interface Member {
     gender?: 'male' | 'female' | 'other';
     role: 'senior' | 'relative';
     status: 'home' | 'work' | 'traveling' | 'available' | 'busy' | 'coffee_ready' | 'coffee_coming';
-    updatedAt?: any; // Firestore timestamp
+    updatedAt?: FirestoreDate; // Firestore timestamp
     id?: string; // Sometimes used interchangeably with docId
     // Generational Orbits
     relationship?: string; // e.g. 'son', 'granddaughter'
     edges?: Record<string, string>; // Map of relation to other members { [userId]: "brother" }
-    relationsLastUpdated?: any;
+    relationsLastUpdated?: FirestoreDate;
     accessLevel?: 'admin' | 'caregiver' | 'joy' | 'guest'; // Permissions
     archetype?: 'tech_wizard' | 'listener' | 'fixer' | 'driver' | 'cheerleader'; // Superpower badge
 }
@@ -131,8 +136,8 @@ export interface MemberStatus {
     status: string;
     displayName: string;
     role: 'senior' | 'relative';
-    updatedAt?: any;
-    [key: string]: any;
+    updatedAt?: FirestoreDate;
+    [key: string]: unknown;
 }
 
 export interface UserProfile {
@@ -141,7 +146,7 @@ export interface UserProfile {
     role: 'senior' | 'relative';
     careCircleId?: string;
     consentGiven: boolean;
-    consentTimestamp?: any;
+    consentTimestamp?: FirestoreDate;
     uid?: string;
     photoURL?: string;
     languagePreference?: string;
@@ -152,7 +157,7 @@ export interface CareCircle {
     seniorId: string;
     seniorName: string;
     inviteCode: string;
-    createdAt: any;
+    createdAt: FirestoreDate;
     lastResetDate?: string; // Daily reset tracker (YYYY-MM-DD)
 }
 

@@ -12,7 +12,9 @@ import {
     where,
     onSnapshot,
     serverTimestamp,
-    deleteDoc
+    deleteDoc,
+    DocumentData,
+    QuerySnapshot
 } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { CareCircle, Member, UserProfile } from '../types';
@@ -27,6 +29,7 @@ const generateInviteCode = () => {
     return code;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function useCareCircle(userId: string | undefined, _userProfile: UserProfile | null) {
     const [careCircle, setCareCircle] = useState<CareCircle | null>(null);
     const [members, setMembers] = useState<Member[]>([]);
@@ -48,13 +51,13 @@ export function useCareCircle(userId: string | undefined, _userProfile: UserProf
                     collection(db, 'careCircleMemberships'),
                     where('userId', '==', userId)
                 );
-                let membershipsSnapshot: any = await getDocs(membershipsQuery);
+                let membershipsSnapshot: QuerySnapshot<DocumentData> | { empty: boolean; docs: DocumentData[] } = await getDocs(membershipsQuery);
 
                 if (membershipsSnapshot.empty) {
                     // FALLBACK: Fetch all and filter client-side (works around index issues)
                     const allMembershipsSnapshot = await getDocs(collection(db, 'careCircleMemberships'));
                     const matchingDocs = allMembershipsSnapshot.docs.filter(
-                        (doc: any) => doc.data().userId === userId
+                        (doc) => doc.data().userId === userId
                     );
 
                     if (matchingDocs.length > 0) {
@@ -76,13 +79,14 @@ export function useCareCircle(userId: string | undefined, _userProfile: UserProf
                         console.warn('[useCareCircle] Circle doc does not exist:', membership.circleId);
                     }
                 }
-            } catch (err: any) {
+            } catch (err: unknown) {
                 console.error('[useCareCircle] Error finding care circle:', err);
+                const errorMessage = (err as Error).message || '';
                 // Check if it's a missing index error
-                if (err.message?.includes('index')) {
+                if (errorMessage.includes('index')) {
                     setError('Database index mangler. Kontakt support.');
                 } else {
-                    setError(err.message);
+                    setError(errorMessage);
                 }
             } finally {
                 setLoading(false);
@@ -157,9 +161,10 @@ export function useCareCircle(userId: string | undefined, _userProfile: UserProf
             setInviteCode(newCode);
 
             return circleId;
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Error creating care circle:', err);
-            setError(err.message);
+            const message = (err as Error).message;
+            setError(message);
             throw err;
         }
     }, [userId]);
@@ -199,9 +204,10 @@ export function useCareCircle(userId: string | undefined, _userProfile: UserProf
             setCareCircle({ id: circleId, ...circleData } as CareCircle);
 
             return circleId;
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Error joining care circle:', err);
-            setError(err.message);
+            const message = (err as Error).message;
+            setError(message);
             throw err;
         }
     }, [userId]);
@@ -231,9 +237,10 @@ export function useCareCircle(userId: string | undefined, _userProfile: UserProf
             await deleteDoc(doc(db, 'careCircleMemberships', `${careCircle.id}_${userId}`));
             setCareCircle(null);
             setMembers([]);
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Error leaving care circle:', err);
-            setError(err.message);
+            const message = (err as Error).message;
+            setError(message);
             throw err;
         }
     }, [careCircle?.id, userId]);
@@ -245,7 +252,7 @@ export function useCareCircle(userId: string | undefined, _userProfile: UserProf
         try {
             const memberRef = doc(db, 'careCircleMemberships', `${careCircle.id}_${userId}`);
             await setDoc(memberRef, data, { merge: true });
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Error updating member:', err);
             throw err;
         }
@@ -259,7 +266,7 @@ export function useCareCircle(userId: string | undefined, _userProfile: UserProf
             console.log("📝 Updating member:", memberId, data);
             const memberRef = doc(db, 'careCircleMemberships', memberId);
             await setDoc(memberRef, data, { merge: true });
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Error updating member (Admin):', err);
             throw err;
         }

@@ -29,7 +29,7 @@ describe('useVideoAutoplay', () => {
         });
 
         // Assign ref
-        // @ts-ignore
+        // @ts-expect-error - Mocking readonly ref for testing purposes
         result.current.videoRef.current = mockVideo;
 
         // Change step to trigger Effect 1
@@ -46,7 +46,7 @@ describe('useVideoAutoplay', () => {
             initialProps: { isMuted: false, step: 0 }
         });
 
-        // @ts-ignore
+        // @ts-expect-error - Mocking readonly ref for testing purposes
         result.current.videoRef.current = mockVideo;
 
         // Change step
@@ -87,7 +87,7 @@ describe('useVideoAutoplay', () => {
             initialProps: { isMuted: true, step: 0 }
         });
 
-        // @ts-ignore
+        // @ts-expect-error - Mocking readonly ref for testing purposes
         result.current.videoRef.current = mockVideo;
         mockVideo.paused = true; // Video is paused
 
@@ -103,7 +103,7 @@ describe('useVideoAutoplay', () => {
             initialProps: { isMuted: true, step: 0 }
         });
 
-        // @ts-ignore
+        // @ts-expect-error - Mocking readonly ref for testing purposes
         result.current.videoRef.current = mockVideo;
         mockVideo.paused = false; // Video is playing
 
@@ -117,7 +117,7 @@ describe('useVideoAutoplay', () => {
     it('should handle manual mute toggle', () => {
         const { result } = renderHook(() => useVideoAutoplay(true, 0));
 
-        // @ts-ignore
+        // @ts-expect-error - Mocking readonly ref for testing purposes
         result.current.videoRef.current = mockVideo;
         mockVideo.paused = true;
 

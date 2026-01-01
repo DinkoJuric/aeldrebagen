@@ -47,9 +47,9 @@ export const useMemories = () => {
                         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                         setUploadProgress(progress);
                     },
-                    (err) => {
+                    (err: unknown) => {
                         console.error('Upload error:', err);
-                        setError(err.message);
+                        setError(err instanceof Error ? err.message : 'Unknown upload error');
                         setIsUploading(false);
                         reject(err);
                     },
@@ -69,19 +69,20 @@ export const useMemories = () => {
 
                             setIsUploading(false);
                             setUploadProgress(100);
+                            setUploadProgress(100);
                             resolve(downloadUrl);
-                        } catch (err: any) {
+                        } catch (err: unknown) {
                             console.error('Firestore save error:', err);
-                            setError(err.message);
+                            setError(err instanceof Error ? err.message : 'Unknown error');
                             setIsUploading(false);
                             reject(err);
                         }
                     }
                 );
             });
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Memory upload error initiation:', err);
-            setError(err.message);
+            setError(err instanceof Error ? err.message : 'Unknown error');
             setIsUploading(false);
             return null;
         }

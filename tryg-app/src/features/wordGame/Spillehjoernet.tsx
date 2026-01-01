@@ -1,3 +1,4 @@
+import React from 'react';
 import { Gamepad2 } from 'lucide-react';
 import { WordGame } from './WordGame';
 import { Leaderboard } from './Leaderboard';

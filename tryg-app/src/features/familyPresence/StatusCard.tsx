@@ -1,31 +1,16 @@
 import React from 'react';
-import { Clock, Pill, Briefcase, Home, Car, Coffee, Moon } from 'lucide-react';
+import { Clock, Pill } from 'lucide-react';
 import { InlineGatesIndicator } from '../tasks/ProgressRing';
 import { Avatar } from '../../components/ui/Avatar';
-import { Task, MemberStatus } from '../../types';
+import { Task, MemberStatus, FirestoreDate } from '../../types';
 import { useTranslation } from 'react-i18next';
+import { toJsDate } from '../../utils/dateUtils';
 
 // ============================================================================
 // CONFIGURATION & CONSTANTS
 // ============================================================================
 
-interface StatusOption {
-    id: string;
-    label: string;
-    icon: React.ElementType;
-    color: string;
-}
-
-/**
- * Status options for family members
- */
-export const STATUS_OPTIONS: StatusOption[] = [
-    { id: 'work', label: 'På arbejde', icon: Briefcase, color: 'bg-indigo-100 text-indigo-600' },
-    { id: 'home', label: 'Hjemme', icon: Home, color: 'bg-green-100 text-green-600' },
-    { id: 'traveling', label: 'Undervejs', icon: Car, color: 'bg-amber-100 text-amber-600' },
-    { id: 'available', label: 'Har tid til en snak', icon: Coffee, color: 'bg-teal-100 text-teal-600' },
-    { id: 'busy', label: 'Optaget', icon: Moon, color: 'bg-stone-100 text-stone-500' },
-];
+import { STATUS_OPTIONS } from './config';
 
 // ============================================================================
 // SUB-COMPONENTS
@@ -96,7 +81,7 @@ interface StatusCardProps {
     name?: string;
     relationship?: string; // Added relationship prop
     status?: string;
-    timestamp?: any;
+    timestamp?: FirestoreDate;
     className?: string;
 
     // Senior specifics
@@ -256,10 +241,10 @@ export const StatusCard: React.FC<StatusCardProps> = ({
         if (typeof timestamp === 'string') {
             timeString = timestamp;
         } else {
-            const date = (timestamp && typeof timestamp.toDate === 'function')
-                ? timestamp.toDate()
-                : new Date(timestamp);
-            timeString = date.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' });
+            const date = toJsDate(timestamp);
+            if (date) {
+                timeString = date.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' });
+            }
         }
     }
 
@@ -293,8 +278,8 @@ export const StatusCard: React.FC<StatusCardProps> = ({
 
 interface StatusListProps {
     members?: MemberStatus[];
-    relativeStatuses?: any[];
-    lastUpdated?: any;
+    relativeStatuses?: MemberStatus[];
+    lastUpdated?: FirestoreDate;
     maxDisplay?: number;
 }
 

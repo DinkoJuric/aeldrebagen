@@ -35,9 +35,11 @@ export function usePhotos(circleId: string | null, currentUserId: string | null)
     // Subscribe to photos from Firestore
     useEffect(() => {
         if (!circleId) {
-            setPhotos([]);
-            setLatestPhoto(null);
-            setLoading(false);
+            setTimeout(() => {
+                setPhotos([]);
+                setLatestPhoto(null);
+                setLoading(false);
+            }, 0);
             return;
         }
 
@@ -60,9 +62,9 @@ export function usePhotos(circleId: string | null, currentUserId: string | null)
 
                 setLoading(false);
             },
-            (err: any) => {
+            (err: unknown) => {
                 console.error('Error fetching photos:', err);
-                setError(err.message);
+                setError(err instanceof Error ? err.message : 'Unknown error');
                 setLoading(false);
             }
         );
@@ -107,9 +109,9 @@ export function usePhotos(circleId: string | null, currentUserId: string | null)
 
             setUploading(false);
             return photoId;
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Error uploading photo:', err);
-            setError(err.message);
+            setError(err instanceof Error ? err.message : 'Unknown error');
             setUploading(false);
             throw err;
         }
@@ -135,9 +137,9 @@ export function usePhotos(circleId: string | null, currentUserId: string | null)
             if (latestPhoto?.id === photoId) {
                 setLatestPhoto(null);
             }
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Error deleting photo:', err);
-            setError(err.message);
+            setError(err instanceof Error ? err.message : 'Unknown error');
             throw err;
         }
     }, [circleId, latestPhoto]);

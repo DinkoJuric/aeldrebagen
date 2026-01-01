@@ -1,7 +1,9 @@
-import { useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { AlertCircle, ChevronDown, ChevronUp, Phone, Calendar } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { SymptomLog } from '../../types';
+import { SymptomLog, FirestoreDate } from '../../types';
+import { toJsDate } from '../../utils/dateUtils';
+import { TFunction } from 'i18next';
 
 interface TrendAnalysis {
     trend: 'none' | 'warning' | 'increasing' | 'decreasing' | 'stable';
@@ -14,28 +16,24 @@ interface TrendAnalysis {
 }
 
 // Check if a date is today
-const isToday = (timestamp: any) => {
-    if (!timestamp) return false;
+const isToday = (timestamp: FirestoreDate | undefined) => {
+    const date = toJsDate(timestamp);
+    if (!date) return false;
     const today = new Date();
-    const date = (timestamp && typeof timestamp.toDate === 'function')
-        ? timestamp.toDate()
-        : new Date(timestamp);
     return date.toDateString() === today.toDateString();
 };
 
 // Check if date is within last N days
-const isWithinDays = (timestamp: any, days: number) => {
-    if (!timestamp) return false;
+const isWithinDays = (timestamp: FirestoreDate | undefined, days: number) => {
+    const date = toJsDate(timestamp);
+    if (!date) return false;
     const cutoff = new Date();
     cutoff.setDate(cutoff.getDate() - days);
-    const date = (timestamp && typeof timestamp.toDate === 'function')
-        ? timestamp.toDate()
-        : new Date(timestamp);
     return date >= cutoff;
 };
 
 // Get trend analysis for symptoms
-const analyzeTrend = (symptoms: SymptomLog[], t: any): TrendAnalysis => {
+const analyzeTrend = (symptoms: SymptomLog[], t: TFunction): TrendAnalysis => {
     if (symptoms.length === 0) return { trend: 'none', message: null, cta: null };
 
     // Count symptoms by day for last 7 days
@@ -88,7 +86,7 @@ interface SymptomSummaryProps {
 }
 
 // Helper to get friendly advice based on symptom
-const getSymptomAdvice = (symptomLabel: string, t: any): string => {
+const getSymptomAdvice = (symptomLabel: string, t: TFunction): string => {
     const label = symptomLabel.toLowerCase();
     if (label.includes('kvalme')) return t('symptom_advice_nausea', 'Kvalme kan lindres med ingefær-te og frisk luft.');
     if (label.includes('hovedpine')) return t('symptom_advice_headache', 'Husk at drikke vand og sikre ro omkring dig.');

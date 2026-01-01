@@ -7,8 +7,64 @@
  * experience by guiding seniors to "Add to Home Screen".
  */
 
-import { useState, useEffect } from 'react';
-import { X, Share } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, Share, Download } from 'lucide-react';
+
+/**
+ * Android/Chrome Install Prompt Hook
+ * Captures the 'beforeinstallprompt' event to show a custom install button
+ */
+// eslint-disable-next-line react-refresh/only-export-components
+interface BeforeInstallPromptEvent extends Event {
+    prompt: () => Promise<void>;
+    userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>;
+}
+
+const useAndroidInstallPrompt = () => {
+    const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+    const [showPrompt, setShowPrompt] = useState(false);
+
+    useEffect(() => {
+        const handler = (e: Event) => {
+            // Prevent Chrome 67 and earlier from automatically showing the prompt
+            e.preventDefault();
+            // Stash the event so it can be triggered later.
+            setDeferredPrompt(e as BeforeInstallPromptEvent);
+
+            // Check if dismissed recently
+            const wasDismissed = localStorage.getItem('pwa-android-dismissed');
+            if (!wasDismissed) {
+                setShowPrompt(true);
+            }
+        };
+
+        window.addEventListener('beforeinstallprompt', handler);
+        return () => window.removeEventListener('beforeinstallprompt', handler);
+    }, []);
+
+    const install = async () => {
+        if (!deferredPrompt) return;
+
+        // Show the install prompt
+        deferredPrompt.prompt();
+
+        // Wait for the user to respond to the prompt
+        const { outcome } = await deferredPrompt.userChoice;
+        console.log(`User response to the install prompt: ${outcome}`);
+
+        // We've used the prompt, and can't use it again, throw it away
+        setDeferredPrompt(null);
+        setShowPrompt(false);
+    };
+
+    const dismiss = () => {
+        setShowPrompt(false);
+        // Remember dismissal for a few days to not annoy user
+        localStorage.setItem('pwa-android-dismissed', Date.now().toString());
+    };
+
+    return { showAndroidPrompt: showPrompt && !!deferredPrompt, install, dismissAndroid: dismiss };
+};
 
 /**
  * Detects if user is on iOS Safari (not in standalone/PWA mode)
@@ -19,13 +75,17 @@ const useIOSInstallPrompt = () => {
 
     useEffect(() => {
         // Check if iOS device
-        // @ts-ignore - MSStream is IE-specific, used for detection
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
+        // Check if iOS device
+        // MSStream is IE-specific, used for detection
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !('MSStream' in window);
 
         // Check if already in standalone mode (installed as PWA)
-        // @ts-ignore - standalone is Safari-specific
+        // standalone is Safari-specific
+        interface NavigatorIOS extends Navigator {
+            standalone?: boolean;
+        }
         const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
-            (window.navigator as any).standalone === true;
+            (window.navigator as NavigatorIOS).standalone === true;
 
         // Check if already dismissed (stored in localStorage)
         const wasDismissed = localStorage.getItem('pwa-install-dismissed');
@@ -52,15 +112,48 @@ const useIOSInstallPrompt = () => {
  * Shows localized (Danish) instructions for adding to home screen
  */
 export const InstallPrompt: React.FC = () => {
-    const { shouldShow, dismiss } = useIOSInstallPrompt();
+    const { shouldShow: shouldShowIOS, dismiss: dismissIOS } = useIOSInstallPrompt();
+    const { showAndroidPrompt, install, dismissAndroid } = useAndroidInstallPrompt();
 
-    if (!shouldShow) return null;
+    if (!shouldShowIOS && !showAndroidPrompt) return null;
 
+    // ANDROID / DESKTOP CHROME PROMPT
+    if (showAndroidPrompt) {
+        return (
+            <div className="fixed bottom-4 left-4 right-4 bg-white p-4 rounded-2xl shadow-xl z-50 animate-slide-up border border-teal-100 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-teal-100 rounded-xl flex items-center justify-center">
+                        <Download className="w-5 h-5 text-teal-600" />
+                    </div>
+                    <div>
+                        <p className="font-bold text-stone-800 text-sm">Installer appen</p>
+                        <p className="text-xs text-stone-500">For nemmere adgang</p>
+                    </div>
+                </div>
+                <div className="flex items-center gap-2">
+                    <button
+                        onClick={dismissAndroid}
+                        className="p-2 text-stone-400 hover:text-stone-600"
+                    >
+                        <X className="w-5 h-5" />
+                    </button>
+                    <button
+                        onClick={install}
+                        className="bg-teal-600 text-white px-4 py-2 rounded-xl text-sm font-bold shadow-sm hover:bg-teal-700 transition-colors"
+                    >
+                        Installer
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
+    // iOS PROMPT (Existing)
     return (
         <div className="fixed bottom-0 inset-x-0 bg-white p-6 shadow-2xl z-50 animate-slide-up border-t-4 border-teal-500 safe-area-bottom">
             {/* Close button */}
             <button
-                onClick={dismiss}
+                onClick={dismissIOS}
                 className="absolute top-3 right-3 p-2 text-stone-400 hover:text-stone-600"
                 aria-label="Luk"
             >

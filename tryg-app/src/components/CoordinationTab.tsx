@@ -10,9 +10,10 @@ import { StatusSelector, STATUS_OPTIONS } from '../features/familyPresence';
 import { MatchBanner } from '../features/helpExchange';
 import { FamilyPresence } from '../features/familyPresence';
 import { RELATIVE_OFFERS, RELATIVE_REQUESTS } from '../features/helpExchange';
-import { useHelpExchangeMatch } from '../features/helpExchange';
+import { useHelpExchangeMatch, ActiveMatch } from '../features/helpExchange/useHelpExchangeMatch';
 import { useHelpExchange } from '../features/helpExchange';
 import { useCareCircleContext } from '../contexts/CareCircleContext';
+import { HelpOffer, HelpRequest } from '../types';
 import { MemoriesGallery } from '../features/memories/MemoriesGallery';
 import { FamilyTree } from '../features/visualizations/FamilyTree';
 import { RelationshipMatrix } from '../features/onboarding/RelationshipMatrix';
@@ -22,7 +23,7 @@ import { FEATURES } from '../config/features';
 export interface CoordinationTabProps {
     onAddTask?: () => void;
     onViewReport?: () => void;
-    onMatchAction?: (match: any) => void;
+    onMatchAction?: (match: ActiveMatch) => void;
     onDismissMatch?: (matchId: string) => void;
     dismissedMatchIds?: Set<string>;
 }
@@ -72,26 +73,26 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
         removeRequest
     } = useHelpExchange(careCircleId, currentUserId, 'relative', userName);
 
-    const helpOffers = allOffersFetched.filter((o: any) => o.createdByRole === 'senior');
-    const helpRequests = allRequestsFetched.filter((r: any) => r.createdByRole === 'senior');
-    const relativeOffers = allOffersFetched.filter((o: any) => o.createdByRole === 'relative');
-    const relativeRequests = allRequestsFetched.filter((r: any) => r.createdByRole === 'relative');
+    const helpOffers = allOffersFetched.filter((o: HelpOffer) => o.createdByRole === 'senior');
+    const helpRequests = allRequestsFetched.filter((r: HelpRequest) => r.createdByRole === 'senior');
+    const relativeOffers = allOffersFetched.filter((o: HelpOffer) => o.createdByRole === 'relative');
+    const relativeRequests = allRequestsFetched.filter((r: HelpRequest) => r.createdByRole === 'relative');
 
     const currentStatusInfo = STATUS_OPTIONS.find(s => s.id === myStatus) || STATUS_OPTIONS[0];
     const StatusIcon = currentStatusInfo.icon;
 
-    const otherRelativeOffers = relativeOffers.filter((o: any) => o.createdByUid !== currentUserId);
-    const otherRelativeRequests = relativeRequests.filter((r: any) => r.createdByUid !== currentUserId);
-    const myRelativeOffers = relativeOffers.filter((o: any) => o.createdByUid === currentUserId);
-    const myRelativeRequests = relativeRequests.filter((r: any) => r.createdByUid === currentUserId);
+    const otherRelativeOffers = relativeOffers.filter((o: HelpOffer) => o.createdByUid !== currentUserId);
+    const otherRelativeRequests = relativeRequests.filter((r: HelpRequest) => r.createdByUid !== currentUserId);
+    const myRelativeOffers = relativeOffers.filter((o: HelpOffer) => o.createdByUid === currentUserId);
+    const myRelativeRequests = relativeRequests.filter((r: HelpRequest) => r.createdByUid === currentUserId);
 
     const allOffers = [
-        ...helpOffers.map((o: any) => ({ ...o, createdByRole: 'senior' })),
-        ...relativeOffers.map((o: any) => ({ ...o, createdByRole: 'relative' }))
+        ...helpOffers.map((o: HelpOffer) => ({ ...o, createdByRole: 'senior' })),
+        ...relativeOffers.map((o: HelpOffer) => ({ ...o, createdByRole: 'relative' }))
     ];
     const allRequests = [
-        ...helpRequests.map((r: any) => ({ ...r, createdByRole: 'senior' })),
-        ...relativeRequests.map((r: any) => ({ ...r, createdByRole: 'relative' }))
+        ...helpRequests.map((r: HelpRequest) => ({ ...r, createdByRole: 'senior' })),
+        ...relativeRequests.map((r: HelpRequest) => ({ ...r, createdByRole: 'relative' }))
     ];
 
     const { topMatch } = useHelpExchangeMatch({
@@ -100,7 +101,7 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
         familyStatus: myStatus
     });
 
-    const getMatchId = (match: any) => {
+    const getMatchId = (match: ActiveMatch) => {
         if (!match) return null;
         const offerId = match.offer?.docId || match.offer?.id || 'none';
         const requestId = match.request?.docId || match.request?.id || 'none';
@@ -209,12 +210,12 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
                     <div className="bg-indigo-50 rounded-xl p-3 border border-indigo-100">
                         <p className="text-xs font-bold text-indigo-800 uppercase tracking-wide mb-2">{t('others_offers')}</p>
                         <div className="flex flex-wrap gap-2">
-                            {otherRelativeOffers.map((offer: any, i: number) => (
+                            {otherRelativeOffers.map((offer: HelpOffer, i: number) => (
                                 <span key={`oro-${i}`} className="text-sm bg-indigo-100 text-indigo-700 px-3 py-1.5 rounded-full">
                                     💚 {offer.label} <span className="text-indigo-400 text-xs">({offer.createdByName})</span>
                                 </span>
                             ))}
-                            {otherRelativeRequests.map((req: any, i: number) => (
+                            {otherRelativeRequests.map((req: HelpRequest, i: number) => (
                                 <span key={`orr-${i}`} className="text-sm bg-purple-100 text-purple-700 px-3 py-1.5 rounded-full">
                                     💜 {req.label} <span className="text-purple-400 text-xs">({req.createdByName})</span>
                                 </span>
@@ -227,12 +228,12 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
                     <div className="space-y-2">
                         <p className="text-xs font-bold text-stone-500 uppercase">{t('from_senior_name', { name: seniorName })}</p>
                         <div className="flex flex-wrap gap-2">
-                            {helpOffers.map((offer: any, i: number) => (
+                            {helpOffers.map((offer: HelpOffer, i: number) => (
                                 <span key={`so-${i}`} className="text-sm bg-teal-100 text-teal-700 px-3 py-1.5 rounded-full">
                                     💚 {offer.label}
                                 </span>
                             ))}
-                            {helpRequests.map((req: any, i: number) => (
+                            {helpRequests.map((req: HelpRequest, i: number) => (
                                 <span key={`sr-${i}`} className="text-sm bg-indigo-100 text-indigo-700 px-3 py-1.5 rounded-full">
                                     💜 {req.label}
                                 </span>
@@ -244,7 +245,7 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
                 <div className="space-y-2">
                     <p className="text-xs font-bold text-stone-500 uppercase">{t('you_offer')}</p>
                     <div className="flex flex-wrap gap-2">
-                        {myRelativeOffers.map((offer: any, i: number) => (
+                        {myRelativeOffers.map((offer: HelpOffer, i: number) => (
                             <span key={`ro-${i}`} className="text-sm bg-teal-500 text-white px-3 py-1.5 rounded-full flex items-center gap-1">
                                 <span className="shrink-0">{offer.emoji || '✨'}</span>
                                 <span>{offer.label}</span>
@@ -262,7 +263,7 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
                         <div className="bg-white rounded-xl p-3 border border-stone-200 space-y-2">
                             <p className="text-xs text-stone-500">Vælg hvad du kan tilbyde:</p>
                             <div className="flex flex-wrap gap-2">
-                                {RELATIVE_OFFERS.filter(o => !relativeOffers.some((ro: any) => ro.id === o.id)).map(offer => (
+                                {RELATIVE_OFFERS.filter(o => !relativeOffers.some((ro: HelpOffer) => ro.id === o.id)).map(offer => (
                                     <button
                                         key={offer.id}
                                         onClick={() => {
@@ -282,7 +283,7 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
                 <div className="space-y-2">
                     <p className="text-xs font-bold text-stone-500 uppercase">{t('you_request')}</p>
                     <div className="flex flex-wrap gap-2">
-                        {myRelativeRequests.map((req: any, i: number) => (
+                        {myRelativeRequests.map((req: HelpRequest, i: number) => (
                             <span key={`rr-${i}`} className="text-sm bg-indigo-500 text-white px-3 py-1.5 rounded-full flex items-center gap-1">
                                 <span className="shrink-0">{req.emoji || '💜'}</span>
                                 <span>{req.label}</span>
@@ -300,7 +301,7 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
                         <div className="bg-white rounded-xl p-3 border border-stone-200 space-y-2">
                             <p className="text-xs text-stone-500">Hvad kunne du bruge hjælp til?</p>
                             <div className="flex flex-wrap gap-2">
-                                {RELATIVE_REQUESTS.filter(r => !relativeRequests.some((rr: any) => rr.id === r.id)).map(request => (
+                                {RELATIVE_REQUESTS.filter(r => !relativeRequests.some((rr: HelpRequest) => rr.id === r.id)).map(request => (
                                     <button
                                         key={request.id}
                                         onClick={() => {
@@ -326,7 +327,9 @@ export const CoordinationTab: React.FC<CoordinationTabProps> = ({
 
             {(() => {
                 const todaySymptoms = symptomLogs.filter(s => {
-                    const date = s.loggedAt?.toDate ? s.loggedAt.toDate() : new Date(s.loggedAt);
+                    const date = s.loggedAt && typeof (s.loggedAt as { toDate: () => Date }).toDate === 'function'
+                        ? (s.loggedAt as { toDate: () => Date }).toDate()
+                        : new Date(s.loggedAt as string | number | Date);
                     return date.toDateString() === new Date().toDateString();
                 });
                 return symptomLogs.length > 0 && (

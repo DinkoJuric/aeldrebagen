@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { CheckCircle, XCircle, Trophy, Sparkles, ArrowRight } from 'lucide-react';
 import { Word } from './useWordGame';
 import { useTranslation } from 'react-i18next';
@@ -33,7 +33,6 @@ export const WordGame: React.FC<WordGameProps> = ({
     const [feedback, setFeedback] = useState<FeedbackState | null>(null);
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
-    // @ts-ignore - Check for import.meta.env
     const baseUrl = import.meta.env.BASE_URL;
 
     if (loading) {

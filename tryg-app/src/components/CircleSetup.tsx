@@ -29,7 +29,7 @@ export const CircleSetup: React.FC<CircleSetupProps> = ({ userRole, userName, on
             const code = await onCreateCircle(userName || '');
             setCreatedCode(code ?? null);
             setStep('created');
-        } catch (err) {
+        } catch {
             setStep('initial');
         }
     };

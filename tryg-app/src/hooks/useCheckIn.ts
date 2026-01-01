@@ -18,9 +18,11 @@ export function useCheckIn(circleId: string | undefined) {
     // Subscribe to check-in status from settings
     useEffect(() => {
         if (!circleId) {
-            setLastCheckIn(null);
-            setLoading(false);
-            return;
+            const timer = setTimeout(() => {
+                setLastCheckIn(null);
+                setLoading(false);
+            }, 0);
+            return () => clearTimeout(timer);
         }
 
         const checkInRef = doc(db, 'careCircles', circleId, 'settings', 'checkIn');
@@ -50,9 +52,10 @@ export function useCheckIn(circleId: string | undefined) {
                 }
                 setLoading(false);
             },
-            (err: any) => {
+            (err: unknown) => {
                 console.error('Error fetching check-in:', err);
-                setError(err.message);
+                const message = (err as Error).message;
+                setError(message);
                 setLoading(false);
             }
         );
@@ -80,9 +83,10 @@ export function useCheckIn(circleId: string | undefined) {
             setLastCheckIn(timeString);
 
             return timeString;
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Error recording check-in:', err);
-            setError(err.message);
+            const message = (err as Error).message;
+            setError(message);
             throw err;
         }
     }, [circleId]);

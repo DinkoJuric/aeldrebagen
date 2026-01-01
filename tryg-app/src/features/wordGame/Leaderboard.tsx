@@ -1,3 +1,4 @@
+import React from 'react';
 import { Crown, Medal, Award, Users } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { LeaderboardEntry } from './useWordGame';
@@ -32,7 +33,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ scores, currentUserId 
 
     // Get rank colors
     const getRankStyle = (rank: number, isMe: boolean) => {
-        let base = 'flex items-center gap-3 p-3 rounded-xl transition-all';
+        const base = 'flex items-center gap-3 p-3 rounded-xl transition-all';
 
         if (isMe) {
             return `${base} bg-indigo-50/60 border-2 border-indigo-200/50 backdrop-blur-sm`;

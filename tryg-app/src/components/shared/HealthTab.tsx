@@ -3,6 +3,7 @@ import { ChevronDown, ChevronUp, AlertCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useCareCircleContext } from '../../contexts/CareCircleContext';
 import { SYMPTOMS_LIST } from '../../data/constants';
+import { SymptomLog } from '../../types';
 
 export const HealthTab: React.FC = () => {
     const { t } = useTranslation();
@@ -18,19 +19,21 @@ export const HealthTab: React.FC = () => {
 
 
     // Group symptoms by date
-    const groupedSymptoms = useMemo<Record<string, any[]>>(() => {
-        const grouped: Record<string, any[]> = {};
-        symptomLogs.forEach(log => {
-            const date = log.loggedAt?.toDate ? log.loggedAt.toDate() : new Date(log.loggedAt);
+    const groupedSymptoms = useMemo<Record<string, (SymptomLog & { dateObj: Date })[]>>(() => {
+        const grouped: Record<string, (SymptomLog & { dateObj: Date })[]> = {};
+        symptomLogs.forEach((log: SymptomLog) => {
+            const date = (log.loggedAt as { toDate?: () => Date })?.toDate ? (log.loggedAt as { toDate: () => Date }).toDate() : new Date((log.loggedAt as unknown as string) || Date.now());
             const dateKey = date.toLocaleDateString('da-DK', { weekday: 'short', day: 'numeric', month: 'short' });
             if (!grouped[dateKey]) grouped[dateKey] = [];
-            grouped[dateKey].push({ ...log, dateObj: date });
+            grouped[dateKey].push({ ...log, dateObj: date } as SymptomLog & { dateObj: Date });
         });
         return grouped;
     }, [symptomLogs]);
 
     // Chart data - 14 days
+    // Fix: Calculate 'now' inside useMemo (or outside) to avoid dependency issues, but acknowledge it changes daily.
     const chartData = useMemo(() => {
+        const nowTime = Date.now();
         const days = Array(14).fill(null).map((_, i) => {
             const d = new Date();
             d.setDate(d.getDate() - (13 - i));
@@ -41,9 +44,9 @@ export const HealthTab: React.FC = () => {
             };
         });
 
-        symptomLogs.forEach(log => {
-            const date = log.loggedAt?.toDate ? log.loggedAt.toDate() : new Date(log.loggedAt);
-            const daysAgo = Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24));
+        symptomLogs.forEach((log: SymptomLog) => {
+            const date = (log.loggedAt as { toDate?: () => Date })?.toDate ? (log.loggedAt as { toDate: () => Date }).toDate() : new Date((log.loggedAt as unknown as string) || nowTime);
+            const daysAgo = Math.floor((nowTime - date.getTime()) / (1000 * 60 * 60 * 24));
             if (daysAgo >= 0 && daysAgo < 14) {
                 days[13 - daysAgo].count++;
             }
@@ -54,7 +57,7 @@ export const HealthTab: React.FC = () => {
 
     const maxCount = Math.max(...chartData.map(d => d.count), 1);
 
-    const displayedSymptoms = useMemo<Record<string, any[]>>(() => {
+    const displayedSymptoms = useMemo<Record<string, (SymptomLog & { dateObj: Date })[]>>(() => {
         if (!filterDate) return groupedSymptoms;
         return { [filterDate]: groupedSymptoms[filterDate] || [] };
     }, [groupedSymptoms, filterDate]);
@@ -174,7 +177,7 @@ export const HealthTab: React.FC = () => {
 
                                 {expandedDates[dateStr] && logs && (
                                     <ul className="divide-y border-t bg-white">
-                                        {logs.map((log: any, i: number) => {
+                                        {logs.map((log: SymptomLog & { dateObj: Date }, i: number) => {
                                             const symptomDef = SYMPTOMS_LIST.find(s => s.id === log.id) || { icon: AlertCircle, label: t('unknown') };
                                             const SymptomIcon = symptomDef.icon || AlertCircle;
                                             const timeStr = log.dateObj.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' });

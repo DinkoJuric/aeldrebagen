@@ -16,13 +16,13 @@ import {
     X
 } from 'lucide-react';
 import { collection, getDocs, doc, writeBatch } from 'firebase/firestore';
-import { deleteUser } from 'firebase/auth';
+import { deleteUser, User } from 'firebase/auth';
 import { db, auth } from '../config/firebase';
 import { CareCircle } from '../types';
 import { Task, SymptomLog } from '../types';
 
 export interface PrivacySettingsProps {
-    user: any; // User from firebase/auth
+    user: User; // User from firebase/auth
     careCircle: CareCircle | null;
     onClose: () => void;
     onPauseChange?: (paused: boolean) => void;
@@ -60,7 +60,7 @@ export const PrivacySettings: React.FC<PrivacySettingsProps> = ({
                 } : null,
                 tasks: [] as Task[],
                 symptoms: [] as SymptomLog[],
-                settings: [] as any[],
+                settings: [] as Record<string, unknown>[],
             };
 
             if (careCircle?.id) {
@@ -159,9 +159,9 @@ export const PrivacySettings: React.FC<PrivacySettingsProps> = ({
             }
 
             // User is now logged out, page will redirect to login
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Delete error:', err);
-            if (err.code === 'auth/requires-recent-login') {
+            if ((err as { code?: string }).code === 'auth/requires-recent-login') {
                 setDeleteError(t('privacy_error_relogin'));
             } else {
                 setDeleteError(t('privacy_error_generic'));

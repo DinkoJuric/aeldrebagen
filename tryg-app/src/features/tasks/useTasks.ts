@@ -40,6 +40,7 @@ export function useTasks(circleId: string | null) {
             (snapshot) => {
                 if (snapshot.empty) {
                     // Initialize with default tasks if none exist
+                    // Initialize with default tasks if none exist
                     initializeDefaultTasks(circleId);
                 } else {
                     const tasksList = snapshot.docs.map(doc => ({
@@ -50,9 +51,9 @@ export function useTasks(circleId: string | null) {
                 }
                 setLoading(false);
             },
-            (err: any) => {
+            (err: unknown) => {
                 console.error('Error fetching tasks:', err);
-                setError(err.message);
+                setError(err instanceof Error ? err.message : 'Unknown error');
                 setLoading(false);
             }
         );
@@ -115,20 +116,7 @@ export function useTasks(circleId: string | null) {
         }
     };
 
-    // Initialize default tasks for new circles
-    const initializeDefaultTasks = async (cId: string) => {
-        try {
-            for (const task of INITIAL_TASKS) {
-                await setDoc(doc(db, 'careCircles', cId, 'tasks', `task_${task.id}`), {
-                    ...task,
-                    createdAt: serverTimestamp(),
-                    completedAt: null,
-                });
-            }
-        } catch (err) {
-            console.error('Error initializing tasks:', err);
-        }
-    };
+
 
     // Toggle task completion
     const toggleTask = useCallback(async (taskId: string) => {
@@ -145,9 +133,9 @@ export function useTasks(circleId: string | null) {
                 completed: !task.completed,
                 completedAt: !task.completed ? serverTimestamp() : null,
             }, { merge: true });
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Error toggling task:', err);
-            setError(err.message);
+            setError(err instanceof Error ? err.message : 'Unknown error');
         }
     }, [circleId, tasks]);
 
@@ -177,9 +165,9 @@ export function useTasks(circleId: string | null) {
                 completedAt: null,
             });
             return taskId;
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Error adding task:', err);
-            setError(err.message);
+            setError(err instanceof Error ? err.message : 'Unknown error');
             throw err;
         }
     }, [circleId]);
@@ -193,9 +181,9 @@ export function useTasks(circleId: string | null) {
 
         try {
             await deleteDoc(taskRef);
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Error removing task:', err);
-            setError(err.message);
+            setError(err instanceof Error ? err.message : 'Unknown error');
             throw err;
         }
     }, [circleId]);
@@ -212,9 +200,9 @@ export function useTasks(circleId: string | null) {
                     completedAt: null,
                 }, { merge: true });
             }
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Error resetting tasks:', err);
-            setError(err.message);
+            setError(err instanceof Error ? err.message : 'Unknown error');
         }
     }, [circleId, tasks]);
 
@@ -230,3 +218,18 @@ export function useTasks(circleId: string | null) {
 }
 
 export default useTasks;
+
+// Initialize default tasks for new circles
+const initializeDefaultTasks = async (cId: string) => {
+    try {
+        for (const task of INITIAL_TASKS) {
+            await setDoc(doc(db, 'careCircles', cId, 'tasks', `task_${task.id}`), {
+                ...task,
+                createdAt: serverTimestamp(),
+                completedAt: null,
+            });
+        }
+    } catch (err) {
+        console.error('Error initializing tasks:', err);
+    }
+};

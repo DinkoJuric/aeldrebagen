@@ -23,7 +23,7 @@ export const AudioRecorder: React.FC<AudioRecorderProps> = ({
 
     const mediaRecorderRef = useRef<MediaRecorder | null>(null);
     const chunksRef = useRef<Blob[]>([]);
-    const timerRef = useRef<NodeJS.Timeout | null>(null);
+    const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
     useEffect(() => {
         return () => {
@@ -75,9 +75,10 @@ export const AudioRecorder: React.FC<AudioRecorderProps> = ({
                 });
             }, 1000);
 
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Recording error:', err);
-            if (err.name === 'NotAllowedError') {
+            const error = err as Error;
+            if (error.name === 'NotAllowedError') {
                 setError(t('mic_permission_denied'));
             } else {
                 setError(t('mic_access_error'));

@@ -36,7 +36,7 @@ export const FamilyTree = React.forwardRef<HTMLDivElement, FamilyTreeProps>(({ m
     const currentUserMember = members.find(m => m.userId === currentUserId || m.docId === currentUserId);
 
     const isSenior = currentUserMember?.role === 'senior' || (currentUserMember?.userId === seniorId || currentUserMember?.docId === seniorId);
-    const isAdmin = isSenior || currentUserMember?.accessLevel === 'admin' || (currentUserMember as any)?.role === 'admin';
+    const isAdmin = isSenior || currentUserMember?.accessLevel === 'admin' || (currentUserMember as unknown as { role: string })?.role === 'admin';
 
     // Group grand-children (Juzu)
     const grandChildren = allRelatives.filter(m => m.displayName?.toLowerCase().includes('juzu'));
@@ -68,7 +68,7 @@ export const FamilyTree = React.forwardRef<HTMLDivElement, FamilyTreeProps>(({ m
     const [selectedMember, setSelectedMember] = React.useState<Member | null>(null);
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
-    const handleNodeClick = (member: any) => {
+    const handleNodeClick = (member: Member) => {
         if (!isAdmin) return; // SECURITY: Restrict editing to admins
         if (!member || member.userId === 'jacob') return; // Cannot edit dummy node
         setSelectedMember(member);

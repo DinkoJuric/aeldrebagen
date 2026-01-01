@@ -12,7 +12,7 @@ import { doc, setDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
 
 export interface ShareModalProps {
-    members: any[];
+    members: Member[];
     inviteCode: string | null;
     onGetInviteCode: () => Promise<void>;
     onClose: () => void;
