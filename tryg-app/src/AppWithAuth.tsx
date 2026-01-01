@@ -8,8 +8,9 @@ import TrygAppCore from './AppCore';
 import { FEATURES } from './config/features';
 import { LivingBackground } from './components/ui/LivingBackground';
 import { ThemeProvider } from './contexts/ThemeContext';
-
-
+import { CareCircleProvider } from './components/providers/CareCircleProvider';
+import { PhoneFrame } from './components/layout/PhoneFrame';
+import { SensoryFeedback } from './components/SensoryFeedback';
 
 // Main app wrapper with Firebase integration
 export default function AppWithAuth() {
@@ -190,17 +191,154 @@ function FirebaseApp() {
 
     // Fully authenticated with circle - render main app
     return (
-        <TrygAppCore
+        <CareCircleProvider
             user={user}
             userProfile={userProfile}
             careCircle={careCircle}
-            onSignOut={signOut}
+            members={members}
             inviteCode={inviteCode}
             onGetInviteCode={getInviteCode}
-            members={members}
             updateMember={updateMember}
             updateAnyMember={updateAnyMember}
-        />
+        >
+            <SensoryFeedback />
+            {/*
+              PhoneFrame now wraps AppCore.
+              We'll pass notification logic to PhoneFrame if we can,
+              but notification state is currently inside AppCore.
+
+              Strategy:
+              AppCore is now the "Content" of the PhoneFrame.
+              AppCore will render its content, but the FRAME itself is external.
+
+              However, to use the PhoneFrame component we created, we need to wrap content in it.
+              And to keep AppCore modular, AppCore should return <PhoneFrame>...</PhoneFrame> ?
+              NO, the plan says:
+              "App.tsx and AppCore to both be children of PhoneFrame."
+
+              So:
+              <PhoneFrame>
+                 <TrygAppCore onSignOut={signOut} />
+              </PhoneFrame>
+
+              BUT PhoneFrame takes `notification` prop.
+              If `notification` state lives in `TrygAppCore`, `PhoneFrame` can't see it here.
+
+              Solution:
+              1. Lift notification state to here (AppWithAuth)?
+                 No, AppCore handles pings which generate notifications.
+              2. Keep notification in AppCore, and AppCore renders PhoneFrame?
+                 The User said: "Refactor App.tsx and AppCore to both be children of PhoneFrame."
+                 This implies the parent (this file) renders PhoneFrame.
+
+              If AppCore manages the notification state, how does PhoneFrame display it?
+              Maybe AppCore *renders* the PhoneFrame?
+              "AppCore should only determine which View to render... based on auth state."
+
+              If I put PhoneFrame inside AppCore, then AppCore is not "a child of PhoneFrame".
+
+              Let's re-read the User's "Conceptual Helper":
+              <CareCircleProvider>
+                 <SensoryFeedback />
+                 <PhoneFrame>
+                    <AppCore />
+                 </PhoneFrame>
+              </CareCircleProvider>
+
+              Okay, so AppWithAuth renders this structure.
+              This means `AppCore` is *inside* the screen area of `PhoneFrame`.
+
+              What about the Notification Banner?
+              It is part of `PhoneFrame`. It needs `notification` prop.
+              Where does the notification come from?
+              It comes from `latestPing` (in Context).
+
+              Ah! `AppCore` had:
+               useEffect(() => { if (latestPing) playPingSound(); }, [latestPing]);
+
+              And also:
+               const [notification, setNotification] = useState<any | null>(null);
+               ...
+               <div className="absolute top-4 ..."> {notification...} </div>
+
+              If `SensoryFeedback` handles sounds, maybe `PhoneFrame` handles Notifications?
+              Does `PhoneFrame` have access to Context?
+              No, it's a layout component.
+              But `AppWithAuth` is inside `CareCircleProvider` (wait, no, it RENDERS it).
+
+              So `AppWithAuth` cannot consume the context it just created in the same render cycle easily without a sub-component.
+
+              However, `TrygAppCore` consumes context.
+              If `TrygAppCore` is inside `PhoneFrame`, `TrygAppCore` can render the banner?
+              No, the banner is "OS Level" (part of the frame).
+
+              Maybe `PhoneFrame` should consume the context to show notifications?
+              If I connect `PhoneFrame` to context, it becomes "smart". User said "PhoneFrame... Responsibility: The Phone Simulator wrapper".
+
+              Alternative: `AppCore` renders the `PhoneFrame`?
+              User said "AppCore... Refactor: Extract the outer wrapper HTML".
+              User said "App.tsx and AppCore to both be children of PhoneFrame".
+              This strongly implies the hierarchy I wrote above.
+
+              So, how does the Notification Banner get data?
+              Options:
+              A) Lift notification state to a `NotificationProvider` (or use `CareCircleContext` if suitable).
+              B) Pass a `NotificationHandler` component as a sibling to `AppCore` inside `PhoneFrame`?
+                 <PhoneFrame>
+                    <NotificationBanner /> <-- Connected component?
+                    <AppCore />
+                 </PhoneFrame>
+              C) Make `PhoneFrame` smart (connect to Context).
+
+              Given `CareCircleContext` has `latestPing`, we can derive the notification from it.
+              The `AppCore` logic was: `if (notification) show banner`.
+              `notification` was set by... actually, `AppCore` *doesn't* seem to set `notification` based on `latestPing` in the file I read!
+
+              Let's look at `AppCore.tsx` again.
+              `const [notification, setNotification] = useState<any | null>(null);`
+              `useEffect(() => { if (notification) ... timer ... }, [notification]);`
+              But WHERE is `setNotification` called?
+              I see `const { latestPing... } = usePings(...)`.
+              I see `playPingSound()`.
+              I DO NOT see `setNotification` called for pings in `AppCore.tsx`!
+
+              Wait, `App.tsx` (Demo) sets notification on a timer.
+              `AppCore.tsx` has the *state* and the *JSX*, but maybe I missed where it's used?
+              Or maybe it's NOT used in `AppCore` yet?
+
+              Let's re-read `AppCore.tsx` content from memory/history.
+              `const [notification, setNotification] = useState<any | null>(null);`
+              It is defined.
+              It is rendered.
+              But `setNotification` is NOT called except in `useEffect` (for timer to clear).
+              Wait, is it passed down? No.
+
+              Ah, `AppCore` imports `PingNotification` from `features/thinkingOfYou`.
+              And renders:
+              `{latestPing && (<PingNotification ping={latestPing} onDismiss={dismissPing} />)}`
+
+              This `PingNotification` is rendered *inside* the content area (LivingBackground).
+              The *Push Notification Banner* (absolute top-4) uses the `notification` state.
+
+              So `AppCore` has TWO notification systems?
+              1. The "Push Banner" (using `notification` state) -> Seems UNUSED in `AppCore` (except for the state definition).
+              2. The `PingNotification` (component) -> Used for `latestPing`.
+
+              If the "Push Banner" is unused in AppCore, then I don't need to worry about passing `notification` prop to `PhoneFrame` for `AppCore`!
+              I only need to worry about `PingNotification` which is *inside* the view.
+
+              However, `App.tsx` (Demo) DOES use the Push Banner for the water reminder.
+
+              So:
+              - `App.tsx` will pass `notification` prop to `PhoneFrame`.
+              - `AppCore` (via `AppWithAuth`) will pass `null` or `undefined` to `PhoneFrame`'s `notification` prop.
+
+              This simplifies everything.
+            */}
+            <PhoneFrame>
+                <TrygAppCore user={user} onSignOut={signOut} />
+            </PhoneFrame>
+        </CareCircleProvider>
     );
 }
 

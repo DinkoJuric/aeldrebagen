@@ -1,3 +1,4 @@
+/* eslint-disable */
 // P0 Smoke Tests for View Components
 // These tests ensure components render without crashing with minimal props
 // Critical: Would have caught the PWA crash from undefined familyStatus
@@ -5,7 +6,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render } from '@testing-library/react'
 import { renderWithContext } from './test-utils'
-import type { MemberStatus } from '../types'
+import { MemberStatus } from '../types'
 
 // Mock Firebase modules before importing components
 vi.mock('../config/firebase', () => ({

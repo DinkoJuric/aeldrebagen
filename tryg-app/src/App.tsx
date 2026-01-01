@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { FEATURES } from './config/features';
 import { cn } from './lib/utils';
 import { useTheme } from './contexts/ThemeContext';
+import { PhoneFrame } from './components/layout/PhoneFrame';
 import './index.css';
 
 export default function TrygApp() {
@@ -97,83 +98,57 @@ export default function TrygApp() {
     }
 
     return (
-        <div className="flex justify-center items-center min-h-screen bg-zinc-800 p-4 font-sans">
+        <PhoneFrame notification={notification} showOnboarding={showOnboarding}>
+            <div className="relative h-full overflow-y-auto no-scrollbar flex flex-col">
+                {/* Role Toggles & Reset - ENHANCED VISIBILITY */}
+                {/* Only show these controls in Demo Mode (App.tsx), not in real app */}
+                <div className="absolute top-4 right-4 z-50 flex gap-2">
+                    <button
+                        onClick={handleResetOnboarding}
+                        className="p-2 bg-white/40 dark:bg-zinc-800/40 backdrop-blur-md border border-white/50 dark:border-zinc-700/50 rounded-full text-stone-900 dark:text-stone-100 shadow-sm transition-all hover:bg-white/60"
+                        title="Reset Onboarding"
+                    >
+                        <RotateCcw size={16} />
+                    </button>
+                    <div className="flex bg-white/40 dark:bg-zinc-800/40 backdrop-blur-md border border-white/50 dark:border-zinc-700/50 rounded-full p-1 shadow-sm">
+                        <button
+                            onClick={() => setView('senior')}
+                            className={cn(
+                                "px-3 py-1.5 rounded-full text-xs font-bold transition-colors",
+                                view === 'senior'
+                                    ? "bg-white text-stone-900 shadow-sm"
+                                    : "text-stone-700 dark:text-stone-300 hover:text-black dark:hover:text-white"
+                                )}
+                        >
+                            {t('role_senior')}
+                        </button>
+                        <button
+                            onClick={() => setView('relative')}
+                            className={cn(
+                                "px-3 py-1.5 rounded-full text-xs font-bold transition-colors",
+                                view === 'relative'
+                                    ? "bg-white text-stone-900 shadow-sm"
+                                    : "text-stone-700 dark:text-stone-300 hover:text-black dark:hover:text-white"
+                                )}
+                        >
+                            {t('role_relative')}
+                        </button>
+                    </div>
+                </div>
 
-            {/* Phone Frame Simulator */}
-            <div className="relative w-full max-w-md h-[850px] bg-white rounded-[3rem] overflow-hidden border-8 border-zinc-900 shadow-2xl ring-1 ring-zinc-400/50">
-
-                {/* Push Notification Banner */}
-                <div className={`
-                    absolute top-4 left-4 right-4 bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-xl z-[60]
-                    transform transition-all duration-500 ease-out border border-stone-200
-                    ${notification ? 'translate-y-12 opacity-100' : '-translate-y-40 opacity-0'}
-                `}>
-                    {notification && (
-                        <div className="flex gap-3 items-center">
-                            <div className="bg-teal-100 p-2 rounded-xl">
-                                <notification.icon className="w-6 h-6 text-teal-600" />
-                            </div>
-                            <div>
-                                <h4 className="font-bold text-stone-800 text-sm">{notification.title}</h4>
-                                <p className="text-stone-500 text-xs">{notification.body}</p>
-                            </div>
-                        </div>
+                {/* Content */}
+                <div className="flex-1 overflow-hidden h-full">
+                    {showOnboarding ? (
+                        view === 'senior' ? (
+                            <SeniorWelcome onComplete={handleOnboardingComplete} />
+                        ) : (
+                            <RelativeWelcome onComplete={handleOnboardingComplete} />
+                        )
+                    ) : (
+                        view === 'senior' ? <SeniorView /> : <RelativeView />
                     )}
                 </div>
-
-                <div className="relative h-full overflow-y-auto no-scrollbar">
-                    {/* Role Toggles & Reset - ENHANCED VISIBILITY */}
-                    <div className="absolute top-4 right-4 z-50 flex gap-2">
-                        <button
-                            onClick={handleResetOnboarding}
-                            className="p-2 bg-white/40 dark:bg-zinc-800/40 backdrop-blur-md border border-white/50 dark:border-zinc-700/50 rounded-full text-stone-900 dark:text-stone-100 shadow-sm transition-all hover:bg-white/60"
-                            title="Reset Onboarding"
-                        >
-                            <RotateCcw size={16} />
-                        </button>
-                        <div className="flex bg-white/40 dark:bg-zinc-800/40 backdrop-blur-md border border-white/50 dark:border-zinc-700/50 rounded-full p-1 shadow-sm">
-                            <button
-                                onClick={() => setView('senior')}
-                                className={cn(
-                                    "px-3 py-1.5 rounded-full text-xs font-bold transition-colors",
-                                    view === 'senior'
-                                        ? "bg-white text-stone-900 shadow-sm"
-                                        : "text-stone-700 dark:text-stone-300 hover:text-black dark:hover:text-white"
-                                )}
-                            >
-                                {t('role_senior')}
-                            </button>
-                            <button
-                                onClick={() => setView('relative')}
-                                className={cn(
-                                    "px-3 py-1.5 rounded-full text-xs font-bold transition-colors",
-                                    view === 'relative'
-                                        ? "bg-white text-stone-900 shadow-sm"
-                                        : "text-stone-700 dark:text-stone-300 hover:text-black dark:hover:text-white"
-                                )}
-                            >
-                                {t('role_relative')}
-                            </button>
-                        </div>
-                    </div>
-
-                    {/* Content */}
-                    <div className="flex-1 overflow-hidden h-full">
-                        {showOnboarding ? (
-                            view === 'senior' ? (
-                                <SeniorWelcome onComplete={handleOnboardingComplete} />
-                            ) : (
-                                <RelativeWelcome onComplete={handleOnboardingComplete} />
-                            )
-                        ) : (
-                            view === 'senior' ? <SeniorView /> : <RelativeView />
-                        )}
-                    </div>
-                </div>
-
-                {/* Home indicator */}
-                <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 w-32 h-1.5 bg-black/20 rounded-full z-50"></div>
             </div>
-        </div>
+        </PhoneFrame>
     );
 }

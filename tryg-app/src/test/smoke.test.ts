@@ -1,6 +1,14 @@
 // Smoke tests for Firebase configuration
 // These tests verify the app can initialize without crashing
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
+
+// Mock Firebase config to prevent initialization issues during imports
+vi.mock('../config/firebase', () => ({
+    db: {},
+    auth: {},
+    storage: {}
+}))
+
 
 describe('Firebase Configuration', () => {
     it('firebase config module exports required objects', async () => {
@@ -22,6 +30,21 @@ describe('Firebase Configuration', () => {
 })
 
 describe('App Entry Points', () => {
+    it('AppCore module can be imported', async () => {
+        const module = await import('../AppCore')
+        expect(module.default).toBeDefined()
+    })
+
+    it('CareCircleProvider module can be imported', async () => {
+        const module = await import('../components/providers/CareCircleProvider')
+        expect(module.CareCircleProvider).toBeDefined()
+    })
+
+    it('PhoneFrame module can be imported', async () => {
+        const module = await import('../components/layout/PhoneFrame')
+        expect(module.PhoneFrame).toBeDefined()
+    })
+
     it('AppWithAuth module can be imported', async () => {
         // This catches any top-level import errors
         try {

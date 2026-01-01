@@ -176,110 +176,110 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
         );
     }
 
-return (
-    <Modal isOpen={true} onClose={onClose} title={t('settings')}>
-        <div className="space-y-6">
+    return (
+        <Modal isOpen={true} onClose={onClose} title={t('settings')}>
+            <div className="space-y-6">
 
-            {/* General Section */}
-            <section>
-                <h3 className="text-xs font-bold text-stone-500 uppercase tracking-wider mb-3">{t('general')}</h3>
+                {/* General Section */}
+                <section>
+                    <h3 className="text-xs font-bold text-stone-500 uppercase tracking-wider mb-3">{t('general')}</h3>
 
-                {/* Theme Selection */}
-                <div className="space-y-2 mb-4">
-                    <label className="text-sm font-medium text-stone-700">{t('theme')}</label>
-                    <div className="grid grid-cols-3 gap-2">
-                        {themes.map((theme) => (
-                            <button
-                                key={theme.id}
-                                onClick={() => setMode(theme.id as 'auto' | 'light' | 'dark')}
-                                className={`p-3 rounded-xl border-2 transition-all flex flex-col items-center gap-1 ${mode === theme.id
-                                    ? 'border-teal-500 bg-teal-50'
-                                    : 'border-stone-200 hover:border-teal-300'
-                                    }`}
-                            >
-                                <theme.icon className={`w-5 h-5 ${mode === theme.id ? 'text-teal-600' : 'text-stone-500'}`} />
-                                <span className={`text-xs font-medium ${mode === theme.id ? 'text-teal-700' : 'text-stone-600'}`}>
-                                    {theme.label.split(' ')[0]}
-                                </span>
-                            </button>
-                        ))}
+                    {/* Theme Selection */}
+                    <div className="space-y-2 mb-4">
+                        <label className="text-sm font-medium text-stone-700">{t('theme')}</label>
+                        <div className="grid grid-cols-3 gap-2">
+                            {themes.map((theme) => (
+                                <button
+                                    key={theme.id}
+                                    onClick={() => setMode(theme.id as 'auto' | 'light' | 'dark')}
+                                    className={`p-3 rounded-xl border-2 transition-all flex flex-col items-center gap-1 ${mode === theme.id
+                                        ? 'border-teal-500 bg-teal-50'
+                                        : 'border-stone-200 hover:border-teal-300'
+                                        }`}
+                                >
+                                    <theme.icon className={`w-5 h-5 ${mode === theme.id ? 'text-teal-600' : 'text-stone-500'}`} />
+                                    <span className={`text-xs font-medium ${mode === theme.id ? 'text-teal-700' : 'text-stone-600'}`}>
+                                        {theme.label.split(' ')[0]}
+                                    </span>
+                                </button>
+                            ))}
+                        </div>
                     </div>
-                </div>
 
-                {/* Language Selection */}
-                <div className="space-y-2">
-                    <label className="text-sm font-medium text-stone-700 flex items-center gap-2">
-                        <Globe className="w-4 h-4" />
-                        {t('language_selection')}
-                    </label>
-                    <div className="grid grid-cols-3 gap-2">
-                        {languages.map((lang) => (
-                            <button
-                                key={lang.code}
-                                onClick={() => i18n.changeLanguage(lang.code)}
-                                className={`p-3 rounded-xl border-2 transition-all flex flex-col items-center gap-1 ${i18n.language === lang.code
-                                    ? 'border-teal-500 bg-teal-50'
-                                    : 'border-stone-200 hover:border-teal-300'
-                                    }`}
-                            >
-                                <span className="text-xl">{lang.flag}</span>
-                                <span className={`text-xs font-medium ${i18n.language === lang.code ? 'text-teal-700' : 'text-stone-600'}`}>
-                                    {lang.label}
-                                </span>
-                            </button>
-                        ))}
+                    {/* Language Selection */}
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium text-stone-700 flex items-center gap-2">
+                            <Globe className="w-4 h-4" />
+                            {t('language_selection')}
+                        </label>
+                        <div className="grid grid-cols-3 gap-2">
+                            {languages.map((lang) => (
+                                <button
+                                    key={lang.code}
+                                    onClick={() => i18n.changeLanguage(lang.code)}
+                                    className={`p-3 rounded-xl border-2 transition-all flex flex-col items-center gap-1 ${i18n.language === lang.code
+                                        ? 'border-teal-500 bg-teal-50'
+                                        : 'border-stone-200 hover:border-teal-300'
+                                        }`}
+                                >
+                                    <span className="text-xl">{lang.flag}</span>
+                                    <span className={`text-xs font-medium ${i18n.language === lang.code ? 'text-teal-700' : 'text-stone-600'}`}>
+                                        {lang.label}
+                                    </span>
+                                </button>
+                            ))}
+                        </div>
                     </div>
-                </div>
 
-                {/* Onboarding Button */}
-                <div className="pt-4">
+                    {/* Onboarding Button */}
+                    <div className="pt-4">
+                        <button
+                            onClick={onStartOnboarding}
+                            className="w-full flex items-center justify-between p-4 bg-teal-50 border-2 border-teal-100 rounded-xl hover:bg-teal-100 hover:border-teal-200 transition-colors group"
+                        >
+                            <div className="flex items-center gap-3">
+                                <div className="p-2 bg-white rounded-full text-teal-600 shadow-sm group-hover:scale-110 transition-transform">
+                                    <BookOpen className="w-5 h-5" />
+                                </div>
+                                <div className="text-left">
+                                    <h4 className="font-bold text-teal-900">{t('app_guide_button', 'App Guide')}</h4>
+                                    <p className="text-xs text-teal-700">{t('app_guide_desc', 'Se hvordan appen virker')}</p>
+                                </div>
+                            </div>
+                            <ChevronRight className="w-5 h-5 text-teal-400 group-hover:text-teal-600 group-hover:translate-x-1 transition-all" />
+                        </button>
+                    </div>
+                </section>
+
+                {/* Privacy & Data Section */}
+                <section>
+                    <h3 className="text-xs font-bold text-stone-500 uppercase tracking-wider mb-3">{t('privacy_data')}</h3>
                     <button
-                        onClick={onStartOnboarding}
-                        className="w-full flex items-center justify-between p-4 bg-teal-50 border-2 border-teal-100 rounded-xl hover:bg-teal-100 hover:border-teal-200 transition-colors group"
+                        onClick={() => setShowPrivacy(true)}
+                        className="w-full flex items-center justify-between p-4 bg-stone-50 rounded-xl hover:bg-stone-100 transition-colors"
                     >
                         <div className="flex items-center gap-3">
-                            <div className="p-2 bg-white rounded-full text-teal-600 shadow-sm group-hover:scale-110 transition-transform">
-                                <BookOpen className="w-5 h-5" />
-                            </div>
-                            <div className="text-left">
-                                <h4 className="font-bold text-teal-900">{t('app_guide_button', 'App Guide')}</h4>
-                                <p className="text-xs text-teal-700">{t('app_guide_desc', 'Se hvordan appen virker')}</p>
-                            </div>
+                            <Shield className="w-5 h-5 text-teal-600" />
+                            <span className="font-medium text-stone-800">{t('privacy_title')}</span>
                         </div>
-                        <ChevronRight className="w-5 h-5 text-teal-400 group-hover:text-teal-600 group-hover:translate-x-1 transition-all" />
+                        <ChevronRight className="w-5 h-5 text-stone-400" />
                     </button>
-                </div>
-            </section>
+                </section>
 
-            {/* Privacy & Data Section */}
-            <section>
-                <h3 className="text-xs font-bold text-stone-500 uppercase tracking-wider mb-3">{t('privacy_data')}</h3>
-                <button
-                    onClick={() => setShowPrivacy(true)}
-                    className="w-full flex items-center justify-between p-4 bg-stone-50 rounded-xl hover:bg-stone-100 transition-colors"
-                >
-                    <div className="flex items-center gap-3">
-                        <Shield className="w-5 h-5 text-teal-600" />
-                        <span className="font-medium text-stone-800">{t('privacy_title')}</span>
+                {/* Sign Out */}
+                <div className="border-t border-stone-100 pt-4">
+                    <button
+                        onClick={onSignOut}
+                        className="w-full flex items-center justify-center gap-2 p-4 text-red-600 hover:bg-red-50 rounded-xl transition-colors font-semibold"
+                    >
+                        <LogOut className="w-5 h-5" />
+                        {t('sign_out')}
+                    </button>
+                    <div className="text-center mt-2">
+                        <p className="text-[10px] text-stone-300">Version 1.0.3 • Build 2024</p>
                     </div>
-                    <ChevronRight className="w-5 h-5 text-stone-400" />
-                </button>
-            </section>
-
-            {/* Sign Out */}
-            <div className="border-t border-stone-100 pt-4">
-                <button
-                    onClick={onSignOut}
-                    className="w-full flex items-center justify-center gap-2 p-4 text-red-600 hover:bg-red-50 rounded-xl transition-colors font-semibold"
-                >
-                    <LogOut className="w-5 h-5" />
-                    {t('sign_out')}
-                </button>
-                <div className="text-center mt-2">
-                    <p className="text-[10px] text-stone-300">Version 1.0.3 • Build 2024</p>
                 </div>
             </div>
-        </div>
-    </Modal>
-);
+        </Modal>
+    );
 };
