@@ -1,3 +1,4 @@
+
 // P0 Smoke Tests for View Components
 // These tests ensure components render without crashing with minimal props
 // Critical: Would have caught the PWA crash from undefined familyStatus
