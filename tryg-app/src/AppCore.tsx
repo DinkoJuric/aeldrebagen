@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CareCircleProvider } from './contexts/CareCircleContext';
 import { LogOut, Settings, Users } from 'lucide-react';
@@ -136,47 +136,47 @@ export default function TrygAppCore({
         }
     }, [notification]);
 
-    const handleToggleTask = async (id: string) => {
+    const handleToggleTask = useCallback(async (id: string) => {
         const task = tasks.find(t => t.id === id || t.id === `task_${id}`);
         const willBeCompleted = task && !task.completed;
         await toggleTask(id);
         if (willBeCompleted && FEATURES.completionSounds) {
             playCompletionSound();
         }
-    };
+    }, [tasks, toggleTask]);
 
-    const handleCheckIn = async () => {
+    const handleCheckIn = useCallback(async () => {
         await recordCheckIn();
         if (FEATURES.completionSounds) {
             playSuccessSound();
         }
-    };
+    }, [recordCheckIn]);
 
-    const handleAddSymptom = async (symptomData: Partial<SymptomLog>) => {
+    const handleAddSymptom = useCallback(async (symptomData: Partial<SymptomLog>) => {
         return await addSymptom(symptomData);
-    };
+    }, [addSymptom]);
 
-    const handleAddTaskFromRelative = async (newTask: Partial<Task>) => {
+    const handleAddTaskFromRelative = useCallback(async (newTask: Partial<Task>) => {
         return await addTask({
             ...newTask,
             createdByRole: 'relative',
             createdByName: relativeName || userProfile?.displayName || 'Familie',
             createdByUserId: user?.uid
         });
-    };
+    }, [addTask, relativeName, userProfile, user]);
 
-    const handleSendPing = async (toRole: 'senior' | 'relative') => {
+    const handleSendPing = useCallback(async (toRole: 'senior' | 'relative') => {
         const fromName = isSenior ? seniorName : relativeName;
         return await sendPing(fromName, (user?.uid ?? undefined) as string, toRole);
-    };
+    }, [isSenior, seniorName, relativeName, sendPing, user]);
 
-    const handleWeeklyAnswer = async (answer: string) => {
+    const handleWeeklyAnswer = useCallback(async (answer: string) => {
         return await addWeeklyAnswer({
             text: answer,
             userId: user?.uid,
             userName: isSenior ? seniorName : (relativeName || 'Pårørende')
         });
-    };
+    }, [addWeeklyAnswer, isSenior, seniorName, relativeName, user]);
 
     // Live update: prefer real-time member data over static user profile
     const currentMember = members.find(m => m.userId === user?.uid);
@@ -192,40 +192,50 @@ export default function TrygAppCore({
         ? effectiveDisplayName || 'Pårørende'
         : members.find(m => m.role === 'relative')?.displayName || 'Pårørende';
 
+    // 🚀 TURBO: Memoize the context value to prevent unnecessary re-renders of consumers.
+    // This is a critical performance optimization for context-heavy applications.
+    const contextValue = useMemo(() => ({
+        careCircleId: careCircle?.id ?? null,
+        seniorId: careCircle?.seniorId || null,
+        seniorName: seniorName,
+        currentUserId: user?.uid ?? null,
+        userRole: userProfile?.role ?? null,
+        userName: isSenior ? seniorName : relativeName,
+        relativeName: relativeName,
+        memberStatuses,
+        members,
+        relativeStatuses,
+        seniorStatus: seniorStatus || null,
+        myStatus: myStatus as any,
+        setMyStatus: setMyStatus,
+        activeTab: activeTab as AppTab,
+        setActiveTab: setActiveTab,
+        tasks,
+        toggleTask: handleToggleTask,
+        addTask: isSenior ? addTask : handleAddTaskFromRelative,
+        symptoms,
+        addSymptom: handleAddSymptom,
+        weeklyAnswers,
+        addWeeklyAnswer: handleWeeklyAnswer,
+        toggleLike: (answerId: string, userId: string, isLiked: boolean) => onToggleLike(answerId, userId, isLiked),
+        addReply: onReply,
+        latestPing,
+        sendPing: handleSendPing,
+        dismissPing: dismissPing,
+        lastCheckIn,
+        recordCheckIn: handleCheckIn,
+        updateMember: updateMember,
+        updateAnyMember: updateAnyMember
+    }), [
+        careCircle, seniorName, user, userProfile, isSenior, relativeName, memberStatuses, members,
+        relativeStatuses, seniorStatus, myStatus, setMyStatus, activeTab, tasks, handleToggleTask,
+        addTask, handleAddTaskFromRelative, symptoms, handleAddSymptom, weeklyAnswers,
+        handleWeeklyAnswer, onToggleLike, onReply, latestPing, handleSendPing, dismissPing,
+        lastCheckIn, handleCheckIn, updateMember, updateAnyMember
+    ]);
+
     return (
-        <CareCircleProvider value={{
-            careCircleId: careCircle?.id ?? null,
-            seniorId: careCircle?.seniorId || null,
-            seniorName: seniorName,
-            currentUserId: user?.uid ?? null,
-            userRole: userProfile?.role ?? null,
-            userName: isSenior ? seniorName : relativeName,
-            relativeName: relativeName,
-            memberStatuses,
-            members,
-            relativeStatuses,
-            seniorStatus: seniorStatus || null,
-            myStatus: myStatus as any,
-            setMyStatus: setMyStatus,
-            activeTab: activeTab as AppTab,
-            setActiveTab: setActiveTab,
-            tasks,
-            toggleTask: handleToggleTask,
-            addTask: isSenior ? addTask : handleAddTaskFromRelative,
-            symptoms,
-            addSymptom: handleAddSymptom,
-            weeklyAnswers,
-            addWeeklyAnswer: handleWeeklyAnswer,
-            toggleLike: (answerId: string, userId: string, isLiked: boolean) => onToggleLike(answerId, userId, isLiked),
-            addReply: onReply,
-            latestPing,
-            sendPing: handleSendPing,
-            dismissPing: dismissPing,
-            lastCheckIn,
-            recordCheckIn: handleCheckIn,
-            updateMember: updateMember,
-            updateAnyMember: updateAnyMember
-        }}>
+        <CareCircleProvider value={contextValue}>
             <div className="flex justify-center items-center min-h-screen bg-stone-50 dark:bg-zinc-950 sm:bg-zinc-800 sm:p-4">
 
                 {/* Phone Frame Simulator (Responsive) */}
