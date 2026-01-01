@@ -1,3 +1,14 @@
+### [1.15.1] - 2025-12-31
+
+### 🧹 Codebase Perfection (Final Sweep)
+**Zero-Debt Milestone**
+- **Linting & Types**: Achieved 0 ESLint warnings and 0 TypeScript errors across the entire codebase.
+- **Strict Nullability**: Resolved complex null/undefined mismatches in `AppCore` and Firebase hooks.
+- **Import Hygiene**: Fixed broken imports in `FamilyTab` and `HealthTab`.
+- **Performance**: Optimized `useEffect` dependencies and deferred state updates to prevent render loops.
+
+---
+
 ### [1.15.0] - 2025-12-31
 
 ### 🚀 Onboarding V2 Experience

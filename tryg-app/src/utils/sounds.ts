@@ -3,7 +3,10 @@
 
 // Define AudioContext type if needed, but it should be available in lib.dom.d.ts
 // We use 'any' for window properties to avoid strict checks if types are missing
-const AudioContextClass = typeof window !== 'undefined' ? (window.AudioContext || (window as any).webkitAudioContext) : null;
+interface WindowWithAudio extends Window {
+    webkitAudioContext?: typeof AudioContext;
+}
+const AudioContextClass = typeof window !== 'undefined' ? (window.AudioContext || (window as unknown as WindowWithAudio).webkitAudioContext) : null;
 const audioContext = AudioContextClass ? new AudioContextClass() : null;
 
 // Gentle completion chime - warm and reassuring

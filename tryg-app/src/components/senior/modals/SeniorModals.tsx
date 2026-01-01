@@ -7,6 +7,7 @@ import { BodyPainSelector } from '../../../features/symptoms';
 import { SYMPTOMS_LIST } from '../../../data/constants';
 import { WeeklyQuestionModal } from '../../../features/weeklyQuestion';
 import { MatchCelebration } from '../../../features/helpExchange';
+import { ActiveMatch } from '../../../features/helpExchange/useHelpExchangeMatch';
 import { useCareCircleContext } from '../../../contexts/CareCircleContext';
 
 interface SeniorModalsProps {
@@ -18,8 +19,8 @@ interface SeniorModalsProps {
     setShowWeeklyModal: (show: boolean) => void;
     showAddTaskModal: boolean;
     setShowAddTaskModal: (show: boolean) => void;
-    activeMatch: any | null;
-    setActiveMatch: (match: any | null) => void;
+    activeMatch: ActiveMatch | null;
+    setActiveMatch: (match: ActiveMatch | null) => void;
 }
 
 export const SeniorModals: React.FC<SeniorModalsProps> = ({
@@ -49,7 +50,7 @@ export const SeniorModals: React.FC<SeniorModalsProps> = ({
     } = useCareCircleContext();
 
     // Symptom flow state
-    const [selectedSymptom, setSelectedSymptom] = useState<any | null>(null);
+    const [selectedSymptom, setSelectedSymptom] = useState<typeof SYMPTOMS_LIST[number] | null>(null);
     const [showBodySelector, setShowBodySelector] = useState(false);
 
     // Add Task state
@@ -57,7 +58,7 @@ export const SeniorModals: React.FC<SeniorModalsProps> = ({
     const [newTaskPeriod, setNewTaskPeriod] = useState('morgen');
     const [newTaskRecurring, setNewTaskRecurring] = useState(false);
 
-    const handleAddSymptom = (symptom: any) => {
+    const handleAddSymptom = (symptom: typeof SYMPTOMS_LIST[number]) => {
         addSymptom(symptom);
         setShowSymptomModal(false);
         setSelectedSymptom(null);
@@ -109,7 +110,7 @@ export const SeniorModals: React.FC<SeniorModalsProps> = ({
                     <BodyPainSelector
                         onSelectLocation={(bodyLocation) => {
                             handleAddSymptom({
-                                ...selectedSymptom,
+                                ...(selectedSymptom as any),
                                 bodyLocation
                             });
                         }}
@@ -150,7 +151,7 @@ export const SeniorModals: React.FC<SeniorModalsProps> = ({
                 isOpen={showWeeklyModal}
                 onClose={() => setShowWeeklyModal(false)}
                 answers={weeklyAnswers}
-                onAnswer={(answerObj: any) => addWeeklyAnswer(answerObj.answer)}
+                onAnswer={(answerObj: Record<string, unknown>) => addWeeklyAnswer(answerObj.answer as string)}
                 userName={userName}
                 currentUserId={currentUserId || undefined}
                 onToggleLike={toggleLike}

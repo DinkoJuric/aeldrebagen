@@ -5,7 +5,7 @@ import { WeeklyQuestionWidget } from '../features/weeklyQuestion';
 import { MatchBanner } from '../features/helpExchange';
 import { InlineGatesIndicator } from '../features/tasks';
 import { playMatchSound } from '../utils/sounds';
-import { useHelpExchangeMatch } from '../features/helpExchange';
+import { useHelpExchangeMatch, ActiveMatch } from '../features/helpExchange';
 import { useHelpExchange } from '../features/helpExchange';
 import { FEATURES } from '../config/features';
 import { useCareCircleContext } from '../contexts/CareCircleContext';
@@ -33,7 +33,7 @@ export const SeniorView: React.FC = () => {
     const [showSymptomModal, setShowSymptomModal] = useState(false);
     const [showWeeklyModal, setShowWeeklyModal] = useState(false);
     const [showAddTaskModal, setShowAddTaskModal] = useState(false);
-    const [activeMatch, setActiveMatch] = useState<any | null>(null);
+    const [activeMatch, setActiveMatch] = useState<ActiveMatch | null>(null);
     const [dismissedMatchIds, setDismissedMatchIds] = useState(new Set());
 
     // Help Exchange & Match Logic (Kept here for Banner orchestration)

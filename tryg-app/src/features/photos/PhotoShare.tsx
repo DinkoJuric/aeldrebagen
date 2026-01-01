@@ -3,7 +3,8 @@
 
 import React, { useState, useRef } from 'react';
 import { Camera, Trash2, Loader2, Image as ImageIcon } from 'lucide-react';
-import { Photo } from '../../types';
+import { Photo, FirestoreDate } from '../../types';
+import { toJsDate } from '../../utils/dateUtils';
 
 interface PhotoCaptureButtonProps {
     onCapture: (file: File) => void;
@@ -93,12 +94,10 @@ export const PhotoViewerModal: React.FC<PhotoViewerModalProps> = ({ isOpen, onCl
     };
 
     // Helper to format date
-    const formatDate = (date: any) => {
-        if (!date) return 'Lige nu';
-        if (typeof date.toDate === 'function') {
-            return date.toDate().toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' });
-        }
-        return new Date(date).toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' });
+    const formatDate = (date: FirestoreDate | undefined) => {
+        const jsDate = toJsDate(date);
+        if (!jsDate) return 'Lige nu';
+        return jsDate.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' });
     };
 
     return (

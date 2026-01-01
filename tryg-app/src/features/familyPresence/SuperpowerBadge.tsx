@@ -1,62 +1,9 @@
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { Wifi, Ear, Wrench, Car, Star, Phone, MessageCircle, X } from 'lucide-react';
+import { Phone, MessageCircle, X } from 'lucide-react';
 import { cn } from '../../lib/utils';
-
-export type Archetype = 'tech_wizard' | 'listener' | 'fixer' | 'driver' | 'cheerleader';
-
-interface ArchetypeConfig {
-    id: Archetype;
-    icon: React.ElementType;
-    label: string;
-    description: string;
-    action: string;
-    color: string;
-}
-
-export const ARCHETYPE_CONFIG: Record<Archetype, ArchetypeConfig> = {
-    tech_wizard: {
-        id: 'tech_wizard',
-        icon: Wifi,
-        label: 'Teknik-Ekspert',
-        description: 'Ring når iPad driller eller WiFi ikke virker',
-        action: 'call',
-        color: 'bg-blue-600'
-    },
-    listener: {
-        id: 'listener',
-        icon: Ear,
-        label: 'Lytteren',
-        description: 'Ring for en god snak og lidt trøst',
-        action: 'call',
-        color: 'bg-purple-600'
-    },
-    fixer: {
-        id: 'fixer',
-        icon: Wrench,
-        label: 'Fikser-Typen',
-        description: 'Ring når noget skal repareres derhjemme',
-        action: 'call',
-        color: 'bg-orange-600'
-    },
-    driver: {
-        id: 'driver',
-        icon: Car,
-        label: 'Chaufføren',
-        description: 'Ring for en tur til lægen eller butikken',
-        action: 'call',
-        color: 'bg-green-600'
-    },
-    cheerleader: {
-        id: 'cheerleader',
-        icon: Star,
-        label: 'Heppen',
-        description: 'Del gode nyheder og få et stort smil',
-        action: 'message',
-        color: 'bg-amber-500'
-    }
-};
+import { ARCHETYPE_CONFIG, Archetype } from './config';
 
 /**
  * Badge size variants using CVA
@@ -253,5 +200,6 @@ export const ArchetypeSelector: React.FC<ArchetypeSelectorProps> = ({
     );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export { badgeVariants };
 export default SuperpowerBadge;

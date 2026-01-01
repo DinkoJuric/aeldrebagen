@@ -3,11 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Clock, Activity, AlertCircle, CheckCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Avatar } from '../../components/ui/Avatar';
-import { Task } from '../../types';
+import { Task, FirestoreDate } from '../../types';
 
 export interface AmbientDashboardProps {
     seniorName: string;
-    lastCheckIn?: any;
+    lastCheckIn?: FirestoreDate;
     tasks: Task[];
     symptomCount: number;
     className?: string;

@@ -6,23 +6,24 @@
  * a human-readable status instead of raw data.
  */
 
-import { Task, SymptomLog } from '../types';
+import { Task, SymptomLog, FirestoreDate } from '../types';
+import { TFunction } from 'i18next';
 
 interface BriefingParams {
     tasks?: Task[];
     symptoms?: SymptomLog[];
     seniorName?: string;
     lastCheckIn?: string | null;
-    t: any; // i18next t function
+    t: TFunction; // i18next t function
 }
 
 /**
  * Helper to check if a timestamp is from today
  */
-const isToday = (date: any): boolean => {
+const isToday = (date: FirestoreDate | undefined): boolean => {
     if (!date) return false;
     let d: Date;
-    if (date.toDate) {
+    if (date && typeof date === 'object' && 'toDate' in date) {
         d = date.toDate();
     } else if (typeof date === 'string') {
         d = new Date(date);
@@ -43,7 +44,7 @@ export function getDailyBriefing({ tasks = [], symptoms = [], seniorName = 'Mor'
     const medicineTasks = tasks.filter(t =>
         t.title?.toLowerCase().includes('medicin') ||
         t.title?.toLowerCase().includes('pille') ||
-        (t as any).type === 'medication'
+        (t as unknown as { type: string }).type === 'medication'
     );
     const allTasksComplete = tasks.length > 0 && tasks.every(t => t.completed);
     const allMedicineComplete = medicineTasks.length > 0 && medicineTasks.every(t => t.completed);
@@ -125,7 +126,7 @@ export function getDailyBriefing({ tasks = [], symptoms = [], seniorName = 'Mor'
 /**
  * Get streak message if applicable
  */
-export function getStreakMessage(streakDays: number, _seniorName = 'Mor', t: any) {
+export function getStreakMessage(streakDays: number, _seniorName = 'Mor', t: TFunction) {
     if (streakDays >= 7) {
         return t('streak_msg_7', { count: streakDays });
     }

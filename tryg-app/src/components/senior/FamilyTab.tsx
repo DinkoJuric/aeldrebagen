@@ -6,6 +6,7 @@ import { MemoryTrigger } from '../../features/weeklyQuestion';
 import { HelpExchange } from '../../features/helpExchange';
 import { FEATURES } from '../../config/features';
 import { useHelpExchange } from '../../features/helpExchange';
+import { HelpOffer, HelpRequest } from '../../types';
 
 export const FamilyTab: React.FC = () => {
 
@@ -31,10 +32,10 @@ export const FamilyTab: React.FC = () => {
     } = useHelpExchange(careCircleId, currentUserId, 'senior', userName);
 
     // Filter offers/requests by role
-    const helpOffers = allOffersFetched.filter((o: any) => o.createdByRole === 'senior');
-    const helpRequests = allRequestsFetched.filter((r: any) => r.createdByRole === 'senior');
-    const relativeOffers = allOffersFetched.filter((o: any) => o.createdByRole === 'relative');
-    const relativeRequests = allRequestsFetched.filter((r: any) => r.createdByRole === 'relative');
+    const helpOffers = allOffersFetched.filter((o: HelpOffer) => o.createdByRole === 'senior');
+    const helpRequests = allRequestsFetched.filter((r: HelpRequest) => r.createdByRole === 'senior');
+    const relativeOffers = allOffersFetched.filter((o: HelpOffer) => o.createdByRole === 'relative');
+    const relativeRequests = allRequestsFetched.filter((r: HelpRequest) => r.createdByRole === 'relative');
 
     return (
         <div className="tab-content animate-fade-in space-y-4">
@@ -52,7 +53,7 @@ export const FamilyTab: React.FC = () => {
             {/* Family Presence */}
             {memberStatuses.length > 0 && (
                 <FamilyPresence
-                    memberStatuses={memberStatuses as any}
+                    memberStatuses={memberStatuses}
                     currentUserId={currentUserId || ''}
                     seniorName={userName}
                 />
@@ -61,7 +62,7 @@ export const FamilyTab: React.FC = () => {
             {/* Legacy Family Status List */}
             {FEATURES.familyStatusCard && memberStatuses.length === 0 && (
                 <StatusList
-                    members={members}
+                    members={members as any}
                     relativeStatuses={relativeStatuses}
                     lastUpdated={null} // statusLastUpdated was passed before, but it was just 'null' in AppCore call mostly
                 />

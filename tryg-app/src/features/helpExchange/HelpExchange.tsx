@@ -26,7 +26,7 @@ export const HelpExchange: React.FC<HelpExchangeProps> = ({
     activeRequests = [],
     relativeOffers = [],
     relativeRequests = [],
-    seniorName: _seniorName = 'Senior'
+    // seniorName is available in props but unused in render
 }) => {
     // Pure "Dumb" Component - relies on props
     const [showOfferPicker, setShowOfferPicker] = useState(false);

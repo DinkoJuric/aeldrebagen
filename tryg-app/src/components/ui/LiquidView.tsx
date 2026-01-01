@@ -1,4 +1,5 @@
 
+import React from 'react';
 import { motion, AnimatePresence, Transition } from 'framer-motion';
 import { useAuth } from '../../hooks/useAuth';
 

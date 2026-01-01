@@ -3,6 +3,8 @@ import { render } from '@testing-library/react';
 import { CareCircleContext } from '../contexts/CareCircleContext';
 import { vi } from 'vitest';
 
+import { CareCircleContextValue } from '../types';
+
 export const mockCareCircleContextValue = {
     careCircleId: 'test-circle',
     seniorId: 'senior-1',
@@ -35,7 +37,7 @@ export const mockCareCircleContextValue = {
     recordCheckIn: vi.fn(),
     updateMember: vi.fn(),
     updateAnyMember: vi.fn(),
-} as unknown as any; // Cast to any/unknown to avoid strict type matching during draft
+} as unknown as CareCircleContextValue;
 
 export const renderWithContext = (ui: React.ReactElement, contextOverrides = {}) => {
     return render(

@@ -1,3 +1,4 @@
+import React from 'react';
 import { cva } from 'class-variance-authority';
 import { CheckCircle, Pill, Activity, Sun, Clock, Heart } from 'lucide-react';
 import { cn } from '../../lib/utils';

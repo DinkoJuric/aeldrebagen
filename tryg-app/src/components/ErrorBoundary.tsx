@@ -57,7 +57,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
                         Prøv igen
                     </button>
 
-                    {process.env.NODE_ENV === 'development' && this.state.error && (
+                    {import.meta.env.DEV && this.state.error && (
                         <details className="mt-8 text-left bg-stone-100 p-4 rounded-xl max-w-sm">
                             <summary className="text-sm text-stone-600 cursor-pointer">
                                 Tekniske detaljer

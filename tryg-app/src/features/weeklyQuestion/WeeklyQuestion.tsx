@@ -2,20 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { MessageCircle, ChevronRight, Sparkles } from 'lucide-react';
 import { WeeklyAnswer } from '../../types';
 
-// Weekly questions to rotate through
-export const WEEKLY_QUESTIONS = [
-    "weekly_question_1",
-    "weekly_question_2"
-];
-
-// Get week number of the year
-export const getWeekNumber = () => {
-    const now = new Date();
-    const start = new Date(now.getFullYear(), 0, 1);
-    const diff = now.getTime() - start.getTime();
-    const oneWeek = 604800000; // ms in a week
-    return Math.floor(diff / oneWeek);
-};
+import { WEEKLY_QUESTIONS, getWeekNumber, DEFAULT_MEMORIES } from './constants';
 
 interface WeeklyQuestionCardProps {
     onAnswer?: (answer: Omit<WeeklyAnswer, 'id'>) => void;
@@ -144,13 +131,7 @@ export const MemoryTrigger: React.FC<MemoryTriggerProps> = ({ memories = [] }) =
     const [currentIndex, setCurrentIndex] = useState(0);
 
     // Default memories if none provided
-    const defaultMemories: Memory[] = [
-        { date: '3 år siden', text: 'Familietur til Skagen', emoji: '🏖️' },
-        { date: '5 år siden', text: 'Emmas fødselsdag', emoji: '🎂' },
-        { date: '2 år siden', text: 'Jul hos farmor', emoji: '🎄' },
-    ];
-
-    const allMemories = memories.length > 0 ? memories : defaultMemories;
+    const allMemories = memories.length > 0 ? memories : DEFAULT_MEMORIES;
     const memory = allMemories[currentIndex % allMemories.length];
 
     useEffect(() => {

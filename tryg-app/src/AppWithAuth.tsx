@@ -17,7 +17,7 @@ export default function AppWithAuth() {
     // If Firebase is disabled, render the original localStorage app
     if (!FEATURES.useFirebase) {
         // Dynamically import the original app
-        const TrygApp = React.lazy<React.ComponentType<any>>(() => import('./App'));
+        const TrygApp = React.lazy<React.ComponentType<unknown>>(() => import('./App'));
         return (
             <React.Suspense fallback={<LoadingScreen />}>
                 <TrygApp />
@@ -60,20 +60,21 @@ function FirebaseApp() {
     } = useCareCircle(user?.uid, userProfile);
 
     // Auth handler for AuthScreen
-    const handleAuth = async (type: string, data: any) => {
+    const handleAuth = async (type: string, data: unknown) => {
         setAuthFormError(null); // Clear previous errors
+        const authData = data as Record<string, unknown>;
         try {
             if (type === 'login') {
-                await signIn(data.email, data.password);
+                await signIn(authData.email as string, authData.password as string);
             } else if (type === 'signup') {
-                await signUp(data.email, data.password, data.displayName, data.role);
+                await signUp(authData.email as string, authData.password as string, authData.displayName as string, authData.role as 'senior' | 'relative');
             } else if (type === 'google') {
-                await signInWithGoogle(data.role);
+                await signInWithGoogle(authData.role as 'senior' | 'relative');
             }
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Auth error:', err);
             // Set user-friendly error message
-            let message = err.message || 'Der opstod en fejl ved login';
+            let message = (err as Error).message || 'Der opstod en fejl ved login';
             // Clean up Firebase error messages
             if (message.includes('auth/popup-closed-by-user')) {
                 message = 'Login-vinduet blev lukket. Prøv igen.';

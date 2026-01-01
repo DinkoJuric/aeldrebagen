@@ -39,16 +39,17 @@ export function useAuth() {
                                 setError(null); // Clear any previous error
                             }
                             return; // Success, exit
-                        } catch (err: any) {
+                        } catch (err: unknown) {
                             console.error(`Error fetching user profile (attempt ${attempt}/${retries}):`, err);
 
                             // If offline error and we have retries left, wait and retry
-                            if (err.message?.includes('offline') && attempt < retries) {
+                            const errorMessage = (err as Error).message || '';
+                            if (errorMessage.includes('offline') && attempt < retries) {
                                 await new Promise(resolve => setTimeout(resolve, delay));
                                 delay *= 2; // Exponential backoff
                             } else if (attempt === retries) {
                                 // Final attempt failed
-                                setError(err.message || 'Could not load profile');
+                                setError(errorMessage || 'Could not load profile');
                             }
                         }
                     }
@@ -104,8 +105,9 @@ export function useAuth() {
             } as UserProfile);
 
             return newUser;
-        } catch (err: any) {
-            setError(err.message);
+        } catch (err: unknown) {
+            const message = (err as Error).message;
+            setError(message);
             throw err;
         }
     }, []);
@@ -116,8 +118,9 @@ export function useAuth() {
         try {
             const { user } = await signInWithEmailAndPassword(auth, email, password);
             return user;
-        } catch (err: any) {
-            setError(err.message);
+        } catch (err: unknown) {
+            const message = (err as Error).message;
+            setError(message);
             throw err;
         }
     }, []);
@@ -139,8 +142,9 @@ export function useAuth() {
             }
 
             return googleUser;
-        } catch (err: any) {
-            setError(err.message);
+        } catch (err: unknown) {
+            const message = (err as Error).message;
+            setError(message);
             throw err;
         }
     }, []);
@@ -150,8 +154,9 @@ export function useAuth() {
         setError(null);
         try {
             await firebaseSignOut(auth);
-        } catch (err: any) {
-            setError(err.message);
+        } catch (err: unknown) {
+            const message = (err as Error).message;
+            setError(message);
             throw err;
         }
     }, []);
@@ -163,8 +168,9 @@ export function useAuth() {
         try {
             await setDoc(doc(db, 'users', user.uid), { role }, { merge: true });
             setUserProfile(prev => prev ? ({ ...prev, role }) : null);
-        } catch (err: any) {
-            setError(err.message);
+        } catch (err: unknown) {
+            const message = (err as Error).message;
+            setError(message);
             throw err;
         }
     }, [user]);
@@ -179,8 +185,9 @@ export function useAuth() {
                 consentTimestamp: serverTimestamp(),
             }, { merge: true });
             setUserProfile(prev => prev ? ({ ...prev, consentGiven: true }) : null);
-        } catch (err: any) {
-            setError(err.message);
+        } catch (err: unknown) {
+            const message = (err as Error).message;
+            setError(message);
             throw err;
         }
     }, [user]);
@@ -194,8 +201,9 @@ export function useAuth() {
                 languagePreference: lang,
             }, { merge: true });
             setUserProfile(prev => prev ? ({ ...prev, languagePreference: lang }) : null);
-        } catch (err: any) {
-            setError(err.message);
+        } catch (err: unknown) {
+            const message = (err as Error).message;
+            setError(message);
             throw err;
         }
     }, [user]);
@@ -205,8 +213,9 @@ export function useAuth() {
         setError(null);
         try {
             await sendPasswordResetEmail(auth, email);
-        } catch (err: any) {
-            setError(err.message);
+        } catch (err: unknown) {
+            const message = (err as Error).message;
+            setError(message);
             throw err;
         }
     }, []);

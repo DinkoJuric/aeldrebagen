@@ -18,6 +18,10 @@ import { db } from '../../config/firebase';
 
 import { HelpOffer, HelpRequest } from '../../types';
 
+// Whitelist of safe fields to save to Firestore
+// React components (icon) and their Symbol properties are NOT safe
+const SAFE_HELP_FIELDS = ['id', 'label', 'emoji'];
+
 export function useHelpExchange(
     circleId: string | null,
     userId: string | null = null,
@@ -32,9 +36,11 @@ export function useHelpExchange(
     // Subscribe to help offers from Firestore
     useEffect(() => {
         if (!circleId) {
-            setHelpOffers([]);
-            setHelpRequests([]);
-            setLoading(false);
+            setTimeout(() => {
+                setHelpOffers([]);
+                setHelpRequests([]);
+                setLoading(false);
+            }, 0);
             return;
         }
 
@@ -50,9 +56,9 @@ export function useHelpExchange(
                 })) as HelpOffer[];
                 setHelpOffers(offersList);
             },
-            (err: any) => {
+            (err: unknown) => {
                 console.error('Error fetching help offers:', err);
-                setError(err.message);
+                setError(err instanceof Error ? err.message : 'Unknown error');
             }
         );
 
@@ -69,9 +75,9 @@ export function useHelpExchange(
                 setHelpRequests(requestsList);
                 setLoading(false);
             },
-            (err: any) => {
+            (err: unknown) => {
                 console.error('Error fetching help requests:', err);
-                setError(err.message);
+                setError(err instanceof Error ? err.message : 'Unknown error');
                 setLoading(false);
             }
         );
@@ -84,18 +90,17 @@ export function useHelpExchange(
 
     // Whitelist of safe fields to save to Firestore
     // React components (icon) and their Symbol properties are NOT safe
-    const SAFE_HELP_FIELDS = ['id', 'label', 'emoji'];
-
-    const sanitizeHelpData = (data: Partial<HelpOffer | HelpRequest>) => {
-        const clean: Record<string, any> = {};
+    const sanitizeHelpData = useCallback((data: Partial<HelpOffer | HelpRequest>) => {
+        const clean: Record<string, unknown> = {};
+        const safeData = data as Record<string, unknown>;
         SAFE_HELP_FIELDS.forEach(key => {
-            const val = (data as any)[key];
+            const val = safeData[key];
             if (val !== undefined && typeof val !== 'function' && typeof val !== 'symbol') {
                 clean[key] = val;
             }
         });
         return clean;
-    };
+    }, []);
 
     // Add a help offer
     const addOffer = useCallback(async (offer: Partial<HelpOffer>) => {
@@ -113,12 +118,12 @@ export function useHelpExchange(
                 createdAt: serverTimestamp(),
             });
             return offerId;
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Error adding help offer:', err);
-            setError(err.message);
+            if (err instanceof Error) setError(err.message);
             throw err;
         }
-    }, [circleId, userId, userRole, displayName]);
+    }, [circleId, userId, userRole, displayName, sanitizeHelpData]);
 
     // Add a help request
     const addRequest = useCallback(async (request: Partial<HelpRequest>) => {
@@ -136,12 +141,12 @@ export function useHelpExchange(
                 createdAt: serverTimestamp(),
             });
             return requestId;
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Error adding help request:', err);
-            setError(err.message);
+            if (err instanceof Error) setError(err.message);
             throw err;
         }
-    }, [circleId, userId, userRole, displayName]);
+    }, [circleId, userId, userRole, displayName, sanitizeHelpData]);
 
     // Remove an offer
     const removeOffer = useCallback(async (offerId: string) => {
@@ -149,9 +154,9 @@ export function useHelpExchange(
 
         try {
             await deleteDoc(doc(db, 'careCircles', circleId, 'helpOffers', offerId));
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Error removing help offer:', err);
-            setError(err.message);
+            setError(err instanceof Error ? err.message : 'Unknown error');
             throw err;
         }
     }, [circleId]);
@@ -162,9 +167,9 @@ export function useHelpExchange(
 
         try {
             await deleteDoc(doc(db, 'careCircles', circleId, 'helpRequests', requestId));
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Error removing help request:', err);
-            setError(err.message);
+            setError(err instanceof Error ? err.message : 'Unknown error');
             throw err;
         }
     }, [circleId]);

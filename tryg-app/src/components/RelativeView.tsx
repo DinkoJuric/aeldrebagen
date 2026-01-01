@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { WeeklyQuestionWidget } from '../features/weeklyQuestion';
+import { ActiveMatch } from '../features/helpExchange';
 import { ThinkingOfYouIconButton } from '../features/thinkingOfYou';
 import { AmbientTab } from './shared/AmbientTab';
 import { CoordinationTab } from './CoordinationTab';
@@ -23,7 +24,7 @@ export const RelativeView: React.FC = () => {
 
     const [showAddModal, setShowAddModal] = useState(false);
     const [showWeeklyModal, setShowWeeklyModal] = useState(false);
-    const [activeMatch, setActiveMatch] = useState<any | null>(null);
+    const [activeMatch, setActiveMatch] = useState<ActiveMatch | null>(null);
     const [showTimePicker, setShowTimePicker] = useState(false);
     const [dismissedMatchIds, setDismissedMatchIds] = useState<Set<string>>(new Set());
 

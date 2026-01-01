@@ -1,16 +1,17 @@
 import React from 'react';
 import { Users } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-// @ts-ignore - Context not yet converted
 import { useCareCircleContext } from '../../contexts/CareCircleContext';
 import { Avatar } from '../../components/ui/Avatar';
 import { MemberStatus } from './useMemberStatus';
+import { FirestoreDate } from '../../types';
+import { toJsDate } from '../../utils/dateUtils';
 
 interface MemberStatusRowProps {
     name: string;
     status: string;
     role: string;
-    timestamp?: any;
+    timestamp?: FirestoreDate;
     isCurrentUser?: boolean;
 }
 
@@ -40,60 +41,60 @@ const MemberStatusRow: React.FC<MemberStatusRowProps> = React.memo(({ name, stat
 
     let timeString = '';
     if (timestamp) {
-        const date = (timestamp && typeof timestamp.toDate === 'function')
-            ? timestamp.toDate()
-            : new Date(timestamp);
+        const date = toJsDate(timestamp);
 
-        const now = new Date();
-        const diffMs = now.getTime() - date.getTime();
-        const diffMins = Math.max(0, Math.floor(diffMs / 60000)); // Prevent negative values
+        if (date) {
+            const now = new Date();
+            const diffMs = now.getTime() - date.getTime();
 
-        if (diffMins < 60) {
-            timeString = `${diffMins}m`;
-        } else if (diffMins < 1440) {
-            timeString = `${Math.floor(diffMins / 60)}t`;
-        } else {
-            timeString = date.toLocaleDateString('da-DK', { day: 'numeric', month: 'short' });
+            const diffMins = Math.max(0, Math.floor(diffMs / 60000)); // Prevent negative values
+
+            if (diffMins < 60) {
+                timeString = `${diffMins}m`;
+            } else if (diffMins < 1440) {
+                timeString = `${Math.floor(diffMins / 60)}t`;
+            } else {
+                timeString = date.toLocaleDateString('da-DK', { day: 'numeric', month: 'short' });
+            }
         }
-    }
 
-    return (
-        <div className={`
+        return (
+            <div className={`
             flex items-center justify-between p-3 rounded-xl transition-all
             ${isCurrentUser ? 'bg-indigo-50/50 border border-indigo-100/50' : 'hover:bg-stone-50 border border-transparent hover:border-stone-100'}
         `}>
-            <div className="flex items-center gap-3">
-                {/* Avatar with connection glow when available */}
-                <div className={`relative ${status === 'available' ? 'animate-glow' : ''}`}>
-                    <Avatar id={avatarId} size="md" className="shadow-sm border-2 border-white" />
-                    <div className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full border-2 border-white ${status === 'available' ? 'bg-teal-500' :
-                        status === 'home' ? 'bg-green-500' :
-                            status === 'work' ? 'bg-indigo-500' :
-                                status === 'traveling' ? 'bg-amber-500' : 'bg-stone-400'
-                        }`} />
+                <div className="flex items-center gap-3">
+                    {/* Avatar with connection glow when available */}
+                    <div className={`relative ${status === 'available' ? 'animate-glow' : ''}`}>
+                        <Avatar id={avatarId} size="md" className="shadow-sm border-2 border-white" />
+                        <div className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full border-2 border-white ${status === 'available' ? 'bg-teal-500' :
+                            status === 'home' ? 'bg-green-500' :
+                                status === 'work' ? 'bg-indigo-500' :
+                                    status === 'traveling' ? 'bg-amber-500' : 'bg-stone-400'
+                            }`} />
+                    </div>
+                    <div>
+                        <span className={`text-sm font-bold block text-left ${isCurrentUser ? 'text-indigo-900' : 'text-stone-700'}`}>
+                            {name} {isCurrentUser && <span className="opacity-50 text-xs font-normal">({t('you')})</span>}
+                        </span>
+                        <span className={`text-xs font-medium block text-left ${config.color || 'text-stone-500'}`}>
+                            {config.label}
+                        </span>
+                    </div>
                 </div>
-                <div>
-                    <span className={`text-sm font-bold block text-left ${isCurrentUser ? 'text-indigo-900' : 'text-stone-700'}`}>
-                        {name} {isCurrentUser && <span className="opacity-50 text-xs font-normal">({t('you')})</span>}
-                    </span>
-                    <span className={`text-xs font-medium block text-left ${config.color || 'text-stone-500'}`}>
-                        {config.label}
-                    </span>
+                <div className="flex flex-col items-end gap-1">
+                    <div className="bg-stone-100/80 p-1.5 rounded-lg backdrop-blur-sm">
+                        <Avatar id={statusIconId} size="sm" />
+                    </div>
+                    {timeString && (
+                        <span className="text-[10px] font-medium text-stone-400 tabular-nums">
+                            {timeString}
+                        </span>
+                    )}
                 </div>
             </div>
-            <div className="flex flex-col items-end gap-1">
-                <div className="bg-stone-100/80 p-1.5 rounded-lg backdrop-blur-sm">
-                    <Avatar id={statusIconId} size="sm" />
-                </div>
-                {timeString && (
-                    <span className="text-[10px] font-medium text-stone-400 tabular-nums">
-                        {timeString}
-                    </span>
-                )}
-            </div>
-        </div>
-    );
-});
+        );
+    });
 
 interface FamilyPresenceProps {
     memberStatuses?: MemberStatus[];
@@ -109,7 +110,7 @@ export const FamilyPresence: React.FC<FamilyPresenceProps> = ({
     compact = false
 }) => {
     const { t } = useTranslation();
-    const context = useCareCircleContext() as any;
+    const context = useCareCircleContext();
     const memberStatuses = propsMembers ?? context?.memberStatuses ?? [];
     const currentUserId = propsUserId ?? context?.currentUserId;
     const seniorName = propsSeniorName ?? context?.seniorName ?? 'Far/Mor';
@@ -117,10 +118,10 @@ export const FamilyPresence: React.FC<FamilyPresenceProps> = ({
     // 🚀 TURBO: Create a lookup map for member statuses to optimize the render loop.
     // This reduces the complexity from O(n*m) to O(n+m), preventing a nested loop.
     const statusMap = React.useMemo(() => {
-        return memberStatuses.reduce((acc: any, status: any) => {
+        return memberStatuses.reduce((acc: Record<string, MemberStatus>, status: MemberStatus) => {
             acc[status.docId] = status;
             return acc;
-        }, {});
+        }, {} as Record<string, MemberStatus>);
     }, [memberStatuses]);
 
 
@@ -145,9 +146,9 @@ export const FamilyPresence: React.FC<FamilyPresenceProps> = ({
                 </div>
             </div>
             <div className="space-y-1">
-                {context.members.map((member: any) => {
+                {context.members.map((member) => {
                     // O(1) lookup instead of O(m) .find()
-                    const statusObj = statusMap[member.userId];
+                    const statusObj = statusMap[member.userId || ''];
                     // Name source of truth: THE MEMBER RECORD
                     const displayName = member.displayName || (member.role === 'senior' ? seniorName : 'Pårørende');
 

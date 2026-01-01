@@ -7,7 +7,7 @@ import { db } from '../config/firebase';
 
 interface Settings {
     familyStatus: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export function useSettings(circleId: string | undefined) {
@@ -20,8 +20,8 @@ export function useSettings(circleId: string | undefined) {
     // Subscribe to settings from Firestore
     useEffect(() => {
         if (!circleId) {
-            setLoading(false);
-            return;
+            const timer = setTimeout(() => setLoading(false), 0);
+            return () => clearTimeout(timer);
         }
 
         const settingsRef = doc(db, 'careCircles', circleId, 'settings', 'main');
@@ -33,9 +33,10 @@ export function useSettings(circleId: string | undefined) {
                 }
                 setLoading(false);
             },
-            (err: any) => {
+            (err: unknown) => {
                 console.error('Error fetching settings:', err);
-                setError(err.message);
+                const message = (err as Error).message;
+                setError(message);
                 setLoading(false);
             }
         );
@@ -54,15 +55,16 @@ export function useSettings(circleId: string | undefined) {
                 familyStatus: status,
                 lastUpdated: serverTimestamp(),
             }, { merge: true });
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Error updating family status:', err);
-            setError(err.message);
+            const message = (err as Error).message;
+            setError(message);
             throw err;
         }
     }, [circleId]);
 
     // Update any setting
-    const updateSetting = useCallback(async (key: string, value: any) => {
+    const updateSetting = useCallback(async (key: string, value: unknown) => {
         if (!circleId) return;
 
         const settingsRef = doc(db, 'careCircles', circleId, 'settings', 'main');
@@ -72,9 +74,10 @@ export function useSettings(circleId: string | undefined) {
                 [key]: value,
                 lastUpdated: serverTimestamp(),
             }, { merge: true });
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Error updating setting:', err);
-            setError(err.message);
+            const message = (err as Error).message;
+            setError(message);
             throw err;
         }
     }, [circleId]);

@@ -3,13 +3,15 @@ import { collection, query, orderBy, onSnapshot, limit } from 'firebase/firestor
 import { db } from '../../config/firebase';
 import { Mic, Play, Calendar, User, History } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { FirestoreDate } from '../../types';
+import { toJsDate } from '../../utils/dateUtils';
 
 interface Memory {
     id: string;
     url: string;
     type: 'audio' | 'photo' | 'video';
     createdByName: string;
-    createdAt: any;
+    createdAt: FirestoreDate;
     questionText?: string;
     duration?: number;
 }
@@ -41,10 +43,10 @@ export const MemoriesGallery: React.FC<MemoriesGalleryProps> = ({ circleId }) =>
         return () => unsubscribe();
     }, [circleId]);
 
-    const formatTime = (timestamp: any) => {
+    const formatTime = (timestamp: FirestoreDate | undefined) => {
         if (!timestamp) return '';
-        const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
-        return date.toLocaleDateString(undefined, { day: 'numeric', month: 'short' });
+        const date = toJsDate(timestamp);
+        return date ? date.toLocaleDateString(undefined, { day: 'numeric', month: 'short' }) : '';
     };
 
     if (loading) {

@@ -3,6 +3,8 @@ import { Modal } from '../../ui/Modal';
 import { Button } from '../../ui/Button';
 import { WeeklyQuestionModal } from '../../../features/weeklyQuestion';
 import { MatchCelebration } from '../../../features/helpExchange';
+import { ActiveMatch } from '../../../features/helpExchange/useHelpExchangeMatch';
+import { Celebration } from '../../../features/helpExchange/config';
 import { TimePickerModal } from '../../../features/tasks';
 import { useTranslation } from 'react-i18next';
 import { useCareCircleContext } from '../../../contexts/CareCircleContext';
@@ -12,11 +14,18 @@ interface RelativeModalsProps {
     setShowAddModal: (show: boolean) => void;
     showWeeklyModal: boolean;
     setShowWeeklyModal: (show: boolean) => void;
-    activeMatch: any | null;
-    setActiveMatch: (match: any | null) => void;
+    activeMatch: ActiveMatch | null;
+    setActiveMatch: (match: ActiveMatch | null) => void;
     showTimePicker: boolean;
     setShowTimePicker: (show: boolean) => void;
     onDismissMatch: (matchId: string) => void;
+}
+
+interface PendingAction {
+    title: string;
+    action: string;
+    celebration?: Celebration;
+    matchToDissmiss?: ActiveMatch;
 }
 
 export const RelativeModals: React.FC<RelativeModalsProps> = ({
@@ -46,7 +55,7 @@ export const RelativeModals: React.FC<RelativeModalsProps> = ({
     const [newTaskTitle, setNewTaskTitle] = useState('');
     const [newTaskPeriod, setNewTaskPeriod] = useState('morgen');
     const [newTaskRecurring, setNewTaskRecurring] = useState(false);
-    const [pendingAction, setPendingAction] = useState<any | null>(null);
+    const [pendingAction, setPendingAction] = useState<PendingAction | null>(null);
 
     const PERIOD_TIMES: Record<string, string> = {
         morgen: '08:00',

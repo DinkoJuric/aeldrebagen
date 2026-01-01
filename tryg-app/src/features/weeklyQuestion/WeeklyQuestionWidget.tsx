@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import { MessageCircle, X, Check, Heart, MessageSquare, Send, Sparkles, Loader2, Mic, Play as PlayIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { WEEKLY_QUESTIONS, getWeekNumber } from './WeeklyQuestion';
-import { WeeklyAnswer, WeeklyReply, Member } from '../../types';
+import { WEEKLY_QUESTIONS, getWeekNumber } from './constants';
+import { WeeklyAnswer, WeeklyReply, Member, FirestoreDate } from '../../types';
 import { AudioRecorder } from '../memories/AudioRecorder';
+import { toJsDate } from '../../utils/dateUtils';
+import { TFunction } from 'i18next';
 
 // Simple time ago formatter (no external deps)
-const formatTimeAgo = (isoString: string | any, t: any) => {
+const formatTimeAgo = (isoString: FirestoreDate | undefined, t: TFunction) => {
     if (!isoString) return '';
     try {
-        // Handle Firestore Timestamp if passed directly
-        const dateStr = isoString?.toDate ? isoString.toDate().toISOString() : isoString;
-        const date = new Date(dateStr);
+        const date = toJsDate(isoString);
+        if (!date) return '';
+
         const now = new Date();
         const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
 
@@ -32,6 +34,7 @@ interface WeeklyQuestionWidgetProps {
 }
 
 // Compact widget for header
+// eslint-disable-next-line react-refresh/only-export-components
 export const WeeklyQuestionWidget: React.FC<WeeklyQuestionWidgetProps> = ({ answers = [], userName, hasUnread = false, onClick }) => {
     const { t } = useTranslation();
     const weekNumber = getWeekNumber();
@@ -69,6 +72,7 @@ interface WeeklyQuestionModalProps {
 }
 
 // Full modal for answering and viewing
+// eslint-disable-next-line react-refresh/only-export-components
 export const WeeklyQuestionModal: React.FC<WeeklyQuestionModalProps> = ({
     isOpen,
     onClose,
@@ -114,8 +118,8 @@ export const WeeklyQuestionModal: React.FC<WeeklyQuestionModalProps> = ({
         const likesB = b.likes?.length || 0;
         if (likesA !== likesB) return likesB - likesA; // Most likes first
         // Fallback to time if available (newest first)
-        const timeA = a.answeredAt?.toMillis ? a.answeredAt.toMillis() : 0;
-        const timeB = b.answeredAt?.toMillis ? b.answeredAt.toMillis() : 0;
+        const timeA = toJsDate(a.answeredAt)?.getTime() || 0;
+        const timeB = toJsDate(b.answeredAt)?.getTime() || 0;
         return timeB - timeA;
     });
 

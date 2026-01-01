@@ -25,7 +25,7 @@ export interface Word {
     correctAnswer: string;
     wrongAnswer?: string;
     options?: { text: string; isCorrect: boolean }[];
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export interface LeaderboardEntry {
@@ -35,8 +35,8 @@ export interface LeaderboardEntry {
     score: number;
     total: number;
     date: string;
-    completedAt?: any;
-    [key: string]: any;
+    completedAt?: unknown;
+    [key: string]: unknown;
 }
 
 export function useWordGame(circleId: string | null, userId: string | null, displayName: string | null) {
@@ -83,18 +83,22 @@ export function useWordGame(circleId: string | null, userId: string | null, disp
         if (saved) {
             try {
                 const { answers: savedAnswers, score: savedScore, complete } = JSON.parse(saved);
-                setAnswers(savedAnswers || {});
-                setScore(savedScore || 0);
-                setIsComplete(complete || false);
+                setTimeout(() => {
+                    setAnswers(savedAnswers || {});
+                    setScore(savedScore || 0);
+                    setIsComplete(complete || false);
+                }, 0);
 
                 // Calculate current word index from saved answers
                 const answeredCount = Object.keys(savedAnswers || {}).length;
-                setCurrentWordIndex(answeredCount);
+                setTimeout(() => {
+                    setCurrentWordIndex(answeredCount);
+                }, 0);
             } catch (e) {
                 console.error('Error loading saved game:', e);
             }
         }
-        setLoading(false);
+        setTimeout(() => setLoading(false), 0);
     }, [userId]);
 
     // Subscribe to leaderboard from Firestore

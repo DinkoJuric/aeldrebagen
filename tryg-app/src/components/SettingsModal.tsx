@@ -6,11 +6,11 @@ import { useTheme } from '../contexts/ThemeContext';
 import { Sun, Moon, SunMoon, Globe, Shield, LogOut, Download, Trash2, ChevronRight, BookOpen } from 'lucide-react';
 import { User } from 'firebase/auth';
 import { deleteUser, reauthenticateWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import { resolvePath } from '../utils/assetUtils';
+// import { resolvePath } from '../utils/assetUtils'; // Unused
 
 interface SettingsModalProps {
     user: User | null;
-    careCircle: any;
+    careCircle: unknown;
     onClose: () => void;
     onSignOut: () => void;
     onStartOnboarding: () => void;
@@ -53,8 +53,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             // Re-authenticate if needed
             try {
                 await deleteUser(user);
-            } catch (err: any) {
-                if (err.code === 'auth/requires-recent-login') {
+            } catch (err: unknown) {
+                if ((err as { code?: string }).code === 'auth/requires-recent-login') {
                     const provider = new GoogleAuthProvider();
                     await reauthenticateWithPopup(user, provider);
                     await deleteUser(user);
@@ -75,7 +75,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
         // Simple data export - in production would be more comprehensive
         const data = {
             email: user?.email,
-            circleId: careCircle?.id,
+            circleId: (careCircle as { id?: string })?.id,
             exportedAt: new Date().toISOString()
         };
         const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });

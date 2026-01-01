@@ -5,7 +5,7 @@ import type { Member } from '../../types';
 import { RelationsSelect } from '../../components/ui/RelationsSelect';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../../config/firebase';
-import { Check, X } from 'lucide-react';
+import { Check, X } from 'lucide-react'; // StepIcon, Users, UserPlus removed as unused
 
 interface RelationshipMatrixProps {
     currentMember: Member;
@@ -60,7 +60,7 @@ export function RelationshipMatrix({ currentMember, allMembers, onComplete }: Re
             const memberRef = doc(db, 'careCircleMemberships', currentMember.docId!);
 
             // Prepare update data
-            const updateData: any = {
+            const updateData: Record<string, unknown> = {
                 edges: relations,
                 relationsLastUpdated: new Date()
             };

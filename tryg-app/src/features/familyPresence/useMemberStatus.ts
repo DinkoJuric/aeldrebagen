@@ -18,9 +18,11 @@ export interface MemberStatus {
     status: string;
     displayName: string;
     role: 'senior' | 'relative';
-    updatedAt?: any;
-    [key: string]: any;
+    updatedAt?: FirestoreDate;
+    [key: string]: unknown;
 }
+
+import { FirestoreDate } from '../../types';
 
 export function useMemberStatus(
     circleId: string | null,
@@ -36,8 +38,11 @@ export function useMemberStatus(
     // Subscribe to all member statuses in the circle
     useEffect(() => {
         if (!circleId) {
-            setMemberStatuses([]);
-            setLoading(false);
+            // Defer state update to avoid warning
+            setTimeout(() => {
+                setMemberStatuses([]);
+                setLoading(false);
+            }, 0);
             return;
         }
 
@@ -66,9 +71,9 @@ export function useMemberStatus(
 
                 setLoading(false);
             },
-            (err: any) => {
+            (err: unknown) => {
                 console.error('Error fetching member statuses:', err);
-                setError(err.message);
+                setError(err instanceof Error ? err.message : 'Unknown error');
                 setLoading(false);
             }
         );
@@ -92,9 +97,9 @@ export function useMemberStatus(
 
             // Optimistic update
             setMyStatusState(status);
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Error updating member status:', err);
-            setError(err.message);
+            if (err instanceof Error) setError(err.message);
             throw err;
         }
     }, [circleId, userId, displayName, role]);

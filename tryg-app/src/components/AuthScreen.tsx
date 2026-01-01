@@ -6,7 +6,7 @@ import { Heart, User, Users, Mail, Lock, Eye, EyeOff, ChevronRight } from 'lucid
 import { FEATURES } from '../config/features';
 
 export interface AuthScreenProps {
-    onAuth: (type: 'login' | 'signup' | 'google', data: any) => void;
+    onAuth: (type: 'login' | 'signup' | 'google', data: unknown) => void;
     onResetPassword: (email: string) => Promise<void>;
     error?: string | null;
     loading?: boolean;
@@ -95,7 +95,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onAuth, onResetPassword,
         try {
             await onResetPassword(email);
             setResetSent(true);
-        } catch (err) {
+        } catch {
             // Error is handled by the hook and passed as error prop
         } finally {
             setResetLoading(false);

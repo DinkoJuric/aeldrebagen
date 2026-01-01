@@ -17,6 +17,7 @@ import {
 import { db } from '../../config/firebase';
 
 import { SymptomLog, SymptomStats } from '../../types';
+import { toJsDate } from '../../utils/dateUtils';
 
 export function useSymptoms(circleId: string | null) {
     const [symptoms, setSymptoms] = useState<SymptomLog[]>([]);
@@ -26,8 +27,10 @@ export function useSymptoms(circleId: string | null) {
     // Subscribe to symptoms from Firestore (most recent first, limited)
     useEffect(() => {
         if (!circleId) {
-            setSymptoms([]);
-            setLoading(false);
+            setTimeout(() => {
+                setSymptoms([]);
+                setLoading(false);
+            }, 0);
             return;
         }
 
@@ -43,9 +46,9 @@ export function useSymptoms(circleId: string | null) {
                 setSymptoms(symptomsList);
                 setLoading(false);
             },
-            (err: any) => {
+            (err: unknown) => {
                 console.error('Error fetching symptoms:', err);
-                setError(err.message);
+                setError(err instanceof Error ? err.message : 'Unknown error');
                 setLoading(false);
             }
         );
@@ -57,16 +60,17 @@ export function useSymptoms(circleId: string | null) {
     // React components and their Symbol properties are NOT safe
     const SAFE_SYMPTOM_FIELDS = ['id', 'label', 'color', 'bodyLocation'];
 
-    const sanitizeSymptomData = (data: Partial<SymptomLog>) => {
-        const clean: Record<string, any> = {};
+    const sanitizeSymptomData = useCallback((data: Partial<SymptomLog>) => {
+        const clean: Record<string, unknown> = {};
+        const safeData = data as Record<string, unknown>;
         SAFE_SYMPTOM_FIELDS.forEach(key => {
-            const val = (data as any)[key];
+            const val = safeData[key];
             if (val !== undefined && typeof val !== 'function' && typeof val !== 'symbol') {
                 clean[key] = val;
             }
         });
         return clean;
-    };
+    }, []);
 
     // Add a new symptom log
     const addSymptom = useCallback(async (symptomData: Partial<SymptomLog>) => {
@@ -88,12 +92,12 @@ export function useSymptoms(circleId: string | null) {
                 loggedAt: serverTimestamp(),
             });
             return symptomId;
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Error adding symptom:', err);
-            setError(err.message);
+            setError(err instanceof Error ? err.message : 'Unknown error');
             throw err;
         }
-    }, [circleId]);
+    }, [circleId, sanitizeSymptomData]);
 
     // Delete a symptom log
     const removeSymptom = useCallback(async (symptomId: string) => {
@@ -101,9 +105,9 @@ export function useSymptoms(circleId: string | null) {
 
         try {
             await deleteDoc(doc(db, 'careCircles', circleId, 'symptoms', symptomId));
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Error removing symptom:', err);
-            setError(err.message);
+            setError(err instanceof Error ? err.message : 'Unknown error');
             throw err;
         }
     }, [circleId]);
@@ -111,7 +115,8 @@ export function useSymptoms(circleId: string | null) {
     // Get symptoms for a specific date range (for reports)
     const getSymptomsByDateRange = useCallback((startDate: Date, endDate: Date) => {
         return symptoms.filter(s => {
-            const symptomDate = new Date(s.loggedAt?.toDate?.() || s.loggedAt);
+            const symptomDate = toJsDate(s.loggedAt);
+            if (!symptomDate) return false;
             return symptomDate >= startDate && symptomDate <= endDate;
         });
     }, [symptoms]);

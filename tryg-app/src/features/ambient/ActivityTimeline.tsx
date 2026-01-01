@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCareCircleContext } from '../../contexts/CareCircleContext';
+import { toJsDate, formatTime } from '../../utils/dateUtils';
 
 export interface ActivityTimelineProps {
     role: 'senior' | 'relative';
@@ -41,14 +42,10 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
         // Add completed tasks FROM TODAY ONLY
         tasks.filter(task => {
             if (!task.completed || !task.completedAt) return false;
-            const timestamp = (task.completedAt as any)?.toDate
-                ? (task.completedAt as any).toDate()
-                : new Date(task.completedAt as any);
-            return timestamp >= today;
+            const timestamp = toJsDate(task.completedAt);
+            return timestamp && timestamp >= today;
         }).forEach(task => {
-            const timestamp = (task.completedAt as any)?.toDate
-                ? (task.completedAt as any).toDate()
-                : new Date(task.completedAt as any);
+            const timestamp = toJsDate(task.completedAt)!; // Safe because of filter
             activities.push({
                 type: 'task',
                 timestamp,
@@ -59,14 +56,10 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
 
         // Add symptoms FROM TODAY ONLY
         symptoms.filter(symptom => {
-            const timestamp = (symptom.loggedAt as any)?.toDate
-                ? (symptom.loggedAt as any).toDate()
-                : new Date(symptom.loggedAt as any);
-            return timestamp >= today;
+            const timestamp = toJsDate(symptom.loggedAt);
+            return timestamp && timestamp >= today;
         }).forEach(symptom => {
-            const timestamp = (symptom.loggedAt as any)?.toDate
-                ? (symptom.loggedAt as any).toDate()
-                : new Date(symptom.loggedAt as any);
+            const timestamp = toJsDate(symptom.loggedAt)!; // Safe because of filter
             activities.push({
                 type: 'symptom',
                 timestamp,
@@ -81,7 +74,7 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
             .slice(0, maxItems)
             .map(a => ({
                 ...a,
-                time: a.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                time: formatTime(a.timestamp)
             }));
     }, [tasks, symptoms, maxItems, t]);
 
