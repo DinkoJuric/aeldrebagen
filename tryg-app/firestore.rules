@@ -76,6 +76,11 @@ service cloud.firestore {
       allow write: if request.auth != null && (membershipId.split('_')[1] == request.auth.uid || isAdmin());
     }
     
+    // Admins - only other admins can grant admin access
+    match /admins/{userId} {
+      allow read, write: if request.auth != null && isAdmin();
+    }
+
     // Helper function to check if user is member of a circle
     function isMemberOfCircle(circleId) {
       return exists(/databases/$(database)/documents/careCircleMemberships/$(circleId + '_' + request.auth.uid));
