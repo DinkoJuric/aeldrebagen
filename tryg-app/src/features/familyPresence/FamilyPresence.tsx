@@ -46,7 +46,6 @@ const MemberStatusRow: React.FC<MemberStatusRowProps> = React.memo(({ name, stat
         if (date) {
             const now = new Date();
             const diffMs = now.getTime() - date.getTime();
-
             const diffMins = Math.max(0, Math.floor(diffMs / 60000)); // Prevent negative values
 
             if (diffMins < 60) {
@@ -57,44 +56,45 @@ const MemberStatusRow: React.FC<MemberStatusRowProps> = React.memo(({ name, stat
                 timeString = date.toLocaleDateString('da-DK', { day: 'numeric', month: 'short' });
             }
         }
+    }
 
-        return (
-            <div className={`
-            flex items-center justify-between p-3 rounded-xl transition-all
-            ${isCurrentUser ? 'bg-indigo-50/50 border border-indigo-100/50' : 'hover:bg-stone-50 border border-transparent hover:border-stone-100'}
-        `}>
-                <div className="flex items-center gap-3">
-                    {/* Avatar with connection glow when available */}
-                    <div className={`relative ${status === 'available' ? 'animate-glow' : ''}`}>
-                        <Avatar id={avatarId} size="md" className="shadow-sm border-2 border-white" />
-                        <div className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full border-2 border-white ${status === 'available' ? 'bg-teal-500' :
-                            status === 'home' ? 'bg-green-500' :
-                                status === 'work' ? 'bg-indigo-500' :
-                                    status === 'traveling' ? 'bg-amber-500' : 'bg-stone-400'
-                            }`} />
-                    </div>
-                    <div>
-                        <span className={`text-sm font-bold block text-left ${isCurrentUser ? 'text-indigo-900' : 'text-stone-700'}`}>
-                            {name} {isCurrentUser && <span className="opacity-50 text-xs font-normal">({t('you')})</span>}
-                        </span>
-                        <span className={`text-xs font-medium block text-left ${config.color || 'text-stone-500'}`}>
-                            {config.label}
-                        </span>
-                    </div>
+    return (
+        <div className={`
+        flex items-center justify-between p-3 rounded-xl transition-all
+        ${isCurrentUser ? 'bg-indigo-50/50 border border-indigo-100/50' : 'hover:bg-stone-50 border border-transparent hover:border-stone-100'}
+    `}>
+            <div className="flex items-center gap-3">
+                {/* Avatar with connection glow when available */}
+                <div className={`relative ${status === 'available' ? 'animate-glow' : ''}`}>
+                    <Avatar id={avatarId} size="md" className="shadow-sm border-2 border-white" />
+                    <div className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full border-2 border-white ${status === 'available' ? 'bg-teal-500' :
+                        status === 'home' ? 'bg-green-500' :
+                            status === 'work' ? 'bg-indigo-500' :
+                                status === 'traveling' ? 'bg-amber-500' : 'bg-stone-400'
+                        }`} />
                 </div>
-                <div className="flex flex-col items-end gap-1">
-                    <div className="bg-stone-100/80 p-1.5 rounded-lg backdrop-blur-sm">
-                        <Avatar id={statusIconId} size="sm" />
-                    </div>
-                    {timeString && (
-                        <span className="text-[10px] font-medium text-stone-400 tabular-nums">
-                            {timeString}
-                        </span>
-                    )}
+                <div>
+                    <span className={`text-sm font-bold block text-left ${isCurrentUser ? 'text-indigo-900' : 'text-stone-700'}`}>
+                        {name} {isCurrentUser && <span className="opacity-50 text-xs font-normal">({t('you')})</span>}
+                    </span>
+                    <span className={`text-xs font-medium block text-left ${config.color || 'text-stone-500'}`}>
+                        {config.label}
+                    </span>
                 </div>
             </div>
-        );
-    });
+            <div className="flex flex-col items-end gap-1">
+                <div className="bg-stone-100/80 p-1.5 rounded-lg backdrop-blur-sm">
+                    <Avatar id={statusIconId} size="sm" />
+                </div>
+                {timeString && (
+                    <span className="text-[10px] font-medium text-stone-400 tabular-nums">
+                        {timeString}
+                    </span>
+                )}
+            </div>
+        </div>
+    );
+});
 
 interface FamilyPresenceProps {
     memberStatuses?: MemberStatus[];
