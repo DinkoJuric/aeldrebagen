@@ -146,7 +146,7 @@ export const RelativeModals: React.FC<RelativeModalsProps> = ({
                 isOpen={showWeeklyModal}
                 onClose={() => setShowWeeklyModal(false)}
                 answers={weeklyAnswers}
-                onAnswer={(answer) => addWeeklyAnswer(answer.text || '')}
+                onAnswer={(answer) => addWeeklyAnswer(answer)}
                 userName={userName}
                 onToggleLike={toggleLike}
                 onReply={addReply}

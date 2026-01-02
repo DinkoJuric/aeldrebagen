@@ -151,7 +151,7 @@ export const SeniorModals: React.FC<SeniorModalsProps> = ({
                 isOpen={showWeeklyModal}
                 onClose={() => setShowWeeklyModal(false)}
                 answers={weeklyAnswers}
-                onAnswer={(answerObj: Record<string, unknown>) => addWeeklyAnswer(answerObj.answer as string)}
+                onAnswer={(answer) => addWeeklyAnswer(answer)}
                 userName={userName}
                 currentUserId={currentUserId || undefined}
                 onToggleLike={toggleLike}
