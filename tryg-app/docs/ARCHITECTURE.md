@@ -132,7 +132,11 @@ tryg-app/
 │   │   │   ├── Onboarding.tsx
 │   │   │   ├── SeniorWelcome.tsx
 │   │   │   └── RelativeWelcome.tsx
-│   │   └── ... (thinkingOfYou, weeklyQuestion)
+│   │   ├── weeklyQuestion/
+│   │   │   ├── index.ts
+│   │   │   ├── WeeklyQuestionWidget.tsx
+│   │   │   ├── useWeeklyQuestions.ts
+│   │   │   └── AudioRecorder.tsx      # Multi-role audio submission component
 │   │
 │   ├── components/          # Shared/Orchestration Components
 │   │   ├── SeniorView.tsx   # Elder interface
@@ -225,6 +229,7 @@ careCircles/
       │       └── createdAt
       │
       └── weeklyAnswers/
+│           └── {answerId}: text, audioUrl, answeredAt, userId, userName, questionId, likes[], replies[]
 
 careCircleMemberships/
   └── {circleId}_{userId}

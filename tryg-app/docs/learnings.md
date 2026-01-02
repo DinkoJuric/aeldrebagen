@@ -19,6 +19,7 @@ description: Master record of all project and cross-project learnings
 8. [UI & Design](#ui--design)
 9. [Documentation & Workflow](#documentation--workflow)
 10. [Google Apps Script](#google-apps-script)
+11. [Audio & Multimedia](#audio--multimedia)
 
 ---
 
@@ -652,3 +653,18 @@ equest.auth.token.email == 'admin@email.com' in irestore.rules.
 - **Problem**: Proposed a "textbook" refactor to split `CareCircleContext` into multiple specialized contexts (Tasks, Symptoms, etc.).
 - **Action**: Realized this contradicts the "Mirror Protocol" (role symmetry) and "Unified Context" (Single Source of Truth) architecture which is central to Tryg's design.
 - **Future**: Prioritize domain-specific patterns (like Mirror Protocol) over generic "best practices" when refactoring. The "AppCore Diet" (Provider extraction) is the preferred middle-ground.
+---
+
+## Audio & Multimedia
+
+### Audio Recording & Cloud Storage Integration (Jan 2026)
+- **Problem**: Weekly question feature had a "will be handled here" comment for years, leaving the "Record Story" button dead.
+- **Action**: Integrated `react-media-recorder` (indirectly via `AudioRecorder`) and used the `useMemories` hook to stream Blobs to Firebase Storage path `memories/{circleId}/audio_{timestamp}.webm`.
+- **Learning**: Reusing memory upload patterns (metadata + storage + firestore record) is much faster and cleaner than writing custom upload logic for every single feature.
+- **Future**: Standardize all multimedia uploads (photos, audio snippets, video messages) through the `useMemories` hook.
+
+### Flexible API Signatures (Signature Mismatch)
+- **Problem**: `addWeeklyAnswer` was hardcoded to `(text: string)`, but the UI needed to pass metadata like `audioUrl` and `userId`. This caused TypeScript to drop the extra data or error out.
+- **Action**: Unified the signature to accept `string | Partial<WeeklyAnswer>`. Inside the provider, we use an object spread to merge the provided properties with safe defaults.
+- **Learning**: Context handlers should be flexible early on. If a feature has multiple "modes" (text vs audio), the API should accept a partial object to allow for easy extensibility without breaking callers.
+- **Future**: When a feature supports multiple media types, use a `Partial<T>` or a discriminated union for the input payload.

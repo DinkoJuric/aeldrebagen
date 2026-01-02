@@ -1,12 +1,18 @@
-### [1.15.2] - 2026-01-01
+### [1.15.3] - 2026-01-02
 
-### 🧹 Final Merge & Code Integrity
-**Technical Debt Cleanup**
-- **Lint Resolution**: Eliminated all remaining ESLint errors in `AppCore.tsx`, achieving total codebase perfection.
-- **Merge Conflict Resolution**: Successfully resolved complex merge conflicts in `AppCore.tsx` and `views.test.tsx` on the `main` branch.
-- **Hook Type Safety**: Aligned hook signatures for `useTasks`, `useSymptoms`, `useCheckIn`, and `usePhotos` with consistent null/undefined handling.
+### 🎙️ Storytelling & Memory Retention
+**Weekly Question Audio Support**
+- **Real-Time Recording**: Seniors and Relatives can now record their voice directly within the Weekly Question modal.
+- **Firebase Storage**: Integrated audio upload logic via `useMemories`, ensuring voice memories are persisted and playable across the circle.
+- **Unified API**: Synchronized `addWeeklyAnswer` signature to accept `Partial<WeeklyAnswer>`, preventing payload truncation and fixing "silent text drop" bugs.
+
+### 🧹 Integrity & QA
+**Branch Protection & Cleanup**
+- **Jules QA**: Analyzed and rejected the `turbo-memoize-context-provider` branch due to redundancy and regressions; confirmed `main` already contains optimized memoization.
+- **Build Hardening**: Resolved `TSC` errors related to `Task` property indexing and `WeeklyAnswer` type mismatches.
 
 ---
+
 
 ### [1.15.1] - 2025-12-31
 
