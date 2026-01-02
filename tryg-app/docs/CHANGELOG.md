@@ -1,3 +1,13 @@
+### [1.15.2] - 2026-01-01
+
+### 🧹 Final Merge & Code Integrity
+**Technical Debt Cleanup**
+- **Lint Resolution**: Eliminated all remaining ESLint errors in `AppCore.tsx`, achieving total codebase perfection.
+- **Merge Conflict Resolution**: Successfully resolved complex merge conflicts in `AppCore.tsx` and `views.test.tsx` on the `main` branch.
+- **Hook Type Safety**: Aligned hook signatures for `useTasks`, `useSymptoms`, `useCheckIn`, and `usePhotos` with consistent null/undefined handling.
+
+---
+
 ### [1.15.1] - 2025-12-31
 
 ### 🧹 Codebase Perfection (Final Sweep)
