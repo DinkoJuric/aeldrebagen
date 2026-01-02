@@ -23,7 +23,7 @@ import { FEATURES } from './config/features';
 import { playPingSound, playCompletionSound, playSuccessSound } from './utils/sounds';
 import './index.css';
 import { User } from 'firebase/auth';
-import { AppTab, UserProfile, Member, Task, SymptomLog, CareCircle } from './types';
+import { AppTab, UserProfile, Member, Task, SymptomLog, CareCircle, WeeklyAnswer } from './types';
 
 interface NotificationType {
     title: string;
@@ -191,9 +191,10 @@ export default function TrygAppCore({
         return await sendPing(toRole);
     }, [sendPing]);
 
-    const handleWeeklyAnswer = useCallback(async (answer: string) => {
+    const handleWeeklyAnswer = useCallback(async (answer: string | Partial<WeeklyAnswer>) => {
+        const baseAnswer = typeof answer === 'string' ? { text: answer } : answer;
         return await addWeeklyAnswer({
-            text: answer,
+            ...baseAnswer,
             userId: user?.uid,
             userName: isSenior ? seniorName : (relativeName || 'Pårørende')
         });

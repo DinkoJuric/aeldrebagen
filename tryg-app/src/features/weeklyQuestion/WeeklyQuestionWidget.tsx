@@ -6,6 +6,8 @@ import { WeeklyAnswer, WeeklyReply, Member, FirestoreDate } from '../../types';
 import { AudioRecorder } from '../memories/AudioRecorder';
 import { toJsDate } from '../../utils/dateUtils';
 import { TFunction } from 'i18next';
+import { useMemories } from '../memories/useMemories';
+import { useCareCircleContext } from '../../contexts/CareCircleContext';
 
 // Simple time ago formatter (no external deps)
 const formatTimeAgo = (isoString: FirestoreDate | undefined, t: TFunction) => {
@@ -90,7 +92,8 @@ export const WeeklyQuestionModal: React.FC<WeeklyQuestionModalProps> = ({
     const [answerType, setAnswerType] = useState<'text' | 'audio'>('text');
     const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
     const { t } = useTranslation();
-    const [isUploading] = useState(false); // Local state since audio upload isn't implemented yet
+    const { careCircleId } = useCareCircleContext();
+    const { uploadMemory, isUploading } = useMemories();
 
     const weekNumber = getWeekNumber();
     const questionKey = WEEKLY_QUESTIONS[weekNumber % WEEKLY_QUESTIONS.length];
@@ -129,18 +132,35 @@ export const WeeklyQuestionModal: React.FC<WeeklyQuestionModalProps> = ({
                 questionId: questionKey,
                 text: myAnswer.trim(),
                 answeredAt: new Date(),
-                userName
+                userName,
+                userId: currentUserId || ''
             });
             setMyAnswer('');
-        } else if (answerType === 'audio' && audioBlob) {
-            // Audio submission logic will be handled here
-            onAnswer?.({
-                questionId: questionKey,
-                text: t('audio_answer_placeholder'),
-                answeredAt: new Date(),
-                userName
-            });
-            setAudioBlob(null);
+        } else if (answerType === 'audio' && audioBlob && careCircleId && currentUserId) {
+            try {
+                const audioUrl = await uploadMemory(audioBlob, {
+                    type: 'audio',
+                    circleId: careCircleId,
+                    createdByUid: currentUserId,
+                    createdByName: userName,
+                    questionId: questionKey,
+                    questionText: question
+                });
+
+                if (audioUrl) {
+                    onAnswer?.({
+                        questionId: questionKey,
+                        text: t('audio_answer_placeholder'),
+                        audioUrl: audioUrl,
+                        answeredAt: new Date(),
+                        userName,
+                        userId: currentUserId
+                    });
+                    setAudioBlob(null);
+                }
+            } catch (error) {
+                console.error('Failed to upload audio answer:', error);
+            }
         }
     };
 

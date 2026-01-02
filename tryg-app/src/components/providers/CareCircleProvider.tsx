@@ -6,7 +6,7 @@ import { useMemberStatus } from '../../features/familyPresence';
 import { useWeeklyQuestions } from '../../features/weeklyQuestion';
 import { usePings } from '../../features/thinkingOfYou';
 import { useCheckIn } from '../../hooks/useCheckIn';
-import { AppTab, UserProfile, Member, Task } from '../../types';
+import { AppTab, UserProfile, Member, Task, WeeklyAnswer } from '../../types';
 import { User } from 'firebase/auth';
 
 interface CareCircleProviderProps {
@@ -98,7 +98,7 @@ export function CareCircleProvider({
         return await sendPing(fromName, (user?.uid ?? undefined) as string, toRole);
     };
 
-    const handleWeeklyAnswer = async (answer: string) => {
+    const handleWeeklyAnswer = async (answer: string | Partial<WeeklyAnswer>) => {
         // Name logic
         const currentMember = members.find(m => m.userId === user?.uid);
         const seniorMember = members.find(m => m.role === 'senior');
@@ -109,8 +109,10 @@ export function CareCircleProvider({
             ? effectiveDisplayName || 'Pårørende'
             : members.find(m => m.role === 'relative')?.displayName || 'Pårørende';
 
+        const baseAnswer = typeof answer === 'string' ? { text: answer } : answer;
+
         return await addWeeklyAnswer({
-            text: answer,
+            ...baseAnswer,
             userId: user?.uid,
             userName: isSenior ? seniorName : (relativeName || 'Pårørende')
         });

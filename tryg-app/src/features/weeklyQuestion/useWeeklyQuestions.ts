@@ -112,7 +112,8 @@ export function useWeeklyQuestions(circleId: string | null) {
         error,
         addAnswer,
         toggleLike,
-        addReply
+        addReply,
+        circleId
     };
 }
 

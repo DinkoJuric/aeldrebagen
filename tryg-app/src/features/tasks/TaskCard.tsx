@@ -87,13 +87,13 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, onToggle }) => {
                                 "text-xl font-bold tracking-tight",
                                 task.completed ? "theme-text-muted opacity-60 line-through" : "theme-text"
                             )}>
-                                {(task.title ?? '') as string}
+                                {((task as any).title ?? '') as string}
                             </h3>
                             {/* Social Attribution Stamp */}
-                            {task.createdByRole === 'relative' && task.createdByName && (
+                            {(task as any).createdByRole === 'relative' && (task as any).createdByName && (
                                 <span className="inline-flex items-center gap-1 bg-indigo-50 px-2 py-0.5 rounded-lg">
                                     <Heart className="w-3 h-3 text-indigo-500 fill-indigo-200" />
-                                    <span className="text-[10px] text-indigo-700 font-medium">Fra {task.createdByName as string}</span>
+                                    <span className="text-[10px] text-indigo-700 font-medium">Fra {((task as any).createdByName ?? '') as string}</span>
                                 </span>
                             )}
                         </div>

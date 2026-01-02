@@ -27,14 +27,14 @@ export interface WeeklyReply {
 
 export interface WeeklyAnswer {
     id: string;
-    questionId?: string;
-    text?: string;
-    userId?: string;
-    userName?: string;
-    answeredAt?: FirestoreDate; // Firestore Timestamp
+    text: string;
+    answeredAt?: FirestoreDate;
+    userName: string;
+    userId: string;
+    questionId: string;
     likes?: string[];
     replies?: WeeklyReply[];
-    audioUrl?: string;
+    audioUrl?: string; // Added for audio support
 }
 
 export interface Ping {
@@ -201,7 +201,7 @@ export interface CareCircleContextValue {
 
     // Weekly Questions
     weeklyAnswers: WeeklyAnswer[];
-    addWeeklyAnswer: (answer: string) => Promise<string | undefined>;
+    addWeeklyAnswer: (answer: string | Partial<WeeklyAnswer>) => Promise<string | undefined>;
     toggleLike: (answerId: string, userId: string, isLiked: boolean) => Promise<void>;
     addReply: (answerId: string, reply: Omit<WeeklyReply, 'id'>) => Promise<void>;
 
