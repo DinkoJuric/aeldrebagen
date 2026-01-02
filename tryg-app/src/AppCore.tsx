@@ -121,6 +121,20 @@ export default function TrygAppCore({
     const { lastCheckIn, recordCheckIn } = useCheckIn(careCircle?.id);
     const { latestPhoto, uploading, deletePhoto } = usePhotos(careCircle?.id, user?.uid ?? null);
 
+    // Live update: prefer real-time member data over static user profile
+    const currentMember = members.find(m => m.userId === user?.uid);
+    const seniorMember = members.find(m => m.role === 'senior');
+
+    const effectiveDisplayName = currentMember?.displayName || userProfile?.displayName;
+
+    // Get display names - Source of Truth is ALWAYS the membership record
+    const seniorName = seniorMember?.displayName || careCircle?.seniorName || (userProfile?.role === 'senior' ? effectiveDisplayName : 'Senior');
+
+    // Relative name logic
+    const relativeName = userProfile?.role === 'relative'
+        ? effectiveDisplayName || 'Pårørende'
+        : members.find(m => m.role === 'relative')?.displayName || 'Pårørende';
+
     // Incoming pings logic
     useEffect(() => {
         if (latestPing && FEATURES.pingSound) {
@@ -178,19 +192,6 @@ export default function TrygAppCore({
         });
     }, [addWeeklyAnswer, isSenior, seniorName, relativeName, user]);
 
-    // Live update: prefer real-time member data over static user profile
-    const currentMember = members.find(m => m.userId === user?.uid);
-    const seniorMember = members.find(m => m.role === 'senior');
-
-    const effectiveDisplayName = currentMember?.displayName || userProfile?.displayName;
-
-    // Get display names - Source of Truth is ALWAYS the membership record
-    const seniorName = seniorMember?.displayName || careCircle?.seniorName || (userProfile?.role === 'senior' ? effectiveDisplayName : 'Senior');
-
-    // Relative name logic
-    const relativeName = userProfile?.role === 'relative'
-        ? effectiveDisplayName || 'Pårørende'
-        : members.find(m => m.role === 'relative')?.displayName || 'Pårørende';
 
     // 🚀 TURBO: Memoize the context value to prevent unnecessary re-renders of consumers.
     // This is a critical performance optimization for context-heavy applications.
