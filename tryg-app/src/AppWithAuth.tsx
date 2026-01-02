@@ -337,7 +337,17 @@ function FirebaseApp() {
               This simplifies everything.
             */}
             <PhoneFrame>
-                <TrygAppCore user={user} onSignOut={signOut} />
+                <TrygAppCore
+                    user={user}
+                    userProfile={userProfile}
+                    careCircle={careCircle}
+                    onSignOut={signOut}
+                    inviteCode={inviteCode}
+                    onGetInviteCode={getInviteCode}
+                    members={members}
+                    updateMember={updateMember}
+                    updateAnyMember={updateAnyMember}
+                />
             </PhoneFrame>
         </CareCircleProvider>
     );

@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { InstallPrompt } from '../InstallPrompt';
 import { UpdateToast } from '../UpdateToast';
 import { LivingBackground } from '../ui/LivingBackground';
