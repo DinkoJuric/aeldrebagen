@@ -6,7 +6,7 @@ import { useMemberStatus } from '../../features/familyPresence';
 import { useWeeklyQuestions } from '../../features/weeklyQuestion';
 import { usePings } from '../../features/thinkingOfYou';
 import { useCheckIn } from '../../hooks/useCheckIn';
-import { AppTab, UserProfile, Member, Task, SymptomLog } from '../../types';
+import { AppTab, UserProfile, Member, Task } from '../../types';
 import { User } from 'firebase/auth';
 
 interface CareCircleProviderProps {

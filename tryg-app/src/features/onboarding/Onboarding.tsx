@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useCareCircle } from '../../hooks/useCareCircle';
 import { SeniorWelcome } from './SeniorWelcome';
 import { RelativeWelcome } from './RelativeWelcome';
+import { useAuth } from '../../hooks/useAuth';
 
 interface OnboardingProps {
     show: boolean;
@@ -11,7 +12,9 @@ interface OnboardingProps {
 }
 
 export const Onboarding: React.FC<OnboardingProps> = ({ show, onComplete }) => {
-    const { userRole } = useCareCircle();
+    const { user, userProfile } = useAuth();
+    useCareCircle(user?.uid, userProfile);
+    const userRole = userProfile?.role;
 
     return createPortal(
         <AnimatePresence>

@@ -11,10 +11,9 @@ interface PhoneFrameProps {
         body: string;
         icon: any;
     } | null;
-    showOnboarding?: boolean;
 }
 
-export function PhoneFrame({ children, notification, showOnboarding = false }: PhoneFrameProps) {
+export function PhoneFrame({ children, notification }: PhoneFrameProps) {
     return (
         <div className="flex justify-center items-center min-h-screen bg-stone-50 dark:bg-zinc-950 sm:bg-zinc-800 sm:p-4 font-sans">
             {/* Phone Frame Simulator (Responsive) */}

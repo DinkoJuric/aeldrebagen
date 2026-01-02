@@ -63,9 +63,10 @@ export function usePings(circleId: string | null, currentUserId: string | null) 
                 // Set latest ping if it's for this user and recent (within last minute)
                 const now = new Date();
                 const recentPing = pingsList.find(p => {
-                    const pingAge = now.getTime() - p.sentAt.getTime();
+                    if (!p.sentAt) return false;
+                    const sentAtDate = p.sentAt instanceof Date ? p.sentAt : new Date(p.sentAt as any);
+                    const pingAge = now.getTime() - sentAtDate.getTime();
                     const isRecent = pingAge < 60000; // Within last minute
-                    // const isForMe = p.toUserId !== currentUserId && p.fromUserId !== currentUserId;
                     const isFromOther = p.fromUserId !== currentUserId;
                     return isRecent && isFromOther;
                 });

@@ -228,13 +228,13 @@ export const StatusCard: React.FC<StatusCardProps> = ({
     }
 
     const statusObj = STATUS_OPTIONS.find(s => s.id === statusId) || STATUS_OPTIONS[0];
-    const avatarId = ({
+    const avatarId = (({
         'work': 'work',
         'home': 'home',
         'traveling': 'car',
         'available': 'coffee',
         'busy': 'moon'
-    } as Record<string, string>)[statusId || ''] || 'home';
+    } as Record<string, string>)[statusId || '']) || 'home';
 
     let timeString = '-';
     if (timestamp) {
@@ -322,9 +322,9 @@ export const StatusList: React.FC<StatusListProps> = ({
         <div className="space-y-2 mb-4">
             {displayedMembers.map((member, index) => (
                 <StatusCard
-                    key={member.docId || member.userId || index}
+                    key={(member.userId || member.docId || index) as string | number}
                     name={member.displayName || 'Pårørende'}
-                    relationship={getRelationship(member.userId || member.docId)}
+                    relationship={getRelationship((member.userId || member.docId) as string)}
                     status={member.status}
                     timestamp={member.updatedAt || lastUpdated}
                 />

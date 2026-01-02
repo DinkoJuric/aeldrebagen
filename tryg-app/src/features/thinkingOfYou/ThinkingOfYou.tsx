@@ -6,6 +6,8 @@ import { playPingSound } from '../../utils/sounds';
 import { Avatar } from '../../components/ui/Avatar';
 import { Ping } from '../../types';
 
+import { toJsDate } from '../../utils/dateUtils';
+
 interface FloatingHeart {
     id: number;
     x: number;
@@ -168,7 +170,7 @@ export const PingNotification: React.FC<PingNotificationProps> = ({ ping, onDism
                             {ping.message || `${ping.fromName} tænker på dig ❤️`}
                         </p>
                         <p className="text-pink-100 text-sm">
-                            {ping.sentAt?.toLocaleTimeString?.('da-DK', { hour: '2-digit', minute: '2-digit' })}
+                            {toJsDate(ping.sentAt)?.toLocaleTimeString?.('da-DK', { hour: '2-digit', minute: '2-digit' })}
                         </p>
                     </div>
                 </div>

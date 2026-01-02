@@ -106,7 +106,7 @@ export default function TrygApp() {
     }
 
     return (
-        <PhoneFrame notification={notification} showOnboarding={showOnboarding}>
+        <PhoneFrame notification={notification}>
             <div className="relative h-full overflow-y-auto no-scrollbar flex flex-col">
                 {/* Role Toggles & Reset - ENHANCED VISIBILITY */}
                 {/* Only show these controls in Demo Mode (App.tsx), not in real app */}
@@ -126,7 +126,7 @@ export default function TrygApp() {
                                 view === 'senior'
                                     ? "bg-white text-stone-900 shadow-sm"
                                     : "text-stone-700 dark:text-stone-300 hover:text-black dark:hover:text-white"
-                                )}
+                            )}
                         >
                             {t('role_senior')}
                         </button>
@@ -137,7 +137,7 @@ export default function TrygApp() {
                                 view === 'relative'
                                     ? "bg-white text-stone-900 shadow-sm"
                                     : "text-stone-700 dark:text-stone-300 hover:text-black dark:hover:text-white"
-                                )}
+                            )}
                         >
                             {t('role_relative')}
                         </button>

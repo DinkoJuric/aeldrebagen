@@ -1,0 +1,13 @@
+﻿src/components/layout/PhoneFrame.tsx(17,54): error TS6133: 'showOnboarding' is declared but its value is never read.
+src/components/providers/CareCircleProvider.tsx(9,45): error TS6133: 'SymptomLog' is declared but its value is never read.
+src/features/familyPresence/StatusCard.tsx(325,21): error TS2322: Type '{}' is not assignable to type 'Key | null | undefined'.
+src/features/familyPresence/StatusCard.tsx(327,51): error TS2345: Argument of type '{}' is not assignable to parameter of type 'string'.
+src/features/onboarding/Onboarding.tsx(14,13): error TS2339: Property 'userRole' does not exist on type '{ careCircle: CareCircle | null; members: Member[]; loading: boolean; error: string | null; inviteCode: string | null; createCareCircle: (seniorName: string) => Promise<...>; ... 5 more ...; hasCareCircle: boolean; }'.
+src/features/onboarding/Onboarding.tsx(14,26): error TS2554: Expected 2 arguments, but got 0.
+src/features/tasks/TaskCard.tsx(92,29): error TS2322: Type 'unknown' is not assignable to type 'string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<...> | null | undefined'.
+src/features/tasks/TaskCard.tsx(96,99): error TS2322: Type '{}' is not assignable to type 'string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<...> | null | undefined'.
+src/features/thinkingOfYou/ThinkingOfYou.tsx(171,43): error TS2551: Property 'toLocaleTimeString' does not exist on type 'string | number | Timestamp | Date'. Did you mean 'toLocaleString'?
+  Property 'toLocaleTimeString' does not exist on type 'string'.
+src/features/thinkingOfYou/usePings.ts(66,53): error TS18047: 'p.sentAt' is possibly 'null'.
+src/features/thinkingOfYou/usePings.ts(66,62): error TS2339: Property 'getTime' does not exist on type 'string | number | Timestamp | Date'.
+  Property 'getTime' does not exist on type 'string'.
