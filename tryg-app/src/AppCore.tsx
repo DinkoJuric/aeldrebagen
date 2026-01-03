@@ -20,7 +20,6 @@ import { useWeeklyQuestions } from './features/weeklyQuestion/useWeeklyQuestions
 import { usePings } from './features/thinkingOfYou/usePings';
 import { useCheckIn } from './hooks/useCheckIn';
 import { FEATURES } from './config/features';
-import { playPingSound, playCompletionSound, playSuccessSound } from './utils/sounds';
 import './index.css';
 import { User } from 'firebase/auth';
 import { AppTab, UserProfile, Member, Task, SymptomLog, CareCircle, WeeklyAnswer } from './types';
@@ -143,13 +142,6 @@ export default function TrygAppCore({
         ? effectiveDisplayName || 'Pårørende'
         : members.find(m => m.role === 'relative')?.displayName || 'Pårørende') || 'Pårørende';
 
-    // Incoming pings logic
-    useEffect(() => {
-        if (latestPing && FEATURES.pingSound) {
-            playPingSound();
-        }
-    }, [latestPing]);
-
     // Notification clear logic
     useEffect(() => {
         if (notification) {
@@ -157,22 +149,6 @@ export default function TrygAppCore({
             return () => clearTimeout(timer);
         }
     }, [notification]);
-
-    const handleToggleTask = useCallback(async (id: string) => {
-        const task = tasks.find(t => t.id === id || t.id === `task_${id}`);
-        const willBeCompleted = task && !task.completed;
-        await toggleTask(id);
-        if (willBeCompleted && FEATURES.completionSounds) {
-            playCompletionSound();
-        }
-    }, [tasks, toggleTask]);
-
-    const handleCheckIn = useCallback(async () => {
-        await recordCheckIn();
-        if (FEATURES.completionSounds) {
-            playSuccessSound();
-        }
-    }, [recordCheckIn]);
 
     const handleAddSymptom = useCallback(async (symptomData: Partial<SymptomLog>) => {
         return await addSymptom(symptomData);
@@ -219,27 +195,27 @@ export default function TrygAppCore({
         activeTab: activeTab as AppTab,
         setActiveTab: setActiveTab,
         tasks,
-        toggleTask: handleToggleTask,
+        toggleTask: toggleTask,
         addTask: isSenior ? addTask : handleAddTaskFromRelative,
         symptoms,
         addSymptom: handleAddSymptom,
         weeklyAnswers,
         addWeeklyAnswer: handleWeeklyAnswer,
-        toggleLike: (answerId: string, userId: string, isLiked: boolean) => onToggleLike(answerId, userId, isLiked),
+        toggleLike: onToggleLike,
         addReply: onReply,
         latestPing,
         sendPing: handleSendPing,
         dismissPing: dismissPing,
         lastCheckIn,
-        recordCheckIn: handleCheckIn,
+        recordCheckIn: recordCheckIn,
         updateMember: updateMember,
         updateAnyMember: updateAnyMember
     }), [
         careCircle, seniorName, user, userProfile, isSenior, relativeName, memberStatuses, members,
-        relativeStatuses, seniorStatus, myStatus, setMyStatus, activeTab, tasks, handleToggleTask,
+        relativeStatuses, seniorStatus, myStatus, setMyStatus, activeTab, tasks, toggleTask,
         addTask, handleAddTaskFromRelative, symptoms, handleAddSymptom, weeklyAnswers,
         handleWeeklyAnswer, onToggleLike, onReply, latestPing, handleSendPing, dismissPing,
-        lastCheckIn, handleCheckIn, updateMember, updateAnyMember
+        lastCheckIn, recordCheckIn, updateMember, updateAnyMember
     ]);
 
     return (
