@@ -1,3 +1,16 @@
+### [Unreleased] - 2026-01-03
+
+### 🚀 EAS & Capacitor Deployment Setup
+**Android Support & Build Pipeline**
+- **Android Platform**: Added native Android platform support (`@capacitor/android`) and generated the `android/` project folder.
+- **EAS Build**: Configured Expo Application Services (EAS) for cloud builds.
+    - Created `eas.json` with "Generic" build profile (Capacitor-compatible).
+    - Created `app.json` to handle EAS Project ID configuration.
+    - Added `build:android` script (`vite build && npx cap sync android`) to standardizing build commands.
+- **Documentation**: Created `docs/BUILD_SURVIVAL_GUIDE.md` detailing cost-saving strategies for EAS (15 build quota) and distribution logic for Android vs. iOS.
+
+---
+
 ### [1.15.3] - 2026-01-02
 
 ### 🎙️ Storytelling & Memory Retention

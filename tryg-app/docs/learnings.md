@@ -668,3 +668,21 @@ equest.auth.token.email == 'admin@email.com' in irestore.rules.
 - **Action**: Unified the signature to accept `string | Partial<WeeklyAnswer>`. Inside the provider, we use an object spread to merge the provided properties with safe defaults.
 - **Learning**: Context handlers should be flexible early on. If a feature has multiple "modes" (text vs audio), the API should accept a partial object to allow for easy extensibility without breaking callers.
 - **Future**: When a feature supports multiple media types, use a `Partial<T>` or a discriminated union for the input payload.
+---
+
+## Deployment (EAS & Capacitor)
+
+### Interactive CLI Hangs
+- **Problem**: `npx eas-cli init` froze on the "What would you like to do?" prompt because the terminal environment (Agent) is non-interactive or has limited TTY support.
+- **Action**: Manually created `eas.json` and `app.json`.
+- **Future**: When scripting EAS or Expo commands, assume non-interactive mode. Use manual JSON configuration instead of "wizards".
+
+### Expo Package vs Capacitor
+- **Problem**: The `expo` package is designed for React Native. In a Vite/Capacitor project, it caused `Autolinking` errors during the build because it tried to link native modules that don't exist in the same way.
+- **Action**: Uninstalled `expo`. We use EAS *only* as a build service (cloud compiler), but the runtime is pure Capacitor.
+- **Future**: For "Web-First" Capacitor apps, do NOT install the `expo` runtime package unless you strictly need specific Expo SDK modules that are compatible with Capacitor.
+
+### Free Tier iOS Distribution
+- **Problem**: User wanted to distribute iOS app to remote testers without paying $99/year.
+- **Action**: Research confirmed "Ad Hoc" distribution is impossible on the Free Tier (Personal Team). The only method is manual side-loading (AltStore), which expires every 7 days.
+- **Future**: Always managing expectations early: Free Tier = Local Testing Only (or Android). Remote iOS distribution essentially requires the paid account.

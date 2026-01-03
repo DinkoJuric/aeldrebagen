@@ -18,6 +18,7 @@
 11. [Family Tree: POC Slot System](#family-tree-poc-identity--slot-system)
 12. [Related Documentation](#related-documentation)
 13. [Development Protocols (Mirror Protocol)](#13-development-protocols-mirror-protocol)
+14. [Deployment Pipeline (EAS + Capacitor)](#14-deployment-pipeline-eas--capacitor)
 
 
 ## System Overview: The Mirror Architecture
@@ -637,4 +638,24 @@ Avoid duplicating UI logic. If a card or widget appears in both views (even with
 - **Examples**: `AppCore.tsx`, `CoordinationTab.tsx`.
 
 > **The Golden Rule**: A Button should never know where its data comes from. A Container should never know how to render a button.
+
+---
+
+## 14. Deployment Pipeline (EAS + Capacitor)
+
+The project uses a hybrid approach: **Capacitor** for the native runtime and **Expo Application Services (EAS)** for the cloud build pipeline.
+
+### The stack
+- **Runtime**: Capacitor (`@capacitor/core`, `@capacitor/ios`, `@capacitor/android`). The app is NOT an "Expo Go" app; it's a "Bare" web app wrapped in native containers.
+- **Build Service**: EAS Build (`eas-cli`). We use "Generic Builds" to compile the native directories in the cloud.
+- **Config**:
+    - `eas.json`: Defines build profiles (`development`, `production`).
+    - `app.json`: Stores the Expo Project ID.
+    - `package.json`: Scripts `build:ios` and `build:android` handle the Vite build + Capacitor sync sequence.
+
+### Why this setup?
+- Allows us to use standard web tools (Vite/React) without Expo's strict framework constraints.
+- Gives us access to EAS's powerful cloud builders without needing a Mac for iOS builds.
+- **Constraint**: We are limited to 15 builds/month on the free tier. See `docs/BUILD_SURVIVAL_GUIDE.md` for strategy.
+
 

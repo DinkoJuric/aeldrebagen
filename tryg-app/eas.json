@@ -1,0 +1,26 @@
+{
+    "build": {
+        "development": {
+            "developmentClient": false,
+            "distribution": "internal",
+            "android": {
+                "gradleCommand": ":app:assembleDebug"
+            },
+            "ios": {
+                "scheme": "App"
+            }
+        },
+        "preview": {
+            "distribution": "internal"
+        },
+        "production": {
+            "distribution": "store",
+            "android": {
+                "gradleCommand": ":app:bundleRelease"
+            },
+            "ios": {
+                "scheme": "App"
+            }
+        }
+    }
+}

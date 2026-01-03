@@ -1,0 +1,12 @@
+{
+    "expo": {
+        "name": "dinko-app",
+        "slug": "dinko-app",
+        "version": "1.0.0",
+        "extra": {
+            "eas": {
+                "projectId": "3138c286-6883-413b-8cc9-cac219a03c2c"
+            }
+        }
+    }
+}
