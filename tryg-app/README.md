@@ -68,14 +68,17 @@ npx localtunnel --port 5174
 # Press Ctrl+C in the terminal where tunnel is running
 ```
 
-Share the generated URL (e.g., `https://xyz.loca.lt`) + your tunnel password (your public IP).
+Share the generated URL (e.g., `https://xyz.loca.lt`).
 
-Get your password: visit https://loca.lt/mytunnelpassword
+**Security Warning:**
+- The public URL is temporary and accessible to anyone who has the link.
+- **Do not** expose sensitive data.
+- For more secure sharing, consider using a service with authentication like [ngrok](https://ngrok.com/) or [Cloudflare Tunnel](https://www.cloudflare.com/products/tunnel/).
 
 **Troubleshooting:**
-- 503 errors = LocalTunnel servers overloaded, try again later
-- Slow/hanging = Consider alternatives: ngrok, Cloudflare Tunnel, or Vercel
-- LocalTunnel is free but unreliable; GitHub Pages is more stable for sharing
+- 503 errors = LocalTunnel servers may be overloaded, try again later.
+- Slow/hanging = Consider the alternatives mentioned above.
+- LocalTunnel is free but can be unreliable; GitHub Pages is more stable for persistent demos.
 
 ---
 
