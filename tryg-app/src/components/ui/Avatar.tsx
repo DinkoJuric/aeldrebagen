@@ -48,8 +48,9 @@ const IMAGE_MAP: Record<string, string> = {
 /**
  * Avatar Component
  * Renders avatars and status icons using individual image files.
+ * 🚀 TURBO: Wrapped in React.memo to prevent unnecessary re-renders when props are unchanged.
  */
-export const Avatar: React.FC<AvatarProps> = ({ id, className, size }) => {
+const AvatarComponent: React.FC<AvatarProps> = ({ id, className, size }) => {
     // Fallback for unknown IDs
     if (!id || !IMAGE_MAP[id]) {
         return (
@@ -75,6 +76,9 @@ export const Avatar: React.FC<AvatarProps> = ({ id, className, size }) => {
         </div>
     );
 };
+
+export const Avatar = React.memo(AvatarComponent);
+Avatar.displayName = 'Avatar';
 
 export { avatarVariants };
 export default Avatar;

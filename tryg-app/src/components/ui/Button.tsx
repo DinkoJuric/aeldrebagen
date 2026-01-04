@@ -38,7 +38,11 @@ export interface ButtonProps
     'aria-label'?: string;
 }
 
-export const Button: React.FC<ButtonProps> = ({
+/**
+ * 🚀 TURBO: Wrapped in React.memo to prevent unnecessary re-renders when props are unchanged.
+ * This is especially useful for buttons in lists or frequently updated UI.
+ */
+const ButtonComponent: React.FC<ButtonProps> = ({
     children,
     onClick,
     variant,
@@ -66,6 +70,9 @@ export const Button: React.FC<ButtonProps> = ({
         </button>
     );
 };
+
+export const Button = React.memo(ButtonComponent);
+Button.displayName = 'Button';
 
 // Export variants for external use (e.g., link styled as button)
 export { buttonVariants };
