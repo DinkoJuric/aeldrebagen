@@ -39,8 +39,9 @@ https://dinkojuric.github.io/aeldrebagen/
    ```
 
 2. Fill in your Firebase values (from Firebase Console):
+   > **Warning:** Do not commit the `.env.local` file to version control. It should be listed in your `.gitignore` file to protect your secrets.
    ```
-   VITE_FIREBASE_API_KEY=<your-api-key>
+   VITE_FIREBASE_API_KEY="YOUR_API_KEY_HERE"
    VITE_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
    VITE_FIREBASE_PROJECT_ID=your-project-id
    VITE_FIREBASE_STORAGE_BUCKET=your-project.firebasestorage.app
