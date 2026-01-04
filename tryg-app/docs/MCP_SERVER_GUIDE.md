@@ -32,6 +32,8 @@ Linux: ~/.config/gemini/mcp.json
 
 Open your `mcp.json` and add this configuration:
 
+> **Security Note:** Never hardcode API keys directly in your configuration files. Use a secrets manager or environment variables to inject them securely at runtime.
+
 ```json
 {
   "mcpServers": {
@@ -54,9 +56,10 @@ Open your `mcp.json` and add this configuration:
     "perplexity-ask": {
       "command": "npx",
       "args": ["-y", "@anthropic/perplexity-mcp@latest"],
-      "env": {
-        "PERPLEXITY_API_KEY": "<your-perplexity-api-key>"
-      }
+       "env": {
+-        "PERPLEXITY_API_KEY": "<your-perplexity-api-key>"
++        "PERPLEXITY_API_KEY": "YOUR_API_KEY_HERE"
+       }
     },
     "chrome-devtools": {
       "command": "npx",
@@ -111,7 +114,7 @@ Ask: *"Show me my current Firebase project"*
       "command": "npx",
       "args": ["package-name@latest"],
       "env": {
-        "API_KEY": "your-key-if-needed"
+        "API_KEY": "YOUR_API_KEY_HERE"
       }
     }
   }
