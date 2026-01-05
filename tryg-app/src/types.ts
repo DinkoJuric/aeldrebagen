@@ -218,3 +218,9 @@ export interface CareCircleContextValue {
     updateMember: (data: Partial<Member>) => Promise<void>;
     updateAnyMember: (memberId: string, data: Partial<Member>) => Promise<void>;
 }
+
+export interface NotificationType {
+    title: string;
+    body: string;
+    icon: React.ElementType;
+}
