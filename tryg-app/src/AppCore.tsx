@@ -6,6 +6,7 @@ import { SeniorView } from './components/SeniorView';
 import { RelativeView } from './components/RelativeView';
 import { SettingsModal } from './components/SettingsModal';
 import { BottomNavigation } from './components/BottomNavigation';
+import { NotificationBanner } from './components/NotificationBanner';
 import { PingNotification } from './features/thinkingOfYou';
 import { ShareModal } from './components/ShareModal';
 import { Onboarding, SeniorWelcome, RelativeWelcome } from './features/onboarding';
@@ -23,14 +24,7 @@ import { FEATURES } from './config/features';
 import { playPingSound, playCompletionSound, playSuccessSound } from './utils/sounds';
 import './index.css';
 import { User } from 'firebase/auth';
-import { AppTab, UserProfile, Member, Task, SymptomLog, CareCircle, WeeklyAnswer } from './types';
-
-interface NotificationType {
-    title: string;
-    body: string;
-    icon: React.ElementType;
-}
-
+import { AppTab, UserProfile, Member, Task, SymptomLog, CareCircle, WeeklyAnswer, NotificationType } from './types';
 
 export interface AppCoreProps {
     user: User | null;
@@ -58,7 +52,6 @@ export default function TrygAppCore({
     const { t, i18n } = useTranslation();
     // View is determined by user role - no toggle allowed
     const isSenior = userProfile?.role === 'senior';
-    // const [activePing, setActivePing] = useState(null); // Unused?
     const [notification, setNotification] = useState<NotificationType | null>(null);
     const [showSettings, setShowSettings] = useState(false);
     const [showShare, setShowShare] = useState(false);
@@ -251,23 +244,7 @@ export default function TrygAppCore({
                 <div className="relative w-full sm:max-w-md h-[100dvh] sm:h-[850px] bg-white sm:rounded-[3rem] overflow-hidden sm:border-8 sm:border-zinc-900 shadow-2xl sm:ring-1 sm:ring-zinc-400/50 flex flex-col">
 
                     {/* Push Notification Banner */}
-                    <div className={`
-          absolute top-4 left-4 right-4 bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-xl z-[60]
-          transform transition-all duration-500 ease-out border border-stone-200
-          ${notification ? 'translate-y-12 opacity-100' : '-translate-y-40 opacity-0'}
-        `}>
-                        {notification && (
-                            <div className="flex gap-3 items-center">
-                                <div className="bg-teal-100 p-2 rounded-xl">
-                                    <notification.icon className="w-6 h-6 text-teal-600" />
-                                </div>
-                                <div>
-                                    <h4 className="font-bold theme-text text-sm">{notification.title}</h4>
-                                    <p className="theme-text-muted text-xs opacity-80">{notification.body}</p>
-                                </div>
-                            </div>
-                        )}
-                    </div>
+                    <NotificationBanner notification={notification} />
 
                     {/* Header - COMPACT - Moved to Relative to push content down */}
                     <div className="relative h-10 z-50 flex justify-between items-center px-3 glass-panel border-b-0 rounded-none bg-transparent shadow-none shrink-0">
