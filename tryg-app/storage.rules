@@ -1,14 +1,30 @@
 rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
-    // Care circle photos - members can read/write
+    // This function checks if the requesting user is a member of the specified care circle
+    // by looking for a corresponding document in the 'careCircleMemberships' collection in Firestore.
+    function isMemberOfCircle(circleId) {
+      return exists(/databases/(default)/documents/careCircleMemberships/$(circleId + '_' + request.auth.uid));
+    }
+
+    // Photos can only be read or written by members of the care circle.
     match /careCircles/{circleId}/photos/{fileName} {
-      allow read, write: if request.auth != null;
+      allow read, write: if request.auth != null && isMemberOfCircle(circleId);
     }
     
-    // Care circle settings (reward photos, etc.)
+    // Settings files (e.g., reward photos) can only be accessed by circle members.
     match /careCircles/{circleId}/settings/{fileName} {
-      allow read, write: if request.auth != null;
+      allow read, write: if request.auth != null && isMemberOfCircle(circleId);
+    }
+
+    // Audio memories can only be accessed by members of the circle.
+    match /careCircles/{circleId}/memories/{fileName} {
+      allow read, write: if request.auth != null && isMemberOfCircle(circleId);
+    }
+
+    // Audio answers for weekly questions are restricted to circle members.
+    match /careCircles/{circleId}/weeklyAnswers/{fileName} {
+      allow read, write: if request.auth != null && isMemberOfCircle(circleId);
     }
   }
 }
