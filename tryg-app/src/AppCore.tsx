@@ -225,7 +225,7 @@ export default function TrygAppCore({
         addSymptom: handleAddSymptom,
         weeklyAnswers,
         addWeeklyAnswer: handleWeeklyAnswer,
-        toggleLike: (answerId: string, userId: string, isLiked: boolean) => onToggleLike(answerId, userId, isLiked),
+        toggleLike: onToggleLike,
         addReply: onReply,
         latestPing,
         sendPing: handleSendPing,
