@@ -1,14 +1,18 @@
 rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
-    // Care circle photos - members can read/write
-    match /careCircles/{circleId}/photos/{fileName} {
-      allow read, write: if request.auth != null;
+    // Helper function to check if user is member of a circle by checking Firestore.
+    // This is crucial for securing storage access.
+    function isMemberOfCircle(circleId) {
+      // Path to the memberships collection in Firestore.
+      return exists(/databases/(default)/documents/careCircleMemberships/$(circleId + '_' + request.auth.uid));
     }
-    
-    // Care circle settings (reward photos, etc.)
-    match /careCircles/{circleId}/settings/{fileName} {
-      allow read, write: if request.auth != null;
+
+    // Secure all paths within a care circle's storage.
+    // This rule uses a wildcard to match any file in any subfolder (photos, memories, etc.)
+    // and ensures only authenticated members of the circle can access it.
+    match /careCircles/{circleId}/{allPaths=**} {
+      allow read, write: if request.auth != null && isMemberOfCircle(circleId);
     }
   }
 }
