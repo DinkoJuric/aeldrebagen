@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { CareCircleContext } from '../../contexts/CareCircleContext';
 import { useTasks } from '../../features/tasks';
 import { useSymptoms } from '../../features/symptoms';
@@ -67,7 +67,7 @@ export function CareCircleProvider({
 
     // Business Logic Handlers (Moved from AppCore)
 
-    const handleAddTaskFromRelative = async (newTask: Partial<Task>) => {
+    const handleAddTaskFromRelative = useCallback(async (newTask: Partial<Task>) => {
         // Relative name logic for task creation
         const currentMember = members.find(m => m.userId === user?.uid);
         const effectiveDisplayName = currentMember?.displayName || userProfile?.displayName;
@@ -81,9 +81,9 @@ export function CareCircleProvider({
             createdByName: relativeName,
             createdByUserId: user?.uid
         });
-    };
+    }, [addTask, members, user, userProfile]);
 
-    const handleSendPing = async (toRole: 'senior' | 'relative') => {
+    const handleSendPing = useCallback(async (toRole: 'senior' | 'relative') => {
         // Name logic
         const currentMember = members.find(m => m.userId === user?.uid);
         const seniorMember = members.find(m => m.role === 'senior');
@@ -96,9 +96,9 @@ export function CareCircleProvider({
 
         const fromName = isSenior ? seniorName : relativeName;
         return await sendPing(fromName, (user?.uid ?? undefined) as string, toRole);
-    };
+    }, [sendPing, isSenior, members, careCircle, user, userProfile]);
 
-    const handleWeeklyAnswer = async (answer: string | Partial<WeeklyAnswer>) => {
+    const handleWeeklyAnswer = useCallback(async (answer: string | Partial<WeeklyAnswer>) => {
         // Name logic
         const currentMember = members.find(m => m.userId === user?.uid);
         const seniorMember = members.find(m => m.role === 'senior');
@@ -116,7 +116,7 @@ export function CareCircleProvider({
             userId: user?.uid,
             userName: isSenior ? seniorName : (relativeName || 'Pårørende')
         });
-    };
+    }, [addWeeklyAnswer, isSenior, members, careCircle, user, userProfile]);
 
     // Calculate derived names for Context Value
     const currentMember = members.find(m => m.userId === user?.uid);
@@ -127,43 +127,54 @@ export function CareCircleProvider({
         ? effectiveDisplayName || 'Pårørende'
         : members.find(m => m.role === 'relative')?.displayName || 'Pårørende';
 
+    // 🚀 TURBO: Memoize the context value to prevent unnecessary re-renders of consumers.
+    // This is a critical performance optimization for context-heavy applications.
+    const value = useMemo(() => ({
+        careCircleId: careCircle?.id ?? null,
+        seniorId: careCircle?.seniorId || null,
+        seniorName: seniorName,
+        currentUserId: user?.uid ?? null,
+        userRole: userProfile?.role ?? null,
+        userName: isSenior ? seniorName : relativeName,
+        relativeName: relativeName,
+        memberStatuses,
+        members,
+        relativeStatuses,
+        seniorStatus: seniorStatus || null,
+        myStatus: myStatus as any,
+        setMyStatus: setMyStatus,
+        activeTab: activeTab as AppTab,
+        setActiveTab: setActiveTab,
+        tasks,
+        toggleTask: toggleTask,
+        addTask: isSenior ? addTask : handleAddTaskFromRelative,
+        symptoms,
+        addSymptom: addSymptom,
+        weeklyAnswers,
+        addWeeklyAnswer: handleWeeklyAnswer,
+        toggleLike: (answerId: string, userId: string, isLiked: boolean) => onToggleLike(answerId, userId, isLiked),
+        addReply: onReply,
+        latestPing,
+        sendPing: handleSendPing,
+        dismissPing: dismissPing,
+        lastCheckIn,
+        recordCheckIn: recordCheckIn,
+        updateMember: updateMember,
+        updateAnyMember: updateAnyMember,
+        // Extended context
+        inviteCode,
+        getInviteCode: onGetInviteCode
+    }), [
+        careCircle, seniorName, user, userProfile, isSenior, relativeName, memberStatuses, members,
+        relativeStatuses, seniorStatus, myStatus, setMyStatus, activeTab, tasks, toggleTask,
+        addTask, handleAddTaskFromRelative, symptoms, addSymptom, weeklyAnswers,
+        handleWeeklyAnswer, onToggleLike, onReply, latestPing, handleSendPing, dismissPing,
+        lastCheckIn, recordCheckIn, updateMember, updateAnyMember, inviteCode, onGetInviteCode
+    ]);
+
+
     return (
-        <CareCircleContext.Provider value={{
-            careCircleId: careCircle?.id ?? null,
-            seniorId: careCircle?.seniorId || null,
-            seniorName: seniorName,
-            currentUserId: user?.uid ?? null,
-            userRole: userProfile?.role ?? null,
-            userName: isSenior ? seniorName : relativeName,
-            relativeName: relativeName,
-            memberStatuses,
-            members,
-            relativeStatuses,
-            seniorStatus: seniorStatus || null,
-            myStatus: myStatus as any,
-            setMyStatus: setMyStatus,
-            activeTab: activeTab as AppTab,
-            setActiveTab: setActiveTab,
-            tasks,
-            toggleTask: toggleTask,
-            addTask: isSenior ? addTask : handleAddTaskFromRelative,
-            symptoms,
-            addSymptom: addSymptom,
-            weeklyAnswers,
-            addWeeklyAnswer: handleWeeklyAnswer,
-            toggleLike: (answerId: string, userId: string, isLiked: boolean) => onToggleLike(answerId, userId, isLiked),
-            addReply: onReply,
-            latestPing,
-            sendPing: handleSendPing,
-            dismissPing: dismissPing,
-            lastCheckIn,
-            recordCheckIn: recordCheckIn,
-            updateMember: updateMember,
-            updateAnyMember: updateAnyMember,
-            // Extended context
-            inviteCode,
-            getInviteCode: onGetInviteCode
-        } as any}>
+        <CareCircleContext.Provider value={value as any}>
             {/* Cast to any temporarily until types.ts is updated in next step */}
             {children}
         </CareCircleContext.Provider>

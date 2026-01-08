@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { CareCircleProvider } from './contexts/CareCircleContext';
+import { CareCircleProvider } from './components/providers/CareCircleProvider';
 import { LogOut, Settings, Users, X } from 'lucide-react';
 import { SeniorView } from './components/SeniorView';
 import { RelativeView } from './components/RelativeView';
@@ -13,17 +13,12 @@ import { PhotoUploadModal, PhotoViewerModal, PhotoNotificationBadge, usePhotos }
 import { LivingBackground } from './components/ui/LivingBackground';
 import { InstallPrompt } from './components/InstallPrompt';
 import { UpdateToast } from './components/UpdateToast';
-import { useTasks } from './features/tasks/useTasks';
-import { useSymptoms } from './features/symptoms/useSymptoms';
-import { useMemberStatus } from './features/familyPresence/useMemberStatus';
-import { useWeeklyQuestions } from './features/weeklyQuestion/useWeeklyQuestions';
 import { usePings } from './features/thinkingOfYou/usePings';
-import { useCheckIn } from './hooks/useCheckIn';
 import { FEATURES } from './config/features';
-import { playPingSound, playCompletionSound, playSuccessSound } from './utils/sounds';
+import { playPingSound } from './utils/sounds';
 import './index.css';
 import { User } from 'firebase/auth';
-import { AppTab, UserProfile, Member, Task, SymptomLog, CareCircle, WeeklyAnswer } from './types';
+import { AppTab, UserProfile, Member, CareCircle } from './types';
 
 interface NotificationType {
     title: string;
@@ -56,9 +51,7 @@ export default function TrygAppCore({
     updateAnyMember,
 }: AppCoreProps) {
     const { t, i18n } = useTranslation();
-    // View is determined by user role - no toggle allowed
     const isSenior = userProfile?.role === 'senior';
-    // const [activePing, setActivePing] = useState(null); // Unused?
     const [notification, setNotification] = useState<NotificationType | null>(null);
     const [showSettings, setShowSettings] = useState(false);
     const [showShare, setShowShare] = useState(false);
@@ -66,6 +59,8 @@ export default function TrygAppCore({
     const [showPhotoViewer, setShowPhotoViewer] = useState(false);
     const [showOnboarding, setShowOnboarding] = useState(false);
     const [showSecretScreen, setShowSecretScreen] = useState(false);
+    const { latestPing, dismissPing } = usePings(careCircle?.id ?? null, user?.uid ?? null);
+    const { latestPhoto, uploading, deletePhoto } = usePhotos(careCircle?.id ?? null, user?.uid ?? null);
 
     const handleStartOnboarding = () => {
         setShowSettings(false);
@@ -103,45 +98,10 @@ export default function TrygAppCore({
         setShowSecretScreen(false);
     };
 
-    // Firebase hooks for real-time data
-    const { tasks, toggleTask, addTask } = useTasks(careCircle?.id ?? null);
-    const { symptoms, addSymptom } = useSymptoms(careCircle?.id ?? null);
-    // Per-member status tracking
-    const {
-        memberStatuses,
-        myStatus,
-        setMyStatus,
-        relativeStatuses,
-        seniorStatus
-    } = useMemberStatus(
-        careCircle?.id ?? null,
-        user?.uid ?? null,
-        userProfile?.displayName ?? null,
-        (userProfile?.role as 'senior' | 'relative') ?? 'relative'
-    );
-    const {
-        answers: weeklyAnswers,
-        addAnswer: addWeeklyAnswer,
-        toggleLike: onToggleLike,
-        addReply: onReply
-    } = useWeeklyQuestions(careCircle?.id ?? null);
-    const { latestPing, sendPing, dismissPing } = usePings(careCircle?.id ?? null, user?.uid ?? null);
-    const { lastCheckIn, recordCheckIn } = useCheckIn(careCircle?.id ?? undefined);
-    const { latestPhoto, uploading, deletePhoto } = usePhotos(careCircle?.id ?? null, user?.uid ?? null);
-
     // Live update: prefer real-time member data over static user profile
-    const currentMember = members.find(m => m.userId === user?.uid);
     const seniorMember = members.find(m => m.role === 'senior');
+    const seniorName = seniorMember?.displayName || careCircle?.seniorName || 'Senior';
 
-    const effectiveDisplayName = currentMember?.displayName || userProfile?.displayName;
-
-    // Get display names - Source of Truth is ALWAYS the membership record
-    const seniorName = seniorMember?.displayName || careCircle?.seniorName || (userProfile?.role === 'senior' ? effectiveDisplayName : 'Senior') || 'Senior';
-
-    // Relative name logic
-    const relativeName = (userProfile?.role === 'relative'
-        ? effectiveDisplayName || 'Pårørende'
-        : members.find(m => m.role === 'relative')?.displayName || 'Pårørende') || 'Pårørende';
 
     // Incoming pings logic
     useEffect(() => {
@@ -158,92 +118,19 @@ export default function TrygAppCore({
         }
     }, [notification]);
 
-    const handleToggleTask = useCallback(async (id: string) => {
-        const task = tasks.find(t => t.id === id || t.id === `task_${id}`);
-        const willBeCompleted = task && !task.completed;
-        await toggleTask(id);
-        if (willBeCompleted && FEATURES.completionSounds) {
-            playCompletionSound();
-        }
-    }, [tasks, toggleTask]);
 
-    const handleCheckIn = useCallback(async () => {
-        await recordCheckIn();
-        if (FEATURES.completionSounds) {
-            playSuccessSound();
-        }
-    }, [recordCheckIn]);
-
-    const handleAddSymptom = useCallback(async (symptomData: Partial<SymptomLog>) => {
-        return await addSymptom(symptomData);
-    }, [addSymptom]);
-
-    const handleAddTaskFromRelative = useCallback(async (newTask: Partial<Task>) => {
-        return await addTask({
-            ...newTask,
-            createdByRole: 'relative',
-            createdByName: relativeName || userProfile?.displayName || 'Familie',
-            createdByUserId: user?.uid
-        });
-    }, [addTask, relativeName, userProfile, user]);
-
-    const handleSendPing = useCallback(async (toRole: 'senior' | 'relative') => {
-        return await sendPing(toRole);
-    }, [sendPing]);
-
-    const handleWeeklyAnswer = useCallback(async (answer: string | Partial<WeeklyAnswer>) => {
-        const baseAnswer = typeof answer === 'string' ? { text: answer } : answer;
-        return await addWeeklyAnswer({
-            ...baseAnswer,
-            userId: user?.uid,
-            userName: isSenior ? seniorName : (relativeName || 'Pårørende')
-        });
-    }, [addWeeklyAnswer, isSenior, seniorName, relativeName, user]);
-
-    // 🚀 TURBO: Memoize the context value to prevent unnecessary re-renders of consumers.
-    // This is a critical performance optimization for context-heavy applications.
-    const contextValue = useMemo(() => ({
-        careCircleId: careCircle?.id ?? null,
-        seniorId: careCircle?.seniorId ?? null,
-        seniorName: seniorName,
-        currentUserId: user?.uid ?? null,
-        userRole: (userProfile?.role as 'senior' | 'relative') ?? null,
-        userName: isSenior ? seniorName : relativeName,
-        relativeName: relativeName,
-        memberStatuses,
-        members,
-        relativeStatuses,
-        seniorStatus: seniorStatus || null,
-        myStatus: myStatus,
-        setMyStatus: setMyStatus,
-        activeTab: activeTab as AppTab,
-        setActiveTab: setActiveTab,
-        tasks,
-        toggleTask: handleToggleTask,
-        addTask: isSenior ? addTask : handleAddTaskFromRelative,
-        symptoms,
-        addSymptom: handleAddSymptom,
-        weeklyAnswers,
-        addWeeklyAnswer: handleWeeklyAnswer,
-        toggleLike: (answerId: string, userId: string, isLiked: boolean) => onToggleLike(answerId, userId, isLiked),
-        addReply: onReply,
-        latestPing,
-        sendPing: handleSendPing,
-        dismissPing: dismissPing,
-        lastCheckIn,
-        recordCheckIn: handleCheckIn,
-        updateMember: updateMember,
-        updateAnyMember: updateAnyMember
-    }), [
-        careCircle, seniorName, user, userProfile, isSenior, relativeName, memberStatuses, members,
-        relativeStatuses, seniorStatus, myStatus, setMyStatus, activeTab, tasks, handleToggleTask,
-        addTask, handleAddTaskFromRelative, symptoms, handleAddSymptom, weeklyAnswers,
-        handleWeeklyAnswer, onToggleLike, onReply, latestPing, handleSendPing, dismissPing,
-        lastCheckIn, handleCheckIn, updateMember, updateAnyMember
-    ]);
 
     return (
-        <CareCircleProvider value={contextValue}>
+        <CareCircleProvider
+            user={user}
+            userProfile={userProfile}
+            careCircle={careCircle}
+            members={members}
+            inviteCode={inviteCode}
+            onGetInviteCode={onGetInviteCode}
+            updateMember={updateMember}
+            updateAnyMember={updateAnyMember}
+        >
             <div className="flex justify-center items-center min-h-screen bg-stone-50 dark:bg-zinc-950 sm:bg-zinc-800 sm:p-4">
 
                 {/* Phone Frame Simulator (Responsive) */}
