@@ -69,9 +69,11 @@ service cloud.firestore {
       }
     }
     
-    // Care circle memberships - any authenticated user can read, but only the user themselves or an admin can write.
+    // Care circle memberships - members of a circle can read that circle's memberships.
     match /careCircleMemberships/{membershipId} {
-      allow read: if request.auth != null;
+      // A user can read a membership document if they are a member of the circle it belongs to.
+      // The circleId is extracted from the composite membershipId ({circleId}_{userId}).
+      allow read: if request.auth != null && isMemberOfCircle(membershipId.split('_')[0]);
       // Users can only write (create/update/delete) their own membership doc, or if they are an admin
       allow write: if request.auth != null && (membershipId.split('_')[1] == request.auth.uid || isAdmin());
     }
