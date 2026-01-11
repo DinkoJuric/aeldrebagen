@@ -6,3 +6,4 @@ node_modules/
 dist/
 coverage/
 .agent/
+tryg-app/.expo/
