@@ -1,9 +1,7 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, lazy } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CareCircleProvider } from './contexts/CareCircleContext';
 import { LogOut, Settings, Users, X } from 'lucide-react';
-import { SeniorView } from './components/SeniorView';
-import { RelativeView } from './components/RelativeView';
 import { SettingsModal } from './components/SettingsModal';
 import { BottomNavigation } from './components/BottomNavigation';
 import { PingNotification } from './features/thinkingOfYou';
@@ -30,6 +28,11 @@ interface NotificationType {
     body: string;
     icon: React.ElementType;
 }
+
+// 🚀 TURBO: Lazily load the main views to reduce the initial bundle size.
+// The code for the user's specific role (Senior or Relative) is only loaded when needed.
+const SeniorView = lazy(() => import('./components/SeniorView'));
+const RelativeView = lazy(() => import('./components/RelativeView'));
 
 
 export interface AppCoreProps {
@@ -352,11 +355,9 @@ export default function TrygAppCore({
                                     {showOnboarding ? (
                                         <Onboarding show={showOnboarding} onComplete={handleOnboardingComplete} />
                                     ) : (
-                                        isSenior ? (
-                                            <SeniorView />
-                                        ) : (
-                                            <RelativeView />
-                                        )
+                                        <React.Suspense fallback={<div className="flex items-center justify-center h-full"><p className="text-stone-400">Indlæser...</p></div>}>
+                                            {isSenior ? <SeniorView /> : <RelativeView />}
+                                        </React.Suspense>
                                     )}
                                     {/* Photo notification badge */}
                                     {latestPhoto && !showOnboarding && (
@@ -382,11 +383,9 @@ export default function TrygAppCore({
                                     {showOnboarding ? (
                                         <Onboarding show={showOnboarding} onComplete={handleOnboardingComplete} />
                                     ) : (
-                                        isSenior ? (
-                                            <SeniorView />
-                                        ) : (
-                                            <RelativeView />
-                                        )
+                                        <React.Suspense fallback={<div className="flex items-center justify-center h-full"><p className="text-stone-400">Indlæser...</p></div>}>
+                                            {isSenior ? <SeniorView /> : <RelativeView />}
+                                        </React.Suspense>
                                     )}
                                     {latestPhoto && !showOnboarding && (
                                         <div className="absolute bottom-24 left-4 right-4 z-40 flex justify-center">
