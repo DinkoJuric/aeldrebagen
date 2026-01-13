@@ -5,7 +5,7 @@
 
 import { describe, it, expect, vi } from 'vitest'
 import { render } from '@testing-library/react'
-import { renderWithContext } from './test-utils'
+import { renderWithContext, renderWithFamilyContext } from './test-utils'
 import { MemberStatus } from '../types'
 
 // Mock Firebase modules before importing components
@@ -13,7 +13,17 @@ vi.mock('../config/firebase', () => ({
     db: {},
     auth: {},
     storage: {}
-}))
+}));
+
+vi.mock('firebase/firestore', async () => {
+    const original = await vi.importActual('firebase/firestore');
+    return {
+        ...original,
+        query: vi.fn(),
+        collection: vi.fn(),
+        onSnapshot: vi.fn(() => () => { }), // Returns an unsubscribe function
+    };
+});
 
 // Mock all hooks that use Firebase
 // Mock all hooks that use Firebase
@@ -130,7 +140,7 @@ describe('FamilyPresence Smoke Tests', () => {
     it('renders with empty memberStatuses', async () => {
         const { FamilyPresence } = await import('../features/familyPresence')
 
-        const { container } = render(
+        const { container } = renderWithFamilyContext(
             <FamilyPresence memberStatuses={[]} currentUserId="user1" seniorName="Brad" />
         )
         expect(container).toBeTruthy()
@@ -144,7 +154,7 @@ describe('FamilyPresence Smoke Tests', () => {
             { docId: 'louise', displayName: 'Louise', status: 'home', role: 'relative' as const }
         ]
 
-        const { container } = render(
+        const { container } = renderWithFamilyContext(
             <FamilyPresence memberStatuses={memberStatuses} currentUserId="louise" seniorName="Brad" />
         )
         expect(container).toBeTruthy()

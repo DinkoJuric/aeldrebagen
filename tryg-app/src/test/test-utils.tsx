@@ -1,6 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import { CareCircleContext } from '../contexts/CareCircleContext';
+import { FamilyProvider } from '../contexts/FamilyContext';
 import { vi } from 'vitest';
 
 import { CareCircleContextValue } from '../types';
@@ -43,6 +44,22 @@ export const renderWithContext = (ui: React.ReactElement, contextOverrides = {})
     return render(
         <CareCircleContext.Provider value={{ ...mockCareCircleContextValue, ...contextOverrides }}>
             {ui}
+        </CareCircleContext.Provider>
+    );
+};
+
+export const renderWithFamilyContext = (ui: React.ReactElement, contextOverrides = {}) => {
+    return render(
+        <CareCircleContext.Provider value={{ ...mockCareCircleContextValue, ...contextOverrides }}>
+            <FamilyProvider
+                careCircleId="test-circle"
+                userId="test-user"
+                userDisplayName="Test User"
+                userRole="relative"
+                members={[]}
+            >
+                {ui}
+            </FamilyProvider>
         </CareCircleContext.Provider>
     );
 };

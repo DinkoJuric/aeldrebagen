@@ -2,6 +2,7 @@ import React from 'react';
 import { Users } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useCareCircleContext } from '../../contexts/CareCircleContext';
+import { useFamilyContext } from '../../contexts/FamilyContext';
 import { Avatar } from '../../components/ui/Avatar';
 import { MemberStatus } from './useMemberStatus';
 import { FirestoreDate } from '../../types';
@@ -108,10 +109,13 @@ export const FamilyPresence: React.FC<FamilyPresenceProps> = ({
     compact = false
 }) => {
     const { t } = useTranslation();
-    const context = useCareCircleContext();
-    const memberStatuses = propsMembers ?? context?.memberStatuses ?? [];
-    const currentUserId = propsUserId ?? context?.currentUserId;
-    const seniorName = propsSeniorName ?? context?.seniorName ?? 'Far/Mor';
+    const { currentUserId: contextUserId, seniorName: contextSeniorName } = useCareCircleContext();
+    const { members, memberStatuses: contextMemberStatuses } = useFamilyContext();
+
+    // Allow overriding context with props for testing/storybook
+    const memberStatuses = propsMembers ?? contextMemberStatuses;
+    const currentUserId = propsUserId ?? contextUserId;
+    const seniorName = propsSeniorName ?? contextSeniorName ?? 'Far/Mor';
 
     // 🚀 TURBO: Create a lookup map for member statuses to optimize the render loop.
     // This reduces the complexity from O(n*m) to O(n+m), preventing a nested loop.
@@ -123,7 +127,7 @@ export const FamilyPresence: React.FC<FamilyPresenceProps> = ({
     }, [memberStatuses]);
 
 
-    if (memberStatuses.length === 0) {
+    if (members.length === 0) {
         return (
             <div className={`bg-stone-50 rounded-xl ${compact ? 'p-3' : 'p-4'} border border-stone-200`}>
                 <p className="text-stone-400 text-sm text-center">{t('no_relatives')}</p>
@@ -144,7 +148,7 @@ export const FamilyPresence: React.FC<FamilyPresenceProps> = ({
                 </div>
             </div>
             <div className="space-y-1">
-                {context.members.map((member) => {
+                {members.map((member) => {
                     // O(1) lookup instead of O(m) .find()
                     const statusObj = statusMap[member.userId || ''];
                     // Name source of truth: THE MEMBER RECORD
