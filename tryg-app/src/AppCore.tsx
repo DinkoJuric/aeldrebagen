@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CareCircleProvider } from './contexts/CareCircleContext';
+import { FamilyProvider } from './contexts/FamilyContext';
 import { LogOut, Settings, Users, X } from 'lucide-react';
 import { SeniorView } from './components/SeniorView';
 import { RelativeView } from './components/RelativeView';
@@ -15,7 +16,6 @@ import { InstallPrompt } from './components/InstallPrompt';
 import { UpdateToast } from './components/UpdateToast';
 import { useTasks } from './features/tasks/useTasks';
 import { useSymptoms } from './features/symptoms/useSymptoms';
-import { useMemberStatus } from './features/familyPresence/useMemberStatus';
 import { useWeeklyQuestions } from './features/weeklyQuestion/useWeeklyQuestions';
 import { usePings } from './features/thinkingOfYou/usePings';
 import { useCheckIn } from './hooks/useCheckIn';
@@ -106,19 +106,6 @@ export default function TrygAppCore({
     // Firebase hooks for real-time data
     const { tasks, toggleTask, addTask } = useTasks(careCircle?.id ?? null);
     const { symptoms, addSymptom } = useSymptoms(careCircle?.id ?? null);
-    // Per-member status tracking
-    const {
-        memberStatuses,
-        myStatus,
-        setMyStatus,
-        relativeStatuses,
-        seniorStatus
-    } = useMemberStatus(
-        careCircle?.id ?? null,
-        user?.uid ?? null,
-        userProfile?.displayName ?? null,
-        (userProfile?.role as 'senior' | 'relative') ?? 'relative'
-    );
     const {
         answers: weeklyAnswers,
         addAnswer: addWeeklyAnswer,
@@ -210,12 +197,6 @@ export default function TrygAppCore({
         userRole: (userProfile?.role as 'senior' | 'relative') ?? null,
         userName: isSenior ? seniorName : relativeName,
         relativeName: relativeName,
-        memberStatuses,
-        members,
-        relativeStatuses,
-        seniorStatus: seniorStatus || null,
-        myStatus: myStatus,
-        setMyStatus: setMyStatus,
         activeTab: activeTab as AppTab,
         setActiveTab: setActiveTab,
         tasks,
@@ -235,8 +216,7 @@ export default function TrygAppCore({
         updateMember: updateMember,
         updateAnyMember: updateAnyMember
     }), [
-        careCircle, seniorName, user, userProfile, isSenior, relativeName, memberStatuses, members,
-        relativeStatuses, seniorStatus, myStatus, setMyStatus, activeTab, tasks, handleToggleTask,
+        careCircle, seniorName, user, userProfile, isSenior, relativeName, activeTab, tasks, handleToggleTask,
         addTask, handleAddTaskFromRelative, symptoms, handleAddSymptom, weeklyAnswers,
         handleWeeklyAnswer, onToggleLike, onReply, latestPing, handleSendPing, dismissPing,
         lastCheckIn, handleCheckIn, updateMember, updateAnyMember
@@ -244,9 +224,16 @@ export default function TrygAppCore({
 
     return (
         <CareCircleProvider value={contextValue}>
-            <div className="flex justify-center items-center min-h-screen bg-stone-50 dark:bg-zinc-950 sm:bg-zinc-800 sm:p-4">
+            <FamilyProvider
+                careCircleId={careCircle?.id ?? null}
+                userId={user?.uid ?? null}
+                userDisplayName={userProfile?.displayName ?? null}
+                userRole={(userProfile?.role as 'senior' | 'relative') ?? null}
+                members={members}
+            >
+                <div className="flex justify-center items-center min-h-screen bg-stone-50 dark:bg-zinc-950 sm:bg-zinc-800 sm:p-4">
 
-                {/* Phone Frame Simulator (Responsive) */}
+                    {/* Phone Frame Simulator (Responsive) */}
                 {/* Mobile: Full screen, no border. Desktop: Phone frame with border. */}
                 <div className="relative w-full sm:max-w-md h-[100dvh] sm:h-[850px] bg-white sm:rounded-[3rem] overflow-hidden sm:border-8 sm:border-zinc-900 shadow-2xl sm:ring-1 sm:ring-zinc-400/50 flex flex-col">
 
@@ -436,7 +423,8 @@ export default function TrygAppCore({
                     {/* Home indicator */}
                     <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 w-32 h-1.5 bg-black/20 rounded-full z-50"></div>
                 </div>
-            </div>
+                </div>
+            </FamilyProvider>
         </CareCircleProvider>
     );
 }
