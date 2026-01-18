@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CareCircleProvider } from './contexts/CareCircleContext';
 import { LogOut, Settings, Users, X } from 'lucide-react';
@@ -105,6 +105,9 @@ export default function TrygAppCore({
 
     // Firebase hooks for real-time data
     const { tasks, toggleTask, addTask } = useTasks(careCircle?.id ?? null);
+    const tasksRef = useRef(tasks);
+    useEffect(() => { tasksRef.current = tasks; }, [tasks]);
+
     const { symptoms, addSymptom } = useSymptoms(careCircle?.id ?? null);
     // Per-member status tracking
     const {
@@ -159,13 +162,13 @@ export default function TrygAppCore({
     }, [notification]);
 
     const handleToggleTask = useCallback(async (id: string) => {
-        const task = tasks.find(t => t.id === id || t.id === `task_${id}`);
+        const task = tasksRef.current.find(t => t.id === id || t.id === `task_${id}`);
         const willBeCompleted = task && !task.completed;
         await toggleTask(id);
         if (willBeCompleted && FEATURES.completionSounds) {
             playCompletionSound();
         }
-    }, [tasks, toggleTask]);
+    }, [toggleTask]); // tasks dependency removed
 
     const handleCheckIn = useCallback(async () => {
         await recordCheckIn();

@@ -55,7 +55,7 @@ const checkboxVariants = cva(
 
 interface TaskCardProps {
     task: Task;
-    onToggle: () => void;
+    onToggle: (taskId: string) => void;
 }
 
 const TASK_ICONS: Record<string, React.ElementType> = {
@@ -65,13 +65,13 @@ const TASK_ICONS: Record<string, React.ElementType> = {
     appointment: Clock,
 };
 
-export const TaskCard: React.FC<TaskCardProps> = ({ task, onToggle }) => {
+const TaskCardBase: React.FC<TaskCardProps> = ({ task, onToggle }) => {
     const state = task.completed ? 'completed' : 'pending';
     const Icon = TASK_ICONS[task.type || 'activity'] || Sun;
 
     return (
         <div
-            onClick={onToggle}
+            onClick={() => onToggle(task.id)}
             className={cn(cardVariants({ state }))}
         >
             <div className="flex items-center justify-between">
@@ -116,5 +116,21 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, onToggle }) => {
         </div>
     );
 };
+
+// 🚀 TURBO: Custom comparison function to prevent re-renders of unchanged tasks.
+// Firestore often returns new object references even if data is identical.
+function arePropsEqual(prev: TaskCardProps, next: TaskCardProps) {
+    return (
+        prev.task.id === next.task.id &&
+        prev.task.completed === next.task.completed &&
+        prev.task.title === next.task.title &&
+        prev.task.time === next.task.time &&
+        prev.task.type === next.task.type &&
+        (prev.task as any).createdByName === (next.task as any).createdByName &&
+        prev.onToggle === next.onToggle
+    );
+}
+
+export const TaskCard = React.memo(TaskCardBase, arePropsEqual);
 
 export { cardVariants, iconContainerVariants, checkboxVariants };

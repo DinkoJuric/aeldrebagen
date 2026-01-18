@@ -2,7 +2,7 @@
 // Tasks hook - real-time task sync via Firestore
 // Replaces localStorage for multi-user task management
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import {
     collection,
     doc,
@@ -24,6 +24,12 @@ export function useTasks(circleId: string | null) {
     const [tasks, setTasks] = useState<Task[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const tasksRef = useRef<Task[]>(tasks);
+
+    // Keep ref in sync
+    useEffect(() => {
+        tasksRef.current = tasks;
+    }, [tasks]);
 
     // Subscribe to tasks from Firestore
     useEffect(() => {
@@ -122,7 +128,7 @@ export function useTasks(circleId: string | null) {
     const toggleTask = useCallback(async (taskId: string) => {
         if (!circleId) return;
 
-        const task = tasks.find(t => t.id === taskId || t.id === `task_${taskId}`);
+        const task = tasksRef.current.find(t => t.id === taskId || t.id === `task_${taskId}`);
         if (!task) return;
 
         const taskRef = doc(db, 'careCircles', circleId, 'tasks',
@@ -137,7 +143,7 @@ export function useTasks(circleId: string | null) {
             console.error('Error toggling task:', err);
             setError(err instanceof Error ? err.message : 'Unknown error');
         }
-    }, [circleId, tasks]);
+    }, [circleId]); // Stable callback, independent of tasks
 
     // Add a new task (from relative or senior)
     const addTask = useCallback(async (newTask: Partial<Task>) => {
