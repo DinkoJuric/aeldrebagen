@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
     Pill,
     Sun,
@@ -12,7 +12,6 @@ import { useTranslation } from 'react-i18next';
 import { useCareCircleContext } from '../../contexts/CareCircleContext';
 import { LiquidList, LiquidItem } from '../ui/LiquidView';
 import { TaskCard } from '../../features/tasks/TaskCard';
-import { playCompletionSound } from '../../utils/sounds';
 import { FEATURES } from '../../config/features';
 import { CoffeeInviteCard } from '../../features/coffee';
 import { AmbientHero, BriefingStory, ActivityTimeline } from '../../features/ambient';
@@ -54,14 +53,10 @@ export const AmbientTab: React.FC<AmbientTabProps> = ({
     const completedMedicineCount = medicineTasks.filter(t => t.completed).length;
     const allMedicineComplete = medicineTasks.length > 0 && medicineTasks.length === completedMedicineCount;
 
-    const handleToggleTask = async (id: string) => {
-        const task = tasks.find(t => t.id === id);
-        const willBeCompleted = task && !task.completed;
-        await toggleTask(id);
-        if (willBeCompleted && FEATURES.completionSounds) {
-            playCompletionSound();
-        }
-    };
+    // 🚀 TURBO: Stable handler to prevent re-renders. Sound logic moved to AppCore.
+    const handleToggle = useCallback((id: string) => {
+        toggleTask(id);
+    }, [toggleTask]);
 
     const handleCheckIn = async () => {
         await recordCheckIn();
@@ -95,7 +90,7 @@ export const AmbientTab: React.FC<AmbientTabProps> = ({
                             <LiquidItem key={task.id} id={task.id}>
                                 <TaskCard
                                     task={task}
-                                    onToggle={() => handleToggleTask(task.id)}
+                                    onToggle={handleToggle}
                                 />
                             </LiquidItem>
                         ))}
@@ -197,7 +192,7 @@ export const AmbientTab: React.FC<AmbientTabProps> = ({
                         {medicineTasks.filter(m => !m.completed).map(med => (
                             <button
                                 key={med.id}
-                                onClick={() => handleToggleTask(med.id)}
+                                onClick={() => handleToggle(med.id)}
                                 className="w-full flex items-center gap-3 p-3 rounded-xl transition-all theme-card border-2 border-purple-100 dark:border-purple-900/50 hover:border-purple-300 shadow-sm"
                             >
                                 <div className="w-8 h-8 rounded-full border-2 border-purple-300 dark:border-purple-600 bg-theme-bg flex items-center justify-center transition-colors">

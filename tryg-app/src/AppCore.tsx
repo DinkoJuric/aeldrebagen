@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CareCircleProvider } from './contexts/CareCircleContext';
 import { LogOut, Settings, Users, X } from 'lucide-react';
@@ -143,6 +143,12 @@ export default function TrygAppCore({
         ? effectiveDisplayName || 'Pårørende'
         : members.find(m => m.role === 'relative')?.displayName || 'Pårørende') || 'Pårørende';
 
+    // 🚀 TURBO: Use ref to track tasks for stable handler functions
+    const tasksRef = useRef<Task[]>([]);
+    useEffect(() => {
+        tasksRef.current = tasks;
+    }, [tasks]);
+
     // Incoming pings logic
     useEffect(() => {
         if (latestPing && FEATURES.pingSound) {
@@ -159,13 +165,14 @@ export default function TrygAppCore({
     }, [notification]);
 
     const handleToggleTask = useCallback(async (id: string) => {
-        const task = tasks.find(t => t.id === id || t.id === `task_${id}`);
+        // Use ref to avoid dependency on 'tasks'
+        const task = tasksRef.current.find(t => t.id === id || t.id === `task_${id}`);
         const willBeCompleted = task && !task.completed;
         await toggleTask(id);
         if (willBeCompleted && FEATURES.completionSounds) {
             playCompletionSound();
         }
-    }, [tasks, toggleTask]);
+    }, [toggleTask]);
 
     const handleCheckIn = useCallback(async () => {
         await recordCheckIn();
