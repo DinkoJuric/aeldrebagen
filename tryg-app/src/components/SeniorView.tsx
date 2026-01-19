@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Avatar } from './ui/Avatar';
+import { getAvatarId } from '../utils/memberUtils';
 import { WeeklyQuestionWidget } from '../features/weeklyQuestion';
 import { MatchBanner } from '../features/helpExchange';
 import { InlineGatesIndicator } from '../features/tasks';
@@ -63,7 +64,7 @@ export const SeniorView: React.FC = () => {
             <header className="px-4 py-2 glass-panel shadow-sm rounded-b-3xl z-10 shrink-0">
                 <div className="flex justify-between items-center">
                     <div className="flex items-center gap-3">
-                        <Avatar id="senior" size="md" />
+                        <Avatar id={getAvatarId('senior', userName)} size="md" />
                         <div onClick={() => setShowCallModal(true)} className="cursor-pointer">
                             <h1 className="text-2xl font-extrabold theme-text leading-tight tracking-tighter">{greeting}</h1>
                             <p className="text-base font-bold theme-text-muted opacity-90">{userName}</p>
