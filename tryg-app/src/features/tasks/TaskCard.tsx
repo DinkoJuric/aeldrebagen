@@ -55,7 +55,7 @@ const checkboxVariants = cva(
 
 interface TaskCardProps {
     task: Task;
-    onToggle: () => void;
+    onToggle: (taskId: string) => void;
 }
 
 const TASK_ICONS: Record<string, React.ElementType> = {
@@ -65,13 +65,13 @@ const TASK_ICONS: Record<string, React.ElementType> = {
     appointment: Clock,
 };
 
-export const TaskCard: React.FC<TaskCardProps> = ({ task, onToggle }) => {
+export const TaskCard: React.FC<TaskCardProps> = React.memo(({ task, onToggle }) => {
     const state = task.completed ? 'completed' : 'pending';
     const Icon = TASK_ICONS[task.type || 'activity'] || Sun;
 
     return (
         <div
-            onClick={onToggle}
+            onClick={() => onToggle(task.id)}
             className={cn(cardVariants({ state }))}
         >
             <div className="flex items-center justify-between">
@@ -115,6 +115,27 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, onToggle }) => {
             </div>
         </div>
     );
-};
+}, (prev, next) => {
+    // 🚀 TURBO: Custom comparison to prevent re-renders when task properties haven't changed.
+    // Since task objects from Firestore are always new references, this deep check is required.
+
+    // 1. Check if handler reference changed (it shouldn't if we did our job right)
+    if (prev.onToggle !== next.onToggle) return false;
+
+    // 2. Check task properties
+    const t1 = prev.task as any;
+    const t2 = next.task as any;
+
+    return (
+        t1.id === t2.id &&
+        t1.completed === t2.completed &&
+        t1.title === t2.title &&
+        t1.time === t2.time &&
+        t1.type === t2.type &&
+        t1.period === t2.period &&
+        t1.createdByRole === t2.createdByRole &&
+        t1.createdByName === t2.createdByName
+    );
+});
 
 export { cardVariants, iconContainerVariants, checkboxVariants };

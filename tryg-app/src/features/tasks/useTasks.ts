@@ -2,7 +2,7 @@
 // Tasks hook - real-time task sync via Firestore
 // Replaces localStorage for multi-user task management
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import {
     collection,
     doc,
@@ -25,6 +25,9 @@ export function useTasks(circleId: string | null) {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
+    // 🚀 TURBO: Use ref to track tasks for stable handler functions
+    const tasksRef = useRef<Task[]>([]);
+
     // Subscribe to tasks from Firestore
     useEffect(() => {
         if (!circleId) {
@@ -33,13 +36,12 @@ export function useTasks(circleId: string | null) {
             return;
         }
 
-        const tasksRef = collection(db, 'careCircles', circleId, 'tasks');
-        const tasksQuery = query(tasksRef, orderBy('period'), orderBy('time'));
+        const tasksRefFirestore = collection(db, 'careCircles', circleId, 'tasks');
+        const tasksQuery = query(tasksRefFirestore, orderBy('period'), orderBy('time'));
 
         const unsubscribe = onSnapshot(tasksQuery,
             (snapshot) => {
                 if (snapshot.empty) {
-                    // Initialize with default tasks if none exist
                     // Initialize with default tasks if none exist
                     initializeDefaultTasks(circleId);
                 } else {
@@ -60,6 +62,11 @@ export function useTasks(circleId: string | null) {
 
         return () => unsubscribe();
     }, [circleId]);
+
+    // Keep ref in sync with state
+    useEffect(() => {
+        tasksRef.current = tasks;
+    }, [tasks]);
 
     // Check for daily reset on load
     useEffect(() => {
@@ -122,7 +129,8 @@ export function useTasks(circleId: string | null) {
     const toggleTask = useCallback(async (taskId: string) => {
         if (!circleId) return;
 
-        const task = tasks.find(t => t.id === taskId || t.id === `task_${taskId}`);
+        // Use ref to avoid dependency on 'tasks'
+        const task = tasksRef.current.find(t => t.id === taskId || t.id === `task_${taskId}`);
         if (!task) return;
 
         const taskRef = doc(db, 'careCircles', circleId, 'tasks',
@@ -137,7 +145,7 @@ export function useTasks(circleId: string | null) {
             console.error('Error toggling task:', err);
             setError(err instanceof Error ? err.message : 'Unknown error');
         }
-    }, [circleId, tasks]);
+    }, [circleId]);
 
     // Add a new task (from relative or senior)
     const addTask = useCallback(async (newTask: Partial<Task>) => {
@@ -193,7 +201,8 @@ export function useTasks(circleId: string | null) {
         if (!circleId) return;
 
         try {
-            for (const task of tasks) {
+            // Use ref to avoid dependency on 'tasks'
+            for (const task of tasksRef.current) {
                 const docId = task.id.startsWith('task_') ? task.id : `task_${task.id}`;
                 await setDoc(doc(db, 'careCircles', circleId, 'tasks', docId), {
                     completed: false,
@@ -204,7 +213,7 @@ export function useTasks(circleId: string | null) {
             console.error('Error resetting tasks:', err);
             setError(err instanceof Error ? err.message : 'Unknown error');
         }
-    }, [circleId, tasks]);
+    }, [circleId]);
 
     return {
         tasks,
