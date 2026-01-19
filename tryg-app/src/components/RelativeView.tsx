@@ -11,6 +11,7 @@ import { FEATURES } from '../config/features';
 import { Avatar } from './ui/Avatar';
 import { useTranslation } from 'react-i18next';
 import { useCareCircleContext } from '../contexts/CareCircleContext';
+import { getAvatarId } from '../utils/memberUtils';
 
 export const RelativeView: React.FC = () => {
     const { t } = useTranslation();
@@ -35,7 +36,7 @@ export const RelativeView: React.FC = () => {
                 <div className="flex justify-between items-center">
                     <div className="flex items-center gap-2">
                         <Avatar
-                            id={userName.toLowerCase().includes('louise') ? 'louise' : (userName.toLowerCase().includes('brad') || userName.toLowerCase().includes('senior')) ? 'brad' : 'fatima'}
+                            id={getAvatarId('relative', userName)}
                             size="md"
                             className="bg-indigo-50"
                         />

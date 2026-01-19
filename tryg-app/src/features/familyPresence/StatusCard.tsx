@@ -5,11 +5,8 @@ import { Avatar } from '../../components/ui/Avatar';
 import { Task, MemberStatus, FirestoreDate } from '../../types';
 import { useTranslation } from 'react-i18next';
 import { toJsDate } from '../../utils/dateUtils';
-
-// ============================================================================
-// CONFIGURATION & CONSTANTS
-// ============================================================================
-
+import { getAvatarId, getStatusIconId } from '../../utils/memberUtils';
+import { useCareCircleContext } from '../../contexts/CareCircleContext';
 import { STATUS_OPTIONS } from './config';
 
 // ============================================================================
@@ -31,13 +28,7 @@ export const StatusSelector: React.FC<StatusSelectorProps> = ({ currentStatus, o
         <div className="flex gap-2 justify-between">
             {STATUS_OPTIONS.map(status => {
                 const isActive = currentStatus === status.id;
-                const avatarId = ({
-                    'work': 'work',
-                    'home': 'home',
-                    'traveling': 'car',
-                    'available': 'coffee',
-                    'busy': 'moon'
-                } as Record<string, string>)[status.id] || 'home';
+                const avatarId = getStatusIconId(status.id);
 
                 return (
                     <button
@@ -228,13 +219,7 @@ export const StatusCard: React.FC<StatusCardProps> = ({
     }
 
     const statusObj = STATUS_OPTIONS.find(s => s.id === statusId) || STATUS_OPTIONS[0];
-    const avatarId = (({
-        'work': 'work',
-        'home': 'home',
-        'traveling': 'car',
-        'available': 'coffee',
-        'busy': 'moon'
-    } as Record<string, string>)[statusId || '']) || 'home';
+    const avatarId = getStatusIconId(statusId || '');
 
     let timeString = '-';
     if (timestamp) {
@@ -251,7 +236,7 @@ export const StatusCard: React.FC<StatusCardProps> = ({
     return (
         <div className={`glass-premium p-4 mb-3 flex items-center justify-between rounded-2xl ${className}`}>
             <div className="flex items-center gap-3">
-                <Avatar id={name === 'Brad' ? 'brad' : name.includes('Fatima') ? 'fatima' : 'louise'} size="md" />
+                <Avatar id={getAvatarId(mode, name)} size="md" />
                 <div>
                     <h4 className="font-bold theme-text text-sm tracking-tight">
                         {name}
@@ -282,10 +267,6 @@ interface StatusListProps {
     lastUpdated?: FirestoreDate;
     maxDisplay?: number;
 }
-
-import { useCareCircleContext } from '../../contexts/CareCircleContext';
-
-// ... (existing constants)
 
 export const StatusList: React.FC<StatusListProps> = ({
     members = [],

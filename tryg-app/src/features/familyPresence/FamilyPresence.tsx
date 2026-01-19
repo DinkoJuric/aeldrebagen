@@ -6,6 +6,7 @@ import { Avatar } from '../../components/ui/Avatar';
 import { MemberStatus } from './useMemberStatus';
 import { FirestoreDate } from '../../types';
 import { toJsDate } from '../../utils/dateUtils';
+import { getAvatarId, getStatusIconId } from '../../utils/memberUtils';
 
 interface MemberStatusRowProps {
     name: string;
@@ -19,22 +20,9 @@ interface MemberStatusRowProps {
 // This is a high-frequency component, so memoization provides a significant performance boost.
 const MemberStatusRow: React.FC<MemberStatusRowProps> = React.memo(({ name, status, role, timestamp, isCurrentUser = false }) => {
     const { t } = useTranslation();
-    const avatarId = role === 'senior' ? 'senior' :
-        name.toLowerCase().includes('louise') ? 'louise' :
-            name.toLowerCase().includes('juzu') ? 'juzu' :
-                (name.toLowerCase().includes('brad') || name.toLowerCase().includes('senior')) ? 'brad' : 'fatima';
+    const avatarId = getAvatarId(role, name);
 
-    const statusIdMapping: Record<string, string> = {
-        'home': 'home',
-        'work': 'work',
-        'traveling': 'car',
-        'available': 'coffee',
-        'busy': 'moon',
-        'good': 'home',
-        'default': 'home'
-    };
-
-    const statusIconId = statusIdMapping[status] || 'home';
+    const statusIconId = getStatusIconId(status);
     const config = role === 'senior'
         ? { label: t('peace_all_well'), color: 'text-green-600' }
         : { label: t(`status_${status}`), color: 'text-stone-500' };
