@@ -65,7 +65,7 @@ const TASK_ICONS: Record<string, React.ElementType> = {
     appointment: Clock,
 };
 
-export const TaskCard: React.FC<TaskCardProps> = ({ task, onToggle }) => {
+export const TaskCard: React.FC<TaskCardProps> = React.memo(({ task, onToggle }) => {
     const state = task.completed ? 'completed' : 'pending';
     const Icon = TASK_ICONS[task.type || 'activity'] || Sun;
 
@@ -115,6 +115,6 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, onToggle }) => {
             </div>
         </div>
     );
-};
+});
 
 export { cardVariants, iconContainerVariants, checkboxVariants };

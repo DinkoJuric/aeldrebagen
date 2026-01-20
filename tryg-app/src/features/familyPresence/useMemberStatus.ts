@@ -2,7 +2,7 @@
 // Member Status hook - per-member status tracking via Firestore
 // Allows each family member to have their own status (visible to others in the circle)
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import {
     collection,
     doc,
@@ -105,10 +105,14 @@ export function useMemberStatus(
     }, [circleId, userId, displayName, role]);
 
     // Get relative statuses only (for senior to see)
-    const relativeStatuses = memberStatuses.filter(s => s.role === 'relative');
+    const relativeStatuses = useMemo(() =>
+        memberStatuses.filter(s => s.role === 'relative'),
+    [memberStatuses]);
 
     // Get senior status (for relatives to see)
-    const seniorStatus = memberStatuses.find(s => s.role === 'senior');
+    const seniorStatus = useMemo(() =>
+        memberStatuses.find(s => s.role === 'senior'),
+    [memberStatuses]);
 
     return {
         memberStatuses,      // All members' statuses
