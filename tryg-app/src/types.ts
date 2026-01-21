@@ -58,6 +58,16 @@ export interface Photo {
     viewedAt?: FirestoreDate;
 }
 
+export interface Memory {
+    id: string;
+    url: string;
+    type: 'audio' | 'photo' | 'video';
+    createdByName: string;
+    createdAt: FirestoreDate;
+    questionText?: string;
+    duration?: number;
+}
+
 export interface HelpOffer {
     docId: string;
     id: string;
