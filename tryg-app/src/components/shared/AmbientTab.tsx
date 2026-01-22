@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
     Pill,
     Sun,
@@ -54,14 +54,13 @@ export const AmbientTab: React.FC<AmbientTabProps> = ({
     const completedMedicineCount = medicineTasks.filter(t => t.completed).length;
     const allMedicineComplete = medicineTasks.length > 0 && medicineTasks.length === completedMedicineCount;
 
-    const handleToggleTask = async (id: string) => {
-        const task = tasks.find(t => t.id === id);
-        const willBeCompleted = task && !task.completed;
+    const handleToggleTask = useCallback(async (id: string, currentStatus: boolean) => {
+        const willBeCompleted = !currentStatus;
         await toggleTask(id);
         if (willBeCompleted && FEATURES.completionSounds) {
             playCompletionSound();
         }
-    };
+    }, [toggleTask]);
 
     const handleCheckIn = async () => {
         await recordCheckIn();
@@ -95,7 +94,7 @@ export const AmbientTab: React.FC<AmbientTabProps> = ({
                             <LiquidItem key={task.id} id={task.id}>
                                 <TaskCard
                                     task={task}
-                                    onToggle={() => handleToggleTask(task.id)}
+                                    onToggle={handleToggleTask}
                                 />
                             </LiquidItem>
                         ))}
@@ -197,7 +196,7 @@ export const AmbientTab: React.FC<AmbientTabProps> = ({
                         {medicineTasks.filter(m => !m.completed).map(med => (
                             <button
                                 key={med.id}
-                                onClick={() => handleToggleTask(med.id)}
+                                onClick={() => handleToggleTask(med.id, med.completed)}
                                 className="w-full flex items-center gap-3 p-3 rounded-xl transition-all theme-card border-2 border-purple-100 dark:border-purple-900/50 hover:border-purple-300 shadow-sm"
                             >
                                 <div className="w-8 h-8 rounded-full border-2 border-purple-300 dark:border-purple-600 bg-theme-bg flex items-center justify-center transition-colors">

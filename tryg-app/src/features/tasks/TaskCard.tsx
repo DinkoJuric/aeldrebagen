@@ -55,7 +55,7 @@ const checkboxVariants = cva(
 
 interface TaskCardProps {
     task: Task;
-    onToggle: () => void;
+    onToggle: (taskId: string, currentStatus: boolean) => void;
 }
 
 const TASK_ICONS: Record<string, React.ElementType> = {
@@ -65,13 +65,17 @@ const TASK_ICONS: Record<string, React.ElementType> = {
     appointment: Clock,
 };
 
-export const TaskCard: React.FC<TaskCardProps> = ({ task, onToggle }) => {
+/**
+ * TaskCard is memoized to prevent re-renders when other tasks in the list change.
+ * This is crucial because Firestore updates always create new object references for the tasks list.
+ */
+export const TaskCard = React.memo(({ task, onToggle }: TaskCardProps) => {
     const state = task.completed ? 'completed' : 'pending';
     const Icon = TASK_ICONS[task.type || 'activity'] || Sun;
 
     return (
         <div
-            onClick={onToggle}
+            onClick={() => onToggle(task.id, task.completed)}
             className={cn(cardVariants({ state }))}
         >
             <div className="flex items-center justify-between">
@@ -115,6 +119,17 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, onToggle }) => {
             </div>
         </div>
     );
-};
+}, (prev, next) => {
+    return (
+        prev.task.id === next.task.id &&
+        prev.task.completed === next.task.completed &&
+        prev.task.title === next.task.title &&
+        prev.task.time === next.task.time &&
+        prev.task.type === next.task.type &&
+        (prev.task as any).createdByRole === (next.task as any).createdByRole &&
+        (prev.task as any).createdByName === (next.task as any).createdByName &&
+        prev.onToggle === next.onToggle
+    );
+});
 
 export { cardVariants, iconContainerVariants, checkboxVariants };
