@@ -65,7 +65,26 @@ const TASK_ICONS: Record<string, React.ElementType> = {
     appointment: Clock,
 };
 
-export const TaskCard: React.FC<TaskCardProps> = ({ task, onToggle }) => {
+// 🚀 TURBO: Custom comparison function to prevent unnecessary re-renders.
+// Firestore often returns new object references even if data hasn't changed.
+// We also ignore onToggle changes because the handler reference might change
+// but its effect (toggling this task ID) remains the same.
+const areTaskPropsEqual = (prevProps: TaskCardProps, nextProps: TaskCardProps) => {
+    const p = prevProps.task;
+    const n = nextProps.task;
+
+    return (
+        p.id === n.id &&
+        p.completed === n.completed &&
+        p.title === n.title &&
+        p.time === n.time &&
+        p.type === n.type &&
+        (p as any).createdByName === (n as any).createdByName &&
+        (p as any).createdByRole === (n as any).createdByRole
+    );
+};
+
+export const TaskCard: React.FC<TaskCardProps> = React.memo(({ task, onToggle }) => {
     const state = task.completed ? 'completed' : 'pending';
     const Icon = TASK_ICONS[task.type || 'activity'] || Sun;
 
@@ -115,6 +134,6 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, onToggle }) => {
             </div>
         </div>
     );
-};
+}, areTaskPropsEqual);
 
 export { cardVariants, iconContainerVariants, checkboxVariants };
