@@ -1,10 +1,12 @@
 name: Weekly Codebase Cleanup
 
 on:
-  schedule:
+  issues:
+    types: [labeled]
+  #schedule:
     # Run every Monday at 2 AM UTC
-    - cron: '0 2 * * 1'
-  workflow_dispatch: # Allow manual triggers
+   # - cron: '0 2 * * 1'
+  # workflow_dispatch: # Allow manual triggers
 
 jobs:
   cleanup:
