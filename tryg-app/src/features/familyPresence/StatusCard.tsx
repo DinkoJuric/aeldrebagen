@@ -25,7 +25,7 @@ interface StatusSelectorProps {
 /**
  * Status selector for RELATIVE to set their status
  */
-export const StatusSelector: React.FC<StatusSelectorProps> = ({ currentStatus, onStatusChange }) => {
+export const StatusSelector: React.FC<StatusSelectorProps> = React.memo(({ currentStatus, onStatusChange }) => {
     const { t } = useTranslation();
     return (
         <div className="flex gap-2 justify-between">
@@ -70,7 +70,7 @@ export const StatusSelector: React.FC<StatusSelectorProps> = ({ currentStatus, o
             })}
         </div>
     );
-};
+});
 
 // ============================================================================
 // MAIN COMPONENT
@@ -97,7 +97,7 @@ interface StatusCardProps {
 /**
  * Unified Status Card Component
  */
-export const StatusCard: React.FC<StatusCardProps> = ({
+export const StatusCard: React.FC<StatusCardProps> = React.memo(({
     mode = 'relative',
     name = 'Bruger',
     relationship,
@@ -274,7 +274,7 @@ export const StatusCard: React.FC<StatusCardProps> = ({
             </div>
         </div>
     );
-};
+});
 
 interface StatusListProps {
     members?: MemberStatus[];
@@ -287,7 +287,7 @@ import { useCareCircleContext } from '../../contexts/CareCircleContext';
 
 // ... (existing constants)
 
-export const StatusList: React.FC<StatusListProps> = ({
+export const StatusList: React.FC<StatusListProps> = React.memo(({
     members = [],
     relativeStatuses = [],
     lastUpdated,
@@ -338,6 +338,6 @@ export const StatusList: React.FC<StatusListProps> = ({
             )}
         </div>
     );
-};
+});
 
 export default StatusCard;
