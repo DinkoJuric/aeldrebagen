@@ -53,21 +53,6 @@ export function useCareCircle(userId: string | undefined, _userProfile: UserProf
                 );
                 let membershipsSnapshot: QuerySnapshot<DocumentData> | { empty: boolean; docs: DocumentData[] } = await getDocs(membershipsQuery);
 
-                if (membershipsSnapshot.empty) {
-                    // FALLBACK: Fetch all and filter client-side (works around index issues)
-                    const allMembershipsSnapshot = await getDocs(collection(db, 'careCircleMemberships'));
-                    const matchingDocs = allMembershipsSnapshot.docs.filter(
-                        (doc) => doc.data().userId === userId
-                    );
-
-                    if (matchingDocs.length > 0) {
-                        membershipsSnapshot = {
-                            empty: false,
-                            docs: matchingDocs
-                        };
-                    }
-                }
-
                 if (!membershipsSnapshot.empty) {
                     const membership = membershipsSnapshot.docs[0].data();
                     const circleRef = doc(db, 'careCircles', membership.circleId);
