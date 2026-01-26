@@ -2,6 +2,16 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     
+    // Helper function to check if user is member of a circle
+    function isMemberOfCircle(circleId) {
+      return exists(/databases/$(database)/documents/careCircleMemberships/$(circleId + '_' + request.auth.uid));
+    }
+
+    // Helper function to check if user is an admin
+    function isAdmin() {
+      return exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
     // Users can only read/write their own profile
     match /users/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
@@ -71,19 +81,13 @@ service cloud.firestore {
     
     // Care circle memberships - any authenticated user can read, but only the user themselves or an admin can write.
     match /careCircleMemberships/{membershipId} {
-      allow read: if request.auth != null;
+      // Users can only read memberships they are part of, or memberships for circles they belong to
+      allow read: if request.auth != null && (
+        resource.data.userId == request.auth.uid ||
+        isMemberOfCircle(resource.data.circleId)
+      );
       // Users can only write (create/update/delete) their own membership doc, or if they are an admin
       allow write: if request.auth != null && (membershipId.split('_')[1] == request.auth.uid || isAdmin());
-    }
-    
-    // Helper function to check if user is member of a circle
-    function isMemberOfCircle(circleId) {
-      return exists(/databases/$(database)/documents/careCircleMemberships/$(circleId + '_' + request.auth.uid));
-    }
-
-    // Helper function to check if user is an admin
-    function isAdmin() {
-      return exists(/databases/$(database)/documents/admins/$(request.auth.uid));
     }
   }
 }
