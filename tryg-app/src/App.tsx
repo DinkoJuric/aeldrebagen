@@ -10,14 +10,7 @@ import { cn } from './lib/utils';
 import { useTheme } from './contexts/ThemeContext';
 import { PhoneFrame } from './components/layout/PhoneFrame';
 import './index.css';
-
-import './index.css';
-
-interface NotificationType {
-    title: string;
-    body: string;
-    icon: React.ElementType;
-}
+import { NotificationType } from './types';
 
 export default function TrygApp() {
     const { t } = useTranslation();
