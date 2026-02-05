@@ -12,7 +12,13 @@ interface ModalProps {
     className?: string;
 }
 
-export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, className }) => {
+/**
+ * 🚀 TURBO: Wrapped in React.memo to prevent re-renders when props are stable.
+ * This is crucial because modals often contain complex children, and re-rendering the
+ * entire tree is expensive. The `isOpen` prop controls its visibility, but memoization
+ * prevents re-renders when parent components update for other reasons.
+ */
+const ModalComponent: React.FC<ModalProps> = ({ isOpen, onClose, title, children, className }) => {
     useScrollLock(isOpen);
 
     if (!isOpen) return null;
@@ -50,5 +56,8 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, 
         document.body
     );
 };
+
+export const Modal = React.memo(ModalComponent);
+Modal.displayName = 'Modal';
 
 export default Modal;
