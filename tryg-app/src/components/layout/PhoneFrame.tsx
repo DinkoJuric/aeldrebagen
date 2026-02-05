@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, memo } from 'react';
 import { InstallPrompt } from '../InstallPrompt';
 import { UpdateToast } from '../UpdateToast';
 import { LivingBackground } from '../ui/LivingBackground';
@@ -13,7 +13,9 @@ interface PhoneFrameProps {
     } | null;
 }
 
-export function PhoneFrame({ children, notification }: PhoneFrameProps) {
+// 🚀 TURBO: Memoize the PhoneFrame component to prevent re-renders from state changes in parent components.
+// Since PhoneFrame is a pure presentational component, it will only re-render if its props (children or notification) change.
+const MemoizedPhoneFrame = memo(({ children, notification }: PhoneFrameProps) => {
     return (
         <div className="flex justify-center items-center min-h-screen bg-stone-50 dark:bg-zinc-950 sm:bg-zinc-800 sm:p-4 font-sans">
             {/* Phone Frame Simulator (Responsive) */}
@@ -68,4 +70,6 @@ export function PhoneFrame({ children, notification }: PhoneFrameProps) {
             </div>
         </div>
     );
-}
+});
+
+export { MemoizedPhoneFrame as PhoneFrame };
