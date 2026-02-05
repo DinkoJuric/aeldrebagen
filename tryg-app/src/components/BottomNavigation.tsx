@@ -67,7 +67,7 @@ const NavTab: React.FC<NavTabProps> = ({ icon, label, onClick, isActive, activeC
 /**
  * Unified Bottom Navigation for Senior and Relative Views
  */
-export const BottomNavigation: React.FC<BottomNavigationProps> = ({
+const BottomNavigationComponent: React.FC<BottomNavigationProps> = ({
     activeTab,
     onTabChange,
 }) => {
@@ -111,6 +111,10 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
         </div>
     );
 };
+
+export const BottomNavigation = React.memo(BottomNavigationComponent);
+BottomNavigation.displayName = 'BottomNavigation';
+
 
 export const RelativeBottomNavigation = BottomNavigation;
 
